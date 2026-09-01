@@ -1,0 +1,24 @@
+# Estado local do Obsidian
+.obsidian/workspace.json
+
+# Quartz
+node_modules/
+public/
+.quartz-cache/
+tsconfig.tsbuildinfo
+
+# Arquivos temporários do sistema
+.DS_Store
+Thumbs.db
+
+# Conteúdo interno e anexos que não pertencem ao repositório público
+07 - Levantamento/
+*.docx
+*.pdf
+*.xls
+*.xlsx
+*.ods
+*.csv
+*.tsv
+.env
+.env.*

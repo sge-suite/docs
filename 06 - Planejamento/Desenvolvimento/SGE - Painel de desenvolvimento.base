@@ -1,0 +1,53 @@
+properties:
+  status:
+    displayName: Estado
+  type:
+    displayName: Tipo
+  order:
+    displayName: Ordem
+  description:
+    displayName: Descrição
+views:
+  - type: table
+    name: Fases
+    filters: file.inFolder("06 - Planejamento/Desenvolvimento/Fases")
+    groupBy:
+      property: status
+      direction: ASC
+    order:
+      - order
+      - file.name
+      - status
+      - description
+  - type: table
+    name: Enums
+    filters: file.inFolder("06 - Planejamento/Desenvolvimento/Enums")
+    groupBy:
+      property: status
+      direction: ASC
+    order:
+      - file.name
+      - status
+      - description
+  - type: table
+    name: Migrations
+    filters: file.inFolder("06 - Planejamento/Desenvolvimento/Migrations")
+    groupBy:
+      property: status
+      direction: ASC
+    order:
+      - order
+      - file.name
+      - status
+      - description
+  - type: table
+    name: Componentes
+    filters: file.inFolder("06 - Planejamento/Desenvolvimento/Componentes")
+    groupBy:
+      property: status
+      direction: ASC
+    order:
+      - file.name
+      - type
+      - status
+      - description

@@ -1,0 +1,66 @@
+{
+  "nodes": [
+    {"id":"a100000000000001","type":"group","x":-1500,"y":-460,"width":3340,"height":260,"label":"Visão conceitual","color":"6"},
+    {"id":"a100000000000002","type":"group","x":-1500,"y":-100,"width":620,"height":880,"label":"Identidade e escopo","color":"5"},
+    {"id":"a100000000000003","type":"group","x":-780,"y":-100,"width":700,"height":1120,"label":"Processo de estágio","color":"4"},
+    {"id":"a100000000000004","type":"group","x":20,"y":-100,"width":700,"height":880,"label":"Documentos e avaliação","color":"3"},
+    {"id":"a100000000000005","type":"group","x":820,"y":-100,"width":1020,"height":880,"label":"Histórico e comunicação","color":"6"},
+    {"id":"a100000000000006","type":"group","x":-1500,"y":1120,"width":3340,"height":300,"label":"Abrir os detalhes","color":"6"},
+
+    {"id":"b200000000000001","type":"text","x":-1430,"y":-400,"width":1500,"height":130,"text":"# Mapa do modelo de dados\n\nAs setas mostram dependências entre áreas. Os cartões inferiores levam aos diagramas e regras canônicas; o Canvas não repete contratos de campos.","color":"6"},
+    {"id":"b200000000000002","type":"text","x":150,"y":-400,"width":1620,"height":130,"text":"## Regra de leitura\n\nFK relaciona o cadastro atual · snapshot congela o fato histórico · Activity Log registra a alteração · status representa o ciclo do próprio registro.","color":"6"},
+
+    {"id":"c300000000000001","type":"text","x":-1430,"y":20,"width":480,"height":100,"text":"## Pessoa e conta\n\n`users` + `user_personal_data`","color":"5"},
+    {"id":"c300000000000002","type":"text","x":-1430,"y":170,"width":480,"height":100,"text":"## Vínculos\n\n`affiliations` define função e contexto.","color":"5"},
+    {"id":"c300000000000003","type":"text","x":-1430,"y":320,"width":230,"height":110,"text":"## Campus\n\nEscopo institucional.","color":"5"},
+    {"id":"c300000000000004","type":"text","x":-1180,"y":320,"width":230,"height":110,"text":"## Curso\n\nEscopo acadêmico.","color":"5"},
+    {"id":"c300000000000005","type":"text","x":-1430,"y":500,"width":480,"height":130,"text":"## Cadastros reutilizáveis\n\nTipos de estágio, concedentes, supervisores e endereços.","color":"5"},
+
+    {"id":"d400000000000001","type":"text","x":-710,"y":20,"width":560,"height":100,"text":"## Solicitação\n\nUm registro editado em Draft ou devolução.","color":"5"},
+    {"id":"d400000000000002","type":"text","x":-710,"y":170,"width":270,"height":120,"text":"## Correções\n\nMensagem e seções autorizadas.","color":"2"},
+    {"id":"d400000000000003","type":"text","x":-420,"y":170,"width":270,"height":120,"text":"## Evidência\n\nComprovação privada de emancipação.","color":"6"},
+    {"id":"d400000000000004","type":"text","x":-710,"y":350,"width":560,"height":110,"text":"## Estágio\n\nFKs atuais + snapshots dos dados aprovados.","color":"4"},
+    {"id":"d400000000000005","type":"text","x":-710,"y":520,"width":270,"height":120,"text":"## Jornada\n\nDistribuição semanal pactuada. Nova vigência só por aditivo.","color":"5"},
+    {"id":"d400000000000006","type":"text","x":-420,"y":520,"width":270,"height":120,"text":"## Pausas\n\nPeríodos que suspendem o cálculo.","color":"5"},
+    {"id":"d400000000000007","type":"text","x":-710,"y":700,"width":560,"height":120,"text":"## Previsão de término\n\nCarga + jornadas + calendário + pausas + margem.","color":"6"},
+    {"id":"d400000000000008","type":"text","x":-710,"y":880,"width":560,"height":90,"text":"## Pedido de cancelamento\n\nDecisão do Setor sem apagar o histórico.","color":"1"},
+
+    {"id":"e500000000000001","type":"text","x":90,"y":20,"width":560,"height":100,"text":"## Templates e versões\n\nO DOCX usado nunca é sobrescrito.","color":"5"},
+    {"id":"e500000000000002","type":"text","x":90,"y":180,"width":560,"height":120,"text":"## Documentos\n\nOrigem, tipo, status, versão e snapshot; saída temporária.","color":"5"},
+    {"id":"e500000000000003","type":"text","x":90,"y":370,"width":560,"height":120,"text":"## Avaliação do supervisor\n\nMesmo formulário em Draft ou Returned.","color":"5"},
+    {"id":"e500000000000004","type":"text","x":90,"y":560,"width":560,"height":130,"text":"## Notas\n\nSupervisor calculada; relatório e apresentação lançadas pelo orientador.","color":"4"},
+
+    {"id":"f600000000000001","type":"text","x":890,"y":20,"width":410,"height":120,"text":"## Snapshots\n\nPreservam os valores usados no processo.","color":"6"},
+    {"id":"f600000000000002","type":"text","x":1360,"y":20,"width":410,"height":120,"text":"## Activity Log\n\nRegistra autoria, vínculo e mudanças.","color":"6"},
+    {"id":"f600000000000003","type":"text","x":890,"y":210,"width":410,"height":120,"text":"## Notificações\n\nAvisos internos por destinatário e contexto.","color":"6"},
+    {"id":"f600000000000004","type":"text","x":1360,"y":210,"width":410,"height":120,"text":"## Mensagens de e-mail\n\nConteúdo preparado e finalidade.","color":"6"},
+    {"id":"f600000000000005","type":"text","x":1125,"y":400,"width":410,"height":120,"text":"## Tentativas de entrega\n\nFila, envio, falha e reprocessamento.","color":"6"},
+
+    {"id":"1000000000000001","type":"text","x":-1430,"y":1210,"width":740,"height":100,"text":"## Relações do núcleo\n\n[Abrir o núcleo](./sge---modelo-de-dados---núcleo)"},
+    {"id":"1000000000000002","type":"text","x":-610,"y":1210,"width":740,"height":100,"text":"## Contexto e autorização\n\n[Abrir o acesso](./sge---modelo-de-dados---acesso)"},
+    {"id":"1000000000000003","type":"text","x":210,"y":1210,"width":740,"height":100,"text":"## Persistência histórica\n\n[Abrir o histórico](./sge---modelo-de-dados---histórico)"},
+    {"id":"1000000000000004","type":"text","x":1030,"y":1210,"width":740,"height":100,"text":"## Estados e transições\n\n[Abrir os ciclos](./sge---ciclos-de-status)"}
+  ],
+  "edges": [
+    {"id":"2000000000000001","fromNode":"c300000000000001","fromSide":"bottom","toNode":"c300000000000002","toSide":"top","toEnd":"arrow"},
+    {"id":"2000000000000002","fromNode":"c300000000000003","fromSide":"top","toNode":"c300000000000002","toSide":"bottom","toEnd":"arrow"},
+    {"id":"2000000000000003","fromNode":"c300000000000004","fromSide":"top","toNode":"c300000000000002","toSide":"bottom","toEnd":"arrow"},
+    {"id":"2000000000000004","fromNode":"c300000000000002","fromSide":"right","toNode":"d400000000000001","toSide":"left","toEnd":"arrow","label":"discente"},
+    {"id":"2000000000000005","fromNode":"c300000000000005","fromSide":"right","toNode":"d400000000000001","toSide":"left","toEnd":"arrow","label":"referências"},
+    {"id":"2000000000000006","fromNode":"d400000000000001","fromSide":"bottom","toNode":"d400000000000002","toSide":"top","toEnd":"arrow","label":"devolução","color":"2"},
+    {"id":"2000000000000007","fromNode":"d400000000000001","fromSide":"bottom","toNode":"d400000000000003","toSide":"top","toEnd":"arrow","label":"se emancipado","color":"6"},
+    {"id":"2000000000000008","fromNode":"d400000000000001","fromSide":"bottom","toNode":"d400000000000004","toSide":"top","toEnd":"arrow","label":"aceite","color":"4"},
+    {"id":"2000000000000009","fromNode":"d400000000000004","fromSide":"bottom","toNode":"d400000000000005","toSide":"top","toEnd":"arrow"},
+    {"id":"200000000000000a","fromNode":"d400000000000004","fromSide":"bottom","toNode":"d400000000000006","toSide":"top","toEnd":"arrow"},
+    {"id":"200000000000000b","fromNode":"d400000000000005","fromSide":"bottom","toNode":"d400000000000007","toSide":"top","toEnd":"arrow"},
+    {"id":"200000000000000c","fromNode":"d400000000000006","fromSide":"bottom","toNode":"d400000000000007","toSide":"top","toEnd":"arrow"},
+    {"id":"200000000000000d","fromNode":"d400000000000004","fromSide":"right","toNode":"e500000000000002","toSide":"left","toEnd":"arrow"},
+    {"id":"200000000000000e","fromNode":"e500000000000001","fromSide":"bottom","toNode":"e500000000000002","toSide":"top","toEnd":"arrow"},
+    {"id":"200000000000000f","fromNode":"d400000000000004","fromSide":"right","toNode":"e500000000000003","toSide":"left","toEnd":"arrow"},
+    {"id":"2000000000000010","fromNode":"e500000000000003","fromSide":"bottom","toNode":"e500000000000004","toSide":"top","toEnd":"arrow"},
+    {"id":"2000000000000011","fromNode":"d400000000000004","fromSide":"right","toNode":"f600000000000001","toSide":"left","toEnd":"arrow","label":"congela"},
+    {"id":"2000000000000012","fromNode":"d400000000000004","fromSide":"right","toNode":"f600000000000002","toSide":"left","toEnd":"arrow","label":"audita"},
+    {"id":"2000000000000013","fromNode":"f600000000000003","fromSide":"right","toNode":"f600000000000004","toSide":"left","toEnd":"arrow"},
+    {"id":"2000000000000014","fromNode":"f600000000000004","fromSide":"bottom","toNode":"f600000000000005","toSide":"top","toEnd":"arrow"}
+  ]
+}

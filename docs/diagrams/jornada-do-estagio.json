@@ -1,0 +1,22 @@
+{
+  "id": "jornada-do-estagio",
+  "kind": "flowchart",
+  "title": "Jornada do estágio",
+  "description": "As etapas públicas do acesso à conclusão de um estágio no SGE.",
+  "summary": "A jornada parte do acesso e do vínculo, passa pela solicitação, análise, formalização e execução, e termina no acompanhamento e na conclusão da carga horária.",
+  "source": {
+    "language": "mermaid",
+    "path": "diagrams/sources/jornada-do-estagio.mmd"
+  },
+  "presentation": {
+    "width": 1280,
+    "height": 300
+  },
+  "sourceRefs": [
+    "content/home.md"
+  ],
+  "data": {
+    "sourceDocument": "home",
+    "sourceIndex": 1
+  }
+}

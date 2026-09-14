@@ -1,0 +1,42 @@
+erDiagram
+    AFFILIATIONS ||--o{ NOTIFICATIONS : affiliation_id
+    NOTIFICATIONS o|--o{ EMAIL_MESSAGES : notification_id
+    EMAIL_MESSAGES ||--o{ EMAIL_DELIVERY_ATTEMPTS : email_message_id
+
+    ACTIVITY_LOG {
+        bigint id PK
+        varchar subject_type
+        bigint subject_id
+        varchar causer_type
+        bigint causer_id
+        timestamp created_at
+    }
+    AFFILIATIONS {
+        bigint id PK
+        bigint user_id FK
+        varchar email
+        timestamp deactivated_at
+    }
+    NOTIFICATIONS {
+        uuid id PK
+        varchar notifiable_type
+        bigint notifiable_id
+        bigint affiliation_id FK
+        jsonb data
+        timestamp read_at
+    }
+    EMAIL_MESSAGES {
+        uuid id PK
+        uuid notification_id FK
+        bigint user_id FK
+        varchar purpose
+        varchar recipient_email
+        timestamp created_at
+    }
+    EMAIL_DELIVERY_ATTEMPTS {
+        uuid id PK
+        uuid email_message_id FK
+        smallint attempt_number
+        varchar status
+        timestamp sent_at
+    }

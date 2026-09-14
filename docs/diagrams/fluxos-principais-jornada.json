@@ -1,0 +1,22 @@
+{
+  "id": "fluxos-principais-jornada",
+  "kind": "flowchart",
+  "title": "Fluxo principal do estágio",
+  "description": "O fluxo funcional resumido da abertura, formalização, execução e conclusão.",
+  "summary": "A pessoa acessa o sistema com um vínculo, envia a solicitação, responde a correções quando necessário, passa pela formalização e acompanha o estágio até a conclusão da carga horária.",
+  "source": {
+    "language": "mermaid",
+    "path": "diagrams/sources/fluxos-principais-jornada.mmd"
+  },
+  "presentation": {
+    "width": 1280,
+    "height": 300
+  },
+  "sourceRefs": [
+    "content/fluxos-principais.md"
+  ],
+  "data": {
+    "sourceDocument": "fluxos-principais",
+    "sourceIndex": 1
+  }
+}

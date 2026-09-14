@@ -1,0 +1,24 @@
+{
+  "id": "guia-completo-jornada",
+  "kind": "flowchart",
+  "title": "Jornada resumida do estágio",
+  "description": "Visão compacta da solicitação, formalização, execução e conclusão do estágio.",
+  "summary": "O processo começa com solicitação e análise, segue para formalização e assinaturas, e termina com a execução e a confirmação da carga horária cumprida.",
+  "svgSource": "diagrams/artifacts/guia-completo-jornada.svg",
+  "interactive": false,
+  "presentation": {
+    "width": 1200,
+    "height": 280
+  },
+  "sourceRefs": [
+    "content/guia-completo.md"
+  ],
+  "data": {
+    "steps": [
+      "Solicitação e análise",
+      "Formalização e assinaturas",
+      "Execução e conclusão"
+    ],
+    "completionRule": "A conclusão exige confirmação do cumprimento integral da carga horária."
+  }
+}

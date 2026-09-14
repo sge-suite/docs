@@ -1,0 +1,40 @@
+{
+  "id": "modelo-nucleo-solicitacao",
+  "kind": "db-schema",
+  "title": "Esquema lógico — solicitação e formalização",
+  "description": "Tabelas e colunas que registram a solicitação e os cadastros usados para formalizar o estágio.",
+  "summary": "A solicitação é enviada por um vínculo discente, referencia curso, tipo e concedente, e mantém o estado que conduz à formalização.",
+  "source": {
+    "language": "mermaid",
+    "path": "diagrams/sources/modelo-nucleo-solicitacao.mmd"
+  },
+  "presentation": {
+    "width": 1780,
+    "height": 900,
+    "initialZoom": 1.05
+  },
+  "layout": {
+    "canvas": { "width": 1780, "height": 900 },
+    "entities": {
+      "AFFILIATIONS": { "x": 80, "y": 80, "width": 380 },
+      "COURSES": { "x": 480, "y": 80, "width": 400 },
+      "INTERNSHIP_TYPES": { "x": 920, "y": 80, "width": 380 },
+      "GRANTING_PARTIES": { "x": 1360, "y": 80, "width": 360 },
+      "INTERNSHIP_REQUESTS": { "x": 660, "y": 520, "width": 460 }
+    },
+    "relationships": [
+      { "from": "AFFILIATIONS", "to": "INTERNSHIP_REQUESTS", "label": "submitted_by_affiliation_id", "fromPort": { "side": "right", "field": "id" }, "toPort": { "side": "left", "field": "submitted_by_affiliation_id" } },
+      { "from": "COURSES", "to": "INTERNSHIP_REQUESTS", "label": "course_id", "fromPort": { "side": "right", "field": "id" }, "toPort": { "side": "left", "field": "course_id" } },
+      { "from": "INTERNSHIP_TYPES", "to": "INTERNSHIP_REQUESTS", "label": "internship_type_id", "fromPort": { "side": "left", "field": "id" }, "toPort": { "side": "right", "field": "internship_type_id" } },
+      { "from": "GRANTING_PARTIES", "to": "INTERNSHIP_REQUESTS", "label": "granting_party_id", "fromPort": { "side": "left", "field": "id" }, "toPort": { "side": "right", "field": "granting_party_id" } }
+    ]
+  },
+  "sourceRefs": [
+    "content/modelo-de-dados-nucleo.md"
+  ],
+  "data": {
+    "sourceDocument": "modelo-de-dados-nucleo",
+    "sourceIndex": 2,
+    "notation": "logical relational database schema"
+  }
+}

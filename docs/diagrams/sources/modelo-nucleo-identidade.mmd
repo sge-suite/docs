@@ -1,0 +1,44 @@
+erDiagram
+    USERS ||--|| USER_PERSONAL_DATA : user_id
+    USERS ||--o{ AFFILIATIONS : user_id
+    ADDRESSES ||--o{ USER_PERSONAL_DATA : address_id
+    ADDRESSES ||--o{ CAMPUSES : address_id
+    CAMPUSES ||--o{ AFFILIATIONS : campus_id
+
+    USERS {
+        bigint id PK
+        varchar name
+        varchar email UK
+        varchar password
+        timestamp created_at
+    }
+    USER_PERSONAL_DATA {
+        bigint id PK
+        bigint user_id FK
+        varchar cpf UK
+        varchar rg
+        bigint address_id FK
+    }
+    ADDRESSES {
+        bigint id PK
+        varchar street
+        varchar number
+        varchar city
+        char uf
+        varchar zip_code
+    }
+    CAMPUSES {
+        bigint id PK
+        varchar name
+        bigint address_id FK
+        bigint legal_representative_affiliation_id FK
+        timestamp deactivated_at
+    }
+    AFFILIATIONS {
+        bigint id PK
+        bigint user_id FK
+        bigint campus_id FK
+        bigint course_id FK
+        varchar type
+        timestamp deactivated_at
+    }

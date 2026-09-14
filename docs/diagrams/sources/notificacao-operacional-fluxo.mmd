@@ -1,0 +1,12 @@
+flowchart TD
+    A[Evento autorizado do domínio] --> B{Destinatário possui conta?}
+    B -- Sim --> C[Cria notification interna]
+    C --> D{Regra permite e-mail?}
+    B -- Não, contato externo selecionado --> E[Congela e-mail operacional]
+    D -- Não --> F[Notificação fica apenas no SGE]
+    D -- Sim --> E
+    E --> G[Após commit, cria email_message]
+    G --> H[Job e email_delivery_attempt]
+    H --> I{SMTP aceitou?}
+    I -- Sim --> J[attempt: sent]
+    I -- Não --> K[attempt: failed; responsável pode reenviar]

@@ -1,0 +1,22 @@
+{
+  "id": "mensageria-fluxo",
+  "kind": "flowchart",
+  "title": "Trilha de notificações e e-mails",
+  "description": "Como eventos do domínio geram notificações, mensagens preparadas e tentativas de entrega.",
+  "summary": "Um evento do domínio pode criar uma notificação e uma mensagem; cada mensagem é enviada por um Job, e o resultado do SMTP fica registrado como tentativa enviada ou falha, com reenvio seguro.",
+  "source": {
+    "language": "mermaid",
+    "path": "diagrams/sources/mensageria-fluxo.mmd"
+  },
+  "presentation": {
+    "width": 1280,
+    "height": 300
+  },
+  "sourceRefs": [
+    "content/e-mails-notificacoes-e-entregas.md"
+  ],
+  "data": {
+    "sourceDocument": "e-mails-notificacoes-e-entregas",
+    "sourceIndex": 1
+  }
+}

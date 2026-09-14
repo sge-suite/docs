@@ -1,0 +1,22 @@
+{
+  "id": "enum-correction-status",
+  "kind": "state",
+  "title": "Ciclo da correção de solicitação",
+  "description": "Estados de uma pendência aberta pelo Setor e respondida pelo discente.",
+  "summary": "A correção fica Open até o reenvio do discente; depois pode ser Resolved pelo Setor ou Cancelled quando o processo é encerrado.",
+  "source": {
+    "language": "mermaid",
+    "path": "diagrams/sources/enum-correction-status.mmd"
+  },
+  "presentation": {
+    "width": 1280,
+    "height": 280
+  },
+  "sourceRefs": [
+    "content/enum-internshiprequestcorrectionstatus.md"
+  ],
+  "data": {
+    "sourceDocument": "enum-internshiprequestcorrectionstatus",
+    "sourceIndex": 1
+  }
+}

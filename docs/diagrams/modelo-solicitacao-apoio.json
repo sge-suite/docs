@@ -1,0 +1,42 @@
+{
+  "id": "modelo-solicitacao-apoio",
+  "kind": "db-schema",
+  "title": "Esquema lógico — apoio da solicitação",
+  "description": "Tabelas relacionadas à formalização do estágio, correções e evidências privadas.",
+  "summary": "Uma solicitação pode originar um estágio e receber várias correções e evidências; cada registro preserva sua própria chave e estado.",
+  "source": {
+    "language": "mermaid",
+    "path": "diagrams/sources/modelo-solicitacao-apoio.mmd"
+  },
+  "presentation": {
+    "width": 1740,
+    "height": 900,
+    "initialZoom": 1.05
+  },
+  "layout": {
+    "canvas": { "width": 1740, "height": 900 },
+    "entities": {
+      "AFFILIATIONS": { "x": 80, "y": 80, "width": 380 },
+      "INTERNSHIP_REQUESTS": { "x": 620, "y": 80, "width": 460 },
+      "INTERNSHIPS": { "x": 1260, "y": 80, "width": 400 },
+      "INTERNSHIP_REQUEST_CORRECTIONS": { "x": 340, "y": 560, "width": 440 },
+      "EMANCIPATION_EVIDENCES": { "x": 980, "y": 560, "width": 420 }
+    },
+    "relationships": [
+      { "from": "AFFILIATIONS", "to": "INTERNSHIP_REQUESTS", "label": "submitted_by_affiliation_id", "fromPort": { "side": "right", "field": "id" }, "toPort": { "side": "left", "field": "submitted_by_affiliation_id" } },
+      { "from": "INTERNSHIP_REQUESTS", "to": "INTERNSHIPS", "label": "internship_id", "fromPort": { "side": "right", "field": "id" }, "toPort": { "side": "left", "field": "id" } },
+      { "from": "INTERNSHIP_REQUESTS", "to": "INTERNSHIP_REQUEST_CORRECTIONS", "label": "internship_request_id", "fromPort": { "side": "bottom", "offset": 0.2 }, "toPort": { "side": "top", "offset": 0.8 } },
+      { "from": "INTERNSHIP_REQUESTS", "to": "EMANCIPATION_EVIDENCES", "label": "internship_request_id", "fromPort": { "side": "bottom", "offset": 0.8 }, "toPort": { "side": "top", "offset": 0.2 } }
+    ]
+  },
+  "sourceRefs": [
+    "content/migration-19-internship-requests.md",
+    "content/migration-19a-emancipation-evidences.md",
+    "content/migration-20-internship-request-corrections.md",
+    "content/migration-15-internships.md"
+  ],
+  "data": {
+    "notation": "logical relational database schema",
+    "scope": "request formalization"
+  }
+}

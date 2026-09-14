@@ -1,0 +1,44 @@
+{
+  "id": "enum-request-status",
+  "kind": "state",
+  "title": "Ciclo da solicitação de estágio",
+  "description": "Estados de uma solicitação desde o rascunho até o aceite, recusa ou retirada.",
+  "summary": "A solicitação vai de Draft para Submitted e UnderReview; a análise pode devolvê-la para correção, aceitá-la, recusá-la ou permitir sua retirada antes do encerramento.",
+  "source": {
+    "language": "mermaid",
+    "path": "diagrams/sources/enum-request-status.mmd"
+  },
+  "presentation": {
+    "width": 1280,
+    "height": 720
+  },
+  "layout": {
+    "canvas": { "width": 1280, "height": 720 },
+    "states": {
+      "Draft": { "x": 80, "y": 280, "width": 144 },
+      "Submitted": { "x": 320, "y": 280, "width": 144 },
+      "UnderReview": { "x": 560, "y": 280, "width": 144 },
+      "PendingCorrection": { "x": 560, "y": 80, "width": 160 },
+      "Accepted": { "x": 840, "y": 160, "width": 144 },
+      "Rejected": { "x": 840, "y": 320, "width": 144 },
+      "Withdrawn": { "x": 560, "y": 520, "width": 144 }
+    },
+    "transitions": [
+      { "from": "Draft", "to": "Submitted", "label": "enviar", "fromSide": "right", "toSide": "left", "labelPlacement": { "x": 272, "y": 256 } },
+      { "from": "Submitted", "to": "UnderReview", "label": "iniciar análise", "fromSide": "right", "toSide": "left", "labelPlacement": { "x": 512, "y": 256 } },
+      { "from": "UnderReview", "to": "PendingCorrection", "label": "devolver seções", "fromSide": "top", "toSide": "bottom", "labelPlacement": { "x": 704, "y": 200 } },
+      { "from": "PendingCorrection", "to": "Submitted", "label": "reenviar", "fromSide": "left", "toSide": "top", "waypoints": [{ "x": 512, "y": 112 }, { "x": 512, "y": 208 }, { "x": 392, "y": 208 }], "labelPlacement": { "x": 456, "y": 192 } },
+      { "from": "UnderReview", "to": "Accepted", "label": "aprovar", "fromSide": "right", "toSide": "left", "waypoints": [{ "x": 768, "y": 312 }, { "x": 768, "y": 192 }], "labelPlacement": { "x": 768, "y": 240 } },
+      { "from": "UnderReview", "to": "Rejected", "label": "recusar", "fromSide": "right", "toSide": "left", "waypoints": [{ "x": 768, "y": 312 }, { "x": 768, "y": 352 }], "labelPlacement": { "x": 768, "y": 336 } },
+      { "from": "Draft", "to": "Withdrawn", "label": "retirar", "fromSide": "bottom", "toSide": "top", "waypoints": [{ "x": 152, "y": 448 }, { "x": 632, "y": 448 }], "labelPlacement": { "x": 392, "y": 432 } },
+      { "from": "UnderReview", "to": "Withdrawn", "label": "retirar", "fromSide": "bottom", "toSide": "top", "labelPlacement": { "x": 680, "y": 432 } }
+    ]
+  },
+  "sourceRefs": [
+    "content/enum-internshiprequeststatus.md"
+  ],
+  "data": {
+    "sourceDocument": "enum-internshiprequeststatus",
+    "sourceIndex": 1
+  }
+}

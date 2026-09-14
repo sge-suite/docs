@@ -1,0 +1,9 @@
+stateDiagram-v2
+    [*] --> Draft
+    Draft --> Draft: salvar parcialmente
+    Draft --> Submitted: enviar
+    Submitted --> Returned: devolver
+    Submitted --> Approved: aprovar
+    Returned --> Submitted: corrigir e reenviar o mesmo registro
+    Returned --> Cancelled: cancelar
+    Submitted --> Cancelled: cancelar

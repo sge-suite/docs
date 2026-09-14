@@ -1,0 +1,752 @@
+{
+  "id": "fluxograma-do-estagio",
+  "kind": "canvas",
+  "title": "Fluxograma navegável do estágio",
+  "description": "Mapa navegável da jornada do estágio, com decisões, retornos, formalização, acompanhamento e conclusão.",
+  "summary": "O processo parte do acesso contextual, percorre solicitação e análise, formalização e execução, e chega à avaliação e conclusão; devoluções retornam ao mesmo registro e decisões preservam o histórico.",
+  "groups": [
+    {
+      "id": "a000000000000006",
+      "label": "5 — Avaliação e conclusão",
+      "x": 1200,
+      "y": -100,
+      "width": 800,
+      "height": 1250
+    },
+    {
+      "id": "a000000000000003",
+      "label": "2 — Solicitação e análise",
+      "x": -1200,
+      "y": -100,
+      "width": 700,
+      "height": 1320
+    },
+    {
+      "id": "a000000000000004",
+      "label": "3 — Formalização",
+      "x": -400,
+      "y": -100,
+      "width": 700,
+      "height": 900
+    },
+    {
+      "id": "a000000000000005",
+      "label": "4 — Estágio em andamento",
+      "x": 400,
+      "y": -100,
+      "width": 700,
+      "height": 800
+    },
+    {
+      "id": "a000000000000002",
+      "label": "1 — Acesso e contexto",
+      "x": -2000,
+      "y": -100,
+      "width": 700,
+      "height": 700
+    }
+  ],
+  "nodes": [
+    {
+      "id": "c000000000000001",
+      "kind": "step",
+      "tag": "ETAPA",
+      "title": "Login",
+      "summary": "A pessoa usa uma única conta com e-mail e senha; o sistema carrega seus vínculos ativos. A redefinição de senha não cria nova conta.",
+      "text": "## Login\n\nA pessoa usa uma única conta com e-mail e senha; o sistema carrega seus vínculos ativos.\n\nA redefinição de senha não cria nova conta.",
+      "x": -1900,
+      "y": 0,
+      "width": 500,
+      "height": 110
+    },
+    {
+      "id": "c000000000000002",
+      "kind": "step",
+      "tag": "ETAPA",
+      "title": "Selecionar vínculo",
+      "summary": "Com um vínculo ativo, o contexto é selecionado automaticamente. Com mais de um, a pessoa escolhe a função, campus e curso corretos para a sessão.",
+      "text": "## Selecionar vínculo\n\nCom um vínculo ativo, o contexto é selecionado automaticamente. Com mais de um, a pessoa escolhe a função, campus e curso corretos para a sessão.",
+      "x": -1900,
+      "y": 140,
+      "width": 500,
+      "height": 110
+    },
+    {
+      "id": "c000000000000003",
+      "kind": "store",
+      "tag": "REGISTRO",
+      "title": "Gate e Policy",
+      "summary": "Cada ação valida o vínculo ativo, AffiliationType, escopo de campus ou curso, posse do registro e estado do fluxo. Não há perfis dinâmicos no banco.",
+      "text": "## Gate e Policy\n\nCada ação valida o vínculo ativo, AffiliationType, escopo de campus ou curso, posse do registro e estado do fluxo.\n\nNão há perfis dinâmicos no banco.",
+      "x": -1900,
+      "y": 280,
+      "width": 500,
+      "height": 110
+    },
+    {
+      "id": "c000000000000004",
+      "kind": "focal",
+      "tag": "FOCO",
+      "title": "Dashboard autorizado",
+      "summary": "Exibe somente as ações possíveis naquele contexto. A pessoa pode trocar de vínculo; ações relevantes registram usuário e vínculo utilizados.",
+      "text": "## Dashboard autorizado\n\nExibe somente as ações possíveis naquele contexto. A pessoa pode trocar de vínculo; ações relevantes registram usuário e vínculo utilizados.",
+      "x": -1900,
+      "y": 420,
+      "width": 500,
+      "height": 100
+    },
+    {
+      "id": "d000000000000008",
+      "kind": "optional",
+      "tag": "ALTERNATIVA",
+      "title": "Returned",
+      "summary": "O Setor abre uma correção com mensagem e seções afetadas. O discente edita apenas essas seções e reenvia o mesmo registro.",
+      "text": "## Returned\n\nO Setor abre uma correção com mensagem e seções afetadas. O discente edita apenas essas seções e reenvia o mesmo registro.",
+      "x": -1110,
+      "y": 1025,
+      "width": 230,
+      "height": 130
+    },
+    {
+      "id": "d000000000000009",
+      "kind": "optional",
+      "tag": "ALTERNATIVA",
+      "title": "Rejected",
+      "summary": "A solicitação é encerrada com motivo. Não cria estágio nem documento de formalização.",
+      "text": "## Rejected\n\nA solicitação é encerrada com motivo. Não cria estágio nem documento de formalização.",
+      "x": -850,
+      "y": 1025,
+      "width": 230,
+      "height": 130
+    },
+    {
+      "id": "1000000000000001",
+      "kind": "step",
+      "tag": "ETAPA",
+      "title": "Avaliação em Draft",
+      "summary": "O supervisor inicia ou retoma o mesmo formulário. Em Draft, campos podem permanecer parciais e o salvamento é progressivo. O histórico não é exibido ao supervisor.",
+      "text": "## Avaliação em Draft\n\nO supervisor inicia ou retoma o mesmo formulário. Em Draft, campos podem permanecer parciais e o salvamento é progressivo.\n\nO histórico não é exibido ao supervisor.",
+      "x": 1300,
+      "y": 0,
+      "width": 600,
+      "height": 120
+    },
+    {
+      "id": "1000000000000002",
+      "kind": "focal",
+      "tag": "FOCO",
+      "title": "Submitted",
+      "summary": "Todos os campos obrigatórios do caminho condicional precisam estar preenchidos. A resposta enviada fica congelada até devolução do Setor ou cancelamento pelo supervisor.",
+      "text": "## Submitted\n\nTodos os campos obrigatórios do caminho condicional precisam estar preenchidos.\n\nA resposta enviada fica congelada até devolução do Setor ou cancelamento pelo supervisor.",
+      "x": 1300,
+      "y": 140,
+      "width": 600,
+      "height": 120
+    },
+    {
+      "id": "1000000000000003",
+      "kind": "optional",
+      "tag": "ALTERNATIVA",
+      "title": "Setor analisa",
+      "summary": "O Setor aprova ou devolve com motivo, mas não altera o conteúdo respondido. Se a carga horária não estiver cumprida, a resposta deve ser devolvida.",
+      "text": "## Setor analisa\n\nO Setor aprova ou devolve com motivo, mas não altera o conteúdo respondido.\n\nSe a carga horária não estiver cumprida, a resposta deve ser devolvida.",
+      "x": 1300,
+      "y": 280,
+      "width": 600,
+      "height": 120
+    },
+    {
+      "id": "1000000000000004",
+      "kind": "decision",
+      "tag": "DECISÃO",
+      "title": "Aprovada e carga cumprida?",
+      "summary": "A aprovação depende da avaliação válida e da confirmação dos requisitos exigidos para esse estágio.",
+      "text": "## Aprovada e carga cumprida?\n\nA aprovação depende da avaliação válida e da confirmação dos requisitos exigidos para esse estágio.",
+      "x": 1300,
+      "y": 420,
+      "width": 600,
+      "height": 95
+    },
+    {
+      "id": "1000000000000005",
+      "kind": "optional",
+      "tag": "ALTERNATIVA",
+      "title": "Returned",
+      "summary": "O mesmo formulário reabre integralmente para o supervisor corrigir e reenviar. Cada valor e transição permanece no Activity Log.",
+      "text": "## Returned\n\nO mesmo formulário reabre integralmente para o supervisor corrigir e reenviar.\n\nCada valor e transição permanece no Activity Log.",
+      "x": 1300,
+      "y": 555,
+      "width": 260,
+      "height": 130
+    },
+    {
+      "id": "1000000000000006",
+      "kind": "focal",
+      "tag": "FOCO",
+      "title": "Approved",
+      "summary": "A resposta aprovada mais recente torna-se a avaliação vigente. Ela deixa de ser editável pelo Setor e pelo supervisor.",
+      "text": "## Approved\n\nA resposta aprovada mais recente torna-se a avaliação vigente.\n\nEla deixa de ser editável pelo Setor e pelo supervisor.",
+      "x": 1640,
+      "y": 555,
+      "width": 260,
+      "height": 130
+    },
+    {
+      "id": "1000000000000007",
+      "kind": "step",
+      "tag": "ETAPA",
+      "title": "Notas",
+      "summary": "O sistema calcula a nota do supervisor pelos conceitos congelados. O orientador lança relatório e apresentação; a nota consolidada usa os pesos do snapshot do tipo.",
+      "text": "## Notas\n\nO sistema calcula a nota do supervisor pelos conceitos congelados. O orientador lança relatório e apresentação; a nota consolidada usa os pesos do snapshot do tipo.",
+      "x": 1300,
+      "y": 710,
+      "width": 600,
+      "height": 135
+    },
+    {
+      "id": "1000000000000008",
+      "kind": "decision",
+      "tag": "DECISÃO",
+      "title": "Requisitos concluídos?",
+      "summary": "Confere avaliação válida, notas exigidas e demais regras institucionais antes de encerrar o estágio.",
+      "text": "## Requisitos concluídos?\n\nConfere avaliação válida, notas exigidas e demais regras institucionais antes de encerrar o estágio.",
+      "x": 1300,
+      "y": 870,
+      "width": 600,
+      "height": 95
+    },
+    {
+      "id": "1000000000000009",
+      "kind": "focal",
+      "tag": "FOCO",
+      "title": "Concluído",
+      "summary": "O estágio é encerrado preservando notas, documentos, snapshots, notificações e Activity Log. A previsão de término nunca produz esta transição sozinha.",
+      "text": "## Concluído\n\nO estágio é encerrado preservando notas, documentos, snapshots, notificações e Activity Log.\n\nA previsão de término nunca produz esta transição sozinha.",
+      "x": 1300,
+      "y": 1015,
+      "width": 600,
+      "height": 120
+    },
+    {
+      "id": "e000000000000001",
+      "kind": "focal",
+      "tag": "FOCO",
+      "title": "Solicitação aceita",
+      "summary": "Cria o estágio em formalização, associa a solicitação e congela snapshots dos dados e regras aprovados. Alterações posteriores do cadastro não reescrevem esse contexto histórico.",
+      "text": "## Solicitação aceita\n\nCria o estágio em formalização, associa a solicitação e congela snapshots dos dados e regras aprovados.\n\nAlterações posteriores do cadastro não reescrevem esse contexto histórico.",
+      "x": -300,
+      "y": 0,
+      "width": 500,
+      "height": 120
+    },
+    {
+      "id": "e000000000000002",
+      "kind": "step",
+      "tag": "ETAPA",
+      "title": "Gerar documentos",
+      "summary": "O Setor escolhe tipo e versão de template ou registra documento da concedente. A geração preserva versão e snapshot, não o arquivo final. Para assinatura, informa o local disponível e seleciona os interessados que receberão o aviso.",
+      "text": "## Gerar documentos\n\nO Setor escolhe tipo e versão de template ou registra documento da concedente. A geração preserva versão e snapshot, não o arquivo final.\n\nPara assinatura, informa o local disponível e seleciona os interessados que receberão o aviso.",
+      "x": -300,
+      "y": 140,
+      "width": 500,
+      "height": 145
+    },
+    {
+      "id": "e000000000000005",
+      "kind": "focal",
+      "tag": "FOCO",
+      "title": "Liberado",
+      "summary": "O Setor confere a formalização concluída e autoriza o início. Somente estágio liberado pode entrar em andamento.",
+      "text": "## Liberado\n\nO Setor confere a formalização concluída e autoriza o início.\n\nSomente estágio liberado pode entrar em andamento.",
+      "x": -30,
+      "y": 465,
+      "width": 230,
+      "height": 110
+    },
+    {
+      "id": "e000000000000006",
+      "kind": "focal",
+      "tag": "FOCO",
+      "title": "Data de início",
+      "summary": "Na data planejada, o schedule sincroniza Released para InProgress. Ele não conclui, cancela nem recalcula o estágio diariamente.",
+      "text": "## Data de início\n\nNa data planejada, o schedule sincroniza Released para InProgress.\n\nEle não conclui, cancela nem recalcula o estágio diariamente.",
+      "x": -30,
+      "y": 600,
+      "width": 230,
+      "height": 150
+    },
+    {
+      "id": "f000000000000001",
+      "kind": "focal",
+      "tag": "FOCO",
+      "title": "Em andamento",
+      "summary": "O estágio ativo é acompanhado pelo discente e pelos vínculos responsáveis. A previsão de término é referência; ela não conclui o estágio sozinha.",
+      "text": "## Em andamento\n\nO estágio ativo é acompanhado pelo discente e pelos vínculos responsáveis.\n\nA previsão de término é referência; ela não conclui o estágio sozinha.",
+      "x": 500,
+      "y": 0,
+      "width": 500,
+      "height": 110
+    },
+    {
+      "id": "f000000000000002",
+      "kind": "optional",
+      "tag": "ALTERNATIVA",
+      "title": "Alterações formais",
+      "summary": "Pausa, substituição de orientador ou supervisor, aditivo e cancelamento preservam motivo e histórico. A jornada não muda por rotina: só um aditivo assinado cria nova vigência. A pausa atualiza o estado imediatamente.",
+      "text": "## Alterações formais\n\nPausa, substituição de orientador ou supervisor, aditivo e cancelamento preservam motivo e histórico.\n\nA jornada não muda por rotina: só um aditivo assinado cria nova vigência. A pausa atualiza o estado imediatamente.",
+      "x": 500,
+      "y": 145,
+      "width": 500,
+      "height": 145
+    },
+    {
+      "id": "f000000000000003",
+      "kind": "store",
+      "tag": "REGISTRO",
+      "title": "Recalcular previsão",
+      "summary": "Carga do tipo, jornada pactuada — ou aditivo formalizado —, calendário, pausas e margem congelada produzem resultado reproduzível. Entradas, versão e resultado ficam em projectedenddatecalculation.",
+      "text": "## Recalcular previsão\n\nCarga do tipo, jornada pactuada — ou aditivo formalizado —, calendário, pausas e margem congelada produzem resultado reproduzível.\n\nEntradas, versão e resultado ficam em projected_end_date_calculation.",
+      "x": 500,
+      "y": 320,
+      "width": 500,
+      "height": 130
+    },
+    {
+      "id": "f000000000000004",
+      "kind": "optional",
+      "tag": "ALTERNATIVA",
+      "title": "Cancelamento",
+      "summary": "O discente solicita com motivo; o Setor aprova ou recusa. Documentos assinados ficam como histórico, pendentes podem ser cancelados e a rescisão é gerada quando cabível.",
+      "text": "## Cancelamento\n\nO discente solicita com motivo; o Setor aprova ou recusa.\n\nDocumentos assinados ficam como histórico, pendentes podem ser cancelados e a rescisão é gerada quando cabível.",
+      "x": 500,
+      "y": 490,
+      "width": 230,
+      "height": 135
+    },
+    {
+      "id": "d000000000000001",
+      "kind": "step",
+      "tag": "ETAPA",
+      "title": "Solicitação em Draft",
+      "summary": "O discente inicia e encontra a própria solicitação vinculada ao seu contexto acadêmico. Ela permanece como o mesmo formulário ao longo de correções e reenvios.",
+      "text": "## Solicitação em Draft\n\nO discente inicia e encontra a própria solicitação vinculada ao seu contexto acadêmico.\n\nEla permanece como o mesmo formulário ao longo de correções e reenvios.",
+      "x": -1100,
+      "y": 0,
+      "width": 500,
+      "height": 110
+    },
+    {
+      "id": "d000000000000002",
+      "kind": "step",
+      "tag": "ETAPA",
+      "title": "Preencher e salvar",
+      "summary": "Livewire salva o rascunho progressivamente; em Draft, os campos de negócio podem ficar nulos. Datas derivadas e validações críticas são calculadas no servidor.",
+      "text": "## Preencher e salvar\n\nLivewire salva o rascunho progressivamente; em Draft, os campos de negócio podem ficar nulos.\n\nDatas derivadas e validações críticas são calculadas no servidor.",
+      "x": -1100,
+      "y": 135,
+      "width": 500,
+      "height": 120
+    },
+    {
+      "id": "d000000000000003",
+      "kind": "store",
+      "tag": "REGISTRO",
+      "title": "Capacidade civil",
+      "summary": "Maior de idade segue normalmente. Menor informa responsável legal. Menor emancipado faz upload do comprovante pelo SGE, em mídia privada registrada na solicitação e analisada pelo Setor. A prova nunca entra em e-mail, documento ou Activity Log.",
+      "text": "## Capacidade civil\n\nMaior de idade segue normalmente. Menor informa responsável legal. Menor emancipado faz upload do comprovante pelo SGE, em mídia privada registrada na solicitação e analisada pelo Setor.\n\nA prova nunca entra em e-mail, documento ou Activity Log.",
+      "x": -1100,
+      "y": 275,
+      "width": 500,
+      "height": 140
+    },
+    {
+      "id": "d000000000000005",
+      "kind": "focal",
+      "tag": "FOCO",
+      "title": "Submitted",
+      "summary": "O envio valida todos os campos obrigatórios do caminho escolhido e congela a edição comum. A solicitação segue para análise; envio não significa aceite.",
+      "text": "## Submitted\n\nO envio valida todos os campos obrigatórios do caminho escolhido e congela a edição comum.\n\nA solicitação segue para análise; envio não significa aceite.",
+      "x": -1100,
+      "y": 620,
+      "width": 500,
+      "height": 110
+    },
+    {
+      "id": "e000000000000003",
+      "kind": "decision",
+      "tag": "DECISÃO",
+      "title": "Assinaturas conferidas?",
+      "summary": "O Setor acompanha manualmente os documentos exigidos e confirma a assinatura externa. Não existe schedule que cancele, cobre ou altere documentos por prazo.",
+      "text": "## Assinaturas conferidas?\n\nO Setor acompanha manualmente os documentos exigidos e confirma a assinatura externa.\n\nNão existe schedule que cancele, cobre ou altere documentos por prazo.",
+      "x": -300,
+      "y": 330,
+      "width": 500,
+      "height": 110
+    },
+    {
+      "id": "e000000000000004",
+      "kind": "optional",
+      "tag": "ALTERNATIVA",
+      "title": "Revisão manual",
+      "summary": "Se a formalização precisar de nova data ou dados, o Setor pode cancelar o documento com motivo e abrir uma correção com campos autorizados. O discente então corrige a mesma solicitação.",
+      "text": "## Revisão manual\n\nSe a formalização precisar de nova data ou dados, o Setor pode cancelar o documento com motivo e abrir uma correção com campos autorizados.\n\nO discente então corrige a mesma solicitação.",
+      "x": -300,
+      "y": 465,
+      "width": 230,
+      "height": 130
+    },
+    {
+      "id": "d000000000000004",
+      "kind": "step",
+      "tag": "ETAPA",
+      "title": "Cadastros relacionados",
+      "summary": "Seleciona curso, tipo, concedente, supervisor, orientador, jornada, data e atividades. Se supervisor ou concedente não existir, a pendência de cadastro é analisada pelo Setor; não vira texto livre definitivo.",
+      "text": "## Cadastros relacionados\n\nSeleciona curso, tipo, concedente, supervisor, orientador, jornada, data e atividades.\n\nSe supervisor ou concedente não existir, a pendência de cadastro é analisada pelo Setor; não vira texto livre definitivo.",
+      "x": -1100,
+      "y": 435,
+      "width": 500,
+      "height": 145
+    },
+    {
+      "id": "d000000000000006",
+      "kind": "optional",
+      "tag": "ALTERNATIVA",
+      "title": "Setor analisa",
+      "summary": "Confere dados, evidências, cadastros e regras do tipo de estágio. O Setor aprova, recusa ou devolve, sem editar as respostas do discente.",
+      "text": "## Setor analisa\n\nConfere dados, evidências, cadastros e regras do tipo de estágio.\n\nO Setor aprova, recusa ou devolve, sem editar as respostas do discente.",
+      "x": -1100,
+      "y": 760,
+      "width": 500,
+      "height": 110
+    },
+    {
+      "id": "f000000000000005",
+      "kind": "step",
+      "tag": "ETAPA",
+      "title": "Liberar avaliação",
+      "summary": "No momento institucional adequado, o sistema disponibiliza a avaliação ao supervisor e cria o aviso para ele agir. Essa liberação não substitui a conferência final do estágio.",
+      "text": "## Liberar avaliação\n\nNo momento institucional adequado, o sistema disponibiliza a avaliação ao supervisor e cria o aviso para ele agir.\n\nEssa liberação não substitui a conferência final do estágio.",
+      "x": 760,
+      "y": 490,
+      "width": 240,
+      "height": 130
+    },
+    {
+      "id": "d000000000000007",
+      "kind": "decision",
+      "tag": "DECISÃO",
+      "title": "Resultado da análise?",
+      "summary": "A decisão é explícita e registrada; não há aprovação automática após reenvio.",
+      "text": "## Resultado da análise?\n\nA decisão é explícita e registrada; não há aprovação automática após reenvio.",
+      "x": -1100,
+      "y": 895,
+      "width": 500,
+      "height": 90
+    }
+  ],
+  "edges": [
+    {
+      "id": "4000000000000001",
+      "from": "c000000000000001",
+      "to": "c000000000000002",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "id": "4000000000000002",
+      "from": "c000000000000002",
+      "to": "c000000000000003",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "id": "4000000000000003",
+      "from": "c000000000000003",
+      "to": "c000000000000004",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "id": "4000000000000004",
+      "from": "c000000000000004",
+      "to": "d000000000000001",
+      "fromSide": "right",
+      "toSide": "left",
+      "label": "contexto Discente"
+    },
+    {
+      "id": "4000000000000005",
+      "from": "d000000000000001",
+      "to": "d000000000000002",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "id": "4000000000000006",
+      "from": "d000000000000002",
+      "to": "d000000000000003",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "id": "4000000000000007",
+      "from": "d000000000000003",
+      "to": "d000000000000004",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "id": "4000000000000008",
+      "from": "d000000000000004",
+      "to": "d000000000000005",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "id": "4000000000000009",
+      "from": "d000000000000005",
+      "to": "d000000000000006",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "id": "400000000000000a",
+      "from": "d000000000000006",
+      "to": "d000000000000007",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "id": "400000000000000b",
+      "from": "d000000000000007",
+      "to": "d000000000000008",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "label": "devolve",
+      "tone": "return"
+    },
+    {
+      "id": "400000000000000c",
+      "from": "d000000000000008",
+      "to": "d000000000000002",
+      "fromSide": "left",
+      "toSide": "left",
+      "label": "edita seções autorizadas",
+      "tone": "return"
+    },
+    {
+      "id": "400000000000000d",
+      "from": "d000000000000007",
+      "to": "d000000000000009",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "label": "recusa",
+      "tone": "return"
+    },
+    {
+      "id": "400000000000000e",
+      "from": "d000000000000007",
+      "to": "e000000000000001",
+      "fromSide": "right",
+      "toSide": "left",
+      "label": "aceita",
+      "tone": "accent"
+    },
+    {
+      "id": "400000000000000f",
+      "from": "e000000000000001",
+      "to": "e000000000000002",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "id": "4000000000000010",
+      "from": "e000000000000002",
+      "to": "e000000000000003",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "id": "4000000000000011",
+      "from": "e000000000000003",
+      "to": "e000000000000004",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "label": "não / nova data ou dados",
+      "tone": "return"
+    },
+    {
+      "id": "4000000000000012",
+      "from": "e000000000000004",
+      "to": "d000000000000002",
+      "fromSide": "left",
+      "toSide": "right",
+      "label": "abre correção manual",
+      "tone": "return"
+    },
+    {
+      "id": "4000000000000013",
+      "from": "e000000000000003",
+      "to": "e000000000000005",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "label": "sim",
+      "tone": "accent"
+    },
+    {
+      "id": "4000000000000014",
+      "from": "e000000000000005",
+      "to": "e000000000000006",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "id": "4000000000000015",
+      "from": "e000000000000006",
+      "to": "f000000000000001",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "id": "4000000000000016",
+      "from": "f000000000000001",
+      "to": "f000000000000002",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "label": "alteração necessária"
+    },
+    {
+      "id": "4000000000000017",
+      "from": "f000000000000002",
+      "to": "f000000000000003",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "label": "impacta a previsão",
+      "tone": "accent"
+    },
+    {
+      "id": "4000000000000018",
+      "from": "f000000000000003",
+      "to": "f000000000000001",
+      "fromSide": "left",
+      "toSide": "left",
+      "label": "persiste e continua",
+      "tone": "accent"
+    },
+    {
+      "id": "4000000000000019",
+      "from": "f000000000000002",
+      "to": "f000000000000004",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "label": "cancelamento solicitado",
+      "tone": "return"
+    },
+    {
+      "id": "400000000000001a",
+      "from": "f000000000000001",
+      "to": "f000000000000005",
+      "fromSide": "right",
+      "toSide": "left",
+      "label": "momento avaliativo"
+    },
+    {
+      "id": "400000000000001b",
+      "from": "f000000000000005",
+      "to": "1000000000000001",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "id": "400000000000001c",
+      "from": "1000000000000001",
+      "to": "1000000000000002",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "id": "400000000000001d",
+      "from": "1000000000000002",
+      "to": "1000000000000003",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "id": "400000000000001e",
+      "from": "1000000000000003",
+      "to": "1000000000000004",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "id": "400000000000001f",
+      "from": "1000000000000004",
+      "to": "1000000000000005",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "label": "não / devolve",
+      "tone": "return"
+    },
+    {
+      "id": "4000000000000020",
+      "from": "1000000000000005",
+      "to": "1000000000000001",
+      "fromSide": "left",
+      "toSide": "left",
+      "label": "edita o mesmo formulário",
+      "tone": "return"
+    },
+    {
+      "id": "4000000000000021",
+      "from": "1000000000000004",
+      "to": "1000000000000006",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "label": "sim",
+      "tone": "accent"
+    },
+    {
+      "id": "4000000000000022",
+      "from": "1000000000000006",
+      "to": "1000000000000007",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "id": "4000000000000023",
+      "from": "1000000000000007",
+      "to": "1000000000000008",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "id": "4000000000000024",
+      "from": "1000000000000008",
+      "to": "1000000000000009",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "label": "sim",
+      "tone": "accent"
+    },
+    {
+      "id": "4000000000000025",
+      "from": "1000000000000008",
+      "to": "f000000000000001",
+      "fromSide": "left",
+      "toSide": "right",
+      "label": "não: em andamento",
+      "tone": "return"
+    }
+  ],
+  "sourceRefs": [
+    "content/fluxos-principais.md",
+    "content/visao-geral.md"
+  ],
+  "data": {
+    "sourceFormat": "obsidian-canvas",
+    "sourcePath": "04 - Fluxos/SGE - Fluxograma do estágio.canvas",
+    "groupCount": 5,
+    "nodeCount": 33,
+    "edgeCount": 37
+  }
+}

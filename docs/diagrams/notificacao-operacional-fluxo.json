@@ -1,0 +1,22 @@
+{
+  "id": "notificacao-operacional-fluxo",
+  "kind": "flowchart",
+  "title": "Fluxo da notificação operacional",
+  "description": "Decisão de destinatário, persistência e entrega de um aviso de domínio.",
+  "summary": "Após um evento autorizado, o sistema verifica se há conta, cria a notificação interna quando aplicável e prepara a mensagem depois do commit; a entrega passa por uma tentativa rastreável.",
+  "source": {
+    "language": "mermaid",
+    "path": "diagrams/sources/notificacao-operacional-fluxo.mmd"
+  },
+  "presentation": {
+    "width": 1280,
+    "height": 480
+  },
+  "sourceRefs": [
+    "content/e-mails-notificacoes-e-entregas.md"
+  ],
+  "data": {
+    "sourceDocument": "e-mails-notificacoes-e-entregas",
+    "sourceIndex": 3
+  }
+}

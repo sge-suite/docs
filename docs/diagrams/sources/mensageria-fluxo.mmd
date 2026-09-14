@@ -1,0 +1,10 @@
+flowchart LR
+    E[Evento de domínio] --> N[notifications\nnotificação interna]
+    E --> M[email_messages\nmensagem preparada]
+    N -. referência opcional .-> M
+    M --> A[email_delivery_attempts\ntentativas de envio]
+    A --> J[Job de e-mail]
+    J --> P{SMTP aceitou?}
+    P -- Sim --> S[attempt: sent]
+    P -- Não --> F[attempt: failed]
+    F --> R[reenvio seguro cria nova tentativa]

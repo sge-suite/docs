@@ -1,0 +1,47 @@
+{
+  "id": "enum-internship-status",
+  "kind": "state",
+  "title": "Ciclo do estágio",
+  "description": "Estados de formalização, execução, pausa, conclusão e cancelamento do estágio.",
+  "summary": "O estágio aguarda formalização, assinaturas e liberação; depois entra em andamento, pode ser pausado ou cancelado, e só termina como Completed após a confirmação dos requisitos.",
+  "source": {
+    "language": "mermaid",
+    "path": "diagrams/sources/enum-internship-status.mmd"
+  },
+  "presentation": {
+    "width": 1440,
+    "height": 720
+  },
+  "layout": {
+    "canvas": { "width": 1440, "height": 720 },
+    "states": {
+      "PendingFormalization": { "x": 96, "y": 264, "width": 160 },
+      "AwaitingSignatures": { "x": 368, "y": 264, "width": 168 },
+      "PendingCorrection": { "x": 592, "y": 80, "width": 184 },
+      "Released": { "x": 592, "y": 264, "width": 160 },
+      "InProgress": { "x": 864, "y": 264, "width": 160 },
+      "Paused": { "x": 1120, "y": 144, "width": 144 },
+      "Completed": { "x": 1120, "y": 352, "width": 160 },
+      "Cancelled": { "x": 864, "y": 536, "width": 160 }
+    },
+    "transitions": [
+      { "from": "PendingFormalization", "to": "AwaitingSignatures", "label": "assinaturas encaminhadas", "fromSide": "right", "toSide": "left", "labelPlacement": { "x": 312, "y": 240 } },
+      { "from": "AwaitingSignatures", "to": "PendingCorrection", "label": "devolução documental", "fromSide": "top", "toSide": "bottom", "waypoints": [{ "x": 452, "y": 184 }, { "x": 684, "y": 184 }], "labelPlacement": { "x": 568, "y": 160 } },
+      { "from": "PendingCorrection", "to": "PendingFormalization", "label": "correção aprovada", "fromSide": "left", "toSide": "top", "waypoints": [{ "x": 520, "y": 112 }, { "x": 520, "y": 200 }, { "x": 176, "y": 200 }], "labelPlacement": { "x": 348, "y": 184 } },
+      { "from": "AwaitingSignatures", "to": "Released", "label": "assinaturas conferidas", "fromSide": "right", "toSide": "left", "labelPlacement": { "x": 564, "y": 240 } },
+      { "from": "Released", "to": "InProgress", "label": "início previsto", "fromSide": "right", "toSide": "left", "labelPlacement": { "x": 808, "y": 240 } },
+      { "from": "InProgress", "to": "Paused", "label": "pausa ativa", "fromSide": "top", "toSide": "left", "waypoints": [{ "x": 944, "y": 216 }, { "x": 1064, "y": 216 }], "labelPlacement": { "x": 1004, "y": 200 } },
+      { "from": "Paused", "to": "InProgress", "label": "pausa encerrada", "fromSide": "bottom", "toSide": "top", "waypoints": [{ "x": 1192, "y": 232 }, { "x": 944, "y": 232 }], "labelPlacement": { "x": 1068, "y": 248 } },
+      { "from": "InProgress", "to": "Completed", "fromSide": "right", "toSide": "left", "waypoints": [{ "x": 1080, "y": 296 }, { "x": 1080, "y": 384 }] },
+      { "from": "PendingFormalization", "to": "Cancelled", "label": "cancelar antes", "fromSide": "bottom", "toSide": "top", "waypoints": [{ "x": 176, "y": 480 }, { "x": 944, "y": 480 }], "labelPlacement": { "x": 560, "y": 464 } },
+      { "from": "InProgress", "to": "Cancelled", "label": "cancelar em execução", "fromSide": "bottom", "toSide": "top", "labelPlacement": { "x": 1056, "y": 432 } }
+    ]
+  },
+  "sourceRefs": [
+    "content/enum-internshipstatus.md"
+  ],
+  "data": {
+    "sourceDocument": "enum-internshipstatus",
+    "sourceIndex": 1
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "id": "dominio-modelo-diagrama",
+  "kind": "architecture",
+  "title": "Domínio e modelo de dados",
+  "description": "Áreas conceituais que conectam identidade, processo de estágio, formalização e histórico.",
+  "summary": "O vínculo ativo conecta identidade e contexto à solicitação; a solicitação origina o estágio, documentos e avaliações, enquanto snapshots, Activity Log e notificações preservam o histórico.",
+  "source": {
+    "language": "mermaid",
+    "path": "diagrams/sources/dominio-modelo-diagrama.mmd"
+  },
+  "presentation": {
+    "width": 1280,
+    "height": 480
+  },
+  "sourceRefs": [
+    "content/dominio-e-modelo-de-dados.md"
+  ],
+  "data": {
+    "sourceDocument": "dominio-e-modelo-de-dados",
+    "sourceIndex": 1
+  }
+}

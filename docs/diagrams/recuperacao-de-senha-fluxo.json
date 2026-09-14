@@ -1,0 +1,22 @@
+{
+  "id": "recuperacao-de-senha-fluxo",
+  "kind": "flowchart",
+  "title": "Fluxo de recuperação de senha",
+  "description": "Caminho seguro da solicitação de recuperação até o resultado do envio.",
+  "summary": "O Fortify cria o token de uso único, mas o log guarda apenas metadados seguros; a mensagem é preparada, uma tentativa é enfileirada e o SMTP determina sucesso ou falha.",
+  "source": {
+    "language": "mermaid",
+    "path": "diagrams/sources/recuperacao-de-senha-fluxo.mmd"
+  },
+  "presentation": {
+    "width": 1280,
+    "height": 480
+  },
+  "sourceRefs": [
+    "content/e-mails-notificacoes-e-entregas.md"
+  ],
+  "data": {
+    "sourceDocument": "e-mails-notificacoes-e-entregas",
+    "sourceIndex": 2
+  }
+}

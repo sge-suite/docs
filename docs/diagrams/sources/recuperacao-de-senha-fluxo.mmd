@@ -1,0 +1,9 @@
+flowchart TD
+    A[Usuário solicita recuperação] --> B[Fortify cria token de uso único]
+    B --> C[Cria email_message sem token ou corpo sensível]
+    C --> D[Cria tentativa: queued]
+    D --> E[Job entrega o e-mail para users.email]
+    E --> F{SMTP aceitou?}
+    F -- Sim --> G[attempt: sent]
+    F -- Não --> H[attempt: failed]
+    H --> I[Reprocessamento conforme política]

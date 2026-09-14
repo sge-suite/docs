@@ -1,0 +1,25 @@
+<svg viewBox="0 0 1200 260" role="img" aria-labelledby="guia-completo-jornada-title guia-completo-jornada-desc" xmlns="http://www.w3.org/2000/svg">
+  <title id="guia-completo-jornada-title">Jornada resumida do estágio</title>
+  <desc id="guia-completo-jornada-desc">A jornada passa por solicitação e análise, formalização e assinaturas, e execução até a confirmação da carga horária concluída.</desc>
+  <defs>
+    <marker id="guia-completo-jornada-arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto" markerUnits="strokeWidth">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#2b2b2b"/>
+    </marker>
+  </defs>
+  <rect x="0" y="0" width="1200" height="260" rx="20" fill="#faf8f8"/>
+  <text x="60" y="48" fill="#4e4e4e" font-family="Arial, sans-serif" font-size="16" font-weight="700" letter-spacing="1.6">JORNADA PRINCIPAL</text>
+  <rect x="60" y="82" width="300" height="120" rx="14" fill="#e4f1ee" stroke="#2e6f63" stroke-width="2"/>
+  <text x="85" y="119" fill="#183d36" font-family="Arial, sans-serif" font-size="20" font-weight="700">1. Solicitação e análise</text>
+  <text x="85" y="151" fill="#2b2b2b" font-family="Arial, sans-serif" font-size="16">Discente preenche; o Setor</text>
+  <text x="85" y="174" fill="#2b2b2b" font-family="Arial, sans-serif" font-size="16">aceita, recusa ou devolve.</text>
+  <path d="M 380 142 H 438" fill="none" stroke="#2b2b2b" stroke-width="3" marker-end="url(#guia-completo-jornada-arrow)"/>
+  <rect x="450" y="82" width="300" height="120" rx="14" fill="#f8ecd9" stroke="#ad6c20" stroke-width="2"/>
+  <text x="475" y="119" fill="#5f3510" font-family="Arial, sans-serif" font-size="20" font-weight="700">2. Formalização</text>
+  <text x="475" y="151" fill="#2b2b2b" font-family="Arial, sans-serif" font-size="16">Documentos são preparados e</text>
+  <text x="475" y="174" fill="#2b2b2b" font-family="Arial, sans-serif" font-size="16">as assinaturas são conferidas.</text>
+  <path d="M 770 142 H 828" fill="none" stroke="#2b2b2b" stroke-width="3" marker-end="url(#guia-completo-jornada-arrow)"/>
+  <rect x="840" y="82" width="300" height="120" rx="14" fill="#e9edf8" stroke="#455f9b" stroke-width="2"/>
+  <text x="865" y="119" fill="#23355f" font-family="Arial, sans-serif" font-size="20" font-weight="700">3. Execução e conclusão</text>
+  <text x="865" y="151" fill="#2b2b2b" font-family="Arial, sans-serif" font-size="16">O estágio ocorre; a conclusão</text>
+  <text x="865" y="174" fill="#2b2b2b" font-family="Arial, sans-serif" font-size="16">exige carga horária cumprida.</text>
+</svg>

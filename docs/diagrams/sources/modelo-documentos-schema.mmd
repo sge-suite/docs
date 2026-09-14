@@ -1,0 +1,38 @@
+erDiagram
+    DOCUMENT_TEMPLATES ||--o{ TEMPLATE_VERSIONS : document_template_id
+    TEMPLATE_VERSIONS ||--o{ GENERATED_DOCUMENTS : template_version_id
+    INTERNSHIPS ||--o{ GENERATED_DOCUMENTS : internship_id
+
+    DOCUMENT_TEMPLATES {
+        bigint id PK
+        bigint campus_id FK
+        varchar key UK
+        varchar name
+        varchar document_type
+        timestamp deactivated_at
+    }
+    TEMPLATE_VERSIONS {
+        bigint id PK
+        bigint document_template_id FK
+        integer version
+        varchar file_sha256
+        jsonb required_variables
+        timestamp activated_at
+    }
+    INTERNSHIPS {
+        bigint id PK
+        bigint student_user_id FK
+        varchar status
+        jsonb student_snapshot
+        jsonb internship_type_snapshot
+    }
+    GENERATED_DOCUMENTS {
+        bigint id PK
+        bigint internship_id FK
+        bigint template_version_id FK
+        varchar origin
+        varchar type
+        varchar status
+        jsonb snapshot
+        timestamp generated_at
+    }

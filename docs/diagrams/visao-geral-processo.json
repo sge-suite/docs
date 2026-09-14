@@ -1,0 +1,22 @@
+{
+  "id": "visao-geral-processo",
+  "kind": "flowchart",
+  "title": "Processo funcional do SGE",
+  "description": "O caminho principal da solicitação até o acompanhamento e a conclusão do estágio.",
+  "summary": "O discente inicia a solicitação, o Setor analisa, correções retornam ao mesmo processo, e o aceite leva a documentos, liberação, execução e acompanhamento acadêmico.",
+  "source": {
+    "language": "mermaid",
+    "path": "diagrams/sources/visao-geral-processo.mmd"
+  },
+  "presentation": {
+    "width": 1280,
+    "height": 300
+  },
+  "sourceRefs": [
+    "content/visao-geral.md"
+  ],
+  "data": {
+    "sourceDocument": "visao-geral",
+    "sourceIndex": 1
+  }
+}

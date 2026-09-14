@@ -1,0 +1,10 @@
+stateDiagram-v2
+    [*] --> Draft
+    Draft --> Submitted: enviar
+    Submitted --> UnderReview: iniciar análise
+    UnderReview --> PendingCorrection: devolver seções
+    PendingCorrection --> Submitted: reenviar
+    UnderReview --> Accepted: aprovar
+    UnderReview --> Rejected: recusar
+    Draft --> Withdrawn: retirar
+    UnderReview --> Withdrawn: retirar

@@ -1,0 +1,22 @@
+{
+  "id": "modelo-acesso-contexto",
+  "kind": "flowchart",
+  "title": "Contexto ativo e autorização",
+  "description": "Como o SGE transforma a conta autenticada em uma decisão de acesso contextual.",
+  "summary": "A conta autenticada resolve o vínculo ativo da sessão; um Gate valida o contexto e as Policies combinam tipo, campus, curso e estado antes de liberar ações e dados.",
+  "source": {
+    "language": "mermaid",
+    "path": "diagrams/sources/modelo-acesso-contexto.mmd"
+  },
+  "presentation": {
+    "width": 1280,
+    "height": 300
+  },
+  "sourceRefs": [
+    "content/modelo-de-dados-acesso.md"
+  ],
+  "data": {
+    "sourceDocument": "modelo-de-dados-acesso",
+    "sourceIndex": 2
+  }
+}

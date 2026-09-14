@@ -1,0 +1,40 @@
+{
+  "id": "modelo-documentos-schema",
+  "kind": "db-schema",
+  "title": "Esquema lógico — documentos e versões",
+  "description": "Tabelas e colunas do catálogo de templates, suas versões e documentos produzidos no estágio.",
+  "summary": "Um template possui versões imutáveis; cada documento gerado referencia a versão usada, o estágio e os dados congelados da geração.",
+  "source": {
+    "language": "mermaid",
+    "path": "diagrams/sources/modelo-documentos-schema.mmd"
+  },
+  "presentation": {
+    "width": 1700,
+    "height": 860,
+    "initialZoom": 1.05
+  },
+  "layout": {
+    "canvas": { "width": 1700, "height": 860 },
+    "entities": {
+      "DOCUMENT_TEMPLATES": { "x": 80, "y": 80, "width": 420 },
+      "TEMPLATE_VERSIONS": { "x": 640, "y": 80, "width": 420 },
+      "INTERNSHIPS": { "x": 1220, "y": 80, "width": 400 },
+      "GENERATED_DOCUMENTS": { "x": 660, "y": 520, "width": 460 }
+    },
+    "relationships": [
+      { "from": "DOCUMENT_TEMPLATES", "to": "TEMPLATE_VERSIONS", "label": "document_template_id", "fromPort": { "side": "right", "field": "id" }, "toPort": { "side": "left", "field": "document_template_id" } },
+      { "from": "TEMPLATE_VERSIONS", "to": "GENERATED_DOCUMENTS", "label": "template_version_id", "fromPort": { "side": "bottom", "offset": 0.5 }, "toPort": { "side": "top", "offset": 0.25 } },
+      { "from": "INTERNSHIPS", "to": "GENERATED_DOCUMENTS", "label": "internship_id", "fromPort": { "side": "left", "field": "id" }, "toPort": { "side": "right", "field": "internship_id" } }
+    ]
+  },
+  "sourceRefs": [
+    "content/migration-13-document-templates.md",
+    "content/migration-14-template-versions.md",
+    "content/migration-16-generated-documents.md",
+    "content/migration-15-internships.md"
+  ],
+  "data": {
+    "notation": "logical relational database schema",
+    "scope": "document generation"
+  }
+}

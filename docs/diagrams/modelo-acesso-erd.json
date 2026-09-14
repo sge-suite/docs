@@ -1,0 +1,39 @@
+{
+  "id": "modelo-acesso-erd",
+  "kind": "db-schema",
+  "title": "Esquema lógico — contexto de acesso",
+  "description": "Tabelas e colunas de conta, campus, curso e vínculo institucional usadas no contexto de autorização.",
+  "summary": "Uma conta exerce vários vínculos; cada vínculo referencia campus e curso, carrega o tipo funcional e define o escopo das Policies.",
+  "source": {
+    "language": "mermaid",
+    "path": "diagrams/sources/modelo-acesso-erd.mmd"
+  },
+  "presentation": {
+    "width": 1680,
+    "height": 820,
+    "initialZoom": 1.05
+  },
+  "layout": {
+    "canvas": { "width": 1680, "height": 820 },
+    "entities": {
+      "USERS": { "x": 80, "y": 80, "width": 360 },
+      "CAMPUSES": { "x": 620, "y": 80, "width": 360 },
+      "COURSES": { "x": 1160, "y": 80, "width": 380 },
+      "AFFILIATIONS": { "x": 620, "y": 500, "width": 420 }
+    },
+    "relationships": [
+      { "from": "USERS", "to": "AFFILIATIONS", "label": "user_id", "fromPort": { "side": "right", "field": "id" }, "toPort": { "side": "left", "field": "user_id" } },
+      { "from": "CAMPUSES", "to": "COURSES", "label": "campus_id", "fromPort": { "side": "right", "field": "id", "fieldOffset": -8 }, "toPort": { "side": "left", "field": "campus_id" } },
+      { "from": "CAMPUSES", "to": "AFFILIATIONS", "label": "campus_id", "fromPort": { "side": "left", "field": "id", "fieldOffset": 8 }, "toPort": { "side": "right", "field": "campus_id" } },
+      { "from": "COURSES", "to": "AFFILIATIONS", "label": "course_id", "fromPort": { "side": "left", "field": "id" }, "toPort": { "side": "right", "field": "course_id" } }
+    ]
+  },
+  "sourceRefs": [
+    "content/modelo-de-dados-acesso.md"
+  ],
+  "data": {
+    "sourceDocument": "modelo-de-dados-acesso",
+    "sourceIndex": 1,
+    "notation": "logical relational database schema"
+  }
+}

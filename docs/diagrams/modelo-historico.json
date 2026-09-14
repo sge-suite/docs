@@ -1,0 +1,59 @@
+{
+  "id": "modelo-historico",
+  "kind": "db-schema",
+  "title": "Esquema lógico — histórico e comunicação",
+  "description": "Auditoria polimórfica, notificações, mensagens e tentativas de entrega.",
+  "summary": "Activity log registra sujeito e causador de forma polimórfica; notificações podem originar mensagens e cada mensagem possui tentativas de entrega append-only.",
+  "source": {
+    "language": "mermaid",
+    "path": "diagrams/sources/modelo-historico.mmd"
+  },
+  "presentation": {
+    "width": 1920,
+    "height": 900,
+    "initialZoom": 1.05
+  },
+  "layout": {
+    "canvas": { "width": 1920, "height": 900 },
+    "entities": {
+      "ACTIVITY_LOG": { "x": 80, "y": 240, "width": 360 },
+      "AFFILIATIONS": { "x": 560, "y": 80, "width": 360 },
+      "NOTIFICATIONS": { "x": 1000, "y": 80, "width": 400 },
+      "EMAIL_MESSAGES": { "x": 1000, "y": 500, "width": 420 },
+      "EMAIL_DELIVERY_ATTEMPTS": { "x": 1500, "y": 500, "width": 360 }
+    },
+    "relationships": [
+      {
+        "from": "AFFILIATIONS", "to": "NOTIFICATIONS", "label": "affiliation_id",
+        "fromPort": { "side": "right", "field": "id" },
+        "toPort": { "side": "left", "field": "affiliation_id" },
+        "waypoints": [{ "x": 960, "y": 128 }, { "x": 960, "y": 212 }],
+        "showLabel": false,
+        "showCardinality": false
+      },
+      {
+        "from": "NOTIFICATIONS", "to": "EMAIL_MESSAGES", "label": "notification_id",
+        "fromPort": { "side": "bottom" },
+        "toPort": { "side": "top" },
+        "showLabel": false,
+        "showCardinality": false
+      },
+      {
+        "from": "EMAIL_MESSAGES", "to": "EMAIL_DELIVERY_ATTEMPTS", "label": "email_message_id",
+        "fromPort": { "side": "right", "field": "id" },
+        "toPort": { "side": "left", "field": "email_message_id" },
+        "waypoints": [{ "x": 1460, "y": 548 }, { "x": 1460, "y": 576 }],
+        "showLabel": false,
+        "showCardinality": false
+      }
+    ]
+  },
+  "sourceRefs": [
+    "content/modelo-de-dados-historico.md"
+  ],
+  "data": {
+    "sourceDocument": "modelo-de-dados-historico",
+    "sourceIndex": 1,
+    "notation": "logical relational database schema"
+  }
+}

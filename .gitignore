@@ -1,18 +1,12 @@
-# Estado local do Obsidian
-.obsidian/workspace.json
-
-# Quartz
+# Dependências e artefatos gerados
 node_modules/
-public/
-.quartz-cache/
-tsconfig.tsbuildinfo
+dist/
 
 # Arquivos temporários do sistema
 .DS_Store
 Thumbs.db
 
-# Conteúdo interno e anexos que não pertencem ao repositório público
-07 - Levantamento/
+# Conteúdo local e dados potencialmente sensíveis
 *.docx
 *.pdf
 *.xls

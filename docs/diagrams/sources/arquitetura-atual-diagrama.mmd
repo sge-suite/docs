@@ -1,0 +1,10 @@
+flowchart TB
+    R[Rotas web e settings] --> C[Controllers / Livewire]
+    C --> S[Services e Actions]
+    S --> M[Models Eloquent]
+    M --> DB[(PostgreSQL)]
+    C --> V[Blade / Flux UI]
+    V --> JS[Vite + Tailwind]
+    C --> P[Gates e Policies]
+    M --> AL[Activitylog]
+    M --> ML[Medialibrary]

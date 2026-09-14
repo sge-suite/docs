@@ -1,0 +1,45 @@
+erDiagram
+    INTERNSHIPS ||--o{ INTERNSHIP_WORK_SCHEDULES : internship_id
+    INTERNSHIPS ||--o{ INTERNSHIP_PAUSES : internship_id
+    INTERNSHIPS ||--o{ INTERNSHIP_CANCELLATION_REQUESTS : internship_id
+
+    INTERNSHIPS {
+        bigint id PK
+        bigint student_user_id FK
+        bigint advisor_affiliation_id FK
+        bigint supervisor_affiliation_id FK
+        bigint course_id FK
+        varchar status
+        date planned_start_date
+        date projected_end_date
+    }
+    INTERNSHIP_WORK_SCHEDULES {
+        bigint id PK
+        bigint internship_id FK
+        date starts_on
+        date ends_on
+        jsonb weekly_hours
+        varchar reason
+    }
+    INTERNSHIP_PAUSES {
+        bigint id PK
+        bigint internship_id FK
+        date starts_at
+        date ends_at
+        varchar reason
+    }
+    NON_WORKING_DATES {
+        bigint id PK
+        date date
+        varchar name
+        varchar scope
+        bigint campus_id FK
+        varchar uf
+    }
+    INTERNSHIP_CANCELLATION_REQUESTS {
+        bigint id PK
+        bigint internship_id FK
+        bigint requested_by_affiliation_id FK
+        varchar status
+        date effective_date
+    }

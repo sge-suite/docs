@@ -1,0 +1,22 @@
+{
+  "id": "arquitetura-atual-diagrama",
+  "kind": "architecture",
+  "title": "Arquitetura atual da aplicação",
+  "description": "Camadas e dependências observadas na aplicação Laravel do SGE.",
+  "summary": "Rotas e configurações chegam a Controllers e Livewire, que usam Services, Actions, Models, Gates e Policies; a aplicação persiste no PostgreSQL e entrega a interface por Blade, Flux UI, Vite e Tailwind.",
+  "source": {
+    "language": "mermaid",
+    "path": "diagrams/sources/arquitetura-atual-diagrama.mmd"
+  },
+  "presentation": {
+    "width": 1280,
+    "height": 480
+  },
+  "sourceRefs": [
+    "content/arquitetura-atual.md"
+  ],
+  "data": {
+    "sourceDocument": "arquitetura-atual",
+    "sourceIndex": 1
+  }
+}

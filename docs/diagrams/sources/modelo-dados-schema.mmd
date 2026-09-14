@@ -1,0 +1,41 @@
+erDiagram
+    USERS ||--o{ AFFILIATIONS : possui
+    AFFILIATIONS ||--o{ INTERNSHIP_REQUESTS : autoriza
+    INTERNSHIP_REQUESTS ||--o| INTERNSHIPS : origina
+    INTERNSHIPS ||--o{ GENERATED_DOCUMENTS : gera
+
+    USERS {
+        bigint id PK
+        varchar name
+        varchar email UK
+        varchar password
+        timestamp created_at
+    }
+    AFFILIATIONS {
+        bigint id PK
+        bigint user_id FK
+        bigint campus_id FK
+        bigint course_id FK
+        varchar type
+    }
+    INTERNSHIP_REQUESTS {
+        bigint id PK
+        bigint submitted_by_affiliation_id FK
+        bigint course_id FK
+        bigint internship_type_id FK
+        varchar status
+    }
+    INTERNSHIPS {
+        bigint id PK
+        bigint student_user_id FK
+        bigint advisor_affiliation_id FK
+        bigint supervisor_affiliation_id FK
+        varchar status
+    }
+    GENERATED_DOCUMENTS {
+        bigint id PK
+        bigint internship_id FK
+        bigint template_version_id FK
+        varchar type
+        varchar status
+    }

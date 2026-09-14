@@ -1,0 +1,45 @@
+erDiagram
+    AFFILIATIONS ||--o{ INTERNSHIP_REQUESTS : submitted_by_affiliation_id
+    COURSES ||--o{ INTERNSHIP_REQUESTS : course_id
+    INTERNSHIP_TYPES ||--o{ INTERNSHIP_REQUESTS : internship_type_id
+    GRANTING_PARTIES o|--o{ INTERNSHIP_REQUESTS : granting_party_id
+
+    AFFILIATIONS {
+        bigint id PK
+        bigint user_id FK
+        bigint campus_id FK
+        bigint course_id FK
+        varchar type
+    }
+    COURSES {
+        bigint id PK
+        bigint campus_id FK
+        varchar name
+        bigint coordinator_affiliation_id FK
+        timestamp deactivated_at
+    }
+    INTERNSHIP_TYPES {
+        bigint id PK
+        bigint course_id FK
+        varchar name
+        jsonb rules
+        timestamp deactivated_at
+    }
+    GRANTING_PARTIES {
+        bigint id PK
+        varchar document_type
+        varchar document_number
+        varchar name
+        bigint address_id FK
+        varchar email
+    }
+    INTERNSHIP_REQUESTS {
+        bigint id PK
+        bigint submitted_by_affiliation_id FK
+        bigint course_id FK
+        bigint internship_type_id FK
+        bigint granting_party_id FK
+        bigint internship_id FK
+        varchar status
+        date planned_start_date
+    }

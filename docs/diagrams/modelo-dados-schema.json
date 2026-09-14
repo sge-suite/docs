@@ -1,0 +1,53 @@
+{
+  "id": "modelo-dados-schema",
+  "kind": "db-schema",
+  "title": "Modelo lógico — visão geral",
+  "description": "Visão das cinco tabelas centrais que conectam identidade, solicitação, estágio e documentos.",
+  "summary": "A conta possui vínculos; um vínculo autoriza a solicitação; a solicitação origina o estágio; e o estágio referencia documentos gerados. Avaliações ficam no recorte de execução.",
+  "source": {
+    "language": "mermaid",
+    "path": "diagrams/sources/modelo-dados-schema.mmd"
+  },
+  "presentation": {
+    "width": 1920,
+    "height": 900,
+    "initialZoom": 1.15
+  },
+  "layout": {
+    "canvas": { "width": 1920, "height": 900 },
+    "entities": {
+      "USERS": { "x": 80, "y": 80, "width": 340 },
+      "AFFILIATIONS": { "x": 520, "y": 80, "width": 380 },
+      "INTERNSHIP_REQUESTS": { "x": 1000, "y": 80, "width": 420 },
+      "INTERNSHIPS": { "x": 1000, "y": 500, "width": 400 },
+      "GENERATED_DOCUMENTS": { "x": 1500, "y": 500, "width": 340 }
+    },
+    "relationships": [
+      { "from": "USERS", "to": "AFFILIATIONS", "label": "possui", "fromPort": { "side": "right", "field": "id" }, "toPort": { "side": "left", "field": "user_id" } },
+      { "from": "AFFILIATIONS", "to": "INTERNSHIP_REQUESTS", "label": "autoriza", "fromPort": { "side": "right", "field": "id" }, "toPort": { "side": "left", "field": "submitted_by_affiliation_id" } },
+      { "from": "INTERNSHIP_REQUESTS", "to": "INTERNSHIPS", "label": "origina", "fromPort": { "side": "bottom", "field": "internship_id" }, "toPort": { "side": "top", "field": "id" }, "showLabel": false, "showCardinality": false },
+      { "from": "INTERNSHIPS", "to": "GENERATED_DOCUMENTS", "label": "gera", "fromPort": { "side": "right", "field": "id" }, "toPort": { "side": "left", "field": "internship_id" }, "showLabel": false, "showCardinality": false }
+    ]
+  },
+  "sourceRefs": [
+    "content/modelagem-de-dados.md",
+    "content/modelo-de-dados-nucleo.md",
+    "content/migration-04-affiliations.md",
+    "content/migration-19-internship-requests.md",
+    "content/migration-15-internships.md",
+    "content/migration-16-generated-documents.md",
+    "content/migration-18-avaliacoes.md"
+  ],
+  "data": {
+    "notation": "logical relational database schema",
+    "scope": "core domain",
+    "detailPages": [
+      "modelo-nucleo-identidade",
+      "modelo-de-dados-acesso",
+      "modelo-nucleo-solicitacao",
+      "modelo-nucleo-execucao",
+      "modelo-historico",
+      "modelo-nucleo-execucao"
+    ]
+  }
+}

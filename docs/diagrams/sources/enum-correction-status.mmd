@@ -1,0 +1,8 @@
+stateDiagram-v2
+    [*] --> Open
+    Open --> Responded: discente reenvia
+    Open --> Cancelled: processo encerrado
+    Responded --> Resolved: Setor aprova
+    Responded --> Cancelled: processo encerrado
+    Resolved --> [*]
+    Cancelled --> [*]

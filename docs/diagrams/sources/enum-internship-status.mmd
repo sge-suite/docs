@@ -1,0 +1,13 @@
+stateDiagram-v2
+    [*] --> PendingFormalization: solicitação aceita
+    PendingFormalization --> AwaitingSignatures: assinaturas encaminhadas
+    AwaitingSignatures --> PendingCorrection: devolução documental
+    PendingCorrection --> PendingFormalization: correção aprovada
+    AwaitingSignatures --> Released: assinaturas conferidas
+    Released --> InProgress: início previsto
+    InProgress --> Completed
+    InProgress --> Paused: pausa ativa
+    Paused --> InProgress: pausa encerrada
+    PendingFormalization --> Cancelled: cancelar antes
+    InProgress --> Cancelled: cancelar em execução
+    Completed --> [*]

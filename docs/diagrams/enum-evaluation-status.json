@@ -1,0 +1,22 @@
+{
+  "id": "enum-evaluation-status",
+  "kind": "state",
+  "title": "Ciclo da avaliação do supervisor",
+  "description": "Estados persistidos da avaliação, da edição progressiva à aprovação ou cancelamento.",
+  "summary": "A avaliação começa em Draft, é enviada como Submitted, pode voltar a Returned para correção e, depois da análise do Setor, termina como Approved ou Cancelled.",
+  "source": {
+    "language": "mermaid",
+    "path": "diagrams/sources/enum-evaluation-status.mmd"
+  },
+  "presentation": {
+    "width": 1280,
+    "height": 280
+  },
+  "sourceRefs": [
+    "content/enum-evaluationstatus.md"
+  ],
+  "data": {
+    "sourceDocument": "enum-evaluationstatus",
+    "sourceIndex": 1
+  }
+}

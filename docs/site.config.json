@@ -1,0 +1,209 @@
+{
+  "siteTitle": "Sistema de Gestão de Estágios",
+  "siteDescription": "Documentação do produto, do domínio e do desenvolvimento do SGE.",
+  "language": "pt-BR",
+  "outputDirectory": "dist",
+  "framework": {
+    "name": "Aurelius",
+    "version": "0.4.19"
+  },
+  "brand": {
+    "title": "SGE",
+    "kicker": "Produto · Domínio · Desenvolvimento",
+    "name": "Sistema de Gestão de Estágios",
+    "logoSource": "assets/logo.png",
+    "logoAlt": "Marca do Sistema de Gestão de Estágios"
+  },
+  "repository": {
+    "url": "https://github.com/sge-suite/sge"
+  },
+  "navigation": {
+    "primary": [
+      "home",
+      "guia-completo",
+      "visao-geral",
+      "fluxos-principais",
+      "modelagem-de-dados",
+      "ambiente-de-desenvolvimento"
+    ],
+    "sections": [
+      {
+        "label": "Comece aqui",
+        "items": [
+          "home",
+          "guia-completo",
+          "visao-geral",
+          "pessoas-e-responsabilidades",
+          "fluxos-principais",
+          "ciclos-de-status",
+          "glossario"
+        ]
+      },
+      {
+        "label": "Arquitetura e domínio",
+        "items": [
+          "arquitetura-atual",
+          "dominio-e-modelo-de-dados",
+          "modelagem-de-dados",
+          "modelo-de-dados-nucleo",
+          "modelo-de-dados-acesso",
+          "modelo-de-dados-historico"
+        ]
+      },
+      {
+        "label": "Planejamento",
+        "items": [
+          "planejamento",
+          "painel-de-desenvolvimento",
+          "backlog-e-decisoes",
+          "cadastros-pendentes-de-supervisor-e-concedente",
+          "e-mails-notificacoes-e-entregas",
+          "geracao-de-documentos-docx-e-variaveis",
+          {
+            "label": "Governança e autorização",
+            "items": [
+              "convencoes-da-documentacao",
+              "matriz-de-autorizacao",
+              "perfis-e-responsabilidades-por-vinculo"
+            ]
+          }
+        ]
+      },
+      {
+        "label": "Execução do desenvolvimento",
+        "items": [
+          {
+            "label": "Fases",
+            "items": [
+              "fases-de-desenvolvimento",
+              "fase-00-preparacao",
+              "fase-01-contratos-de-e-mail",
+              "fase-03-fundacao-de-dados",
+              "fase-04-conta-e-contexto",
+              "fase-05-administracao",
+              "fase-06-documentos",
+              "fase-07-abertura-do-estagio",
+              "fase-08-estagio-em-andamento",
+              "fase-09-avaliacao-e-conclusao",
+              "fase-10-servicos-transversais"
+            ]
+          },
+          {
+            "label": "Enums",
+            "items": [
+              "enums",
+              "enums-e-migrations",
+              "enum-affiliationtype",
+              "enum-emaildeliveryattemptstatus",
+              "enum-emailmessagepurpose",
+              "enum-emancipationevidencestatus",
+              "enum-evaluationstatus",
+              "enum-generateddocumentorigin",
+              "enum-generateddocumentstatus",
+              "enum-generateddocumenttype",
+              "enum-internshipcancellationrequeststatus",
+              "enum-internshiprequestcorrectionstatus",
+              "enum-internshiprequeststatus",
+              "enum-internshipstatus",
+              "enum-legalcapacitydeclaration",
+              "enum-nonworkingdatescope",
+              "enum-partydocumenttype",
+              "enum-registrationrequeststatus"
+            ]
+          },
+          {
+            "label": "Migrations",
+            "items": [
+              "migrations",
+              "migration-01-addresses",
+              "migration-02-user-personal-data",
+              "migration-03-campuses",
+              "migration-04-affiliations",
+              "migration-05-notifications",
+              "migration-06-email-messages",
+              "migration-07-email-delivery-attempts",
+              "migration-09-courses",
+              "migration-10-course-id-em-affiliations",
+              "migration-11-internship-types",
+              "migration-12-granting-parties",
+              "migration-12a-supervisor-registration-requests",
+              "migration-12b-granting-party-registration-requests",
+              "migration-13-document-templates",
+              "migration-14-template-versions",
+              "migration-15-internships",
+              "migration-16-generated-documents",
+              "migration-17-internship-pauses",
+              "migration-18-avaliacoes",
+              "migration-19-internship-requests",
+              "migration-19a-emancipation-evidences",
+              "migration-20-internship-request-corrections",
+              "migration-21-internship-cancellation-requests",
+              "migration-22-non-working-dates",
+              "migration-23-internship-work-schedules",
+              {
+                "label": "Fundação existente",
+                "items": [
+                  "migration-base-01-users",
+                  "migration-base-02-cache",
+                  "migration-base-03-jobs",
+                  "migration-base-04-activity-log",
+                  "migration-base-05-media"
+                ]
+              }
+            ]
+          },
+          {
+            "label": "Componentes técnicos",
+            "items": [
+              "componentes-tecnicos",
+              "desenvolvimento-checklist-de-funcionalidade",
+              "actions",
+              "action-resetuserpassword",
+              "casts",
+              "cast-cpfcast",
+              "concerns",
+              "concern-passwordvalidationrules",
+              "concern-profilevalidationrules",
+              "configuracao-e-bootstrap",
+              "helpers",
+              "helper-brazilianaddresshelper",
+              "helper-braziliancontacthelper",
+              "helper-braziliandocumenthelper",
+              "helper-currencyhelper",
+              "helper-datehelper",
+              "helper-digitshelper",
+              "helper-funcoes-globais",
+              "helper-numbertowordshelper",
+              "model-user",
+              "providers",
+              "provider-appserviceprovider",
+              "provider-fortifyserviceprovider",
+              "schedules",
+              "services",
+              "service-internshipenddatecalculator",
+              "service-internshipgradecalculator",
+              "testes-existentes"
+            ]
+          }
+        ]
+      },
+      {
+        "label": "Operação e migração",
+        "items": [
+          "ambiente-de-desenvolvimento"
+        ]
+      }
+    ]
+  },
+  "colors": {
+    "paper": "#faf8f8",
+    "paper2": "#f1eeee",
+    "ink": "#2b2b2b",
+    "muted": "#4e4e4e",
+    "soft": "#777777",
+    "rule": "rgba(43, 43, 43, 0.14)",
+    "accent": "#84a59d",
+    "accentTint": "rgba(132, 165, 157, 0.16)",
+    "link": "#284b63"
+  }
+}

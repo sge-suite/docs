@@ -1,0 +1,9 @@
+flowchart LR
+    A[Discente inicia a solicitação] --> B[Setor analisa]
+    B -->|precisa corrigir| C[Discente corrige e reenvia]
+    C --> B
+    B -->|aceita| D[Documentos e assinaturas]
+    D --> E[Setor libera o estágio]
+    E --> F[Estágio em andamento]
+    F --> G[Acompanhamento acadêmico]
+    F --> H[Conclusão após carga horária cumprida]

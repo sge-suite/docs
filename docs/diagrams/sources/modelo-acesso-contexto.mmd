@@ -1,0 +1,6 @@
+flowchart LR
+    U["users / identidade autenticada"] --> A["affiliations / função e escopo"]
+    A --> S["vínculo ativo na sessão"]
+    S --> G["Gate / contexto válido"]
+    G --> P["Policies / tipo + campus + curso + estado"]
+    P --> D["ações e dados permitidos"]

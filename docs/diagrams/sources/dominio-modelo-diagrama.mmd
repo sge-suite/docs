@@ -1,0 +1,26 @@
+flowchart LR
+    subgraph A[Identidade e contexto]
+        U[Pessoa e conta] --> AF[Vínculo ativo]
+        C[Campus e curso] --> AF
+    end
+
+    subgraph P[Processo de estágio]
+        R[Solicitação] --> I[Estágio]
+        I --> E[Avaliações e notas]
+    end
+
+    subgraph D[Formalização]
+        T[Template versionado] --> G[Documento gerado]
+    end
+
+    subgraph H[Histórico]
+        S[Snapshots]
+        L[Activity Log]
+        N[Notificações e e-mails]
+    end
+
+    AF --> R
+    I --> G
+    I -. preserva .-> S
+    I -. audita .-> L
+    AF -. comunica .-> N

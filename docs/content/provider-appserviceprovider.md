@@ -7,7 +7,7 @@ status: implemented
 visibility: public
 tags: sge/providers, sge/operacao, sge/formatacao
 related: helper-datehelper, helper-currencyhelper
-source_refs: ../../sge/app/Providers/AppServiceProvider.php
+source_refs: https://github.com/sge-suite/sge/blob/master/app/Providers/AppServiceProvider.php
 ---
 ## Boot atual
 

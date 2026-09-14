@@ -7,7 +7,7 @@ status: in-progress
 visibility: public
 tags: sge/desenvolvimento, sge/testes, sge/checklist
 related: componentes-tecnicos, desenvolvimento-checklist-de-funcionalidade
-source_refs: ../../sge/tests/Unit/CpfCastTest.php, ../../sge/tests/Unit/Helpers/FormattingHelpersTest.php, ../../sge/tests/Unit/Helpers/NumberToWordsHelperTest.php, ../../sge/tests/Feature/Auth/PasswordResetTest.php, ../../sge/tests/Feature/Settings/SecurityTest.php
+source_refs: https://github.com/sge-suite/sge/blob/master/tests/Unit/CpfCastTest.php, https://github.com/sge-suite/sge/blob/master/tests/Unit/Helpers/FormattingHelpersTest.php, https://github.com/sge-suite/sge/blob/master/tests/Unit/Helpers/NumberToWordsHelperTest.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/Auth/PasswordResetTest.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/Settings/SecurityTest.php
 ---
 Este mapa acompanha o código real no repositório Laravel irmão, em `../sge`. Ao criar uma classe ou migration, atualize a matriz e a nota técnica correspondente.
 

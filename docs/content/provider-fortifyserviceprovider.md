@@ -7,7 +7,7 @@ status: implemented
 visibility: public
 tags: sge/providers, sge/autenticacao, sge/seguranca
 related: fase-04-conta-e-contexto, action-resetuserpassword, e-mails-notificacoes-e-entregas, concern-passwordvalidationrules
-source_refs: ../../sge/app/Providers/FortifyServiceProvider.php
+source_refs: https://github.com/sge-suite/sge/blob/master/app/Providers/FortifyServiceProvider.php
 ---
 ## Boot atual
 

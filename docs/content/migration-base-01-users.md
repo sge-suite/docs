@@ -7,7 +7,7 @@ status: implemented
 visibility: public
 tags: sge/migrations, sge/autenticacao, sge/banco-de-dados
 related: cast-cpfcast, migration-02-user-personal-data, model-user, provider-fortifyserviceprovider
-source_refs: ../../sge/database/migrations/0001_01_01_000000_create_users_table.php
+source_refs: https://github.com/sge-suite/sge/blob/master/database/migrations/0001_01_01_000000_create_users_table.php
 ---
 > [!success] Estado
 > Implementada no arquivo `0001_01_01_000000_create_users_table.php`. É a base das contas atuais; o modelo de destino ainda exige a separação de dados pessoais.

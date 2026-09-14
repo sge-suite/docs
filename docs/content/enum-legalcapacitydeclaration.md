@@ -7,7 +7,7 @@ status: implemented
 visibility: public
 tags: sge/enums, sge/estagio, sge/formularios
 related: migration-19-internship-requests
-source_refs: ../../sge/app/Enums/LegalCapacityDeclaration.php, ../../sge/tests/Unit/Enums/LegalCapacityDeclarationTest.php
+source_refs: https://github.com/sge-suite/sge/blob/master/app/Enums/LegalCapacityDeclaration.php, https://github.com/sge-suite/sge/blob/master/tests/Unit/Enums/LegalCapacityDeclarationTest.php
 ---
 > [!info] Escopo
 > A classe e os testes unitários já existem. A integração com o formulário, a migration e a análise do comprovante ainda está planejada. Este enum registra a opção escolhida no formulário; não substitui a data de nascimento nem aprova automaticamente uma emancipação.

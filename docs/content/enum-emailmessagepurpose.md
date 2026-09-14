@@ -7,7 +7,7 @@ status: implemented
 visibility: public
 tags: sge/enums, sge/email
 related: e-mails-notificacoes-e-entregas, migration-06-email-messages, enum-emaildeliveryattemptstatus
-source_refs: ../../sge/app/Enums/EmailMessagePurpose.php, ../../sge/tests/Unit/Enums/EmailMessagePurposeTest.php
+source_refs: https://github.com/sge-suite/sge/blob/master/app/Enums/EmailMessagePurpose.php, https://github.com/sge-suite/sge/blob/master/tests/Unit/Enums/EmailMessagePurposeTest.php
 ---
 > [!success] Estado
 > A classe e os testes unitários já existem em `app/Enums/EmailMessagePurpose.php`. A integração com `EmailMessage`, migration e fluxo de envio ainda está planejada.

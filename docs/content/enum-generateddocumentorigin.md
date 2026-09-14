@@ -7,7 +7,7 @@ status: implemented
 visibility: public
 tags: sge/enums, sge/documentos
 related: migration-16-generated-documents
-source_refs: ../../sge/app/Enums/GeneratedDocumentOrigin.php, ../../sge/tests/Unit/Enums/GeneratedDocumentOriginTest.php
+source_refs: https://github.com/sge-suite/sge/blob/master/app/Enums/GeneratedDocumentOrigin.php, https://github.com/sge-suite/sge/blob/master/tests/Unit/Enums/GeneratedDocumentOriginTest.php
 ---
 > [!success] Estado
 > Implementado em `app/Enums/GeneratedDocumentOrigin.php`. As regras de armazenamento e associação ainda precisam ser aplicadas na migration e no fluxo.

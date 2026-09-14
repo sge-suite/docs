@@ -7,7 +7,7 @@ status: implemented
 visibility: public
 tags: sge/migrations, sge/auditoria, sge/banco-de-dados
 related:
-source_refs: ../../sge/database/migrations/2026_08_06_201115_create_activity_log_table.php
+source_refs: https://github.com/sge-suite/sge/blob/master/database/migrations/2026_08_06_201115_create_activity_log_table.php
 ---
 > [!success] Estado
 > Implementada no arquivo `2026_08_06_201115_create_activity_log_table.php` e usada pelo pacote Spatie Activity Log.

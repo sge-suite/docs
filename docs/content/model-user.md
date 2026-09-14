@@ -7,7 +7,7 @@ status: in-progress
 visibility: public
 tags: sge/models, sge/autenticacao, sge/dados-pessoais
 related: cast-cpfcast, migration-02-user-personal-data, concern-profilevalidationrules
-source_refs: ../../sge/app/Models/User.php
+source_refs: https://github.com/sge-suite/sge/blob/master/app/Models/User.php
 ---
 ## Responsabilidade atual
 

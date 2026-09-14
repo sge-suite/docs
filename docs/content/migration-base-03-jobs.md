@@ -7,7 +7,7 @@ status: implemented
 visibility: public
 tags: sge/migrations, sge/filas, sge/banco-de-dados
 related: migration-07-email-delivery-attempts
-source_refs: ../../sge/database/migrations/0001_01_01_000002_create_jobs_table.php
+source_refs: https://github.com/sge-suite/sge/blob/master/database/migrations/0001_01_01_000002_create_jobs_table.php
 ---
 > [!success] Estado
 > Implementada no arquivo `0001_01_01_000002_create_jobs_table.php`. É a base para envio de e-mails, importações e lotes documentais demorados. A geração DOCX unitária é síncrona e temporária para permitir download sem armazenamento definitivo.

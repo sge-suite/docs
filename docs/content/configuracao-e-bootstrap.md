@@ -7,7 +7,7 @@ status: in-progress
 visibility: public
 tags: sge/desenvolvimento, sge/configuracao, sge/autenticacao, sge/operacao
 related: schedules, provider-appserviceprovider, provider-fortifyserviceprovider, migration-base-02-cache, migration-base-03-jobs, geracao-de-documentos-docx-e-variaveis, helper-numbertowordshelper, ambiente-de-desenvolvimento, componentes-tecnicos, providers, testes-existentes, fase-00-preparacao
-source_refs: ../../sge/bootstrap/app.php, ../../sge/bootstrap/providers.php, ../../sge/routes/console.php, ../../sge/routes/web.php, ../../sge/routes/settings.php, ../../sge/config/auth.php, ../../sge/config/fortify.php, ../../sge/config/app.php, ../../sge/config/cache.php, ../../sge/config/session.php, ../../sge/config/queue.php
+source_refs: https://github.com/sge-suite/sge/blob/master/bootstrap/app.php, https://github.com/sge-suite/sge/blob/master/bootstrap/providers.php, https://github.com/sge-suite/sge/blob/master/routes/console.php, https://github.com/sge-suite/sge/blob/master/routes/web.php, https://github.com/sge-suite/sge/blob/master/routes/settings.php, https://github.com/sge-suite/sge/blob/master/config/auth.php, https://github.com/sge-suite/sge/blob/master/config/fortify.php, https://github.com/sge-suite/sge/blob/master/config/app.php, https://github.com/sge-suite/sge/blob/master/config/cache.php, https://github.com/sge-suite/sge/blob/master/config/session.php, https://github.com/sge-suite/sge/blob/master/config/queue.php
 ---
 Este mapa descreve os pontos de entrada que não são Models, Helpers ou migrations, mas alteram o comportamento global do projeto.
 

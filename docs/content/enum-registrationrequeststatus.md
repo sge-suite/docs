@@ -7,7 +7,7 @@ status: implemented
 visibility: public
 tags: sge/enums, sge/cadastro
 related: migration-12a-supervisor-registration-requests, migration-12b-granting-party-registration-requests
-source_refs: ../../sge/app/Enums/RegistrationRequestStatus.php, ../../sge/tests/Unit/Enums/RegistrationRequestStatusTest.php
+source_refs: https://github.com/sge-suite/sge/blob/master/app/Enums/RegistrationRequestStatus.php, https://github.com/sge-suite/sge/blob/master/tests/Unit/Enums/RegistrationRequestStatusTest.php
 ---
 | Case | Valor | Rótulo |
 | --- | --- | --- |

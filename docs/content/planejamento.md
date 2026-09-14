@@ -7,7 +7,7 @@ status: in-progress
 visibility: public
 tags: sge/planejamento, sge/documentacao
 related: backlog-e-decisoes, e-mails-notificacoes-e-entregas, geracao-de-documentos-docx-e-variaveis, fases-de-desenvolvimento, enums, migrations, componentes-tecnicos, convencoes-da-documentacao, matriz-de-autorizacao, perfis-e-responsabilidades-por-vinculo, painel-de-desenvolvimento
-source_refs: ../../sge/routes/web.php, ../../sge/routes/settings.php, ../../sge/config/fortify.php
+source_refs: https://github.com/sge-suite/sge/blob/master/routes/web.php, https://github.com/sge-suite/sge/blob/master/routes/settings.php, https://github.com/sge-suite/sge/blob/master/config/fortify.php
 ---
 Esta área reúne a execução técnica, as decisões de negócio e os contratos transversais do novo SGE. Ela descreve o estado do planejamento e do código de apoio; não significa que todas as funcionalidades descritas já estejam disponíveis no sistema.
 

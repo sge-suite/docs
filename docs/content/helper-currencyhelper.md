@@ -7,7 +7,7 @@ status: implemented
 visibility: public
 tags: sge/helpers, sge/formatacao
 related: helper-funcoes-globais, providers, helpers
-source_refs: ../../sge/app/Helpers/CurrencyHelper.php
+source_refs: https://github.com/sge-suite/sge/blob/master/app/Helpers/CurrencyHelper.php
 ---
 ## Responsabilidade
 

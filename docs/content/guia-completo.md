@@ -7,7 +7,7 @@ status: defined
 visibility: public
 tags: sge/guia, sge/produto, sge/pdf
 related: home, visao-geral, pessoas-e-responsabilidades, fluxos-principais, ciclos-de-status, glossario, planejamento, arquitetura-atual
-source_refs: ../../sge/routes/web.php, ../../sge/routes/settings.php, ../../sge/config/fortify.php, ../../sge/composer.json
+source_refs: https://github.com/sge-suite/sge/blob/master/routes/web.php, https://github.com/sge-suite/sge/blob/master/routes/settings.php, https://github.com/sge-suite/sge/blob/master/config/fortify.php, https://github.com/sge-suite/sge/blob/master/composer.json
 diagram: guia-completo-jornada
 ---
 > [!abstract] Leitura única

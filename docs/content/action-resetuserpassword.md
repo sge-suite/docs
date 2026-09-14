@@ -7,7 +7,7 @@ status: implemented
 visibility: public
 tags: sge/actions, sge/autenticacao, sge/seguranca
 related: concern-passwordvalidationrules, e-mails-notificacoes-e-entregas, providers, model-user
-source_refs: ../../sge/app/Actions/Fortify/ResetUserPassword.php
+source_refs: https://github.com/sge-suite/sge/blob/master/app/Actions/Fortify/ResetUserPassword.php
 ---
 ## Fluxo
 

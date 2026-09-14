@@ -7,7 +7,7 @@ status: implemented
 visibility: public
 tags: sge/enums, sge/estagio
 related: enum-internshiprequeststatus, enum-generateddocumentstatus, migration-15-internships, schedules, fluxos-principais, ciclos-de-status
-source_refs: ../../sge/app/Enums/InternshipStatus.php, ../../sge/tests/Unit/Enums/InternshipStatusTest.php
+source_refs: https://github.com/sge-suite/sge/blob/master/app/Enums/InternshipStatus.php, https://github.com/sge-suite/sge/blob/master/tests/Unit/Enums/InternshipStatusTest.php
 diagram: enum-internship-status
 ---
 > [!success] Estado

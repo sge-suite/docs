@@ -7,7 +7,7 @@ status: implemented
 visibility: public
 tags: sge/migrations, sge/infraestrutura, sge/banco-de-dados
 related:
-source_refs: ../../sge/database/migrations/0001_01_01_000001_create_cache_table.php
+source_refs: https://github.com/sge-suite/sge/blob/master/database/migrations/0001_01_01_000001_create_cache_table.php
 ---
 > [!success] Estado
 > Implementada no arquivo `0001_01_01_000001_create_cache_table.php`. É infraestrutura do Laravel, não entidade de negócio.

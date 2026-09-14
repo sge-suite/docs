@@ -7,7 +7,7 @@ status: implemented
 visibility: public
 tags: sge/enums, sge/autorizacao
 related: migration-04-affiliations, migrations, modelo-de-dados-acesso, perfis-e-responsabilidades-por-vinculo
-source_refs: ../../sge/app/Enums/AffiliationType.php, ../../sge/tests/Unit/Enums/AffiliationTypeTest.php
+source_refs: https://github.com/sge-suite/sge/blob/master/app/Enums/AffiliationType.php, https://github.com/sge-suite/sge/blob/master/tests/Unit/Enums/AffiliationTypeTest.php
 ---
 > [!success] Estado
 > Implementado em `app/Enums/AffiliationType.php`. Ainda precisa ser usado de forma consistente nas Policies e na migration de `affiliations`.

@@ -7,7 +7,7 @@ status: implemented
 visibility: public
 tags: sge/concerns, sge/validacao, sge/autorizacao
 related: model-user, fase-04-conta-e-contexto
-source_refs: ../../sge/app/Concerns/ProfileValidationRules.php
+source_refs: https://github.com/sge-suite/sge/blob/master/app/Concerns/ProfileValidationRules.php
 ---
 ## Contrato
 

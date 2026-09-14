@@ -7,7 +7,7 @@ status: implemented
 visibility: public
 tags: sge/enums, sge/concedente
 related: migration-12-granting-parties
-source_refs: ../../sge/app/Enums/PartyDocumentType.php, ../../sge/tests/Unit/Enums/PartyDocumentTypeTest.php
+source_refs: https://github.com/sge-suite/sge/blob/master/app/Enums/PartyDocumentType.php, https://github.com/sge-suite/sge/blob/master/tests/Unit/Enums/PartyDocumentTypeTest.php
 ---
 > [!success] Estado
 > Implementado em `app/Enums/PartyDocumentType.php`. A tabela de partes concedentes ainda precisa ser criada.

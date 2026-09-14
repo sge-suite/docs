@@ -7,7 +7,7 @@ status: implemented
 visibility: public
 tags: sge/migrations, sge/arquivos, sge/banco-de-dados
 related: migration-16-generated-documents
-source_refs: ../../sge/database/migrations/2026_08_06_201414_create_media_table.php
+source_refs: https://github.com/sge-suite/sge/blob/master/database/migrations/2026_08_06_201414_create_media_table.php
 ---
 > [!success] Estado
 > Implementada no arquivo `2026_08_06_201414_create_media_table.php` para o Spatie Media Library.

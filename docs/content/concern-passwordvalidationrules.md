@@ -7,7 +7,7 @@ status: implemented
 visibility: public
 tags: sge/concerns, sge/autenticacao, sge/seguranca
 related: fase-04-conta-e-contexto, actions, action-resetuserpassword
-source_refs: ../../sge/app/Concerns/PasswordValidationRules.php
+source_refs: https://github.com/sge-suite/sge/blob/master/app/Concerns/PasswordValidationRules.php
 ---
 ## Contrato
 

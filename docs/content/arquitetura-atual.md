@@ -7,7 +7,7 @@ status: observed
 visibility: public
 tags: sge/arquitetura, sge/implementacao
 related: visao-geral, pessoas-e-responsabilidades, fluxos-principais, dominio-e-modelo-de-dados
-source_refs: ../../sge/composer.json, ../../sge/compose.yaml, ../../sge/app/Providers/AppServiceProvider.php, ../../sge/app/Providers/FortifyServiceProvider.php, ../../sge/app/Models/User.php
+source_refs: https://github.com/sge-suite/sge/blob/master/composer.json, https://github.com/sge-suite/sge/blob/master/compose.yaml, https://github.com/sge-suite/sge/blob/master/app/Providers/AppServiceProvider.php, https://github.com/sge-suite/sge/blob/master/app/Providers/FortifyServiceProvider.php, https://github.com/sge-suite/sge/blob/master/app/Models/User.php
 diagram: arquitetura-atual-diagrama
 ---
 ## Leitura em linguagem simples

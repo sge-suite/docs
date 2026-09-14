@@ -7,7 +7,7 @@ status: implemented
 visibility: public
 tags: sge/helpers, sge/formatacao, sge/data
 related: helper-funcoes-globais, providers
-source_refs: ../../sge/app/Helpers/DateHelper.php, ../../sge/tests/Unit/Helpers/FormattingHelpersTest.php
+source_refs: https://github.com/sge-suite/sge/blob/master/app/Helpers/DateHelper.php, https://github.com/sge-suite/sge/blob/master/tests/Unit/Helpers/FormattingHelpersTest.php
 ---
 ## Responsabilidade
 

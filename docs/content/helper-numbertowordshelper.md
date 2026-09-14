@@ -7,7 +7,7 @@ status: implemented
 visibility: public
 tags: sge/helpers, sge/documentos, sge/formatacao
 related: helper-currencyhelper, migration-16-generated-documents
-source_refs: ../../sge/app/Helpers/NumberToWordsHelper.php, ../../sge/tests/Unit/Helpers/NumberToWordsHelperTest.php
+source_refs: https://github.com/sge-suite/sge/blob/master/app/Helpers/NumberToWordsHelper.php, https://github.com/sge-suite/sge/blob/master/tests/Unit/Helpers/NumberToWordsHelperTest.php
 ---
 ## Responsabilidade
 

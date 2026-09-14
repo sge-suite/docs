@@ -7,7 +7,7 @@ status: implemented
 visibility: public
 tags: sge/helpers, sge/formatacao
 related: helpers, helper-datehelper, helper-currencyhelper, helper-numbertowordshelper, helper-digitshelper, helper-braziliandocumenthelper, helper-braziliancontacthelper, helper-brazilianaddresshelper, componentes-tecnicos
-source_refs: ../../sge/app/helpers.php
+source_refs: https://github.com/sge-suite/sge/blob/master/app/helpers.php
 ---
 ## Como são carregadas
 

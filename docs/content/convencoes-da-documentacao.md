@@ -40,10 +40,10 @@ Não marque uma fase como `completed` se seu checklist ainda tiver itens pendent
 
 Toda nota Markdown deve possuir `id`, `title`, `description`, `type`, `status` e `visibility`.
 
-O repositório Laravel fica em `../../sge` a partir de `docs/`. Para manter os links portáveis, use referências relativas ao site:
+O repositório Laravel fica em um repositório público separado. Para manter as referências portáveis e verificáveis em qualquer checkout, use URLs estáveis do código:
 
 ```yaml
-source_refs: ../../sge/app/Enums/InternshipStatus.php, ../../sge/tests/Unit/Enums/InternshipStatusTest.php
+source_refs: https://github.com/sge-suite/sge/blob/master/app/Enums/InternshipStatus.php, https://github.com/sge-suite/sge/blob/master/tests/Unit/Enums/InternshipStatusTest.php
 ```
 
 Nunca grave um caminho absoluto de máquina em `source_refs`. O comando `npm run check` valida a estrutura, os links e as referências disponíveis.

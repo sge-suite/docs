@@ -7,7 +7,7 @@ status: implemented
 visibility: public
 tags: sge/enums, sge/avaliacao
 related: migration-18-avaliacoes, fase-09-avaliacao-e-conclusao, backlog-e-decisoes, fluxos-principais
-source_refs: ../../sge/app/Enums/EvaluationStatus.php, ../../sge/tests/Unit/Enums/EvaluationStatusTest.php
+source_refs: https://github.com/sge-suite/sge/blob/master/app/Enums/EvaluationStatus.php, https://github.com/sge-suite/sge/blob/master/tests/Unit/Enums/EvaluationStatusTest.php
 diagram: enum-evaluation-status
 ---
 > [!success] Estado

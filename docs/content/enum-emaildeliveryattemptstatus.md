@@ -7,7 +7,7 @@ status: implemented
 visibility: public
 tags: sge/enums, sge/email
 related: migration-07-email-delivery-attempts, e-mails-notificacoes-e-entregas, enum-emailmessagepurpose
-source_refs: ../../sge/app/Enums/EmailDeliveryAttemptStatus.php, ../../sge/tests/Unit/Enums/EmailDeliveryAttemptStatusTest.php
+source_refs: https://github.com/sge-suite/sge/blob/master/app/Enums/EmailDeliveryAttemptStatus.php, https://github.com/sge-suite/sge/blob/master/tests/Unit/Enums/EmailDeliveryAttemptStatusTest.php
 ---
 > [!success] Estado
 > A classe e os testes unitários já existem em `app/Enums/EmailDeliveryAttemptStatus.php`. A integração com `email_delivery_attempts` e os Jobs de envio ainda está planejada. O estado de uma tentativa não é o estado de leitura da notificação.

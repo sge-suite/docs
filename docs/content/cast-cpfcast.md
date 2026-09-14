@@ -7,7 +7,7 @@ status: implemented
 visibility: public
 tags: sge/casts, sge/dados-pessoais, sge/seguranca
 related: migration-02-user-personal-data, model-user, helpers
-source_refs: ../../sge/app/Casts/CpfCast.php, ../../sge/tests/Unit/CpfCastTest.php
+source_refs: https://github.com/sge-suite/sge/blob/master/app/Casts/CpfCast.php, https://github.com/sge-suite/sge/blob/master/tests/Unit/CpfCastTest.php
 ---
 > [!success] Estado atual
 > Implementado em `app/Casts/CpfCast.php` e usado hoje em `User::$cpf`.

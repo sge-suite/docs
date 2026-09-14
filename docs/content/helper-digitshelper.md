@@ -7,7 +7,7 @@ status: implemented
 visibility: public
 tags: sge/helpers, sge/formatacao
 related: helper-braziliandocumenthelper, helper-braziliancontacthelper, helper-brazilianaddresshelper, helper-funcoes-globais
-source_refs: ../../sge/app/Helpers/DigitsHelper.php, ../../sge/tests/Unit/Helpers/FormattingHelpersTest.php
+source_refs: https://github.com/sge-suite/sge/blob/master/app/Helpers/DigitsHelper.php, https://github.com/sge-suite/sge/blob/master/tests/Unit/Helpers/FormattingHelpersTest.php
 ---
 ## Responsabilidade
 

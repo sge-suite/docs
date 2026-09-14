@@ -7,7 +7,7 @@ status: implemented
 visibility: public
 tags: sge/helpers, sge/documentos, sge/formatacao
 related: cast-cpfcast, helper-digitshelper, helper-funcoes-globais
-source_refs: ../../sge/app/Helpers/BrazilianDocumentHelper.php, ../../sge/tests/Unit/Helpers/FormattingHelpersTest.php
+source_refs: https://github.com/sge-suite/sge/blob/master/app/Helpers/BrazilianDocumentHelper.php, https://github.com/sge-suite/sge/blob/master/tests/Unit/Helpers/FormattingHelpersTest.php
 ---
 ## Responsabilidade
 

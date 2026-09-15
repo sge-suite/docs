@@ -6,7 +6,7 @@ type: migration-reference
 status: planned
 visibility: public
 tags: sge/migrations, sge/emancipacao, sge/privacidade
-related:
+related: enum-emancipationevidencestatus, migration-19-internship-requests, migration-base-05-media, migration-base-04-activity-log
 source_refs:
 ---
 | Campo | Regra |
@@ -14,7 +14,7 @@ source_refs:
 | `id` | bigint, chave primária. |
 | `internship_request_id` | FK obrigatória para a solicitação do discente. |
 | `submitted_by_affiliation_id` / `submitted_at` | vínculo discente e instante do envio. |
-| `status` | `EmancipationEvidenceStatus`, inicial `submitted`. |
+| `status` | [`EmancipationEvidenceStatus`](doc:enum-emancipationevidencestatus), inicial `submitted`. |
 | `reviewed_by_affiliation_id` / `reviewed_at` | análise manual pelo Setor. |
 | `return_reason` | obrigatório em `Returned`; não contém o arquivo. |
 | timestamps | auditoria técnica. |

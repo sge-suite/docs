@@ -35,7 +35,7 @@ O painel original era uma Base do Obsidian: uma consulta às propriedades das no
 - [Enum — AffiliationType](doc:enum-affiliationtype) — **implemented** — Tipos funcionais permitidos para um vínculo institucional do SGE.
 - [Enum — EmailDeliveryAttemptStatus](doc:enum-emaildeliveryattemptstatus) — **implemented** — Estados da tentativa de transporte de uma mensagem de e-mail; integração com o modelo ainda pendente.
 - [Enum — EmailMessagePurpose](doc:enum-emailmessagepurpose) — **implemented** — Finalidades estáveis para mensagens de e-mail do SGE; integração com o modelo ainda pendente.
-- [Enum — EmancipationEvidenceStatus](doc:enum-emancipationevidencestatus) — **planned** — Ciclo da prova privada de emancipação analisada pelo Setor de Estágio.
+- [Enum — EmancipationEvidenceStatus](doc:enum-emancipationevidencestatus) — **implemented** — Ciclo da prova privada de emancipação analisada pelo Setor de Estágio; integração com o modelo ainda pendente.
 - [Enum — EvaluationStatus](doc:enum-evaluationstatus) — **implemented** — Ciclo persistido das respostas de avaliação enviadas pelo supervisor; migration e integração ainda pendentes.
 - [Enum — GeneratedDocumentOrigin](doc:enum-generateddocumentorigin) — **implemented** — Origem do documento registrado no processo de estágio.
 - [Enum — GeneratedDocumentStatus](doc:enum-generateddocumentstatus) — **implemented** — Ciclo de vida de cada documento gerado ou registrado no estágio.

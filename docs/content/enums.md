@@ -30,7 +30,7 @@ source_refs:
 | ✅ Implementado | [Enum — EvaluationStatus](doc:enum-evaluationstatus)           | `supervisor_evaluations.status`  |
 | ✅ Implementado | [Enum — RegistrationRequestStatus](doc:enum-registrationrequeststatus)  | solicitações de cadastro pendente |
 | ✅ Implementado | [Enum — InternshipCancellationRequestStatus](doc:enum-internshipcancellationrequeststatus) | `internship_cancellation_requests.status` |
-| 🟡 Planejado    | [Enum — EmancipationEvidenceStatus](doc:enum-emancipationevidencestatus) | `emancipation_evidences.status` |
+| ✅ Implementado | [Enum — EmancipationEvidenceStatus](doc:enum-emancipationevidencestatus) | `emancipation_evidences.status` |
 | 🟡 Planejado    | [Enum — NonWorkingDateScope](doc:enum-nonworkingdatescope)        | `non_working_dates.scope` |
 
 ## Checklist do catálogo

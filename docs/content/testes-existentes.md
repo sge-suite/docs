@@ -19,6 +19,7 @@ Este mapa acompanha o código real no repositório Laravel irmão, em `../sge`. 
 | Enums    | `tests/Unit/Enums/AffiliationTypeTest.php`         | cases, valores, labels e options de vínculo.                            |
 | Enums    | `tests/Unit/Enums/EmailDeliveryAttemptStatusTest.php` | cases, valores, labels e opções das tentativas de e-mail.             |
 | Enums    | `tests/Unit/Enums/EmailMessagePurposeTest.php`     | cases, valores, labels e opções das finalidades de e-mail.             |
+| Enums    | `tests/Unit/Enums/EmancipationEvidenceStatusTest.php` | cases, valores, labels e opções de evidências de emancipação.        |
 | Enums    | `tests/Unit/Enums/EvaluationStatusTest.php`        | cases, valores, labels e opções das avaliações.                         |
 | Enums    | `tests/Unit/Enums/GeneratedDocumentOriginTest.php` | valores, labels e opções de origem.                                     |
 | Enums    | `tests/Unit/Enums/GeneratedDocumentStatusTest.php` | valores, labels e opções de status documental.                          |

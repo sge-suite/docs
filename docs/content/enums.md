@@ -29,7 +29,7 @@ source_refs:
 | ✅ Implementado | [Enum — GeneratedDocumentOrigin](doc:enum-generateddocumentorigin)    | `generated_documents.origin`     |
 | ✅ Implementado | [Enum — EvaluationStatus](doc:enum-evaluationstatus)           | `supervisor_evaluations.status`  |
 | ✅ Implementado | [Enum — RegistrationRequestStatus](doc:enum-registrationrequeststatus)  | solicitações de cadastro pendente |
-| 🟡 Planejado    | [Enum — InternshipCancellationRequestStatus](doc:enum-internshipcancellationrequeststatus) | `internship_cancellation_requests.status` |
+| ✅ Implementado | [Enum — InternshipCancellationRequestStatus](doc:enum-internshipcancellationrequeststatus) | `internship_cancellation_requests.status` |
 | 🟡 Planejado    | [Enum — EmancipationEvidenceStatus](doc:enum-emancipationevidencestatus) | `emancipation_evidences.status` |
 | 🟡 Planejado    | [Enum — NonWorkingDateScope](doc:enum-nonworkingdatescope)        | `non_working_dates.scope` |
 

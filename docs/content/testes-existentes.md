@@ -23,6 +23,7 @@ Este mapa acompanha o código real no repositório Laravel irmão, em `../sge`. 
 | Enums    | `tests/Unit/Enums/GeneratedDocumentOriginTest.php` | valores, labels e opções de origem.                                     |
 | Enums    | `tests/Unit/Enums/GeneratedDocumentStatusTest.php` | valores, labels e opções de status documental.                          |
 | Enums    | `tests/Unit/Enums/GeneratedDocumentTypeTest.php`   | cases, valores, labels, opções e conversão de tipo documental.          |
+| Enums    | `tests/Unit/Enums/InternshipCancellationRequestStatusTest.php` | cases, valores, labels e opções de pedidos de cancelamento.      |
 | Enums    | `tests/Unit/Enums/InternshipRequestCorrectionStatusTest.php` | cases, valores, labels e opções de pendências.                   |
 | Enums    | `tests/Unit/Enums/InternshipRequestStatusTest.php` | cases, valores, labels e opções de solicitações.                       |
 | Enums    | `tests/Unit/Enums/InternshipStatusTest.php`        | valores, labels e opções do ciclo do estágio.                           |

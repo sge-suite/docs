@@ -40,7 +40,7 @@ O painel original era uma Base do Obsidian: uma consulta às propriedades das no
 - [Enum — GeneratedDocumentOrigin](doc:enum-generateddocumentorigin) — **implemented** — Origem do documento registrado no processo de estágio.
 - [Enum — GeneratedDocumentStatus](doc:enum-generateddocumentstatus) — **implemented** — Ciclo de vida de cada documento gerado ou registrado no estágio.
 - [Enum — GeneratedDocumentType](doc:enum-generateddocumenttype) — **implemented** — Tipos de documentos registrados no processo de estágio.
-- [Enum — InternshipCancellationRequestStatus](doc:enum-internshipcancellationrequeststatus) — **planned** — Ciclo do pedido de cancelamento de estágio formalizado.
+- [Enum — InternshipCancellationRequestStatus](doc:enum-internshipcancellationrequeststatus) — **implemented** — Ciclo do pedido de cancelamento de estágio formalizado; integração com o modelo ainda pendente.
 - [Enum — InternshipRequestCorrectionStatus](doc:enum-internshiprequestcorrectionstatus) — **implemented** — Ciclo de cada pendência devolvida na solicitação de estágio; integração ainda pendente.
 - [Enum — InternshipRequestStatus](doc:enum-internshiprequeststatus) — **implemented** — Ciclo de preenchimento, envio e análise da solicitação nativa de estágio; integração ainda pendente.
 - [Enum — InternshipStatus](doc:enum-internshipstatus) — **implemented** — Ciclo de formalização e execução de um estágio já criado no SGE; integração ainda pendente.

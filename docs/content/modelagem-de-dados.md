@@ -47,11 +47,11 @@ Detalhes dos contratos: [granting_parties](doc:migration-12-granting-parties), [
 
 ## Execução do estágio
 
-Depois do aceite, o estágio concentra as vigências de jornada, pausas, calendário, pedidos de cancelamento e avaliação do supervisor.
+Depois do aceite, o estágio concentra as vigências de jornada, pausas, o cálculo baseado no calendário nacional, pedidos de cancelamento e avaliação do supervisor.
 
 {{diagram:modelo-nucleo-execucao}}
 
-Detalhes dos contratos: [internships](doc:migration-15-internships), [internship_pauses](doc:migration-17-internship-pauses), [avaliações](doc:migration-18-avaliacoes), [internship_cancellation_requests](doc:migration-21-internship-cancellation-requests), [non_working_dates](doc:migration-22-non-working-dates) e [internship_work_schedules](doc:migration-23-internship-work-schedules).
+Detalhes dos contratos: [internships](doc:migration-15-internships), [internship_pauses](doc:migration-17-internship-pauses), [avaliações](doc:migration-18-avaliacoes), [internship_cancellation_requests](doc:migration-21-internship-cancellation-requests) e [internship_work_schedules](doc:migration-22-internship-work-schedules).
 
 ## Documentos e versões
 

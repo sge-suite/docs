@@ -6,7 +6,7 @@ type: technical-reference
 status: planned
 visibility: public
 tags: sge/services, sge/calculos, sge/estagio
-related: migration-22-non-working-dates, migration-23-internship-work-schedules
+related: migration-22-internship-work-schedules
 source_refs:
 ---
 Serviço puro, sem Eloquent e sem relógio global. Recebe um DTO com data inicial, carga exigida, jornada pactuada e eventuais vigências criadas por aditivos já formalizados, pausas, datas sem expediente, margem e versão da fórmula. Retorna `ProjectedEndDateResult` com data de conclusão da carga, data final projetada, horas creditadas e snapshot compacto das entradas.
@@ -22,7 +22,7 @@ Serviço puro, sem Eloquent e sem relógio global. Recebe um DTO com data inicia
 - versão de algoritmo desconhecida falha explicitamente;
 - máximo defensivo de dez anos de iteração, configurável apenas em teste.
 
-O calendário é carregado antes da chamada; o serviço não consulta API. O resultado usado em `internships.projected_end_date_calculation` guarda somente as datas sem expediente que afetaram o intervalo, além de IDs/hashes para auditoria.
+O calendário nacional versionado é carregado antes da chamada; o serviço não consulta API. O resultado usado em `internships.projected_end_date_calculation` guarda somente as datas sem expediente que afetaram o intervalo, além da versão/hash usada na auditoria.
 
 ## Recalculo
 
@@ -30,5 +30,4 @@ Criação do estágio, nova pausa, alteração/cancelamento de pausa, ativação
 
 ## Referências
 
-- [Migration 22 — non_working_dates](doc:migration-22-non-working-dates)
-- [Migration 23 — internship_work_schedules](doc:migration-23-internship-work-schedules)
+- [Migration 22 — internship_work_schedules](doc:migration-22-internship-work-schedules)

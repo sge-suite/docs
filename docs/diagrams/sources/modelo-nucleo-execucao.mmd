@@ -28,14 +28,6 @@ erDiagram
         date ends_at
         varchar reason
     }
-    NON_WORKING_DATES {
-        bigint id PK
-        date date
-        varchar name
-        varchar scope
-        bigint campus_id FK
-        varchar uf
-    }
     INTERNSHIP_CANCELLATION_REQUESTS {
         bigint id PK
         bigint internship_id FK

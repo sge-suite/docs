@@ -6,7 +6,7 @@ type: reference-hub
 status: in-progress
 visibility: public
 tags: sge/desenvolvimento, sge/migrations, sge/banco-de-dados
-related: migration-base-01-users, migration-base-02-cache, migration-base-03-jobs, migration-base-04-activity-log, migration-base-05-media, migration-01-addresses, migration-02-user-personal-data, migration-03-campuses, migration-04-affiliations, enum-affiliationtype, migration-05-notifications, migration-06-email-messages, enum-emailmessagepurpose, migration-07-email-delivery-attempts, enum-emaildeliveryattemptstatus, migration-09-courses, migration-10-course-id-em-affiliations, migration-11-internship-types, migration-12-granting-parties, enum-partydocumenttype, migration-12a-supervisor-registration-requests, enum-registrationrequeststatus, migration-12b-granting-party-registration-requests, migration-13-document-templates, migration-14-template-versions, migration-15-internships, enum-internshipstatus, migration-16-generated-documents, migration-17-internship-pauses, migration-18-avaliacoes, enum-evaluationstatus, migration-19-internship-requests, enum-internshiprequeststatus, migration-19a-emancipation-evidences, enum-emancipationevidencestatus, migration-20-internship-request-corrections, enum-internshiprequestcorrectionstatus, migration-21-internship-cancellation-requests, enum-internshipcancellationrequeststatus, migration-22-non-working-dates, enum-nonworkingdatescope, migration-23-internship-work-schedules, dominio-e-modelo-de-dados, enums, enums-e-migrations
+related: migration-base-01-users, migration-base-02-cache, migration-base-03-jobs, migration-base-04-activity-log, migration-base-05-media, migration-01-addresses, migration-02-user-personal-data, migration-03-campuses, migration-04-affiliations, enum-affiliationtype, migration-05-notifications, migration-06-email-messages, enum-emailmessagepurpose, migration-07-email-delivery-attempts, enum-emaildeliveryattemptstatus, migration-09-courses, migration-10-course-id-em-affiliations, migration-11-internship-types, migration-12-granting-parties, enum-partydocumenttype, migration-12a-supervisor-registration-requests, enum-registrationrequeststatus, migration-12b-granting-party-registration-requests, migration-13-document-templates, migration-14-template-versions, migration-15-internships, enum-internshipstatus, migration-16-generated-documents, migration-17-internship-pauses, migration-18-avaliacoes, enum-evaluationstatus, migration-19-internship-requests, enum-internshiprequeststatus, migration-19a-emancipation-evidences, enum-emancipationevidencestatus, migration-20-internship-request-corrections, enum-internshiprequestcorrectionstatus, migration-21-internship-cancellation-requests, enum-internshipcancellationrequeststatus, migration-22-internship-work-schedules, dominio-e-modelo-de-dados, enums, enums-e-migrations
 source_refs:
 diagram: migrations-ordem
 ---
@@ -31,7 +31,7 @@ As migrations abaixo são o backlog do domínio e continuam pendentes até o có
 > A implementação segue os contratos desta pasta e as decisões aprovadas no planejamento.
 
 > [!note] Numeração
-> A ordem salta da migration 07 para a 09 porque não existe uma migration 08 no modelo atual. A numeração posterior foi preservada para não alterar referências já usadas no planejamento.
+> A ordem salta da migration 07 para a 09 porque não existe uma migration 08 no modelo atual. As numerações posteriores seguem o modelo atual.
 
 ## Ordem de execução
 
@@ -60,8 +60,7 @@ As migrations abaixo são o backlog do domínio e continuam pendentes até o có
 |   19A | [Migration 19A — emancipation_evidences](doc:migration-19a-emancipation-evidences)        | provas de emancipação      | `internship_requests`, `media`, [Enum — EmancipationEvidenceStatus](doc:enum-emancipationevidencestatus) |
 |    20 | [Migration 20 — internship_request_corrections](doc:migration-20-internship-request-corrections) | correções de solicitações | `internship_requests`, `affiliations`, [Enum — InternshipRequestCorrectionStatus](doc:enum-internshiprequestcorrectionstatus)                  |
 |    21 | [Migration 21 — internship_cancellation_requests](doc:migration-21-internship-cancellation-requests) | pedidos de cancelamento | `internships`, `affiliations`, [Enum — InternshipCancellationRequestStatus](doc:enum-internshipcancellationrequeststatus) |
-|    22 | [Migration 22 — non_working_dates](doc:migration-22-non-working-dates)              | calendário sem expediente | `campuses`, `affiliations`, [Enum — NonWorkingDateScope](doc:enum-nonworkingdatescope) |
-|    23 | [Migration 23 — internship_work_schedules](doc:migration-23-internship-work-schedules)      | jornada e aditivos         | `internships`, `generated_documents`, `affiliations` |
+|    22 | [Migration 22 — internship_work_schedules](doc:migration-22-internship-work-schedules)      | jornada e aditivos         | `internships`, `generated_documents`, `affiliations` |
 
 ## Dependências críticas
 

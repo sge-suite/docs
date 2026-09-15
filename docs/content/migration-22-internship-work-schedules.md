@@ -1,6 +1,6 @@
 ---
-id: migration-23-internship-work-schedules
-title: Migration 23 — internship_work_schedules
+id: migration-22-internship-work-schedules
+title: Migration 22 — internship_work_schedules
 description: Jornada semanal pactuada, preservada por vigência somente quando um aditivo formalizado a alterar.
 type: migration-reference
 status: planned

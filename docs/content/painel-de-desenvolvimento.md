@@ -45,7 +45,6 @@ O painel original era uma Base do Obsidian: uma consulta às propriedades das no
 - [Enum — InternshipRequestStatus](doc:enum-internshiprequeststatus) — **implemented** — Ciclo de preenchimento, envio e análise da solicitação nativa de estágio; integração ainda pendente.
 - [Enum — InternshipStatus](doc:enum-internshipstatus) — **implemented** — Ciclo de formalização e execução de um estágio já criado no SGE; integração ainda pendente.
 - [Enum — LegalCapacityDeclaration](doc:enum-legalcapacitydeclaration) — **implemented** — Opção declarada pelo discente para a capacidade civil no formulário de abertura; integração ainda pendente.
-- [Enum — NonWorkingDateScope](doc:enum-nonworkingdatescope) — **planned** — Escopo territorial ou institucional de uma data sem expediente.
 - [Enum — PartyDocumentType](doc:enum-partydocumenttype) — **implemented** — Tipo de documento de identificação da parte concedente.
 - [Enum — RegistrationRequestStatus](doc:enum-registrationrequeststatus) — **implemented** — Ciclo das solicitações de cadastro de supervisor e parte concedente.
 
@@ -79,8 +78,7 @@ O painel original era uma Base do Obsidian: uma consulta às propriedades das no
 - [Migration 19A — emancipation_evidences](doc:migration-19a-emancipation-evidences) — **planned** — Histórico privado das provas de emancipação e sua análise manual.
 - [Migration 20 — internship_request_corrections](doc:migration-20-internship-request-corrections) — **planned** — Pendências operacionais que direcionam a edição da solicitação de estágio.
 - [Migration 21 — internship_cancellation_requests](doc:migration-21-internship-cancellation-requests) — **planned** — Pedidos rastreáveis de cancelamento de estágio formalizado feitos pelo discente.
-- [Migration 22 — non_working_dates](doc:migration-22-non-working-dates) — **planned** — Calendário auditável de feriados e demais datas sem expediente usadas na previsão de término.
-- [Migration 23 — internship_work_schedules](doc:migration-23-internship-work-schedules) — **planned** — Jornada semanal pactuada, preservada por vigência somente quando um aditivo formalizado a alterar.
+- [Migration 22 — internship_work_schedules](doc:migration-22-internship-work-schedules) — **planned** — Jornada semanal pactuada, preservada por vigência somente quando um aditivo formalizado a alterar.
 
 ## Componentes técnicos
 

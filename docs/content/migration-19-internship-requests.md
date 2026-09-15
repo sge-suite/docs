@@ -57,7 +57,7 @@ Há somente uma solicitação para o processo aberto pelo discente. Ela é atual
 }
 ```
 
-As sete chaves sempre existem quando o formulário é enviado; cada valor é inteiro não negativo em horas. A soma semanal deve ser positiva e atender aos limites ordinários e às exceções declaradas em `internship_types.rules.workload_exceptions`. `projected_end_date` é recalculada a partir desta jornada, da carga exigida do tipo, do calendário nacional versionado e das pausas posteriormente registradas.
+As sete chaves sempre existem quando o formulário é enviado; cada valor é inteiro não negativo em horas. A soma semanal deve ser positiva e atender aos limites ordinários e às exceções declaradas em `internship_types.rules.workload_exceptions`. `projected_end_date` é recalculada a partir desta jornada, da carga exigida do tipo, do calendário nacional e estadual versionado aplicável à UF do campus e das pausas posteriormente registradas.
 
 ### Caminhos condicionais de cadastro
 

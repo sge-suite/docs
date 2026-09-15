@@ -135,7 +135,7 @@ source_refs:
 ### D-019 — Previsão de término reproduzível
 
 - **Status:** definido.
-- **Decisão:** a data prevista de término é calculada pela jornada válida, pela margem de sete dias corridos configurada e congelada no tipo de estágio, pelo calendário nacional versionado e pelas pausas. Eventual nova vigência exige aditivo formalizado. O cálculo limita o último dia às horas restantes e persiste uma base reproduzível; não aceita horas restantes livres como fonte primária.
+- **Decisão:** a data prevista de término é calculada pela jornada válida, pela margem de sete dias corridos configurada e congelada no tipo de estágio, pelo calendário nacional e estadual versionado — conforme a UF do campus — e pelas pausas. Eventual nova vigência exige aditivo formalizado. O cálculo limita o último dia às horas restantes e persiste uma base reproduzível; não aceita horas restantes livres como fonte primária.
 - **Motivo:** mantém o cálculo rastreável e evita resultados inconsistentes após alterações de calendário, jornada ou pausa.
 - **Referências:** [Service — InternshipEndDateCalculator](doc:service-internshipenddatecalculator) e [Migration 22 — internship_work_schedules](doc:migration-22-internship-work-schedules).
 

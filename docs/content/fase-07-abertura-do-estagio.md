@@ -30,7 +30,7 @@ Base: [fluxo de abertura](doc:fluxos-principais#2-solicitacao).
 - [ ] Exigir upload privado do comprovante pelo próprio SGE quando selecionar menor emancipado, criando `emancipation_evidences` e mídia privada sem apagar envios anteriores.
 - [ ] Implementar decisão manual do Setor: validar ou recusar com motivo; o envio nunca aprova automaticamente.
 - [ ] Validar no servidor que a opção maior de idade corresponde à data de nascimento e que menor emancipado contém comprovante.
-- [ ] Validar carga horária, período, feriados nacionais, pausas e regras do tipo.
+- [ ] Validar carga horária, período, feriados nacionais e estaduais aplicáveis, pausas e regras do tipo.
 
 ## Formalização inicial
 

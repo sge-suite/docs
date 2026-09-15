@@ -22,7 +22,7 @@ Serviço puro, sem Eloquent e sem relógio global. Recebe um DTO com data inicia
 - versão de algoritmo desconhecida falha explicitamente;
 - máximo defensivo de dez anos de iteração, configurável apenas em teste.
 
-O calendário nacional versionado é carregado antes da chamada; o serviço não consulta API. O resultado usado em `internships.projected_end_date_calculation` guarda somente as datas sem expediente que afetaram o intervalo, além da versão/hash usada na auditoria.
+O calendário nacional e estadual versionado, aplicável à UF do campus, é carregado antes da chamada; o serviço não consulta API. A BrasilAPI é usada somente na importação administrativa do calendário, nunca durante o cálculo. O resultado usado em `internships.projected_end_date_calculation` guarda somente as datas sem expediente que afetaram o intervalo, além da versão/hash usada na auditoria.
 
 ## Recalculo
 

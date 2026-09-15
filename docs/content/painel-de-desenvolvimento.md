@@ -33,6 +33,7 @@ O painel original era uma Base do Obsidian: uma consulta às propriedades das no
 ## Enums
 
 - [Enum — AffiliationType](doc:enum-affiliationtype) — **implemented** — Tipos funcionais permitidos para um vínculo institucional do SGE.
+- [Enum — BrazilianState](doc:enum-brazilianstate) — **implemented** — Unidades federativas usadas pelos campi e pela importação do calendário estadual; integração com os modelos ainda pendente.
 - [Enum — EmailDeliveryAttemptStatus](doc:enum-emaildeliveryattemptstatus) — **implemented** — Estados da tentativa de transporte de uma mensagem de e-mail; integração com o modelo ainda pendente.
 - [Enum — EmailMessagePurpose](doc:enum-emailmessagepurpose) — **implemented** — Finalidades estáveis para mensagens de e-mail do SGE; integração com o modelo ainda pendente.
 - [Enum — EmancipationEvidenceStatus](doc:enum-emancipationevidencestatus) — **implemented** — Ciclo da prova privada de emancipação analisada pelo Setor de Estágio; integração com o modelo ainda pendente.

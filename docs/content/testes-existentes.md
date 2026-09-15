@@ -17,6 +17,7 @@ Este mapa acompanha o código real no repositório Laravel irmão, em `../sge`. 
 | -------- | -------------------------------------------------- | ----------------------------------------------------------------------- |
 | Cast     | `tests/Unit/CpfCastTest.php`                       | CPF mascarado válido, armazenamento sem máscara e CPF inválido.         |
 | Enums    | `tests/Unit/Enums/AffiliationTypeTest.php`         | cases, valores, labels e options de vínculo.                            |
+| Enums    | `tests/Unit/Enums/BrazilianStateTest.php`          | cases, siglas, rótulos e opções das unidades federativas.               |
 | Enums    | `tests/Unit/Enums/EmailDeliveryAttemptStatusTest.php` | cases, valores, labels e opções das tentativas de e-mail.             |
 | Enums    | `tests/Unit/Enums/EmailMessagePurposeTest.php`     | cases, valores, labels e opções das finalidades de e-mail.             |
 | Enums    | `tests/Unit/Enums/EmancipationEvidenceStatusTest.php` | cases, valores, labels e opções de evidências de emancipação.        |

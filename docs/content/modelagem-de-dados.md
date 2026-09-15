@@ -47,7 +47,7 @@ Detalhes dos contratos: [granting_parties](doc:migration-12-granting-parties), [
 
 ## Execução do estágio
 
-Depois do aceite, o estágio concentra as vigências de jornada, pausas, o cálculo baseado no calendário nacional, pedidos de cancelamento e avaliação do supervisor.
+Depois do aceite, o estágio concentra as vigências de jornada, pausas, o cálculo baseado no calendário nacional e estadual aplicável à UF do campus, pedidos de cancelamento e avaliação do supervisor.
 
 {{diagram:modelo-nucleo-execucao}}
 

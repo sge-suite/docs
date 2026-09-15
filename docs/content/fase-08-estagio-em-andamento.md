@@ -19,7 +19,7 @@ Base: [acompanhamento do estágio](doc:fluxos-principais#4-estagio-em-andamento)
 - [ ] Registrar os schedules em `routes/console.php` com `onOneServer`, `withoutOverlapping` e a operação de `schedule:run` em produção.
 - [ ] Implementar pausas com início/fim em data, motivo, estado `InProgress` de origem e validação de sobreposição.
 - [ ] Sincronizar o status imediatamente ao criar/alterar/remover pausa, além da reconciliação diária.
-- [ ] Usar calendário nacional versionado, sem dependência de rede no cálculo; registrar exceções de um estágio como pausas.
+- [ ] Usar calendário nacional e estadual versionado, conforme a UF do campus, sem dependência de rede no cálculo; registrar exceções de um estágio como pausas.
 - [ ] Criar a jornada inicial pactuada e impedir sua edição ordinária durante o estágio.
 - [ ] Permitir nova vigência de jornada somente após aditivo com assinaturas conferidas; impedir sobreposição/lacuna e reescrita de dias passados.
 - [ ] Recalcular término com carga horária, jornada pactuada ou aditivo formalizado, calendário, pausas e margem congelada.

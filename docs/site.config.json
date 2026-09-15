@@ -94,6 +94,7 @@
               "enums",
               "enums-e-migrations",
               "enum-affiliationtype",
+              "enum-brazilianstate",
               "enum-emaildeliveryattemptstatus",
               "enum-emailmessagepurpose",
               "enum-emancipationevidencestatus",

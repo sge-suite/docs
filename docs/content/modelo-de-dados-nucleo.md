@@ -43,7 +43,7 @@ Uma pessoa possui uma conta e quantos vínculos forem necessários. O vínculo a
 
 | Conjunto | Regra central |
 | --- | --- |
-| jornadas, pausas e calendário nacional | determinam a previsão reproduzível de término |
+| jornadas, pausas e calendário nacional/estadual | determinam a previsão reproduzível de término |
 | templates e versões | preservam o modelo usado em cada geração |
 | documentos | mantêm origem, versão, estado e snapshot; o arquivo final é temporário |
 | avaliação do supervisor | reutiliza o mesmo formulário em `Draft` ou `Returned` |

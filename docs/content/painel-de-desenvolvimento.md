@@ -58,7 +58,7 @@ Este índice é uma fotografia editorial da documentação publicada. Os documen
 - [Migration base 04 — activity_log](doc:migration-base-04-activity-log) — **implemented** — Estado atual da auditoria baseada no Spatie Activity Log.
 - [Migration base 05 — media](doc:migration-base-05-media) — **implemented** — Estado atual do armazenamento de mídia polimórfica do Spatie Media Library.
 - [Migration 01A — cities](doc:migration-01a-cities) — **implemented** — Catálogo local de cidades identificado pelo código IBGE, carregado pelo `CitySeeder` antes dos endereços.
-- [Migration 01 — addresses](doc:migration-01-addresses) — **planned** — Contrato da tabela reutilizável de endereços atuais e históricos.
+- [Migration 01 — addresses](doc:migration-01-addresses) — **implemented** — Base backend com cidade local, validação dos campos obrigatórios, Activity Log e cópia histórica; consulta e validação de CEP continuam pendentes.
 - [Migration 02 — user_personal_data](doc:migration-02-user-personal-data) — **planned** — Contrato dos dados pessoais separados da autenticação.
 - [Migration 03 — campuses](doc:migration-03-campuses) — **planned** — Contrato da tabela de campi e do representante legal por vínculo.
 - [Migration 04 — affiliations](doc:migration-04-affiliations) — **planned** — Contrato base dos vínculos institucionais e seu contexto de acesso.

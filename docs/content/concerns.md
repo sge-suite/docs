@@ -6,7 +6,7 @@ type: technical-hub
 status: in-progress
 visibility: public
 tags: sge/desenvolvimento, sge/validacao, sge/checklist
-related: concern-passwordvalidationrules, concern-profilevalidationrules, componentes-tecnicos, fase-04-conta-e-contexto
+related: concern-passwordvalidationrules, concern-profilevalidationrules, migration-01-addresses, componentes-tecnicos, fase-04-conta-e-contexto
 source_refs:
 ---
 Concerns devem conter regras coesas e reutilizáveis, sem conhecer uma tela específica. Cada método precisa deixar claro quando é usado e quais mensagens/contratos produz.
@@ -15,6 +15,7 @@ Concerns devem conter regras coesas e reutilizáveis, sem conhecer uma tela espe
 
 - [`PasswordValidationRules`](doc:concern-passwordvalidationrules) — senha nova e senha atual.
 - [`ProfileValidationRules`](doc:concern-profilevalidationrules) — nome e e-mail de perfil.
+- [`AddressValidationRules`](doc:migration-01-addresses) — cidade existente e campos textuais obrigatórios de endereço, aplicada ao salvar `Address`; sem validação de CEP nesta etapa.
 
 ## Checklist comum
 

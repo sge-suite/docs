@@ -25,7 +25,7 @@ Estas migrations já existem no projeto novo e não devem ser recriadas. Cada um
 
 Não há migration de permissões: as tabelas anteriormente previstas foram removidas e a autorização usa Gates e Policies com os vínculos.
 
-As migrations abaixo são o backlog do domínio e continuam pendentes até o código e os testes confirmarem cada contrato.
+As migrations de [`cities`](doc:migration-01a-cities), [`addresses`](doc:migration-01-addresses) e [`holidays`](doc:migration-22-holidays) já estão implementadas e testadas em PostgreSQL. As demais continuam no backlog até o código e os testes confirmarem seus contratos; as notas individuais distinguem a base disponível das integrações futuras.
 
 > [!info] Fonte dos contratos
 > A implementação segue os contratos desta pasta e as decisões aprovadas no planejamento.

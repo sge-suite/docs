@@ -6,12 +6,13 @@ type: technical-hub
 status: in-progress
 visibility: public
 tags: sge/desenvolvimento, sge/actions, sge/checklist
-related: action-resetuserpassword, concerns, componentes-tecnicos, fase-04-conta-e-contexto
+related: action-resetuserpassword, migration-01-addresses, concerns, componentes-tecnicos, fase-04-conta-e-contexto
 source_refs:
 ---
 ## Inventário
 
 - [`ResetUserPassword`](doc:action-resetuserpassword) — valida e grava a nova senha no fluxo Fortify.
+- [`CopyAddress`](doc:migration-01-addresses) — relê um endereço persistido em transação e cria uma linha independente, sem modificar a origem ou copiar alterações ainda não salvas.
 
 ## Checklist comum
 

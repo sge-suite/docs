@@ -10,7 +10,7 @@ related: migration-01a-cities, migration-01-addresses, migration-03-campuses, mi
 source_refs: https://github.com/sge-suite/sge/blob/master/app/Enums/BrazilianState.php, https://github.com/sge-suite/sge/blob/master/tests/Unit/Enums/BrazilianStateTest.php
 ---
 > [!success] Estado
-> A classe e os testes unitários já existem em `app/Enums/BrazilianState.php`. O cast no model `City` já está implementado; os casts e integrações em endereços, campi e calendários continuam planejados.
+> A classe e os testes unitários já existem em `app/Enums/BrazilianState.php`. O cast no model `City` já está implementado; `Address` obtém a UF pelo relacionamento com a cidade, sem coluna ou cast de UF próprios. As integrações com campi e o cálculo do calendário continuam planejadas.
 
 Os valores persistidos são as siglas oficiais em maiúsculas. `label()` apresenta o nome da unidade federativa em português e `options()` serve diretamente aos campos de seleção.
 
@@ -46,14 +46,15 @@ O model `City` persiste `state` como sigla e o expõe como `BrazilianState` por 
 | `Sergipe` | `SE` | Sergipe |
 | `Tocantins` | `TO` | Tocantins |
 
-Para o cálculo do estágio, a UF e a cidade do endereço histórico do local de trabalho definem os feriados estaduais e municipais aplicáveis. O catálogo de cidades é local e carregado pelo `CitySeeder`; a BrasilAPI/IBGE pode ser usada para gerar ou revisar o arquivo de carga. No formulário, a BrasilAPI também pode sugerir dados quando o usuário informa um CEP, mas o sistema resolve a cidade no catálogo local e persiste seu código IBGE. O calendário importado é persistido em [`holidays`](doc:migration-22-holidays).
+Para o cálculo do estágio, a UF e a cidade do endereço histórico do local de trabalho definem os feriados estaduais e municipais aplicáveis. O catálogo de cidades é local e carregado pelo `CitySeeder`; a BrasilAPI/IBGE pode ser usada para gerar ou revisar o arquivo de carga. A consulta opcional de CEP no formulário fica para uma etapa futura e deverá resolver a cidade no catálogo local, preservando sua identidade IBGE. O calendário importado é persistido em [`holidays`](doc:migration-22-holidays).
 
 ## Checklist
 
 - [x] Criar enum, rótulos, `values()` e `options()`.
 - [x] Cobrir cases, siglas, rótulos e opções com teste unitário.
 - [x] Adicionar o cast de UF ao model `City`.
-- [ ] Adicionar o cast de UF aos modelos de endereço e campus.
+- [x] Expor a UF de `Address` pelo relacionamento com `City`, sem duplicar coluna ou cast.
+- [ ] Integrar a UF ao cadastro de campus conforme seu contrato.
 - [x] Criar o catálogo local de cidades e carregá-lo pelo `CitySeeder`.
 - [x] Criar a tabela, o model e a importação BrasilAPI de feriados nacionais e estaduais; o cadastro municipal permanece pendente.
 - [ ] Usar o calendário persistido no cálculo da previsão de término.

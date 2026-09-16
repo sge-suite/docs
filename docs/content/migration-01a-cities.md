@@ -25,7 +25,7 @@ source_refs: https://github.com/sge-suite/sge/blob/master/app/Console/Commands/F
 
 O catálogo nacional tem 5.571 municípios e é importado localmente. O catálogo conferido está salvo em `database/data/cities.json` e versionado junto com o projeto. A migration `create_cities_table`, o model `City` e o `CitySeeder` estão implementados: o seeder lê esse arquivo e insere/atualiza as cidades de forma idempotente pelo `ibge_code`, sem apagar registros existentes.
 
-Não há chamada à BrasilAPI para consultas de cidades nem para o cálculo de feriados. A API/IBGE pode ser usada apenas para obter ou revisar o arquivo versionado antes de uma nova implantação. A única consulta externa prevista no formulário é a busca opcional por CEP, documentada em [`addresses`](doc:migration-01-addresses); mesmo nesse caso, a cidade é resolvida e persistida pela tabela local usando o código IBGE. Quando uma busca por nome for necessária, o backend consulta a tabela local com filtro por `state`, busca textual limitada e o índice `(state, name)`. `City` não usa Scout/Meilisearch porque é uma tabela de referência de backend, sem necessidade atual de busca fuzzy ou índice externo; a cidade nunca é um enum nem texto livre.
+Não há chamada à BrasilAPI para consultas de cidades nem para o cálculo de feriados. A API/IBGE pode ser usada apenas para obter ou revisar o arquivo versionado antes de uma nova implantação. A busca opcional por CEP, documentada em [`addresses`](doc:migration-01-addresses), fica para uma etapa futura; quando existir, a cidade continuará sendo resolvida no catálogo local, sem criação de municípios pela resposta externa. Quando uma busca por nome for necessária, o backend consulta a tabela local com filtro por `state`, busca textual limitada e o índice `(state, name)`. `City` não usa Scout/Meilisearch porque é uma tabela de referência de backend, sem necessidade atual de busca fuzzy ou índice externo; a cidade nunca é um enum nem texto livre.
 
 O código IBGE é a identidade da cidade. O `CitySeeder` pode atualizar o nome oficial associado ao mesmo código em uma carga controlada; documentos gerados preservam os valores formatados no snapshot da geração, e endereços históricos continuam apontando para a mesma identidade municipal. Não há enum de cidades nem exclusão lógica como operação normal.
 
@@ -75,14 +75,15 @@ A obtenção do arquivo ocorre fora do fluxo de seed, durante o desenvolvimento 
 - `UNIQUE (ibge_code)`;
 - `INDEX (state)` e `INDEX (state, name)` para filtros por UF e consultas locais por nome;
 - a validação de `state` usa os 27 valores de [`BrazilianState`](doc:enum-brazilianstate);
-- uma cidade só pode ser usada por endereço e feriado municipal da mesma UF, quando essas tabelas forem implementadas.
+- a UF do endereço é obtida por `city_id`, sem campo estadual duplicado; feriados municipais devem pertencer à UF da cidade selecionada.
 
-O model `City` declara `holidays()` para os feriados municipais. O relacionamento com `Address` continua pendente até a implementação dessa tabela.
+O model `City` declara `holidays()` para os feriados municipais e `addresses()` para os endereços. `CityFactory` cria fixtures independentes de rede e do catálogo nacional nos testes de backend.
 
 ## Checklist
 
 - [x] Criar `create_cities_table` antes de `create_addresses_table`.
 - [x] Criar Model `City` com cast de `state`.
+- [x] Adicionar `City::addresses()` e `CityFactory` para fixtures de backend.
 - [x] Gerar e revisar `database/data/cities.json` com o catálogo nacional pelo comando Artisan.
 - [x] Criar `CitySeeder` idempotente, executável sem rede e seguro para reexecução.
 - [x] Testar migration, carga local, unicidade do código IBGE e filtro por UF/nome.

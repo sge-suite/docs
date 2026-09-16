@@ -92,7 +92,7 @@ Cada versão declara quais itens abaixo são obrigatórios ou opcionais. Uma var
 | `${ALUNO_NASCIMENTO}` | `dd/mm/aaaa`. |
 | `${ALUNO_CPF}` / `${ALUNO_RG}` | documentos formatados. |
 | `${ALUNO_RG_ORGAO}` / `${ALUNO_RG_DATA_EMISSAO}` | emissor e data. |
-| `${ALUNO_ENDERECO}` | endereço completo do snapshot. |
+| `${ALUNO_ENDERECO}` | endereço completo de `internships.student_address_id`, quando houver; a cidade é resolvida por `city_id`. |
 | `${ALUNO_LOGRADOURO}` / `${ALUNO_NUMERO}` / `${ALUNO_BAIRRO}` | partes do endereço. |
 | `${ALUNO_CIDADE}` / `${ALUNO_UF}` / `${ALUNO_CEP}` | localidade formatada. |
 | `${CURSO_NOME}` | curso do estágio. |
@@ -108,7 +108,7 @@ Cada versão declara quais itens abaixo são obrigatórios ou opcionais. Uma var
 | `${CONCEDENTE_DOCUMENTO}` | CPF/CNPJ formatado conforme o tipo. |
 | `${CONCEDENTE_EMAIL}` / `${CONCEDENTE_TELEFONE}` | contatos do snapshot. |
 | `${CONCEDENTE_AREA_ATUACAO}` | área de atuação. |
-| `${CONCEDENTE_ENDERECO}` | endereço completo. |
+| `${CONCEDENTE_ENDERECO}` | endereço completo de `internships.workplace_address_id`, preservado na formalização; a concedente atual não substitui essa referência histórica. |
 | `${CONCEDENTE_LOGRADOURO}` / `${CONCEDENTE_NUMERO}` / `${CONCEDENTE_BAIRRO}` | partes do endereço. |
 | `${CONCEDENTE_CIDADE}` / `${CONCEDENTE_UF}` / `${CONCEDENTE_CEP}` | localidade formatada. |
 | `${CONCEDENTE_REPRESENTANTE_NOME}` | representante legal. |

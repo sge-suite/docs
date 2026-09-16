@@ -30,12 +30,14 @@ Base: [fluxo de abertura](doc:fluxos-principais#2-solicitacao).
 - [ ] Exigir upload privado do comprovante pelo próprio SGE quando selecionar menor emancipado, criando `emancipation_evidences` e mídia privada sem apagar envios anteriores.
 - [ ] Implementar decisão manual do Setor: validar ou recusar com motivo; o envio nunca aprova automaticamente.
 - [ ] Validar no servidor que a opção maior de idade corresponde à data de nascimento e que menor emancipado contém comprovante.
-- [ ] Validar carga horária, período, feriados nacionais e estaduais aplicáveis, pausas e regras do tipo.
+- [ ] No endereço, selecionar primeiro a UF e depois consultar cidades do catálogo local por nome; persistir a cidade por código IBGE.
+- [ ] Na formalização, copiar o endereço atual da concedente para uma nova linha de `addresses` e gravar `internships.workplace_address_id`.
+- [ ] Validar carga horária, período, feriados nacionais/estaduais/municipais aplicáveis ao endereço do local de trabalho, pausas e regras do tipo.
 
 ## Formalização inicial
 
 - [ ] Criar `internships` com status inicial `pending_formalization` somente após aceitar a solicitação.
-- [ ] Copiar para o estágio os dados aprovados e os snapshots históricos.
+- [ ] Copiar para o estágio os dados aprovados, os snapshots históricos e as referências históricas de endereço.
 - [ ] Associar `internship_id` à mesma solicitação que originou o estágio.
 
 ## Cadastros relacionados

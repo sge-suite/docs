@@ -12,7 +12,7 @@ source_refs:
 
 ## Como ler
 
-O painel original era uma Base do Obsidian: uma consulta às propriedades das notas. No Aurelius, a Base não vira uma falsa tabela dinâmica. Este índice é uma fotografia editorial da migração; os documentos vinculados continuam sendo a fonte de verdade.
+Este índice é uma fotografia editorial da documentação publicada. Os documentos vinculados continuam sendo a fonte de verdade; os status servem para navegação e acompanhamento, não substituem o contrato técnico.
 
 **Como interpretar os status:** `implemented` indica que o artefato já existe no código; a integração com o domínio, as migrations, as Policies e os testes específicos podem continuar pendentes. `defined` indica contrato aprovado ainda não implementado; `planned` indica trabalho ainda não iniciado.
 
@@ -33,7 +33,8 @@ O painel original era uma Base do Obsidian: uma consulta às propriedades das no
 ## Enums
 
 - [Enum — AffiliationType](doc:enum-affiliationtype) — **implemented** — Tipos funcionais permitidos para um vínculo institucional do SGE.
-- [Enum — BrazilianState](doc:enum-brazilianstate) — **implemented** — Unidades federativas usadas pelos campi e pela importação do calendário estadual; integração com os modelos ainda pendente.
+- [Enum — BrazilianState](doc:enum-brazilianstate) — **implemented** — Unidades federativas usadas por cidades, endereços, campi e calendários; integração com os modelos ainda pendente.
+- [Enum — NonWorkingDateScope](doc:enum-nonworkingdatescope) — **planned** — Escopo nacional, estadual ou municipal de uma data sem expediente.
 - [Enum — EmailDeliveryAttemptStatus](doc:enum-emaildeliveryattemptstatus) — **implemented** — Estados da tentativa de transporte de uma mensagem de e-mail; integração com o modelo ainda pendente.
 - [Enum — EmailMessagePurpose](doc:enum-emailmessagepurpose) — **implemented** — Finalidades estáveis para mensagens de e-mail do SGE; integração com o modelo ainda pendente.
 - [Enum — EmancipationEvidenceStatus](doc:enum-emancipationevidencestatus) — **implemented** — Ciclo da prova privada de emancipação analisada pelo Setor de Estágio; integração com o modelo ainda pendente.
@@ -56,7 +57,8 @@ O painel original era uma Base do Obsidian: uma consulta às propriedades das no
 - [Migration base 03 — jobs](doc:migration-base-03-jobs) — **implemented** — Estado atual das filas, lotes e falhas de Jobs do Laravel.
 - [Migration base 04 — activity_log](doc:migration-base-04-activity-log) — **implemented** — Estado atual da auditoria baseada no Spatie Activity Log.
 - [Migration base 05 — media](doc:migration-base-05-media) — **implemented** — Estado atual do armazenamento de mídia polimórfica do Spatie Media Library.
-- [Migration 01 — addresses](doc:migration-01-addresses) — **planned** — Contrato da tabela reutilizável de endereços atuais.
+- [Migration 01A — cities](doc:migration-01a-cities) — **planned** — Catálogo local de cidades identificadas pelo código IBGE; deve ser carregado antes dos endereços.
+- [Migration 01 — addresses](doc:migration-01-addresses) — **planned** — Contrato da tabela reutilizável de endereços atuais e históricos.
 - [Migration 02 — user_personal_data](doc:migration-02-user-personal-data) — **planned** — Contrato dos dados pessoais separados da autenticação.
 - [Migration 03 — campuses](doc:migration-03-campuses) — **planned** — Contrato da tabela de campi e do representante legal por vínculo.
 - [Migration 04 — affiliations](doc:migration-04-affiliations) — **planned** — Contrato base dos vínculos institucionais e seu contexto de acesso.
@@ -79,7 +81,9 @@ O painel original era uma Base do Obsidian: uma consulta às propriedades das no
 - [Migration 19A — emancipation_evidences](doc:migration-19a-emancipation-evidences) — **planned** — Histórico privado das provas de emancipação e sua análise manual.
 - [Migration 20 — internship_request_corrections](doc:migration-20-internship-request-corrections) — **planned** — Pendências operacionais que direcionam a edição da solicitação de estágio.
 - [Migration 21 — internship_cancellation_requests](doc:migration-21-internship-cancellation-requests) — **planned** — Pedidos rastreáveis de cancelamento de estágio formalizado feitos pelo discente.
-- [Migration 22 — internship_work_schedules](doc:migration-22-internship-work-schedules) — **planned** — Jornada semanal pactuada, preservada por vigência somente quando um aditivo formalizado a alterar.
+- [Migration 22 — non_working_dates](doc:migration-22-non-working-dates) — **planned** — Calendário nacional, estadual e municipal persistido e versionado.
+- [Migration 22A — internship_calendar_overrides](doc:migration-22-internship-calendar-overrides) — **planned** — Exceções de expediente específicas de um estágio.
+- [Migration 23 — internship_work_schedules](doc:migration-23-internship-work-schedules) — **planned** — Jornada semanal pactuada, preservada por vigência somente quando um aditivo formalizado a alterar.
 
 ## Componentes técnicos
 

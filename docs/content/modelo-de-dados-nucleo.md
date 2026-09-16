@@ -13,7 +13,7 @@ diagram: modelo-nucleo-identidade
 > [!info] Nível deste diagrama
 > Este é um recorte do modelo lógico relacional publicado. Ele mostra tabelas, colunas-chave e relações; o contrato completo de campos, índices e nulabilidade fica em uma única fonte técnica, evitando duplicação no diagrama.
 
-## Identidade, campus e cadastros
+## Identidade, cidades, endereços e cadastros
 
 {{diagram:modelo-nucleo-identidade}}
 
@@ -21,6 +21,8 @@ diagram: modelo-nucleo-identidade
 | --- | --- |
 | `users` | identidade autenticada e credenciais |
 | `user_personal_data` | CPF e dados pessoais atuais |
+| `cities` | catálogo local de municípios por código IBGE e UF |
+| `addresses` | endereços atuais e cópias históricas usadas por estágios |
 | `affiliations` | função institucional, campus, curso e e-mail contextual |
 | `campuses` e `courses` | escopo acadêmico e administrativo |
 | `internship_types` | regras de carga, notas e exceções aplicáveis ao curso |
@@ -43,7 +45,7 @@ Uma pessoa possui uma conta e quantos vínculos forem necessários. O vínculo a
 
 | Conjunto | Regra central |
 | --- | --- |
-| jornadas, pausas e calendário nacional/estadual | determinam a previsão reproduzível de término |
+| jornadas, pausas, calendário e exceções | determinam a previsão reproduzível de término |
 | templates e versões | preservam o modelo usado em cada geração |
 | documentos | mantêm origem, versão, estado e snapshot; o arquivo final é temporário |
 | avaliação do supervisor | reutiliza o mesmo formulário em `Draft` ou `Returned` |

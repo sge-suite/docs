@@ -95,6 +95,7 @@
               "enums-e-migrations",
               "enum-affiliationtype",
               "enum-brazilianstate",
+              "enum-nonworkingdatescope",
               "enum-emaildeliveryattemptstatus",
               "enum-emailmessagepurpose",
               "enum-emancipationevidencestatus",
@@ -115,6 +116,7 @@
             "label": "Migrations",
             "items": [
               "migrations",
+              "migration-01a-cities",
               "migration-01-addresses",
               "migration-02-user-personal-data",
               "migration-03-campuses",
@@ -138,7 +140,9 @@
               "migration-19a-emancipation-evidences",
               "migration-20-internship-request-corrections",
               "migration-21-internship-cancellation-requests",
-              "migration-22-internship-work-schedules",
+              "migration-22-non-working-dates",
+              "migration-22-internship-calendar-overrides",
+              "migration-23-internship-work-schedules",
               {
                 "label": "Fundação existente",
                 "items": [

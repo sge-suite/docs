@@ -19,11 +19,11 @@ Esta é a referência visual do modelo lógico relacional. Cada caixa representa
 
 ## Identidade e cadastros
 
-Contas, dados pessoais, endereços e vínculos formam o contexto institucional. Campus, curso e tipo de estágio são cadastros que restringem o escopo do processo.
+Contas, dados pessoais, cidades, endereços e vínculos formam o contexto institucional. Campus, curso e tipo de estágio são cadastros que restringem o escopo do processo.
 
 {{diagram:modelo-nucleo-identidade}}
 
-Detalhes dos contratos: [addresses](doc:migration-01-addresses), [user_personal_data](doc:migration-02-user-personal-data), [campuses](doc:migration-03-campuses), [affiliations](doc:migration-04-affiliations), [courses](doc:migration-09-courses) e [internship_types](doc:migration-11-internship-types).
+Detalhes dos contratos: [cities](doc:migration-01a-cities), [addresses](doc:migration-01-addresses), [user_personal_data](doc:migration-02-user-personal-data), [campuses](doc:migration-03-campuses), [affiliations](doc:migration-04-affiliations), [courses](doc:migration-09-courses) e [internship_types](doc:migration-11-internship-types).
 
 ## Contexto de acesso
 
@@ -47,11 +47,11 @@ Detalhes dos contratos: [granting_parties](doc:migration-12-granting-parties), [
 
 ## Execução do estágio
 
-Depois do aceite, o estágio concentra as vigências de jornada, pausas, o cálculo baseado no calendário nacional e estadual aplicável à UF do campus, pedidos de cancelamento e avaliação do supervisor.
+Depois do aceite, o estágio concentra as vigências de jornada, pausas, o cálculo baseado no calendário nacional, estadual e municipal aplicável à cidade/UF do endereço histórico do local de trabalho, pedidos de cancelamento e avaliação do supervisor.
 
 {{diagram:modelo-nucleo-execucao}}
 
-Detalhes dos contratos: [internships](doc:migration-15-internships), [internship_pauses](doc:migration-17-internship-pauses), [avaliações](doc:migration-18-avaliacoes), [internship_cancellation_requests](doc:migration-21-internship-cancellation-requests) e [internship_work_schedules](doc:migration-22-internship-work-schedules).
+Detalhes dos contratos: [internships](doc:migration-15-internships), [internship_pauses](doc:migration-17-internship-pauses), [avaliações](doc:migration-18-avaliacoes), [internship_cancellation_requests](doc:migration-21-internship-cancellation-requests), [non_working_dates](doc:migration-22-non-working-dates), [internship_calendar_overrides](doc:migration-22-internship-calendar-overrides) e [internship_work_schedules](doc:migration-23-internship-work-schedules).
 
 ## Documentos e versões
 
@@ -75,7 +75,7 @@ Detalhes dos contratos: [activity_log](doc:migration-base-04-activity-log), [not
 
 ## Regras do modelo
 
-- FKs apontam para cadastros atuais; snapshots preservam os valores usados em um processo já iniciado.
+- FKs apontam para cadastros atuais; snapshots e cópias históricas de endereço preservam os valores usados em um processo já iniciado.
 - A solicitação origina no máximo um estágio, mas correções e evidências podem ser várias.
 - `internships` é o agregado operacional: jornadas, pausas, documentos, avaliações e cancelamentos dependem dele.
 - Templates podem ter muitas versões, mas um documento gerado referencia apenas a versão usada na geração.

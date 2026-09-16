@@ -24,4 +24,4 @@ diagram: modelo-historico
 - Segredos de autenticação não são snapshots: links e tokens de recuperação nunca são guardados no conteúdo do e-mail. Não haverá confirmação adicional de endereço de e-mail.
 
 > [!warning] Não confundir
-> `addresses` é reutilizável para o endereço atual. O endereço que aparece em um estágio ou documento deve ser lido do snapshot histórico correspondente.
+> `addresses` é reutilizável para o endereço atual e para cópias históricas. O endereço que aparece em um estágio deve ser lido de `internships.workplace_address_id` ou `student_address_id`; o documento gerado congela a representação usada na geração.

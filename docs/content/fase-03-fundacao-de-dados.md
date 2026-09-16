@@ -6,7 +6,7 @@ type: development-phase
 status: planned
 visibility: public
 tags: sge/desenvolvimento, sge/banco-de-dados, sge/checklist
-related: migrations, enums, migration-base-01-users, migration-base-02-cache, migration-base-03-jobs, migration-base-04-activity-log, migration-base-05-media, enum-affiliationtype, enum-partydocumenttype, migration-01-addresses, migration-02-user-personal-data, migration-03-campuses, migration-04-affiliations, migration-09-courses, migration-10-course-id-em-affiliations, migration-11-internship-types, migration-12-granting-parties, casts, helpers, concerns, testes-existentes, fase-04-conta-e-contexto
+related: migrations, enums, migration-base-01-users, migration-base-02-cache, migration-base-03-jobs, migration-base-04-activity-log, migration-base-05-media, enum-affiliationtype, enum-brazilianstate, migration-01a-cities, migration-01-addresses, migration-02-user-personal-data, migration-03-campuses, migration-04-affiliations, migration-09-courses, migration-10-course-id-em-affiliations, migration-11-internship-types, migration-12-granting-parties, migration-22-non-working-dates, migration-22-internship-calendar-overrides, casts, helpers, concerns, testes-existentes, fase-04-conta-e-contexto
 source_refs:
 ---
 > [!info] Ordem
@@ -27,6 +27,7 @@ source_refs:
 ## Dados cadastrais
 
 - [x] Criar e testar as classes dos enums estáveis; a integração com Models, migrations e fluxos continua nas etapas específicas.
+- [ ] Concluir [`cities`](doc:migration-01a-cities), gerar `database/data/cities.json` e carregar o catálogo com `CitySeeder` sem rede.
 - [ ] Concluir [`addresses`](doc:migration-01-addresses).
 - [ ] Concluir [`user_personal_data`](doc:migration-02-user-personal-data).
 - [ ] Concluir [`campuses`](doc:migration-03-campuses).
@@ -35,10 +36,11 @@ source_refs:
 - [ ] Concluir [`course_id` em affiliations](doc:migration-10-course-id-em-affiliations).
 - [ ] Concluir [`internship_types`](doc:migration-11-internship-types).
 - [ ] Concluir [`granting_parties`](doc:migration-12-granting-parties).
+- [ ] Concluir [`non_working_dates`](doc:migration-22-non-working-dates) e suas exceções por estágio.
 
 ## Regras de dados
 
-- [ ] Preservar endereço atual sem apagar snapshots históricos.
+- [ ] Preservar linhas de endereço usadas historicamente; alterações criam nova linha quando necessário.
 - [ ] Garantir CPF único e imutável pela configuração do usuário.
 - [ ] Normalizar CPF, CNPJ, CEP, UF e e-mails.
 - [ ] Permitir múltiplos vínculos por pessoa sem trocar campus dentro do vínculo.

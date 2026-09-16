@@ -1,16 +1,16 @@
 ---
 id: enum-brazilianstate
 title: Enum — BrazilianState
-description: Siglas oficiais das 27 unidades federativas brasileiras usadas pelos campi e pelo calendário estadual.
+description: Siglas oficiais das 27 unidades federativas brasileiras usadas por cidades, endereços e calendários estaduais.
 type: enum-reference
 status: implemented
 visibility: public
 tags: sge/enums, sge/cadastros, sge/calendario
-related: migration-03-campuses, service-internshipenddatecalculator
+related: migration-01a-cities, migration-01-addresses, migration-03-campuses, migration-22-non-working-dates, service-internshipenddatecalculator
 source_refs: https://github.com/sge-suite/sge/blob/master/app/Enums/BrazilianState.php, https://github.com/sge-suite/sge/blob/master/tests/Unit/Enums/BrazilianStateTest.php
 ---
 > [!success] Estado
-> A classe e os testes unitários já existem em `app/Enums/BrazilianState.php`. O cast nos modelos e a integração com os campi e o calendário de feriados continuam planejados.
+> A classe e os testes unitários já existem em `app/Enums/BrazilianState.php`. O cast nos modelos e a integração com cidades, endereços, campi e calendários continuam planejados.
 
 Os valores persistidos são as siglas oficiais em maiúsculas. `label()` apresenta o nome da unidade federativa em português e `options()` serve diretamente aos campos de seleção.
 
@@ -44,12 +44,13 @@ Os valores persistidos são as siglas oficiais em maiúsculas. `label()` apresen
 | `Sergipe` | `SE` | Sergipe |
 | `Tocantins` | `TO` | Tocantins |
 
-Para o cálculo do estágio, a UF do campus define os feriados estaduais aplicáveis. O SGE importa o calendário da BrasilAPI com `GET /api/feriados/v1/{ano}?uf={UF}`, persiste e versiona os resultados. A API não é consultada durante o cálculo de previsão de término.
+Para o cálculo do estágio, a UF e a cidade do endereço histórico do local de trabalho definem os feriados estaduais e municipais aplicáveis. O catálogo de cidades é local e carregado pelo `CitySeeder`; a BrasilAPI/IBGE pode ser usada para gerar ou revisar o arquivo de carga. No formulário, a BrasilAPI também pode sugerir dados quando o usuário informa um CEP, mas o sistema resolve a cidade no catálogo local e persiste seu código IBGE. O calendário importado é persistido e versionado em [`non_working_dates`](doc:migration-22-non-working-dates).
 
 ## Checklist
 
 - [x] Criar enum, rótulos, `values()` e `options()`.
 - [x] Cobrir cases, siglas, rótulos e opções com teste unitário.
-- [ ] Adicionar o cast de UF aos modelos que representam campus e endereço.
-- [ ] Criar a tabela e a importação versionada dos feriados nacionais e estaduais.
+- [ ] Adicionar o cast de UF aos modelos que representam cidade, endereço, campus e calendário.
+- [ ] Criar o catálogo local de cidades e carregá-lo pelo `CitySeeder`.
+- [ ] Criar a tabela e a importação versionada dos feriados nacionais, estaduais e municipais.
 - [ ] Usar o calendário persistido no cálculo da previsão de término.

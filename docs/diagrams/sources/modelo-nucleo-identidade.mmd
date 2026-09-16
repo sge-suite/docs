@@ -1,6 +1,7 @@
 erDiagram
     USERS ||--|| USER_PERSONAL_DATA : user_id
     USERS ||--o{ AFFILIATIONS : user_id
+    CITIES ||--o{ ADDRESSES : city_id
     ADDRESSES ||--o{ USER_PERSONAL_DATA : address_id
     ADDRESSES ||--o{ CAMPUSES : address_id
     CAMPUSES ||--o{ AFFILIATIONS : campus_id
@@ -21,11 +22,17 @@ erDiagram
     }
     ADDRESSES {
         bigint id PK
+        bigint city_id FK
         varchar street
         varchar number
-        varchar city
-        char uf
-        varchar zip_code
+        varchar neighborhood
+        char zip_code
+    }
+    CITIES {
+        bigint id PK
+        char ibge_code UK
+        varchar name
+        char state
     }
     CAMPUSES {
         bigint id PK

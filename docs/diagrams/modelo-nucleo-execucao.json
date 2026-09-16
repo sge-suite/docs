@@ -2,28 +2,31 @@
   "id": "modelo-nucleo-execucao",
   "kind": "db-schema",
   "title": "Esquema lógico — execução do estágio",
-  "description": "Tabelas e colunas que controlam vigência, jornadas, pausas e cancelamento.",
-  "summary": "O estágio usa o calendário nacional no cálculo, possui jornadas e pausas e pode receber um pedido de cancelamento; a avaliação é detalhada no contrato próprio.",
+  "description": "Tabelas e colunas que controlam endereço de trabalho, calendário, vigência, jornadas, pausas e cancelamento.",
+  "summary": "O estágio usa o calendário nacional, estadual e municipal aplicável ao endereço do local de trabalho, possui jornadas, pausas e exceções e pode receber um pedido de cancelamento; a avaliação é detalhada no contrato próprio.",
   "source": {
     "language": "mermaid",
     "path": "diagrams/sources/modelo-nucleo-execucao.mmd"
   },
   "presentation": {
     "width": 1780,
-    "height": 620,
+    "height": 820,
     "initialZoom": 1.05
   },
   "layout": {
-    "canvas": { "width": 1780, "height": 620 },
+    "canvas": { "width": 1780, "height": 820 },
     "entities": {
       "INTERNSHIPS": { "x": 80, "y": 80, "width": 440 },
       "INTERNSHIP_WORK_SCHEDULES": { "x": 640, "y": 80, "width": 420 },
       "INTERNSHIP_PAUSES": { "x": 1240, "y": 80, "width": 380 },
-      "INTERNSHIP_CANCELLATION_REQUESTS": { "x": 720, "y": 400, "width": 460 }
+      "NON_WORKING_DATES": { "x": 80, "y": 500, "width": 440 },
+      "INTERNSHIP_CALENDAR_OVERRIDES": { "x": 640, "y": 500, "width": 420 },
+      "INTERNSHIP_CANCELLATION_REQUESTS": { "x": 1240, "y": 500, "width": 460 }
     },
     "relationships": [
       { "from": "INTERNSHIPS", "to": "INTERNSHIP_WORK_SCHEDULES", "label": "internship_id", "fromPort": { "side": "right", "field": "id", "fieldOffset": -8 }, "toPort": { "side": "left", "field": "internship_id" } },
       { "from": "INTERNSHIPS", "to": "INTERNSHIP_PAUSES", "label": "internship_id", "fromPort": { "side": "right", "field": "id", "fieldOffset": 8 }, "toPort": { "side": "left", "field": "internship_id" } },
+      { "from": "INTERNSHIPS", "to": "INTERNSHIP_CALENDAR_OVERRIDES", "label": "internship_id", "fromPort": { "side": "bottom", "offset": 0.28 }, "toPort": { "side": "top", "offset": 0.25 } },
       { "from": "INTERNSHIPS", "to": "INTERNSHIP_CANCELLATION_REQUESTS", "label": "internship_id", "fromPort": { "side": "bottom", "offset": 0.72 }, "toPort": { "side": "top", "offset": 0.25 } }
     ]
   },

@@ -6,7 +6,7 @@ type: decisions
 status: in-progress
 visibility: public
 tags: sge/decisoes, sge/backlog
-related: e-mails-notificacoes-e-entregas, enum-evaluationstatus, migration-18-avaliacoes, fluxos-principais, migration-13-document-templates, migration-14-template-versions, migration-16-generated-documents, migration-12-granting-parties, glossario, modelo-de-dados-acesso, matriz-de-autorizacao, migration-11-internship-types, migration-15-internships, migration-19-internship-requests, migration-20-internship-request-corrections, migration-base-04-activity-log, helper-numbertowordshelper, migration-21-internship-cancellation-requests, migration-02-user-personal-data, service-internshipenddatecalculator, migration-22-internship-work-schedules, geracao-de-documentos-docx-e-variaveis, schedules, ciclos-de-status
+related: e-mails-notificacoes-e-entregas, enum-evaluationstatus, enum-brazilianstate, enum-nonworkingdatescope, migration-01a-cities, migration-01-addresses, migration-18-avaliacoes, fluxos-principais, migration-13-document-templates, migration-14-template-versions, migration-16-generated-documents, migration-12-granting-parties, glossario, modelo-de-dados-acesso, matriz-de-autorizacao, migration-11-internship-types, migration-15-internships, migration-19-internship-requests, migration-20-internship-request-corrections, migration-base-04-activity-log, helper-numbertowordshelper, migration-21-internship-cancellation-requests, migration-22-non-working-dates, migration-22-internship-calendar-overrides, migration-23-internship-work-schedules, geracao-de-documentos-docx-e-variaveis, schedules, ciclos-de-status
 source_refs:
 ---
 ## Próximas definições
@@ -19,11 +19,11 @@ source_refs:
 
 ## Decisões registradas
 
-### D-001 — Documentação em Markdown com Mermaid
+### D-001 — Documentação versionada em Markdown com Mermaid
 
 - **Status:** definido.
-- **Decisão:** manter a documentação no vault do Obsidian em arquivos `.md`, com diagramas Mermaid.
-- **Motivo:** facilita navegação, versionamento e atualização durante o desenvolvimento.
+- **Decisão:** manter a documentação publicada em arquivos `.md`, com diagramas Mermaid versionados no repositório.
+- **Motivo:** facilita navegação, versionamento, revisão e atualização durante o desenvolvimento.
 
 ### D-002 — Papéis separados de vínculos
 
@@ -34,7 +34,7 @@ source_refs:
 ### D-004 — Dados pessoais fora de `internships`
 
 - **Status:** definido.
-- **Decisão:** CPF, RG, data de nascimento e endereço atual ficarão em `user_personal_data`, relacionado um-para-um com `users`; os estágios manterão FKs e snapshots `jsonb` para preservar o histórico.
+- **Decisão:** CPF, RG, data de nascimento e endereço atual ficarão em `user_personal_data`, relacionado um-para-um com `users`; os estágios manterão FKs e snapshots `jsonb` para preservar o histórico, enquanto os endereços históricos serão cópias imutáveis na própria tabela `addresses`.
 - **Motivo:** evita repetição de dados pessoais e mantém os documentos e estágios imunes a alterações posteriores no cadastro.
 
 ### D-005 — Configurações pessoais por tipo de vínculo
@@ -47,13 +47,13 @@ source_refs:
 
 - **Status:** definido.
 - **Decisão:** manter os diagramas Mermaid em notas Markdown independentes e organizá-los em um canvas específico por meio de cards de arquivo.
-- **Motivo:** preserva a renderização e a exportação dos diagramas, ao mesmo tempo que permite navegação espacial no Obsidian.
+- **Motivo:** preserva a renderização e a exportação dos diagramas, ao mesmo tempo que permite organizar fontes e artefatos no repositório.
 
 ### D-007 — Canvas do fluxograma com cards padronizados
 
 - **Status:** definido.
 - **Decisão:** o canvas do fluxograma usará cards de texto coloridos, grupos e conexões com cores por semântica. O JSON Canvas não possui formas nativas específicas para processo, decisão, documento ou banco de dados.
-- **Motivo:** evita depender de recursos que não fazem parte do formato e mantém o arquivo compatível com o Obsidian.
+- **Motivo:** evita depender de recursos que não fazem parte do formato e mantém os diagramas compatíveis com o pipeline de publicação.
 
 ### D-008 — Trilhas separadas para notificações e e-mails
 
@@ -135,9 +135,9 @@ source_refs:
 ### D-019 — Previsão de término reproduzível
 
 - **Status:** definido.
-- **Decisão:** a data prevista de término é calculada pela jornada válida, pela margem de sete dias corridos configurada e congelada no tipo de estágio, pelo calendário nacional e estadual versionado — conforme a UF do campus — e pelas pausas. Eventual nova vigência exige aditivo formalizado. O cálculo limita o último dia às horas restantes e persiste uma base reproduzível; não aceita horas restantes livres como fonte primária.
+- **Decisão:** a data prevista de término é calculada pela jornada válida, pela margem de sete dias corridos configurada e congelada no tipo de estágio, pelo calendário nacional, estadual e municipal versionado — conforme a cidade/UF do endereço histórico do local de trabalho —, pelas pausas e pelas exceções específicas do estágio. Eventual nova vigência exige aditivo formalizado. O cálculo limita o último dia às horas restantes e persiste uma base reproduzível; não aceita horas restantes livres como fonte primária.
 - **Motivo:** mantém o cálculo rastreável e evita resultados inconsistentes após alterações de calendário, jornada ou pausa.
-- **Referências:** [Service — InternshipEndDateCalculator](doc:service-internshipenddatecalculator) e [Migration 22 — internship_work_schedules](doc:migration-22-internship-work-schedules).
+- **Referências:** [Service — InternshipEndDateCalculator](doc:service-internshipenddatecalculator), [Migration 22 — non_working_dates](doc:migration-22-non-working-dates) e [Migration 23 — internship_work_schedules](doc:migration-23-internship-work-schedules).
 
 ### D-020 — Motor DOCX local e catálogo canônico
 
@@ -165,4 +165,4 @@ source_refs:
 - **Status:** definido.
 - **Decisão:** a solicitação define uma jornada semanal por carga horária em cada dia, sem registrar horários de entrada ou saída. Essa jornada permanece fixa durante a execução. Pausas são registradas normalmente no formulário: suspendem o cômputo e alteram a previsão de término, mas nunca distribuem ou modificam horas. Quando uma pausa não prevista precisar ter seus efeitos formalizados no instrumento do estágio, o Setor de Estágio gera um aditivo, conforme a análise do caso. Qualquer alteração de carga horária exige um documento de aditivo; somente depois de suas assinaturas serem conferidas pelo Setor o sistema encerra a vigência anterior, cria a nova e recalcula a previsão. Não há alteração temporária de carga horária como funcionalidade independente.
 - **Motivo:** mantém o cálculo simples e rastreável, separa interrupção de execução de mudança contratual e impede que um ajuste informal reescreva a base de documentos ou de cálculos anteriores.
-- **Referências:** [Migration 22 — internship_work_schedules](doc:migration-22-internship-work-schedules), [Service — InternshipEndDateCalculator](doc:service-internshipenddatecalculator) e [Fluxos principais](doc:fluxos-principais#4-estagio-em-andamento).
+- **Referências:** [Migration 23 — internship_work_schedules](doc:migration-23-internship-work-schedules), [Migration 22A — internship_calendar_overrides](doc:migration-22-internship-calendar-overrides), [Service — InternshipEndDateCalculator](doc:service-internshipenddatecalculator) e [Fluxos principais](doc:fluxos-principais#4-estagio-em-andamento).

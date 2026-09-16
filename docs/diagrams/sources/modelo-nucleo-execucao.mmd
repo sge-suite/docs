@@ -1,7 +1,10 @@
 erDiagram
     INTERNSHIPS ||--o{ INTERNSHIP_WORK_SCHEDULES : internship_id
     INTERNSHIPS ||--o{ INTERNSHIP_PAUSES : internship_id
+    INTERNSHIPS ||--o{ INTERNSHIP_CALENDAR_OVERRIDES : internship_id
     INTERNSHIPS ||--o{ INTERNSHIP_CANCELLATION_REQUESTS : internship_id
+    ADDRESSES ||--o{ INTERNSHIPS : workplace_address_id
+    CITIES ||--o{ NON_WORKING_DATES : city_id
 
     INTERNSHIPS {
         bigint id PK
@@ -9,6 +12,7 @@ erDiagram
         bigint advisor_affiliation_id FK
         bigint supervisor_affiliation_id FK
         bigint course_id FK
+        bigint workplace_address_id FK
         varchar status
         date planned_start_date
         date projected_end_date
@@ -27,6 +31,21 @@ erDiagram
         date starts_at
         date ends_at
         varchar reason
+    }
+    NON_WORKING_DATES {
+        bigint id PK
+        date date
+        varchar name
+        varchar scope
+        char state_code
+        bigint city_id FK
+    }
+    INTERNSHIP_CALENDAR_OVERRIDES {
+        bigint id PK
+        bigint internship_id FK
+        date date
+        boolean is_working_day
+        text reason
     }
     INTERNSHIP_CANCELLATION_REQUESTS {
         bigint id PK

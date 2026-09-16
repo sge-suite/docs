@@ -14,23 +14,28 @@ source_refs:
 
 ## Contrato
 
-| Campo                     | Regra                                     |
-| ------------------------- | ----------------------------------------- |
-| `id`                      | bigint, chave primária.                   |
-| `document_type`           | enum/string `cpf` ou `cnpj`.              |
-| `document_number`         | obrigatório, normalizado e sem pontuação. |
-| `name`                    | nome completo/razão social, obrigatório.  |
-| `address_id`              | nullable, FK para endereço atual.         |
-| `representative_name` / `representative_role` | nullable; identificação e cargo do representante da concedente. |
-| `phone` / `email`         | nullable e normalizados; canais atuais de contato. |
-| `field_of_activity`       | nullable; área de atuação.                |
-| `professional_council` / `council_registration_number` | nullable; conselho e registro profissional quando aplicáveis. |
-| `credentialing_process_number` | texto nullable com o número do processo de credenciamento, quando aplicável. |
-| timestamps / `deleted_at` | auditoria e exclusão lógica.              |
+| Coluna | Tipo PostgreSQL | Nulo | Chaves/índices | Regra |
+| --- | --- | --- | --- | --- |
+| `id` | `bigint` | não | `PK` | Identificador da concedente/unidade. |
+| `document_type` | `varchar(16)` | não | — | `cpf` ou `cnpj`, validado por [`PartyDocumentType`](doc:enum-partydocumenttype). |
+| `document_number` | `varchar(14)` | não | índice composto | Documento normalizado, sem pontuação. |
+| `name` | `varchar(255)` | não | — | Nome completo ou razão social. |
+| `address_id` | `bigint` | sim | `FK` | Endereço atual; `SET NULL` somente para cadastro não utilizado. |
+| `representative_name` | `varchar(255)` | sim | — | Nome do representante atual. |
+| `representative_role` | `varchar(120)` | sim | — | Cargo do representante atual. |
+| `phone` | `varchar(20)` | sim | — | Telefone atual normalizado. |
+| `email` | `varchar(254)` | sim | — | E-mail atual. |
+| `field_of_activity` | `varchar(255)` | sim | — | Área de atuação. |
+| `professional_council` | `varchar(120)` | sim | — | Conselho profissional, quando aplicável. |
+| `council_registration_number` | `varchar(64)` | sim | — | Registro no conselho, quando aplicável. |
+| `credentialing_process_number` | `varchar(100)` | sim | — | Processo de credenciamento, quando aplicável. |
+| `created_at` | `timestamp(0)` | não | — | Auditoria. |
+| `updated_at` | `timestamp(0)` | não | — | Auditoria. |
+| `deleted_at` | `timestamp(0)` | sim | índice | Exclusão lógica sem apagar histórico. |
 
 Não exigir unicidade global de CNPJ: unidades distintas podem compartilhar o documento. Nome, unidade e endereço diferenciam os registros. Para ser selecionada na solicitação de estágio, a parte concedente precisa estar cadastrada; não é exigido convênio ou termo prévio como regra de validação. Quando houver, o número do processo de credenciamento preenche o campo correspondente do documento. O estágio guardará FK e snapshot.
 
-Os campos de endereço continuam em `addresses`, e não são repetidos nesta tabela. O modelo também evita copiar telefone, representante, conselho e processo a cada estágio: eles são dados atuais da concedente e entram no snapshot somente no aceite.
+Os campos de endereço continuam em `addresses`, e não são repetidos nesta tabela. Ao criar um estágio, o sistema copia o endereço apontado por `address_id` para uma nova linha de `addresses`; o estágio guarda essa nova FK em `workplace_address_id`. Telefone, representante, conselho e processo continuam sendo dados atuais da concedente e entram no snapshot do estágio somente no aceite.
 
 ## Checklist
 

@@ -20,10 +20,11 @@ source_refs:
 | `user_id`    | FK única para `users`; um perfil por conta.           |
 | `cpf`        | obrigatório, único e sem formatação; não é login.     |
 | `rg`         | nullable; exigido para discente quando a regra pedir. |
-| `rg_issuer` / `rg_issue_date` | nullable; obrigatórios junto ao RG quando o formulário exigir documento de identidade. |
+| `rg_issuer` | `varchar(120)`, nullable; obrigatório junto ao RG quando exigido. |
+| `rg_issue_date` | `date`, nullable; obrigatório junto ao RG quando exigido. |
 | `birth_date` | nullable; exigida quando a regra pedir.               |
 | `phone`      | nullable, normalizado; exigido para discente no envio da solicitação de estágio. |
-| `emancipation_verified_at` | timestamp nullable; preenchido somente após validação do Setor de Estágio. |
+| `emancipation_verified_at` | `timestamp(0)` nullable; preenchido somente após validação do Setor de Estágio. |
 | `emancipation_verified_by_affiliation_id` | FK nullable para o vínculo que confirmou a prova; adicionada em alteração posterior a `affiliations`, para não criar dependência circular. |
 | `address_id` | nullable, FK para `addresses`.                        |
 | timestamps   | obrigatórios.                                         |

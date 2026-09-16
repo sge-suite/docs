@@ -42,9 +42,11 @@ Base: [papéis por vínculo](doc:pessoas-e-responsabilidades), [Matriz de autori
 
 - [ ] Administrar templates DOCX e versões.
 - [ ] Administrar concedentes e solicitações pendentes.
+- [ ] Administrar a importação do calendário nacional/estadual e o cadastro manual de feriados municipais.
 - [ ] Analisar estágios enviados.
 - [ ] Analisar solicitações de supervisor/concedente.
 - [ ] Validar documentos, avaliações, pendências e liberação.
+- [ ] Consultar o calendário aplicável e registrar exceções por estágio, sem alterar o calendário global.
 
 ## Próxima fase
 

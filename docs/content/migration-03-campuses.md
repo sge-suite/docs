@@ -19,11 +19,13 @@ source_refs:
 | `id`                                  | bigint, chave primária.                      |
 | `name`                                | nome institucional completo, obrigatório.    |
 | `cnpj`                                | nullable, normalizado e sem formatação.      |
-| `phone` / `email`                     | nullable.                                    |
+| `phone`                              | `varchar(20)`, nullable e normalizado.       |
+| `email`                              | `varchar(254)`, nullable.                    |
 | `address_id`                          | FK obrigatória para endereço atual.          |
 | `legal_representative_affiliation_id` | nullable; vínculo da pessoa representante.   |
 | `internship_office_signatory_affiliation_id` | nullable; vínculo usado como responsável institucional nos documentos. |
-| `insurance_company_name` / `insurance_policy_number` | nullable no cadastro inicial; obrigatórios para gerar modelo que cite o seguro. |
+| `insurance_company_name`             | `varchar(255)`, nullable no cadastro inicial; obrigatório se o template citar o seguro. |
+| `insurance_policy_number`            | `varchar(100)`, nullable no cadastro inicial; obrigatório se o template citar o seguro. |
 | `deactivated_at`                      | nullable; bloqueia novos cadastros/vínculos. |
 | timestamps / `deleted_at`             | auditoria e exclusão lógica.                 |
 

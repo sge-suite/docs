@@ -18,7 +18,8 @@ source_refs:
 | --- | --- |
 | `id` | bigint, chave primária. |
 | `affiliation_id` | FK obrigatória para o vínculo discente dono da solicitação. |
-| `course_id` / `internship_type_id` | FKs obrigatórias fora de `Draft`; o tipo deve estar ativo e pertencer ao curso selecionado. |
+| `course_id` | FK obrigatória fora de `Draft`; o curso deve estar disponível no contexto do vínculo. |
+| `internship_type_id` | FK obrigatória fora de `Draft`; o tipo deve estar ativo e pertencer ao curso selecionado. |
 | `advisor_affiliation_id` | FK nullable enquanto o Setor ainda não atribuiu orientador; obrigatória no aceite. |
 | `granting_party_id` | FK nullable para a concedente já validada. |
 | `granting_party_registration_request_id` | FK nullable para a solicitação pendente de cadastro; é alternativa a `granting_party_id`, nunca texto livre solto. |
@@ -26,14 +27,18 @@ source_refs:
 | `supervisor_registration_request_id` | FK nullable para a solicitação pendente de cadastro; é alternativa a `supervisor_affiliation_id`. |
 | `student_year_semester` | string nullable em `Draft`; período/semestre declarado pelo discente e congelado no snapshot no aceite. |
 | `legal_capacity_declaration` | [`LegalCapacityDeclaration`](doc:enum-legalcapacitydeclaration) nullable em `Draft`; rádio obrigatório no envio: maior, menor ou menor emancipado. |
-| `legal_guardian_name` / `legal_guardian_cpf` / `legal_guardian_kinship` / `legal_guardian_email` | conjunto obrigatório quando a opção for `minor`; nulo para maior ou menor emancipado enquanto a comprovação estiver em análise. CPF normalizado. |
+| `legal_guardian_name` | texto nullable; obrigatório quando a opção for `minor`. |
+| `legal_guardian_cpf` | `char(11)` nullable; obrigatório quando a opção for `minor`, normalizado e validado. |
+| `legal_guardian_kinship` | `varchar(80)` nullable; obrigatório quando a opção for `minor`. |
+| `legal_guardian_email` | `varchar(255)` nullable; obrigatório quando a opção for `minor`. |
 | `activities` | texto nullable em `Draft`; obrigatório no envio. |
 | `internship_sector` | texto nullable; setor/área de realização, obrigatório se a concedente ou o tipo o exigir. |
 | `weekly_hours` | JSONB nullable em `Draft`; mapa validado com domingo a sábado. |
 | `planned_start_date` | data nullable em `Draft`; obrigatória no envio e usada para calcular o término. |
 | `projected_end_date` | data nullable calculada no servidor; nunca editável pelo discente. |
 | `is_remunerated` | boolean nullable em `Draft`; obrigatório no envio. |
-| `grant_value` / `transportation_allowance` | decimal(10,2) nullable; bolsa obrigatória e positiva se remunerado; auxílio pode ser zero ou nulo. |
+| `grant_value` | decimal(10,2) nullable; bolsa obrigatória e positiva se remunerado. |
+| `transportation_allowance` | decimal(10,2) nullable; auxílio pode ser zero ou nulo. |
 | `observations` | texto nullable; observações complementares. |
 | `status` | [`InternshipRequestStatus`](doc:enum-internshiprequeststatus): rascunho, enviada, em análise, com pendência, aceita, recusada ou desistida. |
 | `internship_id` | FK nullable e única para o estágio criado depois do aceite. |
@@ -57,7 +62,7 @@ Há somente uma solicitação para o processo aberto pelo discente. Ela é atual
 }
 ```
 
-As sete chaves sempre existem quando o formulário é enviado; cada valor é inteiro não negativo em horas. A soma semanal deve ser positiva e atender aos limites ordinários e às exceções declaradas em `internship_types.rules.workload_exceptions`. `projected_end_date` é recalculada a partir desta jornada, da carga exigida do tipo, do calendário nacional e estadual versionado aplicável à UF do campus e das pausas posteriormente registradas.
+As sete chaves sempre existem quando o formulário é enviado; cada valor é inteiro não negativo em horas. A soma semanal deve ser positiva e atender aos limites ordinários e às exceções declaradas em `internship_types.rules.workload_exceptions`. `projected_end_date` é recalculada a partir desta jornada, da carga exigida do tipo, do calendário nacional, estadual e municipal versionado aplicável ao endereço do local de trabalho e das pausas posteriormente registradas.
 
 ### Caminhos condicionais de cadastro
 

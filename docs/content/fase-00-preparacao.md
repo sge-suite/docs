@@ -14,7 +14,7 @@ source_refs:
 
 ## Checklist
 
-- [x] Confirmar o projeto Laravel irmão deste vault em `../sge`.
+- [x] Confirmar o projeto Laravel irmão desta documentação em `../sge`.
 - [x] Instalar dependências PHP e iniciar o Sail.
 - [x] Criar `.env`, gerar a chave e validar PostgreSQL.
 - [x] Executar `./vendor/bin/sail npm install` e validar o build do Vite.

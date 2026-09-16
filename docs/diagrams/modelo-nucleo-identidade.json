@@ -2,28 +2,29 @@
   "id": "modelo-nucleo-identidade",
   "kind": "db-schema",
   "title": "Esquema lógico — identidade e cadastros",
-  "description": "Tabelas e colunas de identidade, dados pessoais, endereços, campus e vínculos institucionais.",
-  "summary": "A conta possui dados pessoais e vínculos; os vínculos apontam para campus e curso, enquanto os cadastros mantêm seus endereços atuais.",
+  "description": "Tabelas e colunas de identidade, dados pessoais, cidades, endereços, campus e vínculos institucionais.",
+  "summary": "A conta possui dados pessoais e vínculos; cidades são catalogadas pelo código IBGE, endereços apontam para elas e cadastros mantêm endereços atuais.",
   "source": {
     "language": "mermaid",
     "path": "diagrams/sources/modelo-nucleo-identidade.mmd"
   },
   "presentation": {
     "width": 1760,
-    "height": 900,
+    "height": 1040,
     "initialZoom": 1.05
   },
   "layout": {
     "canvas": {
       "width": 1760,
-      "height": 900
+      "height": 1040
     },
     "entities": {
       "USERS": { "x": 80, "y": 80, "width": 320 },
       "USER_PERSONAL_DATA": { "x": 640, "y": 80, "width": 360 },
-      "ADDRESSES": { "x": 1320, "y": 80, "width": 340 },
-      "CAMPUSES": { "x": 80, "y": 560, "width": 420 },
-      "AFFILIATIONS": { "x": 720, "y": 560, "width": 360 }
+      "CITIES": { "x": 1320, "y": 80, "width": 340 },
+      "ADDRESSES": { "x": 1320, "y": 360, "width": 340 },
+      "CAMPUSES": { "x": 80, "y": 600, "width": 420 },
+      "AFFILIATIONS": { "x": 720, "y": 600, "width": 360 }
     },
     "relationships": [
       {
@@ -45,6 +46,15 @@
         "waypoints": [{ "x": 512, "y": 136 }, { "x": 512, "y": 520 }, { "x": 680, "y": 520 }, { "x": 680, "y": 636 }],
         "labelPlacement": { "x": 544, "y": 336 },
         "cardinalityPlacement": { "from": { "x": 432, "y": 152 }, "to": { "x": 696, "y": 620 } }
+      },
+      {
+        "from": "CITIES",
+        "to": "ADDRESSES",
+        "label": "city_id",
+        "fromPort": { "side": "left", "field": "id" },
+        "toPort": { "side": "left", "field": "city_id" },
+        "waypoints": [{ "x": 1260, "y": 180 }, { "x": 1260, "y": 420 }],
+        "labelPlacement": { "x": 1190, "y": 300 }
       },
       {
         "from": "ADDRESSES",

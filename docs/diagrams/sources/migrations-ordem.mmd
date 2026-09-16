@@ -1,11 +1,11 @@
 flowchart LR
     A[Base e contas] --> B[Identidade e endereços]
-    B --> C[Campus, vínculos e cursos]
+    B --> C[Catálogo local, endereços, campus, vínculos e cursos]
     C --> D[Cadastros institucionais]
     D --> E[Solicitações e estágios]
     E --> F[Documentos e comunicação]
-    E --> G[Jornadas e pausas]
+    E --> G[Calendário, jornadas e pausas]
 
-    B -. users, addresses e dados pessoais .-> C
+    B -. users, cities, addresses e dados pessoais .-> C
     C -. affiliations, courses e internship_types .-> D
     D -. concedentes, supervisores e pedidos .-> E

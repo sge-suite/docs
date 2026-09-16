@@ -6,7 +6,7 @@ type: reference-hub
 status: in-progress
 visibility: public
 tags: sge/desenvolvimento, sge/enums, sge/banco-de-dados
-related: enum-affiliationtype, enum-brazilianstate, enum-emailmessagepurpose, enum-emaildeliveryattemptstatus, enum-internshiprequeststatus, enum-legalcapacitydeclaration, enum-internshiprequestcorrectionstatus, enum-internshipstatus, enum-partydocumenttype, enum-generateddocumenttype, enum-generateddocumentstatus, enum-generateddocumentorigin, enum-evaluationstatus, enum-registrationrequeststatus, enum-internshipcancellationrequeststatus, enum-emancipationevidencestatus, migrations, dominio-e-modelo-de-dados, enums-e-migrations
+related: enum-affiliationtype, enum-brazilianstate, enum-nonworkingdatescope, enum-emailmessagepurpose, enum-emaildeliveryattemptstatus, enum-internshiprequeststatus, enum-legalcapacitydeclaration, enum-internshiprequestcorrectionstatus, enum-internshipstatus, enum-partydocumenttype, enum-generateddocumenttype, enum-generateddocumentstatus, enum-generateddocumentorigin, enum-evaluationstatus, enum-registrationrequeststatus, enum-internshipcancellationrequeststatus, enum-emancipationevidencestatus, migrations, dominio-e-modelo-de-dados, enums-e-migrations
 source_refs:
 ---
 > [!abstract] Critério
@@ -17,7 +17,8 @@ source_refs:
 | Status          | Enum                                        | Onde é usado                     |
 | --------------- | ------------------------------------------- | -------------------------------- |
 | ✅ Implementado | [Enum — AffiliationType](doc:enum-affiliationtype)            | `affiliations.type`              |
-| ✅ Implementado | [Enum — BrazilianState](doc:enum-brazilianstate)              | UF de campi e do calendário estadual |
+| ✅ Implementado | [Enum — BrazilianState](doc:enum-brazilianstate)              | `cities.state`, endereços, campi e calendários |
+| 🟡 Planejado | [Enum — NonWorkingDateScope](doc:enum-nonworkingdatescope) | `non_working_dates.scope` |
 | ✅ Implementado | [Enum — EmailMessagePurpose](doc:enum-emailmessagepurpose)        | `email_messages.purpose`         |
 | ✅ Implementado | [Enum — EmailDeliveryAttemptStatus](doc:enum-emaildeliveryattemptstatus) | `email_delivery_attempts.status` |
 | ✅ Implementado | [Enum — InternshipRequestStatus](doc:enum-internshiprequeststatus)    | `internship_requests.status`     |
@@ -53,7 +54,7 @@ Neste índice, **Implementado** significa que a classe do enum e seus testes uni
 - Variáveis de template: usar catálogo fixo em português com `${variavel}`.
 - Motivo/origem de jornada e fonte do calendário: strings auditadas; não são conjuntos fechados.
 - Aditivos: usar `GeneratedDocumentType::Addendum`.
-- Feriados: usar calendário nacional e estadual versionado, aplicável pela UF do campus; exceções de um estágio são registradas como pausas.
+- Feriados: usar calendário nacional, estadual e municipal versionado, aplicável pela cidade/UF do endereço histórico do local de trabalho; exceções de um estágio ficam em `internship_calendar_overrides`.
 
 ## Navegação
 

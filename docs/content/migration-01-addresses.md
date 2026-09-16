@@ -10,7 +10,7 @@ related: migration-01a-cities, helper-brazilianaddresshelper, dominio-e-modelo-d
 source_refs:
 ---
 > [!todo] Estado
-> Planejada. Depende do catálogo de [`cities`](doc:migration-01a-cities), que deve ser criado antes desta tabela.
+> Planejada. Depende do catálogo de [`cities`](doc:migration-01a-cities), que já está implementado e deve permanecer criado antes desta tabela.
 
 ## Contrato
 

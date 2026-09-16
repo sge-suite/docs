@@ -3,14 +3,14 @@ id: migration-01a-cities
 title: Migration 01A — cities
 description: Catálogo local das cidades brasileiras identificadas pelo código IBGE.
 type: migration-reference
-status: planned
+status: implemented
 visibility: public
 tags: sge/migrations, sge/localizacao, sge/ibge
 related: enum-brazilianstate, migration-01-addresses, migration-22-holidays
 source_refs: https://github.com/sge-suite/sge/blob/master/app/Console/Commands/FetchCities.php, https://github.com/sge-suite/sge/blob/master/config/services.php, https://github.com/sge-suite/sge/blob/master/database/data/cities.json
 ---
-> [!todo] Estado
-> Planejada. É uma tabela de referência pequena, carregada a partir do catálogo do IBGE/BrasilAPI antes de liberar os formulários de endereço.
+> [!success] Estado
+> Implementada. A tabela de referência e o catálogo local estão disponíveis no projeto; a carga é determinística e não depende de serviço externo.
 
 ## Contrato
 
@@ -23,13 +23,13 @@ source_refs: https://github.com/sge-suite/sge/blob/master/app/Console/Commands/F
 | `created_at` | `timestamp(0)` | não | — | Inclusão no catálogo. |
 | `updated_at` | `timestamp(0)` | não | — | Última sincronização. |
 
-O catálogo nacional tem poucos milhares de linhas e deve ser importado localmente. A carga inicial foi feita durante o desenvolvimento: o catálogo conferido está salvo em `database/data/cities.json` e versionado junto com o projeto. Depois, o `CitySeeder` lerá esse arquivo e inserirá/atualizará as cidades de forma idempotente pelo `ibge_code`.
+O catálogo nacional tem 5.571 municípios e é importado localmente. O catálogo conferido está salvo em `database/data/cities.json` e versionado junto com o projeto. A migration `create_cities_table`, o model `City` e o `CitySeeder` estão implementados: o seeder lê esse arquivo e insere/atualiza as cidades de forma idempotente pelo `ibge_code`, sem apagar registros existentes.
 
-Não haverá chamada à BrasilAPI para o autocomplete de cidades nem para o cálculo de feriados. A API/IBGE pode ser usada apenas para obter ou revisar o arquivo versionado antes de uma nova implantação. A única consulta externa prevista no formulário é a busca opcional por CEP, documentada em [`addresses`](doc:migration-01-addresses); mesmo nesse caso, a cidade é resolvida e persistida pela tabela local usando o código IBGE. O formulário seleciona primeiro a UF e consulta a tabela local com filtro por `state` e busca textual limitada; a cidade nunca é um enum nem texto livre.
+Não há chamada à BrasilAPI para consultas de cidades nem para o cálculo de feriados. A API/IBGE pode ser usada apenas para obter ou revisar o arquivo versionado antes de uma nova implantação. A única consulta externa prevista no formulário é a busca opcional por CEP, documentada em [`addresses`](doc:migration-01-addresses); mesmo nesse caso, a cidade é resolvida e persistida pela tabela local usando o código IBGE. Quando uma busca por nome for necessária, o backend consulta a tabela local com filtro por `state`, busca textual limitada e o índice `(state, name)`. `City` não usa Scout/Meilisearch porque é uma tabela de referência de backend, sem necessidade atual de busca fuzzy ou índice externo; a cidade nunca é um enum nem texto livre.
 
 O código IBGE é a identidade da cidade. O `CitySeeder` pode atualizar o nome oficial associado ao mesmo código em uma carga controlada; documentos gerados preservam os valores formatados no snapshot da geração, e endereços históricos continuam apontando para a mesma identidade municipal. Não há enum de cidades nem exclusão lógica como operação normal.
 
-## Geração do catálogo e `CitySeeder`
+## Geração do catálogo e carga local
 
 O comando Artisan `cities:fetch` consulta a lista de UFs, busca os municípios de cada uma, valida os códigos IBGE e gera o arquivo local. A configuração da URL fica em `services.brasil_api.base_url`; não há URL duplicada dentro do comando.
 
@@ -52,13 +52,20 @@ O arquivo `database/data/cities.json` contém somente dados de referência, em f
 ]
 ```
 
-O `CitySeeder` deve:
+O `CitySeeder` implementado:
 
-- ler o arquivo local sem fazer requisições de rede;
-- validar o código IBGE com sete dígitos, a UF contra `BrazilianState` e o nome não vazio;
-- inserir ou atualizar pelo `ibge_code`, em lotes e dentro de uma operação segura para reexecução;
-- nunca apagar cidades automaticamente, porque endereços e feriados podem referenciá-las;
-- ser chamado pelo seeder principal sem depender de ordem implícita ou de serviço externo disponível.
+- lê o arquivo local sem fazer requisições de rede;
+- valida o código IBGE com sete dígitos, a UF contra `BrazilianState`, o nome não vazio e o limite da coluna;
+- insere ou atualiza pelo `ibge_code`, em lotes de 500 registros e dentro de uma transação;
+- rejeita códigos IBGE duplicados no catálogo;
+- nunca apaga cidades automaticamente, porque endereços e feriados podem referenciá-las;
+- é chamado explicitamente pelo seeder principal.
+
+Para carregar ou recarregar o catálogo, use:
+
+```bash
+php artisan db:seed --class=Database\\Seeders\\CitySeeder
+```
 
 A obtenção do arquivo ocorre fora do fluxo de seed, durante o desenvolvimento ou em uma sincronização administrativa explícita. Depois de revisado e commitado, qualquer ambiente consegue popular o banco de forma determinística e reproduzível.
 
@@ -66,14 +73,16 @@ A obtenção do arquivo ocorre fora do fluxo de seed, durante o desenvolvimento 
 
 - `PRIMARY KEY (id)`;
 - `UNIQUE (ibge_code)`;
-- `INDEX (state, name)` para o autocomplete dependente da UF;
+- `INDEX (state)` e `INDEX (state, name)` para filtros por UF e consultas locais por nome;
 - a validação de `state` usa os 27 valores de [`BrazilianState`](doc:enum-brazilianstate);
-- uma cidade só pode ser usada por endereço e feriado municipal da mesma UF.
+- uma cidade só pode ser usada por endereço e feriado municipal da mesma UF, quando essas tabelas forem implementadas.
+
+O model `City` não declara relacionamentos para `Address` ou `Holiday` enquanto os modelos dependentes não existirem; sua chave primária já está preparada para essas FKs futuras.
 
 ## Checklist
 
-- [ ] Criar `create_cities_table` antes de `create_addresses_table`.
-- [ ] Criar Model `City` com cast de `state`.
+- [x] Criar `create_cities_table` antes de `create_addresses_table`.
+- [x] Criar Model `City` com cast de `state`.
 - [x] Gerar e revisar `database/data/cities.json` com o catálogo nacional pelo comando Artisan.
-- [ ] Criar `CitySeeder` idempotente, executável sem rede e seguro para reexecução.
-- [ ] Testar código IBGE, filtro por UF e busca do autocomplete.
+- [x] Criar `CitySeeder` idempotente, executável sem rede e seguro para reexecução.
+- [x] Testar migration, carga local, unicidade do código IBGE e filtro por UF/nome.

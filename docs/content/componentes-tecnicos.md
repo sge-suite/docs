@@ -23,7 +23,7 @@ Esta nota é o inventário do código transversal do projeto novo. Cada componen
 | Models                 | 🟡 Em uso | [Model — User](doc:model-user)             |
 | Providers              | 🟡 Em uso | [Providers](doc:providers)                |
 | Schedules              | 🟡 Planejado | [Schedules](doc:schedules)              |
-| Seeders                | 🟡 Planejado | [Migration 01A — cities](doc:migration-01a-cities) |
+| Seeders                | 🟢 Implementado | [Migration 01A — cities](doc:migration-01a-cities) |
 | Testes                 | 🟡 Em uso | [Testes existentes](doc:testes-existentes)        |
 | Bootstrap/configuração | 🟡 Em uso | [Configuração e bootstrap](doc:configuracao-e-bootstrap) |
 

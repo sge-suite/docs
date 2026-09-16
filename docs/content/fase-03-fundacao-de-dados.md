@@ -27,7 +27,7 @@ source_refs:
 ## Dados cadastrais
 
 - [x] Criar e testar as classes dos enums estáveis; a integração com Models, migrations e fluxos continua nas etapas específicas.
-- [ ] Concluir [`cities`](doc:migration-01a-cities), gerar `database/data/cities.json` e carregar o catálogo com `CitySeeder` sem rede.
+- [ ] Concluir [`cities`](doc:migration-01a-cities), executar `php artisan cities:fetch` quando necessário e carregar o catálogo com `CitySeeder` sem rede.
 - [ ] Concluir [`addresses`](doc:migration-01-addresses).
 - [ ] Concluir [`user_personal_data`](doc:migration-02-user-personal-data).
 - [ ] Concluir [`campuses`](doc:migration-03-campuses).

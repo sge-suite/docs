@@ -36,7 +36,8 @@ source_refs:
 - [ ] Concluir [`course_id` em affiliations](doc:migration-10-course-id-em-affiliations).
 - [ ] Concluir [`internship_types`](doc:migration-11-internship-types).
 - [ ] Concluir [`granting_parties`](doc:migration-12-granting-parties).
-- [ ] Concluir [`holidays`](doc:migration-22-holidays) e suas exceções por estágio.
+- [x] Concluir [`holidays`](doc:migration-22-holidays).
+- [ ] Concluir exceções por estágio em [`internship_calendar_overrides`](doc:migration-22-internship-calendar-overrides).
 
 ## Regras de dados
 

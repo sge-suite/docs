@@ -77,7 +77,7 @@ A obtenção do arquivo ocorre fora do fluxo de seed, durante o desenvolvimento 
 - a validação de `state` usa os 27 valores de [`BrazilianState`](doc:enum-brazilianstate);
 - uma cidade só pode ser usada por endereço e feriado municipal da mesma UF, quando essas tabelas forem implementadas.
 
-O model `City` não declara relacionamentos para `Address` ou `Holiday` enquanto os modelos dependentes não existirem; sua chave primária já está preparada para essas FKs futuras.
+O model `City` declara `holidays()` para os feriados municipais. O relacionamento com `Address` continua pendente até a implementação dessa tabela.
 
 ## Checklist
 

@@ -18,7 +18,7 @@ source_refs:
 | --------------- | ------------------------------------------- | -------------------------------- |
 | ✅ Implementado | [Enum — AffiliationType](doc:enum-affiliationtype)            | `affiliations.type`              |
 | ✅ Implementado | [Enum — BrazilianState](doc:enum-brazilianstate)              | `cities.state`, endereços, campi e calendários |
-| 🟡 Planejado | [Enum — HolidayScope](doc:enum-holidayscope) | `holidays.scope` |
+| ✅ Implementado | [Enum — HolidayScope](doc:enum-holidayscope) | `holidays.scope` |
 | ✅ Implementado | [Enum — EmailMessagePurpose](doc:enum-emailmessagepurpose)        | `email_messages.purpose`         |
 | ✅ Implementado | [Enum — EmailDeliveryAttemptStatus](doc:enum-emaildeliveryattemptstatus) | `email_delivery_attempts.status` |
 | ✅ Implementado | [Enum — InternshipRequestStatus](doc:enum-internshiprequeststatus)    | `internship_requests.status`     |
@@ -54,7 +54,7 @@ Neste índice, **Implementado** significa que a classe do enum e seus testes uni
 - Variáveis de template: usar catálogo fixo em português com `${variavel}`.
 - Motivo/origem de jornada e fonte do calendário: strings auditadas; não são conjuntos fechados.
 - Aditivos: usar `GeneratedDocumentType::Addendum`.
-- Feriados: usar calendário nacional, estadual e municipal versionado, aplicável pela cidade/UF do endereço histórico do local de trabalho; exceções de um estágio ficam em `internship_calendar_overrides`.
+- Feriados: usar calendário nacional, estadual e municipal persistido, aplicável pela cidade/UF do endereço histórico do local de trabalho; exceções de um estágio ficam em `internship_calendar_overrides`.
 
 ## Navegação
 

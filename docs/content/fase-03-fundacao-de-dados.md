@@ -6,7 +6,7 @@ type: development-phase
 status: planned
 visibility: public
 tags: sge/desenvolvimento, sge/banco-de-dados, sge/checklist
-related: migrations, enums, migration-base-01-users, migration-base-02-cache, migration-base-03-jobs, migration-base-04-activity-log, migration-base-05-media, enum-affiliationtype, enum-brazilianstate, migration-01a-cities, migration-01-addresses, migration-02-user-personal-data, migration-03-campuses, migration-04-affiliations, migration-09-courses, migration-10-course-id-em-affiliations, migration-11-internship-types, migration-12-granting-parties, migration-22-non-working-dates, migration-22-internship-calendar-overrides, casts, helpers, concerns, testes-existentes, fase-04-conta-e-contexto
+related: migrations, enums, migration-base-01-users, migration-base-02-cache, migration-base-03-jobs, migration-base-04-activity-log, migration-base-05-media, enum-affiliationtype, enum-brazilianstate, migration-01a-cities, migration-01-addresses, migration-02-user-personal-data, migration-03-campuses, migration-04-affiliations, migration-09-courses, migration-10-course-id-em-affiliations, migration-11-internship-types, migration-12-granting-parties, migration-22-holidays, migration-22-internship-calendar-overrides, casts, helpers, concerns, testes-existentes, fase-04-conta-e-contexto
 source_refs:
 ---
 > [!info] Ordem
@@ -36,7 +36,7 @@ source_refs:
 - [ ] Concluir [`course_id` em affiliations](doc:migration-10-course-id-em-affiliations).
 - [ ] Concluir [`internship_types`](doc:migration-11-internship-types).
 - [ ] Concluir [`granting_parties`](doc:migration-12-granting-parties).
-- [ ] Concluir [`non_working_dates`](doc:migration-22-non-working-dates) e suas exceções por estágio.
+- [ ] Concluir [`holidays`](doc:migration-22-holidays) e suas exceções por estágio.
 
 ## Regras de dados
 

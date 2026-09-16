@@ -6,7 +6,7 @@ type: migration-reference
 status: planned
 visibility: public
 tags: sge/migrations, sge/calendario, sge/estagio
-related: migration-15-internships, migration-22-non-working-dates, migration-base-04-activity-log
+related: migration-15-internships, migration-22-holidays, migration-base-04-activity-log
 source_refs:
 ---
 > [!todo] Estado
@@ -25,7 +25,7 @@ source_refs:
 | `created_at` | `timestamp(0)` | não | — | Auditoria. |
 | `updated_at` | `timestamp(0)` | não | — | Auditoria técnica. |
 
-Uma exceção não modifica `non_working_dates` e não é um escopo territorial. O cálculo consulta primeiro o calendário aplicável e depois substitui o resultado somente para a data e o estágio indicados. Toda criação, alteração ou invalidação gera Activity Log; a exclusão física é proibida depois de participar de uma previsão.
+Uma exceção não modifica `holidays` e não é um escopo territorial. O cálculo consulta primeiro os feriados aplicáveis e depois substitui o resultado somente para a data e o estágio indicados. Recessos, folgas, pontes e fechamentos específicos devem ser registrados como pausas do estágio. Toda criação, alteração ou invalidação gera Activity Log; a exclusão física é proibida depois de participar de uma previsão.
 
 ## Checklist
 

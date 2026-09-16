@@ -6,7 +6,7 @@ type: reference-hub
 status: in-progress
 visibility: public
 tags: sge/desenvolvimento, sge/enums, sge/banco-de-dados
-related: enum-affiliationtype, enum-brazilianstate, enum-nonworkingdatescope, enum-emailmessagepurpose, enum-emaildeliveryattemptstatus, enum-internshiprequeststatus, enum-legalcapacitydeclaration, enum-internshiprequestcorrectionstatus, enum-internshipstatus, enum-partydocumenttype, enum-generateddocumenttype, enum-generateddocumentstatus, enum-generateddocumentorigin, enum-evaluationstatus, enum-registrationrequeststatus, enum-internshipcancellationrequeststatus, enum-emancipationevidencestatus, migrations, dominio-e-modelo-de-dados, enums-e-migrations
+related: enum-affiliationtype, enum-brazilianstate, enum-holidayscope, enum-emailmessagepurpose, enum-emaildeliveryattemptstatus, enum-internshiprequeststatus, enum-legalcapacitydeclaration, enum-internshiprequestcorrectionstatus, enum-internshipstatus, enum-partydocumenttype, enum-generateddocumenttype, enum-generateddocumentstatus, enum-generateddocumentorigin, enum-evaluationstatus, enum-registrationrequeststatus, enum-internshipcancellationrequeststatus, enum-emancipationevidencestatus, migrations, dominio-e-modelo-de-dados, enums-e-migrations
 source_refs:
 ---
 > [!abstract] Critério
@@ -18,7 +18,7 @@ source_refs:
 | --------------- | ------------------------------------------- | -------------------------------- |
 | ✅ Implementado | [Enum — AffiliationType](doc:enum-affiliationtype)            | `affiliations.type`              |
 | ✅ Implementado | [Enum — BrazilianState](doc:enum-brazilianstate)              | `cities.state`, endereços, campi e calendários |
-| 🟡 Planejado | [Enum — NonWorkingDateScope](doc:enum-nonworkingdatescope) | `non_working_dates.scope` |
+| 🟡 Planejado | [Enum — HolidayScope](doc:enum-holidayscope) | `holidays.scope` |
 | ✅ Implementado | [Enum — EmailMessagePurpose](doc:enum-emailmessagepurpose)        | `email_messages.purpose`         |
 | ✅ Implementado | [Enum — EmailDeliveryAttemptStatus](doc:enum-emaildeliveryattemptstatus) | `email_delivery_attempts.status` |
 | ✅ Implementado | [Enum — InternshipRequestStatus](doc:enum-internshiprequeststatus)    | `internship_requests.status`     |

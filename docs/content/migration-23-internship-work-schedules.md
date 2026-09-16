@@ -6,7 +6,7 @@ type: migration-reference
 status: planned
 visibility: public
 tags: sge/migrations, sge/jornada, sge/calculos
-related: migration-15-internships, migration-16-generated-documents, migration-17-internship-pauses, migration-22-non-working-dates, migration-22-internship-calendar-overrides, service-internshipenddatecalculator
+related: migration-15-internships, migration-16-generated-documents, migration-17-internship-pauses, migration-22-holidays, migration-22-internship-calendar-overrides, service-internshipenddatecalculator
 source_refs:
 ---
 > [!todo] Estado
@@ -35,7 +35,7 @@ O banco deve garantir, quando o PostgreSQL estiver disponível, que `ends_on` se
 
 Ao aceitar a solicitação, o SGE cria uma jornada inicial com início igual a `planned_start_date`. Durante a execução não existe edição ordinária nem mudança temporária de carga horária: pausas apenas suspendem o cômputo. Se for necessário alterar a distribuição de horas, o Setor gera um aditivo e só aplica a nova jornada depois de conferir as assinaturas. A aplicação fecha a vigência anterior no dia precedente e cria nova linha; nunca recalcula dias passados usando a nova distribuição.
 
-O documento principal usa a jornada inicial. O aditivo referencia a vigência que ele formaliza. Toda alteração efetivada por aditivo recalcula `internships.projected_end_date` usando a jornada correta para cada data, o calendário nacional/estadual/municipal persistido aplicável ao endereço do local de trabalho, as pausas e a margem definida no snapshot do tipo de estágio.
+O documento principal usa a jornada inicial. O aditivo referencia a vigência que ele formaliza. Toda alteração efetivada por aditivo recalcula `internships.projected_end_date` usando a jornada correta para cada data, o calendário de feriados nacional/estadual/municipal persistido aplicável ao endereço do local de trabalho, as pausas e a margem definida no snapshot do tipo de estágio.
 
 `weekly_hours` não registra horário de entrada e saída. A tabela informa somente quantas horas são creditadas em cada dia da semana. A quantidade exigida e os limites ordinários ou excepcionais continuam no snapshot de `internship_type_snapshot`.
 
@@ -43,7 +43,7 @@ O documento principal usa a jornada inicial. O aditivo referencia a vigência qu
 
 Uma vigência que já participou de cálculo, documento ou auditoria não pode ser apagada nem ter suas horas reescritas. Correções contratuais criam uma nova vigência e preservam a anterior. Alterações em `updated_at` não devem mudar a distribuição histórica; na prática, o Model deve tratar a linha como imutável depois de utilizada.
 
-Uma pausa não é uma jornada e não altera `weekly_hours`. Uma exceção de feriado também não é uma jornada: fica em [`internship_calendar_overrides`](doc:migration-22-internship-calendar-overrides). A lista de dias trabalhados é derivada no momento da consulta a partir das vigências, pausas, calendário e exceções; não há tabela materializada de dias individuais.
+Uma pausa não é uma jornada e não altera `weekly_hours`. Uma exceção de feriado também não é uma jornada: fica em [`internship_calendar_overrides`](doc:migration-22-internship-calendar-overrides). A lista de dias trabalhados é derivada no momento da consulta a partir das vigências, pausas, feriados e exceções; não há tabela materializada de dias individuais.
 
 ## Checklist
 
@@ -62,6 +62,6 @@ Uma pausa não é uma jornada e não altera `weekly_hours`. Uma exceção de fer
 - [internships](doc:migration-15-internships)
 - [generated_documents](doc:migration-16-generated-documents)
 - [internship_pauses](doc:migration-17-internship-pauses)
-- [non_working_dates](doc:migration-22-non-working-dates)
+- [holidays](doc:migration-22-holidays)
 - [internship_calendar_overrides](doc:migration-22-internship-calendar-overrides)
 - [Service — InternshipEndDateCalculator](doc:service-internshipenddatecalculator)

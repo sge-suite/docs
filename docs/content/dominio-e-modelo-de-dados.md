@@ -41,7 +41,7 @@ Esta página é o ponto de entrada do modelo de dados. Os campos e relacionament
 - Cadastros atuais mantêm relacionamentos por FK; fatos históricos relevantes são congelados em snapshots.
 - Alterações relevantes registram autoria e vínculo no Activity Log.
 - Templates são versionados; documentos gerados preservam a versão e os dados usados, sem armazenar permanentemente o arquivo final.
-- A jornada pactuada, as pausas e os dias sem expediente são registros próprios porque afetam a previsão de término; uma nova vigência de jornada só é criada por aditivo formalizado.
+- A jornada pactuada, os feriados e as pausas são registros próprios porque afetam a previsão de término; uma nova vigência de jornada só é criada por aditivo formalizado.
 
 > [!tip] Leitura recomendada
 > Para uma visão visual, comece em [Modelagem de dados](doc:modelagem-de-dados). Para implementar uma regra, vá ao recorte correspondente e confirme o fluxo em [Fluxos principais](doc:fluxos-principais).

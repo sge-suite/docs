@@ -2,8 +2,8 @@
   "id": "modelo-nucleo-execucao",
   "kind": "db-schema",
   "title": "Esquema lógico — execução do estágio",
-  "description": "Tabelas e colunas que controlam endereço de trabalho, calendário, vigência, jornadas, pausas e cancelamento.",
-  "summary": "O estágio usa o calendário nacional, estadual e municipal aplicável ao endereço do local de trabalho, possui jornadas, pausas e exceções e pode receber um pedido de cancelamento; a avaliação é detalhada no contrato próprio.",
+  "description": "Tabelas e colunas que controlam endereço de trabalho, feriados, vigência, jornadas, pausas e cancelamento.",
+  "summary": "O estágio usa os feriados nacionais, estaduais e municipais aplicáveis ao endereço do local de trabalho, possui jornadas, pausas e exceções e pode receber um pedido de cancelamento; a avaliação é detalhada no contrato próprio.",
   "source": {
     "language": "mermaid",
     "path": "diagrams/sources/modelo-nucleo-execucao.mmd"
@@ -19,7 +19,7 @@
       "INTERNSHIPS": { "x": 80, "y": 80, "width": 440 },
       "INTERNSHIP_WORK_SCHEDULES": { "x": 640, "y": 80, "width": 420 },
       "INTERNSHIP_PAUSES": { "x": 1240, "y": 80, "width": 380 },
-      "NON_WORKING_DATES": { "x": 80, "y": 500, "width": 440 },
+      "HOLIDAYS": { "x": 80, "y": 500, "width": 440 },
       "INTERNSHIP_CALENDAR_OVERRIDES": { "x": 640, "y": 500, "width": 420 },
       "INTERNSHIP_CANCELLATION_REQUESTS": { "x": 1240, "y": 500, "width": 460 }
     },

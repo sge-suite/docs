@@ -4,7 +4,7 @@ erDiagram
     INTERNSHIPS ||--o{ INTERNSHIP_CALENDAR_OVERRIDES : internship_id
     INTERNSHIPS ||--o{ INTERNSHIP_CANCELLATION_REQUESTS : internship_id
     ADDRESSES ||--o{ INTERNSHIPS : workplace_address_id
-    CITIES ||--o{ NON_WORKING_DATES : city_id
+    CITIES ||--o{ HOLIDAYS : city_id
 
     INTERNSHIPS {
         bigint id PK
@@ -32,7 +32,7 @@ erDiagram
         date ends_at
         varchar reason
     }
-    NON_WORKING_DATES {
+    HOLIDAYS {
         bigint id PK
         date date
         varchar name

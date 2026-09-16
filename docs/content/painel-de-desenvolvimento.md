@@ -34,7 +34,7 @@ Este índice é uma fotografia editorial da documentação publicada. Os documen
 
 - [Enum — AffiliationType](doc:enum-affiliationtype) — **implemented** — Tipos funcionais permitidos para um vínculo institucional do SGE.
 - [Enum — BrazilianState](doc:enum-brazilianstate) — **implemented** — Unidades federativas usadas por cidades, endereços, campi e calendários; integração com os modelos ainda pendente.
-- [Enum — NonWorkingDateScope](doc:enum-nonworkingdatescope) — **planned** — Escopo nacional, estadual ou municipal de uma data sem expediente.
+- [Enum — HolidayScope](doc:enum-holidayscope) — **planned** — Escopo nacional, estadual ou municipal de um feriado.
 - [Enum — EmailDeliveryAttemptStatus](doc:enum-emaildeliveryattemptstatus) — **implemented** — Estados da tentativa de transporte de uma mensagem de e-mail; integração com o modelo ainda pendente.
 - [Enum — EmailMessagePurpose](doc:enum-emailmessagepurpose) — **implemented** — Finalidades estáveis para mensagens de e-mail do SGE; integração com o modelo ainda pendente.
 - [Enum — EmancipationEvidenceStatus](doc:enum-emancipationevidencestatus) — **implemented** — Ciclo da prova privada de emancipação analisada pelo Setor de Estágio; integração com o modelo ainda pendente.
@@ -81,7 +81,7 @@ Este índice é uma fotografia editorial da documentação publicada. Os documen
 - [Migration 19A — emancipation_evidences](doc:migration-19a-emancipation-evidences) — **planned** — Histórico privado das provas de emancipação e sua análise manual.
 - [Migration 20 — internship_request_corrections](doc:migration-20-internship-request-corrections) — **planned** — Pendências operacionais que direcionam a edição da solicitação de estágio.
 - [Migration 21 — internship_cancellation_requests](doc:migration-21-internship-cancellation-requests) — **planned** — Pedidos rastreáveis de cancelamento de estágio formalizado feitos pelo discente.
-- [Migration 22 — non_working_dates](doc:migration-22-non-working-dates) — **planned** — Calendário nacional, estadual e municipal persistido e versionado.
+- [Migration 22 — holidays](doc:migration-22-holidays) — **planned** — Calendário de feriados nacional, estadual e municipal persistido e versionado.
 - [Migration 22A — internship_calendar_overrides](doc:migration-22-internship-calendar-overrides) — **planned** — Exceções de expediente específicas de um estágio.
 - [Migration 23 — internship_work_schedules](doc:migration-23-internship-work-schedules) — **planned** — Jornada semanal pactuada, preservada por vigência somente quando um aditivo formalizado a alterar.
 

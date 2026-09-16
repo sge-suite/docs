@@ -6,7 +6,7 @@ type: development-phase
 status: planned
 visibility: public
 tags: sge/desenvolvimento, sge/estagio, sge/checklist
-related: fluxos-principais, migration-17-internship-pauses, migration-22-non-working-dates, migration-22-internship-calendar-overrides, migration-23-internship-work-schedules, enum-internshipstatus, enum-generateddocumenttype, schedules, fase-09-avaliacao-e-conclusao
+related: fluxos-principais, migration-17-internship-pauses, migration-22-holidays, migration-22-internship-calendar-overrides, migration-23-internship-work-schedules, enum-internshipstatus, enum-generateddocumenttype, schedules, fase-09-avaliacao-e-conclusao
 source_refs:
 ---
 Base: [acompanhamento do estágio](doc:fluxos-principais#4-estagio-em-andamento).
@@ -20,7 +20,7 @@ Base: [acompanhamento do estágio](doc:fluxos-principais#4-estagio-em-andamento)
 - [ ] Implementar pausas com início/fim em data, motivo, estado `InProgress` de origem e validação de sobreposição.
 - [ ] Sincronizar o status imediatamente ao criar/alterar/remover pausa, além da reconciliação diária.
 - [ ] Usar calendário nacional, estadual e municipal versionado conforme a cidade/UF do endereço histórico do local de trabalho, sem dependência de rede no cálculo.
-- [ ] Permitir ao Setor de Estágio liberar ou bloquear uma data específica em `internship_calendar_overrides`, com motivo e auditoria; não usar pausas para representar feriados.
+- [ ] Permitir ao Setor de Estágio liberar ou bloquear uma data específica em `internship_calendar_overrides`, com motivo e auditoria; recessos, folgas, pontes e fechamentos devem ser representados por pausas, não por `holidays`.
 - [ ] Criar a jornada inicial pactuada e impedir sua edição ordinária durante o estágio.
 - [ ] Permitir nova vigência de jornada somente após aditivo com assinaturas conferidas; impedir sobreposição/lacuna e reescrita de dias passados.
 - [ ] Recalcular término com carga horária, jornada pactuada ou aditivo formalizado, calendário, pausas e margem congelada.

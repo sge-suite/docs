@@ -6,7 +6,7 @@ type: decisions
 status: in-progress
 visibility: public
 tags: sge/decisoes, sge/backlog
-related: e-mails-notificacoes-e-entregas, enum-evaluationstatus, enum-brazilianstate, enum-nonworkingdatescope, migration-01a-cities, migration-01-addresses, migration-18-avaliacoes, fluxos-principais, migration-13-document-templates, migration-14-template-versions, migration-16-generated-documents, migration-12-granting-parties, glossario, modelo-de-dados-acesso, matriz-de-autorizacao, migration-11-internship-types, migration-15-internships, migration-19-internship-requests, migration-20-internship-request-corrections, migration-base-04-activity-log, helper-numbertowordshelper, migration-21-internship-cancellation-requests, migration-22-non-working-dates, migration-22-internship-calendar-overrides, migration-23-internship-work-schedules, geracao-de-documentos-docx-e-variaveis, schedules, ciclos-de-status
+related: e-mails-notificacoes-e-entregas, enum-evaluationstatus, enum-brazilianstate, enum-holidayscope, migration-01a-cities, migration-01-addresses, migration-18-avaliacoes, fluxos-principais, migration-13-document-templates, migration-14-template-versions, migration-16-generated-documents, migration-12-granting-parties, glossario, modelo-de-dados-acesso, matriz-de-autorizacao, migration-11-internship-types, migration-15-internships, migration-19-internship-requests, migration-20-internship-request-corrections, migration-base-04-activity-log, helper-numbertowordshelper, migration-21-internship-cancellation-requests, migration-22-holidays, migration-22-internship-calendar-overrides, migration-23-internship-work-schedules, geracao-de-documentos-docx-e-variaveis, schedules, ciclos-de-status
 source_refs:
 ---
 ## Próximas definições
@@ -137,7 +137,7 @@ source_refs:
 - **Status:** definido.
 - **Decisão:** a data prevista de término é calculada pela jornada válida, pela margem de sete dias corridos configurada e congelada no tipo de estágio, pelo calendário nacional, estadual e municipal versionado — conforme a cidade/UF do endereço histórico do local de trabalho —, pelas pausas e pelas exceções específicas do estágio. Eventual nova vigência exige aditivo formalizado. O cálculo limita o último dia às horas restantes e persiste uma base reproduzível; não aceita horas restantes livres como fonte primária.
 - **Motivo:** mantém o cálculo rastreável e evita resultados inconsistentes após alterações de calendário, jornada ou pausa.
-- **Referências:** [Service — InternshipEndDateCalculator](doc:service-internshipenddatecalculator), [Migration 22 — non_working_dates](doc:migration-22-non-working-dates) e [Migration 23 — internship_work_schedules](doc:migration-23-internship-work-schedules).
+- **Referências:** [Service — InternshipEndDateCalculator](doc:service-internshipenddatecalculator), [Migration 22 — holidays](doc:migration-22-holidays) e [Migration 23 — internship_work_schedules](doc:migration-23-internship-work-schedules).
 
 ### D-020 — Motor DOCX local e catálogo canônico
 

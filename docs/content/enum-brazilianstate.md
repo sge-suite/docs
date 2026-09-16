@@ -6,7 +6,7 @@ type: enum-reference
 status: implemented
 visibility: public
 tags: sge/enums, sge/cadastros, sge/calendario
-related: migration-01a-cities, migration-01-addresses, migration-03-campuses, migration-22-non-working-dates, service-internshipenddatecalculator
+related: migration-01a-cities, migration-01-addresses, migration-03-campuses, migration-22-holidays, service-internshipenddatecalculator
 source_refs: https://github.com/sge-suite/sge/blob/master/app/Enums/BrazilianState.php, https://github.com/sge-suite/sge/blob/master/tests/Unit/Enums/BrazilianStateTest.php
 ---
 > [!success] Estado
@@ -44,7 +44,7 @@ Os valores persistidos são as siglas oficiais em maiúsculas. `label()` apresen
 | `Sergipe` | `SE` | Sergipe |
 | `Tocantins` | `TO` | Tocantins |
 
-Para o cálculo do estágio, a UF e a cidade do endereço histórico do local de trabalho definem os feriados estaduais e municipais aplicáveis. O catálogo de cidades é local e carregado pelo `CitySeeder`; a BrasilAPI/IBGE pode ser usada para gerar ou revisar o arquivo de carga. No formulário, a BrasilAPI também pode sugerir dados quando o usuário informa um CEP, mas o sistema resolve a cidade no catálogo local e persiste seu código IBGE. O calendário importado é persistido e versionado em [`non_working_dates`](doc:migration-22-non-working-dates).
+Para o cálculo do estágio, a UF e a cidade do endereço histórico do local de trabalho definem os feriados estaduais e municipais aplicáveis. O catálogo de cidades é local e carregado pelo `CitySeeder`; a BrasilAPI/IBGE pode ser usada para gerar ou revisar o arquivo de carga. No formulário, a BrasilAPI também pode sugerir dados quando o usuário informa um CEP, mas o sistema resolve a cidade no catálogo local e persiste seu código IBGE. O calendário importado é persistido e versionado em [`holidays`](doc:migration-22-holidays).
 
 ## Checklist
 

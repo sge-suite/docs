@@ -95,7 +95,7 @@
               "enums-e-migrations",
               "enum-affiliationtype",
               "enum-brazilianstate",
-              "enum-nonworkingdatescope",
+              "enum-holidayscope",
               "enum-emaildeliveryattemptstatus",
               "enum-emailmessagepurpose",
               "enum-emancipationevidencestatus",
@@ -140,7 +140,7 @@
               "migration-19a-emancipation-evidences",
               "migration-20-internship-request-corrections",
               "migration-21-internship-cancellation-requests",
-              "migration-22-non-working-dates",
+              "migration-22-holidays",
               "migration-22-internship-calendar-overrides",
               "migration-23-internship-work-schedules",
               {

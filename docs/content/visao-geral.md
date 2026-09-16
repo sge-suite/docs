@@ -52,7 +52,7 @@ Quando a solicitação é aceita, o Setor de Estágio prepara o documento apropr
 
 ### Execução e mudanças
 
-Depois de liberado, o estágio entra em andamento na data planejada. A previsão de término considera a jornada, a carga horária, os dias sem expediente e as pausas registradas.
+Depois de liberado, o estágio entra em andamento na data planejada. A previsão de término considera a jornada, a carga horária, os feriados aplicáveis e as pausas registradas.
 
 Durante o estágio, podem existir pausas, substituição autorizada de orientador ou supervisor, aditivos e pedidos de cancelamento. Uma pausa é registrada com período e motivo. Se uma pausa não prevista precisar ser formalizada, o Setor de Estágio providencia o aditivo adequado.
 

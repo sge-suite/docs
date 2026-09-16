@@ -6,7 +6,7 @@ type: migration-reference
 status: planned
 visibility: public
 tags: sge/migrations, sge/localizacao, sge/ibge
-related: enum-brazilianstate, migration-01-addresses, migration-22-non-working-dates
+related: enum-brazilianstate, migration-01-addresses, migration-22-holidays
 source_refs: https://github.com/sge-suite/sge/blob/master/app/Console/Commands/FetchCities.php, https://github.com/sge-suite/sge/blob/master/config/services.php, https://github.com/sge-suite/sge/blob/master/database/data/cities.json
 ---
 > [!todo] Estado

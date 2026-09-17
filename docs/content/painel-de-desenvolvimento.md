@@ -93,6 +93,8 @@ Este índice é uma fotografia editorial da documentação publicada. Os documen
 - [Casts](doc:casts) — **in-progress** — Índice dos casts Eloquent que transformam dados entre entrada, domínio e banco.
 - [Concern — PasswordValidationRules](doc:concern-passwordvalidationrules) — **implemented** — Regras compartilhadas para criação/alteração e confirmação de senha.
 - [Concern — ProfileValidationRules](doc:concern-profilevalidationrules) — **implemented** — Regras compartilhadas para nome e e-mail de perfil.
+- [Concern — CityValidationRules](doc:migration-01a-cities) — **implemented** — Regras compartilhadas para código IBGE, nome e UF do catálogo local.
+- [Concern — HolidayValidationRules](doc:migration-22-holidays) — **implemented** — Regras compartilhadas para data, nome, escopo, UF e cidade dos feriados.
 - [Concerns](doc:concerns) — **in-progress** — Índice dos traits que centralizam regras reutilizáveis de validação.
 - [Configuração e bootstrap](doc:configuracao-e-bootstrap) — **in-progress** — Mapa dos arquivos que inicializam a aplicação e configuram autenticação, locale, filas, cache e rotas.
 - [Helper — BrazilianAddressHelper](doc:helper-brazilianaddresshelper) — **implemented** — Formatação de CEP brasileiro para apresentação.

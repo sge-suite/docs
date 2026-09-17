@@ -7,7 +7,7 @@ status: implemented
 visibility: public
 tags: sge/migrations, sge/localizacao, sge/ibge
 related: enum-brazilianstate, migration-01-addresses, migration-22-holidays
-source_refs: https://github.com/sge-suite/sge/blob/master/app/Console/Commands/FetchCities.php, https://github.com/sge-suite/sge/blob/master/config/services.php, https://github.com/sge-suite/sge/blob/master/database/data/cities.json
+source_refs: https://github.com/sge-suite/sge/blob/master/app/Models/City.php, https://github.com/sge-suite/sge/blob/master/app/Concerns/CityValidationRules.php, https://github.com/sge-suite/sge/blob/master/app/Console/Commands/FetchCities.php, https://github.com/sge-suite/sge/blob/master/database/seeders/CitySeeder.php, https://github.com/sge-suite/sge/blob/master/config/services.php, https://github.com/sge-suite/sge/blob/master/database/data/cities.json
 ---
 > [!success] Estado
 > Implementada. A tabela de referência e o catálogo local estão disponíveis no projeto; a carga é determinística e não depende de serviço externo.
@@ -23,7 +23,7 @@ source_refs: https://github.com/sge-suite/sge/blob/master/app/Console/Commands/F
 | `created_at` | `timestamp(0)` | não | — | Inclusão no catálogo. |
 | `updated_at` | `timestamp(0)` | não | — | Última sincronização. |
 
-O catálogo nacional tem 5.571 municípios e é importado localmente. O catálogo conferido está salvo em `database/data/cities.json` e versionado junto com o projeto. A migration `create_cities_table`, o model `City` e o `CitySeeder` estão implementados: o seeder lê esse arquivo e insere/atualiza as cidades de forma idempotente pelo `ibge_code`, sem apagar registros existentes.
+O catálogo nacional tem 5.571 municípios e é importado localmente. O catálogo conferido está salvo em `database/data/cities.json` e versionado junto com o projeto. A migration `create_cities_table`, o model `City` e o `CitySeeder` estão implementados: o seeder lê esse arquivo e insere/atualiza as cidades de forma idempotente pelo `ibge_code`, sem apagar registros existentes. `CityValidationRules` centraliza código IBGE, nome e UF e é aplicado ao salvar o model, ao validar o catálogo no seeder e ao aceitar respostas do comando de coleta.
 
 Não há chamada à BrasilAPI para consultas de cidades nem para o cálculo de feriados. A API/IBGE pode ser usada apenas para obter ou revisar o arquivo versionado antes de uma nova implantação. A busca opcional por CEP, documentada em [`addresses`](doc:migration-01-addresses), fica para uma etapa futura; quando existir, a cidade continuará sendo resolvida no catálogo local, sem criação de municípios pela resposta externa. Quando uma busca por nome for necessária, o backend consulta a tabela local com filtro por `state`, busca textual limitada e o índice `(state, name)`. `City` não usa Scout/Meilisearch porque é uma tabela de referência de backend, sem necessidade atual de busca fuzzy ou índice externo; a cidade nunca é um enum nem texto livre.
 
@@ -55,7 +55,7 @@ O arquivo `database/data/cities.json` contém somente dados de referência, em f
 O `CitySeeder` implementado:
 
 - lê o arquivo local sem fazer requisições de rede;
-- valida o código IBGE com sete dígitos, a UF contra `BrazilianState`, o nome não vazio e o limite da coluna;
+- valida o código IBGE com sete dígitos, a UF contra `BrazilianState`, o nome não vazio e o limite da coluna usando `CityValidationRules`;
 - insere ou atualiza pelo `ibge_code`, em lotes de 500 registros e dentro de uma transação;
 - rejeita códigos IBGE duplicados no catálogo;
 - nunca apaga cidades automaticamente, porque endereços e feriados podem referenciá-las;
@@ -87,3 +87,4 @@ O model `City` declara `holidays()` para os feriados municipais e `addresses()` 
 - [x] Gerar e revisar `database/data/cities.json` com o catálogo nacional pelo comando Artisan.
 - [x] Criar `CitySeeder` idempotente, executável sem rede e seguro para reexecução.
 - [x] Testar migration, carga local, unicidade do código IBGE e filtro por UF/nome.
+- [x] Testar campos inválidos do catálogo e preservar dados existentes quando a validação falha.

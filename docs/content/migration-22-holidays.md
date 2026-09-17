@@ -7,7 +7,7 @@ status: implemented
 visibility: public
 tags: sge/migrations, sge/calendario, sge/calculos
 related: enum-holidayscope, enum-brazilianstate, migration-01a-cities, migration-15-internships, migration-22-internship-calendar-overrides
-source_refs:
+source_refs: https://github.com/sge-suite/sge/blob/master/app/Models/Holiday.php, https://github.com/sge-suite/sge/blob/master/app/Concerns/HolidayValidationRules.php, https://github.com/sge-suite/sge/blob/master/app/Console/Commands/ImportHolidays.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/HolidaysTest.php
 ---
 > [!success] Estado
 > Implementada como base de backend. Registra somente feriados oficiais reutilizáveis; recessos, folgas, pontes e fechamentos específicos entram como pausas do estágio. A consulta de cidades não depende da API e os feriados importados são persistidos antes de qualquer cálculo.
@@ -19,7 +19,7 @@ source_refs:
 | `id` | `bigint` | não | `PK` | Identificador da data. |
 | `date` | `date` | não | índice | Uma data por registro. Feriadão usa uma linha para cada dia. |
 | `name` | `varchar(255)` | não | — | Nome apresentado na lista e nos relatórios. |
-| `scope` | `varchar(255)` | não | índice | [`HolidayScope`](doc:enum-holidayscope): `national`, `state` ou `municipal`; validado pelo cast do model. |
+| `scope` | `varchar(255)` | não | índice | [`HolidayScope`](doc:enum-holidayscope): `national`, `state` ou `municipal`; validado por `HolidayValidationRules` e pelo cast do model. |
 | `state_code` | `char(2)` | sim | índice composto | UF validada por [`BrazilianState`](doc:enum-brazilianstate). Nula no escopo nacional, obrigatória no estadual e derivada da cidade no municipal. |
 | `city_id` | `bigint` | sim | `FK`, índice composto | Cidade do feriado municipal; `RESTRICT`. Obrigatória nesse escopo. |
 | `deleted_at` | `timestamp(0)` | sim | parte da unicidade | Exclusão lógica via `SoftDeletes`; permite auditoria e restauração. |
@@ -35,6 +35,8 @@ source_refs:
 - feriados diferentes podem ocorrer na mesma data e no mesmo escopo; o mesmo feriado ativo não pode ser duplicado: nacional por data/nome, estadual por data/UF/nome e municipal por data/cidade/nome;
 - a exclusão é lógica (`deleted_at`); consultas normais ignoram registros excluídos e o Activity Log registra a auditoria;
 - nenhuma consulta de cálculo chama a BrasilAPI.
+
+`HolidayValidationRules` compartilha as regras de data, nome, escopo, UF e cidade entre o model e a importação. A importação rejeita payloads inválidos antes de persistir qualquer linha; o model mantém ainda as regras relacionais entre escopo, cidade e UF, incluindo a derivação da UF em feriados municipais.
 
 O comando `php artisan holidays:import {ano}` importa os feriados nacionais da BrasilAPI. Com `--uf=RS`, importa os nacionais e estaduais retornados para a UF. A chamada usa timeout e retry, ignora pontos facultativos e é idempotente: registros ativos existentes não são sobrescritos. Feriados municipais continuam previstos para cadastro manual quando houver fluxo administrativo.
 
@@ -53,3 +55,4 @@ O estágio usa o endereço histórico do local de trabalho para obter a cidade e
 - [x] Criar importação nacional/estadual idempotente com retry, sem sobrescrever registros.
 - [ ] Criar cadastro manual de datas municipais pelo Administrador do Sistema.
 - [x] Testar schema, combinações de escopo/localização, unicidade, soft delete, filtro por UF e importação.
+- [x] Testar campos inválidos no model e na importação sem alterar registros existentes.

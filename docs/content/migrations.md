@@ -25,7 +25,7 @@ Estas migrations já existem no projeto novo e não devem ser recriadas. Cada um
 
 Não há migration de permissões: as tabelas anteriormente previstas foram removidas e a autorização usa Gates e Policies com os vínculos.
 
-As migrations de [`cities`](doc:migration-01a-cities), [`addresses`](doc:migration-01-addresses), [`user_personal_data`](doc:migration-02-user-personal-data) e [`holidays`](doc:migration-22-holidays) já estão implementadas. As demais continuam no backlog até o código e os testes confirmarem seus contratos; as notas individuais distinguem a base disponível das integrações futuras.
+As migrations de [`cities`](doc:migration-01a-cities), [`addresses`](doc:migration-01-addresses), [`user_personal_data`](doc:migration-02-user-personal-data), [`campuses`](doc:migration-03-campuses) e [`holidays`](doc:migration-22-holidays) já estão implementadas. As demais continuam no backlog até o código e os testes confirmarem seus contratos; as notas individuais distinguem a base disponível das integrações futuras.
 
 > [!info] Fonte dos contratos
 > A implementação segue os contratos desta pasta e as decisões aprovadas no planejamento.

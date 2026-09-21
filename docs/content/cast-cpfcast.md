@@ -32,9 +32,9 @@ $user->save();
 // banco: 52998224725
 ```
 
-## Uso atual e destino
+## Uso
 
-Hoje `User` possui `cpf` no `$fillable`, na docblock e no cast. O modelo de destino separa CPF em `user_personal_data`; antes da [migration 02](doc:migration-02-user-personal-data) ser adotada, decidir se o cast será movido para `UserPersonalData` e remover o CPF da conta de autenticação.
+`User` possui `cpf` no `$fillable`, na docblock e no cast. O CPF permanece na conta como identificador único; [`user_personal_data`](doc:migration-02-user-personal-data) não o replica.
 
 ## Checklist
 
@@ -43,7 +43,7 @@ Hoje `User` possui `cpf` no `$fillable`, na docblock e no cast. O modelo de dest
 - [x] Rejeitar CPF inválido.
 - [x] Cobrir CPF mascarado, limpo e inválido em `tests/Unit/CpfCastTest.php`.
 - [ ] Definir comportamento para string composta apenas por espaços.
-- [ ] Mover o cast para o Model de dados pessoais quando o domínio deixar de guardar CPF em `users`.
+- [x] Manter o cast em `User`, sem duplicar CPF no Model de dados pessoais.
 - [ ] Confirmar que CPF não é editável pela configuração do usuário.
 - [ ] Garantir que consultas e snapshots usem o formato canônico.
 

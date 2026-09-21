@@ -57,7 +57,7 @@ A cidade deverá continuar sendo resolvida exclusivamente no catálogo local: pr
 
 ## Testes
 
-`tests/Feature/AddressesTest.php` cobre tipos e limites PostgreSQL, nulabilidade, índices, FK `RESTRICT`, migrate e rollback, factories, casts, relacionamentos, campos obrigatórios, número textual, CEP opcional sem validação de formato, cópia histórica e Activity Log. Os testes usam `Http::fake()` e `preventStrayRequests()` para impedir acesso à rede.
+`tests/Feature/AddressesTest.php` cobre tipos e limites PostgreSQL, nulabilidade, índices, FK `RESTRICT`, migrate e rollback, factories, casts, relacionamentos, campos obrigatórios, número textual, CEP opcional sem validação de formato, cópia histórica e Activity Log. Como `user_personal_data` referencia `addresses`, o teste de rollback reverte em conjunto as migrations aplicadas a partir de `addresses`, testa a remoção da tabela e reaplica o conjunto. Os testes usam `Http::fake()` e `preventStrayRequests()` para impedir acesso à rede.
 
 ```bash
 ./vendor/bin/sail artisan test --compact tests/Feature/AddressesTest.php tests/Feature/CitiesTest.php tests/Unit/DatabaseDriverGuardTest.php

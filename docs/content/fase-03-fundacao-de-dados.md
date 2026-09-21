@@ -30,7 +30,7 @@ source_refs:
 - [x] Concluir [`cities`](doc:migration-01a-cities), executar `php artisan cities:fetch` quando necessário e carregar o catálogo com `CitySeeder` sem rede.
 - [x] Implementar a base backend de [`addresses`](doc:migration-01-addresses), incluindo cópia histórica.
 - [ ] Implementar consulta e validação de CEP no futuro fluxo de cadastro.
-- [ ] Concluir [`user_personal_data`](doc:migration-02-user-personal-data).
+- [x] Concluir [`user_personal_data`](doc:migration-02-user-personal-data).
 - [ ] Concluir [`campuses`](doc:migration-03-campuses).
 - [ ] Concluir [`affiliations`](doc:migration-04-affiliations).
 - [ ] Concluir [`courses`](doc:migration-09-courses).

@@ -10,7 +10,7 @@ related: cast-cpfcast, migration-02-user-personal-data, model-user, provider-for
 source_refs: https://github.com/sge-suite/sge/blob/master/database/migrations/0001_01_01_000000_create_users_table.php
 ---
 > [!success] Estado
-> Implementada no arquivo `0001_01_01_000000_create_users_table.php`. É a base das contas atuais; o modelo de destino ainda exige a separação de dados pessoais.
+> Implementada no arquivo `0001_01_01_000000_create_users_table.php`. É a base das contas e mantém o CPF como identificador único da pessoa.
 
 ## Tabelas criadas
 
@@ -43,8 +43,7 @@ source_refs: https://github.com/sge-suite/sge/blob/master/database/migrations/00
 - [x] Criar as três tabelas base.
 - [x] Tornar e-mail e CPF únicos no estado atual.
 - [x] Configurar broker de reset para `password_reset_tokens`.
-- [ ] Definir a transferência de `users.cpf` para `user_personal_data.cpf`.
-- [ ] Atualizar [CpfCast](doc:cast-cpfcast) e `User` após a separação.
+- [x] Manter CPF e [CpfCast](doc:cast-cpfcast) em `users`; `user_personal_data` guarda somente dados complementares do discente.
 - [ ] Confirmar se `sessions.user_id` deve receber FK no futuro.
 - [ ] Adicionar teste de schema/rollback se essa migration for alterada.
 

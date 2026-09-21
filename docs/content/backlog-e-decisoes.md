@@ -34,7 +34,7 @@ source_refs:
 ### D-004 — Dados pessoais fora de `internships`
 
 - **Status:** definido.
-- **Decisão:** CPF, RG, data de nascimento e endereço atual ficarão em `user_personal_data`, relacionado um-para-um com `users`; os estágios manterão FKs e snapshots `jsonb` para preservar o histórico, enquanto os endereços históricos serão cópias imutáveis na própria tabela `addresses`.
+- **Decisão:** CPF permanece em `users` como identificador único da conta. RG, data de nascimento, telefone e endereço atual ficam em `user_personal_data`, relacionado um-para-um com `users` e preenchido apenas no fluxo discente; os estágios manterão FKs e snapshots `jsonb` para preservar o histórico, enquanto os endereços históricos serão cópias imutáveis na própria tabela `addresses`.
 - **Motivo:** evita repetição de dados pessoais e mantém os documentos e estágios imunes a alterações posteriores no cadastro.
 
 ### D-005 — Configurações pessoais por tipo de vínculo

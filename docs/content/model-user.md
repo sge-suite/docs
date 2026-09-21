@@ -19,11 +19,11 @@ Model autenticável do Laravel. Usa `HasFactory` e `Notifiable`, representa a co
 | atributos ocultos  | `password`, `remember_token`, via `#[Hidden]`.                                 |
 | casts              | `cpf` → [Cast — CpfCast](doc:cast-cpfcast) (`CpfCast`); `password` → `hashed`.           |
 | `initials()`       | Usa `Str::initials()` e retorna primeira/última inicial quando há mais de uma. |
-| relações           | Ainda não possui relações de domínio implementadas.                            |
+| relações           | `personalData()` é um perfil opcional um-para-um para dados complementares do discente. |
 
-## Divergência a resolver
+## Delimitação de responsabilidade
 
-O modelo de destino separa `users` (autenticação) de `user_personal_data` (CPF, RG, nascimento e endereço). Hoje CPF ainda está em `users`. Antes da implementação da [migration de dados pessoais](doc:migration-02-user-personal-data), decidir a migração dos valores, o preenchimento do novo Model e a retirada de `cpf` do login/cadastro da conta.
+`users` mantém autenticação e CPF. [`user_personal_data`](doc:migration-02-user-personal-data) armazena somente RG, nascimento, telefone e endereço atuais quando o futuro fluxo de vínculo discente precisar deles. Cadastro, login e a configuração atual da conta não criam esse perfil.
 
 ## Checklist
 
@@ -31,10 +31,11 @@ O modelo de destino separa `users` (autenticação) de `user_personal_data` (CPF
 - [x] Ocultar senha e remember token.
 - [x] Aplicar cast de senha com hash automático.
 - [x] Aplicar `CpfCast` no estado atual.
-- [ ] Criar relação com `UserPersonalData`.
+- [x] Criar relação com `UserPersonalData`.
 - [ ] Criar relações com `Affiliation`, `Notification` e `EmailMessage` quando as tabelas existirem.
-- [ ] Remover CPF de `$fillable`/docblock/casts de `User` quando o domínio for migrado.
-- [ ] Testar conta sem dados pessoais completos e conta com múltiplos vínculos.
+- [x] Manter CPF em `$fillable`, docblock e casts de `User`.
+- [x] Testar conta sem dados pessoais completos.
+- [ ] Testar conta com múltiplos vínculos quando `affiliations` existir.
 
 ## Relacionamentos
 

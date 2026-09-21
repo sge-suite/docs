@@ -6,12 +6,13 @@ type: technical-hub
 status: in-progress
 visibility: public
 tags: sge/desenvolvimento, sge/casts, sge/checklist
-related: cast-cpfcast, componentes-tecnicos, helpers, migration-02-user-personal-data
+related: cast-cpfcast, cast-phonecast, componentes-tecnicos, helpers, migration-02-user-personal-data
 source_refs:
 ---
 ## Inventário
 
 - [`CpfCast`](doc:cast-cpfcast) — valida e persiste CPF somente com dígitos.
+- [`PhoneCast`](doc:cast-phonecast) — valida telefone fixo ou celular com DDD e persiste somente os dígitos.
 
 ## Checklist comum
 

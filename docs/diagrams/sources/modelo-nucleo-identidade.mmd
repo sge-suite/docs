@@ -10,13 +10,13 @@ erDiagram
         bigint id PK
         varchar name
         varchar email UK
+        varchar cpf UK
         varchar password
         timestamp created_at
     }
     USER_PERSONAL_DATA {
         bigint id PK
         bigint user_id FK
-        varchar cpf UK
         varchar rg
         bigint address_id FK
     }

@@ -12,7 +12,7 @@ diagram: modelo-acesso-erd
 ---
 ## Antes do diagrama
 
-Em linguagem simples, uma pessoa possui uma conta para entrar no SGE e um ou mais vínculos que dizem em que papel ela está trabalhando. O sistema usa esse papel, o campus, o curso e a relação com o estágio para mostrar apenas as informações necessárias.
+Em linguagem simples, uma pessoa possui uma conta para entrar no SGE e um ou mais vínculos que dizem em que papel ela está trabalhando. O sistema usa esse papel, o campus, o curso aplicável e a relação com o estágio para mostrar apenas as informações necessárias.
 
 O esquema abaixo usa nomes técnicos de tabelas e colunas para atender também a quem desenvolve o sistema. A explicação dos papéis, sem esses termos, está em [Pessoas e responsabilidades](doc:pessoas-e-responsabilidades).
 
@@ -27,7 +27,9 @@ A função e o escopo pertencem a `affiliations.type`, convertido para o enum `A
 {{diagram:modelo-acesso-contexto}}
 
 > [!info] Regra de contexto
-> A pessoa autentica uma única conta, escolhe um vínculo ativo e opera somente dentro do campus, curso e tipo desse vínculo. Para atuar em outro contexto, deve existir outro registro em `affiliations` e ele precisa ser selecionado na sessão.
+> A pessoa autentica uma única conta e escolhe um vínculo ativo. O vínculo define tipo e campus; para discente, a Migration 10 também define o curso diretamente. Para coordenador, o escopo de curso vem dos cursos que o referenciam. Para atuar em outro contexto, deve existir outro registro em `affiliations` e ele precisa ser selecionado na sessão.
+
+A caixa operacional usa `Affiliation::notifications()` após a Policy validar que o vínculo selecionado está ativo e pertence à conta autenticada. O par polimórfico de cada notificação mantém separadas as caixas de vínculos diferentes da mesma conta. Notificações de recuperação de senha e de e-mail inicial continuam na relação nativa de `User`.
 
 > [!warning] Fonte única de autorização
 > `AffiliationType`, vínculo ativo, escopo e estado do registro são os únicos insumos de autorização. Gates e Policies codificam essas regras institucionais de modo determinístico; não há regra de acesso editável em banco.

@@ -10,7 +10,7 @@ related: geracao-de-documentos-docx-e-variaveis, migration-14-template-versions,
 source_refs:
 ---
 > [!todo] Estado
-> Planejada. Não depende de `internships`, pois o catálogo pode ser preparado antes dos processos.
+> Planejada. Depende de [`campuses`](doc:migration-03-campuses) e [`GeneratedDocumentType`](doc:enum-generateddocumenttype), mas não de `internships`: o catálogo pode ser preparado antes dos processos.
 
 ## Contrato
 

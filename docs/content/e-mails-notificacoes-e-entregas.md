@@ -11,7 +11,7 @@ source_refs:
 diagram: mensageria-fluxo
 ---
 > [!abstract] Decisão de planejamento
-> Esta é a primeira fundação transversal a ser detalhada antes das demais funcionalidades. Ela define como preservar notificações, conteúdo de e-mails e tentativas de entrega. Não descreve código já implementado.
+> A base nativa de notificações internas da Migration 05 está implementada. Este plano continua definindo as etapas futuras de mensagens de e-mail e tentativas de entrega; não implica que esses fluxos estejam implementados.
 
 ## Objetivo e limites
 
@@ -25,20 +25,20 @@ O termo **enviado** neste plano significa que o provedor SMTP aceitou a mensagem
 
 ### `notifications`
 
-Usará a convenção da tabela nativa plural do Laravel. Cada linha representa uma notificação destinada a uma pessoa dentro do sistema; para avisos de domínio, também preserva o vínculo que determinou o contexto e o destinatário.
+Usará a tabela nativa plural do Laravel, com `data` em `jsonb`. Cada linha representa uma notificação destinada a uma conta ou a um vínculo dentro do sistema.
 
 | Campo                               | Tipo conceitual    | Finalidade                                                                 |
 | ----------------------------------- | ------------------ | -------------------------------------------------------------------------- |
 | `id`                                | uuid               | Identificador compatível com Notifications do Laravel.                     |
-| `notifiable_type` / `notifiable_id` | morph              | Destinatário interno; inicialmente `User`.                                 |
-| `affiliation_id`                    | bigint nullable    | Vínculo que define o contexto e o e-mail operacional, quando houver.       |
+| `notifiable_type` / `notifiable_id` | morph              | `Affiliation` para operação; `User` para recuperação de senha e e-mail inicial. |
 | `type`                              | string             | Classe/tipo estável da notificação.                                        |
-| `data`                              | jsonb              | Título, texto interno, rota/entidade de destino e metadados não sensíveis. |
-| `deduplication_key`                 | string nullable    | Chave estável e única de evento/destinatário, usada nos avisos idempotentes. |
+| `data`                              | jsonb              | JSON convertido pelo cast nativo `array`, com título, texto interno, rota/entidade e metadados não sensíveis. |
 | `read_at`                           | timestamp nullable | Leitura no SGE; não representa leitura do e-mail.                          |
 | `created_at` / `updated_at`         | timestamp          | Auditoria temporal.                                                        |
 
-Notificações de estágio, vínculo, avaliação e demais eventos operacionais devem nascer aqui antes de serem encaminhadas ao e-mail. A notificação destinada apenas ao Setor de Estágio permanece interna. Para eventos reexecutáveis, como schedules, `deduplication_key` combina fato, entidade, data efetiva e destinatário; a mesma chave recupera o aviso já existente em vez de criar outra linha.
+Notificações de estágio, vínculo, avaliação e demais eventos operacionais devem nascer no vínculo destinatário antes de serem encaminhadas ao e-mail. A notificação destinada apenas ao Setor de Estágio permanece interna no vínculo. Recuperação de senha e e-mail inicial pertencem à conta. A implementação atual adiciona `Notifiable` a `Affiliation`; `AffiliationPolicy::viewNotifications` valida que o vínculo está ativo e pertence à conta autenticada. Cada consulta usa a relação polimórfica desse vínculo, sem misturar caixas de vínculos diferentes da mesma conta. As futuras Notifications devem implementar `toDatabase()` e `databaseType()`.
+
+O schema nativo não recebe coluna de deduplicação. Para evento reexecutável, a Action precisa persistir e consultar a fonte de idempotência do domínio. `email_messages.idempotency_key` cobre a mensagem de e-mail; um aviso somente interno que exigir deduplicação durável precisa de um registro operacional próprio antes de o fluxo ser ativado.
 
 O aviso de documento disponível para assinatura é uma exceção controlada por seleção humana: ao mover o documento para `awaiting_signature`, o Setor escolhe os interessados elegíveis. Para cada selecionado com conta, cria-se `notification` interna e `email_message`; para o contato externo da concedente, quando selecionado e sem conta, cria-se somente `email_message`, com `notification_id`, `user_id` e `affiliation_id` nulos. Não há caixa de texto para destinatário livre. O conteúdo usa o local de disponibilização informado pelo Setor e não pressupõe uma plataforma específica.
 
@@ -50,8 +50,8 @@ Representa uma mensagem preparada, com destinatário e conteúdo congelados no i
 | ----------------------------------- | --------------- | ---------------------------------------------------------------------------------- |
 | `id`                                | uuid            | Identificador da mensagem.                                                         |
 | `notification_id`                   | uuid nullable   | FK para `notifications` quando o e-mail deriva de um aviso interno.                |
-| `user_id`                           | bigint nullable | Conta relacionada; obrigatório para e-mails de autenticação.                       |
-| `affiliation_id`                    | bigint nullable | Vínculo usado para resolver o destinatário operacional.                            |
+| `user_id`                           | bigint nullable | Conta destinatária da recuperação de senha ou e-mail inicial.                       |
+| `affiliation_id`                    | bigint nullable | Vínculo destinatário do e-mail operacional.                                        |
 | `purpose`                           | enum            | Finalidade estável, como `password_reset`, `notification` ou `new_affiliation`. |
 | `recipient_email`                   | string          | Snapshot do endereço efetivamente escolhido.                                       |
 | `subject`                           | string nullable | Assunto final, quando não expuser segredo.                                         |
@@ -85,7 +85,7 @@ O Job cria ou reserva a tentativa antes de chamar o transportador. Só define `s
 | Finalidade                     | Destinatário                                    | Registros obrigatórios                                         | Conteúdo persistido                                                                                                    |
 | ------------------------------ | ----------------------------------------------- | -------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
 | Recuperação de senha           | `users.email`                                   | `email_messages` e ao menos uma `email_delivery_attempt`       | Não guardar URL, token nem corpo que os contenha. Registrar finalidade, destinatário, template e resultado da entrega. |
-| Notificação operacional a usuário | `affiliations.email`, conforme o vínculo     | `notifications`, `email_messages` e tentativas                 | Guardar assunto e versões texto/HTML renderizadas, protegidas e imutáveis.                                             |
+| Notificação operacional a usuário | `affiliations.email`, conforme o vínculo     | notificação no vínculo, `email_messages` e tentativas           | Guardar assunto e versões texto/HTML renderizadas, protegidas e imutáveis.                                             |
 | Aviso externo de assinatura    | e-mail cadastrado da concedente, quando selecionado | `email_messages` e tentativas; sem notificação interna      | Guardar o local informado, documento e conteúdo renderizado; não criar destinatário livre.                            |
 | Resumo do Setor de Estágio     | somente notificação interna do vínculo do Setor | `notifications`; sem `email_messages`                          | Guardar contagens e links filtrados do resumo diário, sem listar dados sensíveis.                                      |
 | Aviso de novo vínculo          | E-mail do vínculo definido pela regra do evento | `notifications`, `email_messages` e tentativas                 | Mesmo padrão de notificação operacional.                                                                               |
@@ -105,16 +105,17 @@ O Job cria ou reserva a tentativa antes de chamar o transportador. Só define `s
 
 ## Ordem de implementação futura
 
-O planejamento acima deve ser mantido antes das demais funcionalidades. A implementação física, porém, só poderá criar as FKs depois de `users` e `affiliations`.
+O planejamento acima deve ser mantido antes das demais funcionalidades. A migration de `notifications` não declara FKs porque `notifiable_type`/`notifiable_id` são polimórficos; ela foi posicionada após `users` e `affiliations`. As FKs futuras de `email_messages` dependem de `notifications`, `users` e `affiliations`.
 
-1. Criar os enums de finalidade e status.
-2. Criar as três migrations e seus índices/FKs.
-3. Implementar Models, casts protegidos, relações e factories.
-4. Integrar o envio de recuperação do Fortify ao log seguro.
-5. Definir o fluxo seguro de senha inicial sem confirmação adicional de endereço de e-mail.
-6. Criar a base comum que grava `notifications`, mensagens e tentativas para eventos de domínio.
-7. Configurar Jobs, limite de taxa, reprocessamento, alertas de falha e autorização de reenvio.
-8. Cobrir fluxos, idempotência, reenvio e proteção de segredos com testes.
+1. [x] Implementar os enums de finalidade e status; ambos já têm testes unitários.
+2. [x] Criar a migration nativa de `notifications` pelo gerador do Laravel e adaptar `data` para `jsonb`; adicionar `Notifiable` a `Affiliation` e cobrir a relação e a Policy por testes PostgreSQL.
+3. Criar as migrations de mensagens e tentativas com suas FKs.
+4. Implementar Models, casts protegidos, relações e factories próprios de e-mail.
+5. Integrar o envio de recuperação do Fortify ao log seguro.
+6. Definir o fluxo seguro de senha inicial sem confirmação adicional de endereço de e-mail.
+7. Criar a base comum que grava Notifications nativas, mensagens e tentativas para eventos de domínio.
+8. Configurar Jobs, limite de taxa, reprocessamento, alertas de falha e autorização de reenvio.
+9. Cobrir fluxos, idempotência, reenvio e proteção de segredos com testes.
 
 ## Pendência de retenção
 

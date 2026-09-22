@@ -23,7 +23,7 @@ diagram: modelo-nucleo-identidade
 | `user_personal_data` | Dados complementares atuais do discente; CPF permanece em `users` |
 | `cities` | catálogo local de municípios por código IBGE e UF |
 | `addresses` | endereços atuais e cópias históricas usadas por estágios |
-| `affiliations` | função institucional, campus, curso e e-mail contextual |
+| `affiliations` | função institucional, campus e e-mail contextual; a Migration 10 adicionará `course_id` aos vínculos de discente |
 | `campuses` e `courses` | escopo acadêmico e administrativo |
 | `internship_types` | regras de carga, notas e exceções aplicáveis ao curso |
 | `granting_parties` | cadastro atual da concedente |

@@ -24,7 +24,7 @@ source_refs: https://github.com/sge-suite/sge/blob/master/database/migrations/20
 | `birth_date` | nullable; exigida quando a regra pedir.               |
 | `phone`      | `varchar(255)`, nullable, validado e normalizado pelo `PhoneCast` com `celular_com_ddd`; aceita telefone fixo (8 dígitos) ou celular (9 dígitos), ambos com DDD, e é exigido para discente no envio da solicitação de estágio. |
 | `emancipation_verified_at` | `timestamp(0)` nullable; preenchido somente após validação do Setor de Estágio. |
-| `emancipation_verified_by_affiliation_id` | FK nullable para o vínculo que confirmou a prova; adicionada em alteração posterior a `affiliations`, para não criar dependência circular. |
+| `emancipation_verified_by_affiliation_id` | FK nullable para o vínculo que confirmou a prova; adicionada pela Migration 19A, depois de `affiliations`, para não criar dependência circular. |
 | `address_id` | nullable, FK para `addresses` com exclusão `RESTRICT`. |
 | timestamps   | obrigatórios.                                         |
 

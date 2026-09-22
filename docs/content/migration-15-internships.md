@@ -12,9 +12,9 @@ source_refs:
 > [!todo] Estado
 > Planejada. Depende de usuários, endereços, cursos, tipos de estágio, partes concedentes e [`InternshipStatus`](doc:enum-internshipstatus).
 
-Um estágio é criado somente após o aceite de uma [solicitação de estágio](doc:migration-19-internship-requests). A relação inversa é única: a solicitação recebe `internship_id` ao criar o estágio, preservando a origem sem duplicar uma solicitação a cada correção. `student_user_id` identifica a conta da pessoa; a solicitação continua sendo o registro que identifica o vínculo discente dono do processo.
+Um estágio é criado somente após o aceite de uma [solicitação de estágio](doc:migration-19-internship-requests). A Migration 15 vem antes da 19 somente para permitir que a solicitação acrescente sua FK única `internship_id`; no fluxo do produto, a solicitação nasce e é aceita antes de a linha do estágio ser criada.
 
-Antes de criar esta migration, é necessário confirmar como o estágio recuperará o vínculo discente de origem para autorização e auditoria — por uma FK própria ou pela solicitação associada. Não se deve inferir campus, curso ou escopo apenas a partir de `student_user_id`.
+O vínculo discente de origem é `internship_requests.affiliation_id`. `internships` não repete `student_affiliation_id`: para autorização e auditoria, a Action parte da solicitação associada; `student_user_id` identifica a conta para consulta e snapshot, sem inferir campus, curso ou escopo.
 
 ## Contrato mínimo
 
@@ -68,7 +68,7 @@ As notas de relatório e apresentação são lançadas pelo orientador diretamen
 - [ ] Criar migration com FKs, JSONB, índices de consulta e status inicial.
 - [ ] Definir `restrict`/`nullOnDelete` para preservar histórico.
 - [ ] Criar Model com cast de status e snapshots.
-- [ ] Confirmar a referência ao vínculo discente de origem para autorização e auditoria.
+- [x] Usar `internship_requests.affiliation_id` como vínculo discente de origem para autorização e auditoria.
 - [ ] Implementar criação do snapshot no momento correto do fluxo.
 - [ ] Validar regras do tipo, carga horária, período, feriados nacionais/estaduais/municipais aplicáveis ao endereço de trabalho e idade.
 - [ ] Criar o serviço de cálculo e persistir a base reproduzível em `projected_end_date_calculation`.

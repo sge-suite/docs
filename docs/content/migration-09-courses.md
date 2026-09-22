@@ -10,7 +10,7 @@ related: migration-03-campuses, migration-04-affiliations, migration-10-course-i
 source_refs:
 ---
 > [!todo] Estado
-> Planejada. Depende de [`campuses`](doc:migration-03-campuses) e [`affiliations`](doc:migration-04-affiliations).
+> Planejada. Depende de [`campuses`](doc:migration-03-campuses) e [`affiliations`](doc:migration-04-affiliations). A decisão sobre os nomes e a obrigatoriedade das duas FKs de coordenador precisa ser fechada antes do código.
 
 ## Contrato
 

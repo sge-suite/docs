@@ -20,7 +20,7 @@ source_refs:
 | `document_type` | `varchar(16)` | não | — | `cpf` ou `cnpj`, validado por [`PartyDocumentType`](doc:enum-partydocumenttype). |
 | `document_number` | `varchar(14)` | não | índice composto | Documento normalizado, sem pontuação. |
 | `name` | `varchar(255)` | não | — | Nome completo ou razão social. |
-| `address_id` | `bigint` | sim | `FK` | Endereço atual; `SET NULL` somente para cadastro não utilizado. |
+| `address_id` | `bigint` | sim | `FK`, `RESTRICT` | Endereço atual; a relação é removida explicitamente antes de excluir a linha de endereço. |
 | `representative_name` | `varchar(255)` | sim | — | Nome do representante atual. |
 | `representative_role` | `varchar(120)` | sim | — | Cargo do representante atual. |
 | `phone` | `varchar(20)` | sim | — | Telefone atual normalizado. |
@@ -35,7 +35,7 @@ source_refs:
 
 Não exigir unicidade global de CNPJ: unidades distintas podem compartilhar o documento. Nome, unidade e endereço diferenciam os registros. Para ser selecionada na solicitação de estágio, a parte concedente precisa estar cadastrada; não é exigido convênio ou termo prévio como regra de validação. Quando houver, o número do processo de credenciamento preenche o campo correspondente do documento. O estágio guardará FK e snapshot.
 
-Os campos de endereço continuam em `addresses`, e não são repetidos nesta tabela. Ao criar um estágio, o sistema copia o endereço apontado por `address_id` para uma nova linha de `addresses`; o estágio guarda essa nova FK em `workplace_address_id`. Telefone, representante, conselho e processo continuam sendo dados atuais da concedente e entram no snapshot do estágio somente no aceite.
+Os campos de endereço continuam em `addresses`, e não são repetidos nesta tabela. A FK usa `RESTRICT`: uma regra de `SET NULL` condicional ao uso do cadastro não pode ser representada pela FK. Ao atualizar o endereço atual, a aplicação cria ou seleciona a nova linha e troca `address_id`; a remoção física só é elegível depois que nenhuma relação a referenciar. Ao criar um estágio, o sistema copia o endereço apontado por `address_id` para uma nova linha de `addresses`; o estágio guarda essa nova FK em `workplace_address_id`. Telefone, representante, conselho e processo continuam sendo dados atuais da concedente e entram no snapshot do estágio somente no aceite.
 
 ## Checklist
 

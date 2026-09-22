@@ -17,6 +17,7 @@ Esta é a referência operacional para implementar as telas, Gates, Policies e t
 ## Regras comuns a todos os vínculos
 
 - Cada pessoa autentica uma única conta e seleciona um `affiliations` ativo para operar. Trocar de vínculo troca o contexto; não soma acessos.
+- A caixa operacional consulta somente as notificações do vínculo ativo selecionado. `AffiliationPolicy::viewNotifications` exige vínculo ativo e pertencente à conta autenticada; notificações de outro vínculo não atravessam a relação polimórfica, mesmo para a mesma conta. Notificações de conta continuam em `User`.
 - Toda leitura e alteração verifica `AffiliationType`, campus, curso quando aplicável, posse ou relação com o registro e o status atual. Um vínculo desativado não inicia nem altera fluxos.
 - Gates e Policies nativos do Laravel são a única camada de autorização. Não existem papéis, permissões ou exceções editáveis por interface.
 - O Activity Log registra alterações relevantes. Discente e supervisor não o consultam; os demais o consultam somente quando a Policy do processo autorizar.
@@ -30,7 +31,7 @@ Esta é a referência operacional para implementar as telas, Gates, Policies e t
 | Administrador do Sistema | institucional/global | não, salvo atribuição futura explícita | campi e vínculos administrativos globais | ativação e estrutura institucional |
 | Administrador do Campus | próprio campus | não, salvo outro vínculo ativo | pessoas, vínculos, cursos e tipos do campus | administração do campus |
 | Setor de Estágio | campus ou escopo atribuído | sim | concedentes, pendências e templates | análise, formalização, liberação e avaliação |
-| Coordenador | curso do vínculo | consulta acadêmica | não | atestado de orientação previsto |
+| Coordenador | cursos que o referenciam como coordenador | consulta acadêmica | não | atestado de orientação previsto |
 | Orientador | próprios orientandos | sim, nas notas acadêmicas | não | lançamento de relatório e apresentação |
 | Discente | próprio vínculo/processo | sim, na própria solicitação e pedidos | próprios dados permitidos | envio, correção, desistência e pedido de cancelamento |
 | Supervisor | estágios sob sua supervisão | sim, na própria avaliação | não | envio ou cancelamento da própria avaliação |
@@ -185,7 +186,7 @@ Recebe notificação interna e e-mail quando selecionado para assinatura ou quan
 
 ### Finalidade e escopo
 
-Opera exclusivamente a própria solicitação e o próprio estágio, dentro do curso do vínculo ativo. Uma pessoa com dois cursos usa vínculos separados e não mistura os processos.
+Opera exclusivamente a própria solicitação e o próprio estágio, dentro do curso do vínculo ativo. A Migration 10 associa o curso ao vínculo de discente; uma pessoa com dois cursos usa vínculos separados e não mistura os processos.
 
 ### Ações permitidas
 

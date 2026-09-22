@@ -6,7 +6,7 @@ type: migration-reference
 status: planned
 visibility: public
 tags: sge/migrations, sge/emancipacao, sge/privacidade
-related: enum-emancipationevidencestatus, migration-19-internship-requests, migration-base-05-media, migration-base-04-activity-log
+related: enum-emancipationevidencestatus, migration-02-user-personal-data, migration-04-affiliations, migration-19-internship-requests, migration-base-05-media, migration-base-04-activity-log
 source_refs:
 ---
 | Campo | Regra |
@@ -20,6 +20,8 @@ source_refs:
 | timestamps | auditoria técnica. |
 
 Cada linha possui exatamente uma mídia privada na coleção `emancipation_evidence`. Novo envio cria nova linha; não substitui o binário anterior. A prova só é visível ao discente proprietário e ao Setor autorizado, nunca ao supervisor, orientador, e-mail, documento gerado ou Activity Log. A solicitação só pode ser aceita como `emancipated_minor` quando houver evidência `Approved` vigente.
+
+A Migration 19A também acrescenta `emancipation_verified_by_affiliation_id` em `user_personal_data`, depois de `affiliations` existir. A coluna complementa o `emancipation_verified_at` já presente no perfil com a autoria da confirmação atual; a evidência continua sendo o histórico e a fonte da análise.
 
 ## Envio, registro e acesso
 

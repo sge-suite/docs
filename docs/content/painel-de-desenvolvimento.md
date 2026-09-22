@@ -20,7 +20,7 @@ Este índice é uma fotografia editorial da documentação publicada. Os documen
 
 - [Fase 00 — Preparação](doc:fase-00-preparacao) — **completed** — Checklist do ambiente, qualidade e fluxo de trabalho do projeto novo.
 - [Fase 01 — Contratos de e-mail](doc:fase-01-contratos-de-e-mail) — **planned** — Checklist para fechar notificações, mensagens e tentativas de e-mail.
-- [Fase 03 — Fundação de dados](doc:fase-03-fundacao-de-dados) — **planned** — Checklist da fundação de dados, enums, migrations, modelos e catálogos básicos.
+- [Fase 03 — Fundação de dados](doc:fase-03-fundacao-de-dados) — **in-progress** — Checklist da fundação de dados, enums, migrations, modelos e catálogos básicos.
 - [Fase 04 — Conta e contexto](doc:fase-04-conta-e-contexto) — **planned** — Checklist de autenticação, vínculos ativos e configurações próprias.
 - [Fase 05 — Administração](doc:fase-05-administracao) — **planned** — Checklist de policies, escopos, perfis e catálogos administrativos do SGE.
 - [Fase 06 — Documentos](doc:fase-06-documentos) — **planned** — Checklist de templates DOCX, versões, geração e acompanhamento de assinatura.
@@ -62,7 +62,7 @@ Este índice é uma fotografia editorial da documentação publicada. Os documen
 - [Migration 02 — user_personal_data](doc:migration-02-user-personal-data) — **implemented** — Dados complementares opcionais do discente; CPF permanece na conta.
 - [Migration 03 — campuses](doc:migration-03-campuses) — **implemented** — Tabela de campi; representante legal e cargo permanecem textuais no próprio campus.
 - [Migration 04 — affiliations](doc:migration-04-affiliations) — **implemented** — Schema PostgreSQL, modelo, validação, factory, relações e Activity Log; login e sessão seguem na Fase 04.
-- [Migration 05 — notifications](doc:migration-05-notifications) — **planned** — Extensão das notificações nativas do Laravel com contexto de vínculo.
+- [Migration 05 — notifications](doc:migration-05-notifications) — **planned** — Tabela nativa do Laravel para notificações internas.
 - [Migration 06 — email_messages](doc:migration-06-email-messages) — **planned** — Snapshot imutável da mensagem de e-mail preparada para envio.
 - [Migration 07 — email_delivery_attempts](doc:migration-07-email-delivery-attempts) — **planned** — Histórico append-only das tentativas de transporte de e-mails.
 - [Migration 09 — courses](doc:migration-09-courses) — **planned** — Contrato dos cursos por campus e de seus coordenadores.

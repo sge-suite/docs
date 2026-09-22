@@ -26,7 +26,7 @@ source_refs: https://github.com/sge-suite/sge/blob/master/database/migrations/20
 | `last_used_at` | `timestamp(0)` nullable; último vínculo explicitamente selecionado. |
 | `created_at`, `updated_at` | timestamps convencionais do Laravel. |
 
-Não há `course_id` nem `deleted_at`. O curso e sua FK só entram na Migration 10, depois da criação de `courses`. `Affiliation` não usa `SoftDeletes`: o ciclo de vida do vínculo usa `deactivated_at`.
+Não há `course_id` nem `deleted_at`. A ausência de curso nesta migration é intencional: `courses` ainda não existe e a Migration 10 adicionará a FK obrigatória para vínculos de discente. Até essa alteração estar implementada, os fluxos de criação de vínculos discentes por interface não entram em produção. `Affiliation` não usa `SoftDeletes`: o ciclo de vida do vínculo usa `deactivated_at`.
 
 ### FKs e índices
 

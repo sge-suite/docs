@@ -10,7 +10,7 @@ related: enum-legalcapacitydeclaration, enum-internshiprequeststatus, migration-
 source_refs:
 ---
 > [!todo] Estado
-> Planejada. Implementa o formulário nativo de abertura antes de existir um estágio formalizado.
+> Planejada. Implementa o formulário nativo de abertura antes de existir um estágio formalizado. A tabela é criada depois de `internships` apenas porque ela guarda a FK única `internship_id`; o fluxo continua sendo solicitação, aceite e criação do estágio.
 
 ## Contrato
 

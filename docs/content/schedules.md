@@ -67,9 +67,9 @@ A própria Action cria a notificação interna na mesma transação da transiç�
 
 O lembrete de término usa exclusivamente a `projected_end_date` vigente, porque ela já incorpora jornada, calendário, exceções e pausas. A chave estável do aviso inclui estágio, versão/resultado atual do cálculo, limiar de sete dias e destinatário. Assim, a rotina diária só envia uma vez para a mesma previsão; se um evento autorizado alterar a data, a mudança relevante da previsão é comunicada pelo próprio fluxo de alteração, não por uma sequência de lembretes.
 
-O resumo do Setor agrega, no mínimo, estágios iniciados, pausados ou retomados no dia, estágios com término previsto em sete dias e estágios cuja previsão já passou sem conclusão. Sua `deduplication_key` combina campus, data e destinatário do Setor; ele é somente interno e não expõe dados sensíveis na listagem resumida.
+O resumo do Setor agrega, no mínimo, estágios iniciados, pausados ou retomados no dia, estágios com término previsto em sete dias e estágios cuja previsão já passou sem conclusão. Ele é somente interno e não expõe dados sensíveis na listagem resumida.
 
-Cada destinatário recebe no máximo uma notificação por fato temporal. `notifications` terá `deduplication_key` opcional e única quando preenchida; a Action usa uma chave estável que combina evento, estágio, data efetiva e destinatário. A mesma chave é usada para recuperar a notificação já criada em caso de reexecução. A `email_message` derivada preserva sua própria chave de idempotência e histórico de tentativas.
+Cada destinatário recebe no máximo uma notificação por fato temporal. A Action usa uma chave estável que combina evento, estágio, data efetiva e destinatário. Quando houver e-mail, essa chave participa de `email_messages.idempotency_key`. Para o resumo somente interno, a implementação deve definir antes um registro operacional durável de despacho; a tabela nativa `notifications` não deve receber colunas próprias para essa finalidade.
 
 ## Testes obrigatórios
 
@@ -79,7 +79,7 @@ Cada destinatário recebe no máximo uma notificação por fato temporal. `notif
 - garantir que `Completed` nunca seja produzido pelo command e que a previsão só seja recalculada pelos gatilhos de domínio;
 - testar lembrete exatamente a sete dias, nova previsão após mudança autorizada e ausência de aviso fora do limiar;
 - testar resumo único interno por campus/destinatário, sem `email_message` para o Setor;
-- testar despacho de e-mail do discente somente após commit, destinatário sem canal de e-mail e a unicidade de `deduplication_key`; e
+- testar despacho de e-mail do discente somente após commit, destinatário sem canal de e-mail e a idempotência da fonte de despacho; e
 - executar em ambiente com cache compartilhado e validar `onOneServer`, `withoutOverlapping` e os alertas operacionais.
 
 ## Relações

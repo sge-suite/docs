@@ -10,7 +10,7 @@ related: migration-13-document-templates, geracao-de-documentos-docx-e-variaveis
 source_refs:
 ---
 > [!todo] Estado
-> Planejada. Depende de [`document_templates`](doc:migration-13-document-templates).
+> Planejada. Depende de [`document_templates`](doc:migration-13-document-templates), [`affiliations`](doc:migration-04-affiliations) e da tabela `media` já fornecida pelo Media Library.
 
 ## Contrato
 

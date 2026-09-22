@@ -14,13 +14,13 @@ source_refs:
 
 ## Contrato
 
-Adicionar `course_id` nullable com FK para `courses`. O campo é obrigatório para `AffiliationType::Student`, nulo para funções que não pertencem a um curso específico, e não permite compartilhar o mesmo vínculo de discente entre cursos.
+Adicionar `course_id` nullable com FK para `courses`. O campo é obrigatório para `AffiliationType::Student`, nulo para funções que não pertencem a um curso específico, e não permite compartilhar o mesmo vínculo de discente entre cursos. A Migration 04 deliberadamente não contém essa FK, pois ela precisa da tabela criada na Migration 09.
 
 ## Checklist
 
-- [ ] Adicionar coluna e índice de `course_id`.
+- [ ] Adicionar coluna `course_id`; decidir um índice somente diante de uma consulta que o justifique.
 - [ ] Definir comportamento de exclusão do curso (`restrict` preferencialmente para preservar histórico).
-- [ ] Definir se a obrigatoriedade condicional será `CHECK` no PostgreSQL, validação de domínio ou ambos.
+- [x] Aplicar a obrigatoriedade condicional e a coerência de campus pela validação do Model; não criar `CHECK` de domínio.
 - [ ] Atualizar Model `Affiliation` e relação com `Course`.
 - [ ] Atualizar factory com vínculo discente por curso.
 - [ ] Testar discente sem curso, servidor com curso indevido e dois cursos para a mesma pessoa.

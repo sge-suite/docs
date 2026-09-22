@@ -43,6 +43,8 @@ Campos relacionados em `internships`:
 | `evaluation_released_by_affiliation_id` | Vínculo que autorizou a liberação, quando houver ação manual.       |
 | `current_supervisor_evaluation_id`      | FK nullable para a avaliação aprovada vigente e efetiva no cálculo. |
 
+Essas três colunas não entram na Migration 15. Depois de criar `supervisor_evaluations`, a própria Migration 18 altera `internships` para acrescentar `evaluation_released_at`, `evaluation_released_by_affiliation_id` e `current_supervisor_evaluation_id`, com suas FKs. Essa ordem evita dependência circular entre as tabelas.
+
 ## Schema de `response`
 
 ```json
@@ -116,7 +118,7 @@ A confirmação de carga horária fica em coluna própria. Fora de `Draft`, `hou
 
 - [ ] Confirmar o contrato de campos contra critérios e escalas aprovados.
 - [ ] Criar [`EvaluationStatus`](doc:enum-evaluationstatus).
-- [ ] Criar migration, Models, casts e índices.
+- [ ] Criar `supervisor_evaluations`, depois acrescentar as referências de avaliação vigente em `internships`, Models, casts e índices.
 - [ ] Implementar liberação, notificação, salvamento de rascunho e envio imutável.
 - [ ] Implementar autosave Livewire em `Draft` e edição integral em `Returned` com auditoria de alterações.
 - [ ] Atualizar a avaliação vigente em transação após aprovação.

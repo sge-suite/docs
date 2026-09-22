@@ -25,7 +25,7 @@ Estas migrations já existem no projeto novo e não devem ser recriadas. Cada um
 
 Não há migration de permissões: as tabelas anteriormente previstas foram removidas e a autorização usa Gates e Policies com os vínculos.
 
-As migrations de [`cities`](doc:migration-01a-cities), [`addresses`](doc:migration-01-addresses), [`user_personal_data`](doc:migration-02-user-personal-data), [`campuses`](doc:migration-03-campuses), [`affiliations`](doc:migration-04-affiliations) e [`holidays`](doc:migration-22-holidays) estão implementadas e verificadas em PostgreSQL. As demais continuam no backlog até o código e os testes confirmarem seus contratos; as notas individuais distinguem a base disponível das integrações futuras.
+As migrations de [`cities`](doc:migration-01a-cities), [`addresses`](doc:migration-01-addresses), [`user_personal_data`](doc:migration-02-user-personal-data), [`campuses`](doc:migration-03-campuses), [`affiliations`](doc:migration-04-affiliations), [`notifications`](doc:migration-05-notifications) e [`holidays`](doc:migration-22-holidays) estão implementadas e verificadas em PostgreSQL. As demais continuam no backlog até o código e os testes confirmarem seus contratos; as notas individuais distinguem a base disponível das integrações futuras.
 
 > [!info] Fonte dos contratos
 > A implementação segue os contratos desta pasta e as decisões aprovadas no planejamento.
@@ -42,7 +42,7 @@ As migrations de [`cities`](doc:migration-01a-cities), [`addresses`](doc:migrati
 |    02 | [Migration 02 — user_personal_data](doc:migration-02-user-personal-data)            | dados complementares do discente | `users`, `addresses`                                                                                 |
 |    03 | [Migration 03 — campuses](doc:migration-03-campuses)                      | campi                      | `addresses`                                                                                                |
 |    04 | [Migration 04 — affiliations](doc:migration-04-affiliations) | vínculos base, sem `course_id` | `users`, `campuses`, [Enum — AffiliationType](doc:enum-affiliationtype) |
-|    05 | [Migration 05 — notifications](doc:migration-05-notifications)                 | notificações internas      | `users`, `affiliations`                                                                                    |
+|    05 | [Migration 05 — notifications](doc:migration-05-notifications)                 | notificações internas nativas | `users`, `affiliations`                                                                                  |
 |    06 | [Migration 06 — email_messages](doc:migration-06-email-messages)                | mensagens preparadas       | `notifications`, `users`, `affiliations`, [Enum — EmailMessagePurpose](doc:enum-emailmessagepurpose)                             |
 |    07 | [Migration 07 — email_delivery_attempts](doc:migration-07-email-delivery-attempts)       | tentativas de transporte   | `email_messages`, [Enum — EmailDeliveryAttemptStatus](doc:enum-emaildeliveryattemptstatus)                                              |
 |    09 | [Migration 09 — courses](doc:migration-09-courses)                       | cursos                     | `campuses`, `affiliations`                                                                                 |
@@ -51,14 +51,14 @@ As migrations de [`cities`](doc:migration-01a-cities), [`addresses`](doc:migrati
 |    12 | [Migration 12 — granting_parties](doc:migration-12-granting-parties)              | partes concedentes         | `addresses`, [Enum — PartyDocumentType](doc:enum-partydocumenttype)                                                            |
 |   12A | [Migration 12A — supervisor_registration_requests](doc:migration-12a-supervisor-registration-requests) | pedidos de supervisor | `affiliations`, [Enum — RegistrationRequestStatus](doc:enum-registrationrequeststatus) |
 |   12B | [Migration 12B — granting_party_registration_requests](doc:migration-12b-granting-party-registration-requests) | pedidos de concedente | `affiliations`, [Enum — RegistrationRequestStatus](doc:enum-registrationrequeststatus), [Enum — PartyDocumentType](doc:enum-partydocumenttype) |
-|    13 | [Migration 13 — document_templates](doc:migration-13-document-templates)            | templates                  | —                                                                                                          |
-|    14 | [Migration 14 — template_versions](doc:migration-14-template-versions)             | versões de templates       | `document_templates`                                                                                       |
-|    15 | [Migration 15 — internships](doc:migration-15-internships)                   | estágios e snapshots       | `users`, `addresses`, `courses`, `internship_types`, `granting_parties`, [Enum — InternshipStatus](doc:enum-internshipstatus) |
-|    16 | [Migration 16 — generated_documents](doc:migration-16-generated-documents)           | documentos gerados         | `internships`, `template_versions`, enums documentais                                                      |
+|    13 | [Migration 13 — document_templates](doc:migration-13-document-templates)            | templates                  | `campuses`, [Enum — GeneratedDocumentType](doc:enum-generateddocumenttype)                               |
+|    14 | [Migration 14 — template_versions](doc:migration-14-template-versions)             | versões de templates       | `document_templates`, `affiliations`, `media`                                                             |
+|    15 | [Migration 15 — internships](doc:migration-15-internships)                   | estágios e snapshots       | `users`, `addresses`, `affiliations`, `courses`, `internship_types`, `granting_parties`, [Enum — InternshipStatus](doc:enum-internshipstatus) |
+|    16 | [Migration 16 — generated_documents](doc:migration-16-generated-documents)           | documentos gerados         | `internships`, `template_versions`, `affiliations`, enums documentais                                      |
 |    17 | [Migration 17 — internship_pauses](doc:migration-17-internship-pauses)             | pausas                     | `internships`                                                                                              |
-|    18 | [Migration 18 — avaliações](doc:migration-18-avaliacoes)                   | avaliações do supervisor   | `internships`, `affiliations`, [Enum — EvaluationStatus](doc:enum-evaluationstatus)                                           |
-|    19 | [Migration 19 — internship_requests](doc:migration-19-internship-requests)           | solicitações de estágio    | `affiliations`, `courses`, `internship_types`, `granting_parties`, `internships`, [Enum — InternshipRequestStatus](doc:enum-internshiprequeststatus) |
-|   19A | [Migration 19A — emancipation_evidences](doc:migration-19a-emancipation-evidences)        | provas de emancipação      | `internship_requests`, `media`, [Enum — EmancipationEvidenceStatus](doc:enum-emancipationevidencestatus) |
+|    18 | [Migration 18 — avaliações](doc:migration-18-avaliacoes)                   | avaliações e referência vigente | `internships`, `affiliations`, [Enum — EvaluationStatus](doc:enum-evaluationstatus)                                      |
+|    19 | [Migration 19 — internship_requests](doc:migration-19-internship-requests)           | solicitações de estágio    | `affiliations`, `courses`, `internship_types`, `granting_parties`, `supervisor_registration_requests`, `granting_party_registration_requests`, `internships`, [Enum — InternshipRequestStatus](doc:enum-internshiprequeststatus) |
+|   19A | [Migration 19A — emancipation_evidences](doc:migration-19a-emancipation-evidences)        | provas de emancipação e autoria da confirmação | `internship_requests`, `user_personal_data`, `affiliations`, `media`, [Enum — EmancipationEvidenceStatus](doc:enum-emancipationevidencestatus) |
 |    20 | [Migration 20 — internship_request_corrections](doc:migration-20-internship-request-corrections) | correções de solicitações | `internship_requests`, `affiliations`, [Enum — InternshipRequestCorrectionStatus](doc:enum-internshiprequestcorrectionstatus)                  |
 |    21 | [Migration 21 — internship_cancellation_requests](doc:migration-21-internship-cancellation-requests) | pedidos de cancelamento | `internships`, `affiliations`, [Enum — InternshipCancellationRequestStatus](doc:enum-internshipcancellationrequeststatus) |
 |    22 | [Migration 22 — holidays](doc:migration-22-holidays)                       | feriados persistidos       | `cities`, [Enum — HolidayScope](doc:enum-holidayscope), [Enum — BrazilianState](doc:enum-brazilianstate) |
@@ -71,6 +71,16 @@ As migrations de [`cities`](doc:migration-01a-cities), [`addresses`](doc:migrati
 
 > [!warning] Não inverter 04, 09 e 10
 > `affiliations` precisa existir para que `courses` possa referenciar os coordenadores. `courses` precisa existir antes de adicionar `course_id` aos vínculos. Essa é a razão da separação da ordem.
+
+> [!info] Ordem física e fluxo do produto
+> A Migration 15 cria `internships` antes da 19 porque a solicitação guarda a FK única `internship_id`, evitando uma FK circular. No fluxo do produto, a pessoa cria a solicitação primeiro; o estágio só recebe uma linha após o aceite, na mesma transação que grava essa FK na solicitação.
+
+## Prontidão para implementação
+
+- A Migration 05 está implementada: usa a migration nativa do Laravel 13, `data` em `jsonb` e `Notifiable` em `Affiliation`, sem Model customizado nem schema paralelo. A migration de `email_messages` continua planejada.
+- As Migrations 09 e 10 formam a sequência necessária para completar o vínculo de discente ao curso. A 09 ainda exige decidir os nomes e a obrigatoriedade das duas FKs de coordenador; a 10 já está definida para validar o curso no Model, sem `CHECK` de domínio.
+- A Migration 12 ainda precisa decidir se uma unidade da concedente é coluna própria ou parte do nome antes de fixar a unicidade e a factory.
+- As Migrations 06–07, 13–23 incluem conteúdo protegido, snapshots, estados, FKs históricas ou efeitos transacionais. Devem ser implementadas na fase funcional correspondente, com revisão do contrato e dos testes do fluxo.
 
 ## Checklist comum
 

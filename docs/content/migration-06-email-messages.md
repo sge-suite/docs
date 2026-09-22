@@ -16,7 +16,7 @@ source_refs: https://github.com/sge-suite/sge/blob/master/database/migrations/20
 
 | Campo                               | Regra                                                             |
 | ----------------------------------- | ----------------------------------------------------------------- |
-| `id`                                | UUID, chave primária.                                             |
+| `id`                                | `bigint` autoincremental (`$table->id()`), chave primária.         |
 | `notification_id`                   | nullable, FK quando a mensagem deriva de notificação interna; nulo para aviso externo selecionado. |
 | `user_id`                           | nullable; obrigatório para recuperação de senha e aviso de novo vínculo à conta. |
 | `affiliation_id`                    | nullable; obrigatório para e-mail operacional do vínculo.         |

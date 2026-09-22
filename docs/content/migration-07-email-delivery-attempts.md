@@ -16,8 +16,8 @@ source_refs: https://github.com/sge-suite/sge/blob/master/database/migrations/20
 
 | Campo                                 | Regra                                    |
 | ------------------------------------- | ---------------------------------------- |
-| `id`                                  | UUID, chave primária.                    |
-| `email_message_id`                    | FK obrigatória para a mensagem.          |
+| `id`                                  | `bigint` autoincremental (`$table->id()`), chave primária. |
+| `email_message_id`                    | `bigint`, FK obrigatória para a mensagem. |
 | `attempt_number`                      | smallint, sequência por mensagem.        |
 | `status`                              | `queued`, `sent` ou `failed`.            |
 | `provider`                            | nullable; inicialmente SMTP configurado. |

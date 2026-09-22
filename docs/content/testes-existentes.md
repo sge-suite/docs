@@ -44,8 +44,8 @@ Este mapa acompanha o código real no repositório Laravel irmão, em `../sge`. 
 | Feriados | `tests/Feature/HolidaysTest.php`                  | Regras compartilhadas no model e na importação, coerência de escopo/localização e preservação dos registros diante de payloads inválidos. |
 | Vínculos | `tests/Feature/AffiliationTest.php` | Schema PostgreSQL, FKs e exclusão, múltiplos vínculos, validação PHP e cast enum, lifecycle, último uso, factory e Activity Log. 22 testes e 158 assertions passaram por Sail. |
 | Notificações | `tests/Feature/NotificationsTest.php` | Schema PostgreSQL nativo com `jsonb` e UUID, relação polimórfica, leitura/não leitura, isolamento entre vínculos da mesma conta, notificações destinadas a `User`, Policy de vínculo ativo e rollback/reaplicação. 7 testes e 77 assertions passaram por Sail. |
-| Mensagens de e-mail | `tests/Feature/EmailMessageTest.php` | Schema PostgreSQL, FKs, UUID, criptografia de destinatário e conteúdo, snapshot imutável, regras por finalidade e unicidade da chave de idempotência. |
-| Tentativas de entrega | `tests/Feature/EmailDeliveryAttemptTest.php` | Schema PostgreSQL, sequência única, estados e marcos, motivo sanitizado, preservação de tentativas anteriores e rollback/reaplicação na ordem das FKs. |
+| Mensagens de e-mail | `tests/Feature/EmailMessageTest.php` | Schema PostgreSQL, FKs, ID `bigint`, criptografia de destinatário e conteúdo, snapshot imutável, regras por finalidade e unicidade da chave UUID de idempotência. |
+| Tentativas de entrega | `tests/Feature/EmailDeliveryAttemptTest.php` | Schema PostgreSQL com ID e FK `bigint`, sequência única, estados e marcos, motivo sanitizado, preservação de tentativas anteriores e rollback/reaplicação na ordem das FKs. |
 
 ## Lacunas prioritárias
 

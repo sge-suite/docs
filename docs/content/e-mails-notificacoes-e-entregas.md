@@ -48,7 +48,7 @@ Representa uma mensagem preparada, com destinatário e conteúdo congelados no i
 
 | Campo                               | Tipo conceitual | Finalidade                                                                         |
 | ----------------------------------- | --------------- | ---------------------------------------------------------------------------------- |
-| `id`                                | uuid            | Identificador da mensagem.                                                         |
+| `id`                                | bigint          | Identificador autoincremental da mensagem.                                        |
 | `notification_id`                   | uuid nullable   | FK para `notifications` quando o e-mail deriva de um aviso interno.                |
 | `user_id`                           | bigint nullable | Conta destinatária da recuperação de senha ou do aviso de novo vínculo.             |
 | `affiliation_id`                    | bigint nullable | Vínculo destinatário do e-mail operacional.                                        |
@@ -70,8 +70,8 @@ Cada registro representa uma tentativa real de envio de uma `email_message`; rep
 
 | Campo                                 | Tipo conceitual    | Finalidade                                                   |
 | ------------------------------------- | ------------------ | ------------------------------------------------------------ |
-| `id`                                  | uuid               | Identificador da tentativa.                                  |
-| `email_message_id`                    | uuid               | FK para a mensagem.                                          |
+| `id`                                  | bigint             | Identificador autoincremental da tentativa.                  |
+| `email_message_id`                    | bigint             | FK para a mensagem.                                          |
 | `attempt_number`                      | smallint           | Sequência por mensagem.                                      |
 | `status`                              | enum               | `queued`, `sent` ou `failed`.                                |
 | `provider`                            | string nullable    | Provedor/transport utilizado, inicialmente SMTP configurado. |

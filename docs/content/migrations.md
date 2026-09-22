@@ -77,7 +77,7 @@ As migrations de [`cities`](doc:migration-01a-cities), [`addresses`](doc:migrati
 
 ## Prontidão para implementação
 
-- As Migrations 05–07 estão implementadas. `notifications` usa a base nativa do Laravel 13 com `data` em `jsonb`; as duas tabelas de e-mail têm UUIDs, FKs históricas, Models, casts e testes PostgreSQL. O fluxo de envio permanece planejado.
+- As Migrations 05–07 estão implementadas. `notifications` usa a base nativa do Laravel 13 com ID UUID e `data` em `jsonb`; as duas tabelas de e-mail usam IDs `bigint` autoincrementais, FKs históricas, Models, casts e testes PostgreSQL. O fluxo de envio permanece planejado.
 - As Migrations 09 e 10 formam a sequência necessária para completar o vínculo de discente ao curso. A 09 ainda exige decidir os nomes e a obrigatoriedade das duas FKs de coordenador; a 10 já está definida para validar o curso no Model, sem `CHECK` de domínio.
 - A Migration 12 ainda precisa decidir se uma unidade da concedente é coluna própria ou parte do nome antes de fixar a unicidade e a factory.
 - As Migrations 13–23 incluem snapshots, estados, FKs históricas ou efeitos transacionais. Devem ser implementadas na fase funcional correspondente, com revisão do contrato e dos testes do fluxo.

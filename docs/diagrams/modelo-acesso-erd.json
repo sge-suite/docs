@@ -25,7 +25,9 @@
       { "from": "USERS", "to": "AFFILIATIONS", "label": "user_id", "fromPort": { "side": "right", "field": "id" }, "toPort": { "side": "left", "field": "user_id" } },
       { "from": "CAMPUSES", "to": "COURSES", "label": "campus_id", "fromPort": { "side": "right", "field": "id", "fieldOffset": -8 }, "toPort": { "side": "left", "field": "campus_id" } },
       { "from": "CAMPUSES", "to": "AFFILIATIONS", "label": "campus_id", "fromPort": { "side": "left", "field": "id", "fieldOffset": 8 }, "toPort": { "side": "right", "field": "campus_id" } },
-      { "from": "COURSES", "to": "AFFILIATIONS", "label": "course_id", "fromPort": { "side": "left", "field": "id" }, "toPort": { "side": "right", "field": "course_id" } }
+      { "from": "COURSES", "to": "AFFILIATIONS", "label": "course_id", "fromPort": { "side": "left", "field": "id" }, "toPort": { "side": "right", "field": "course_id" } },
+      { "from": "AFFILIATIONS", "to": "COURSES", "label": "primary_coordinator_affiliation_id", "fromPort": { "side": "right", "field": "id", "fieldOffset": -8 }, "toPort": { "side": "left", "field": "primary_coordinator_affiliation_id" } },
+      { "from": "AFFILIATIONS", "to": "COURSES", "label": "secondary_coordinator_affiliation_id", "fromPort": { "side": "right", "field": "id", "fieldOffset": 8 }, "toPort": { "side": "left", "field": "secondary_coordinator_affiliation_id" } }
     ]
   },
   "sourceRefs": [

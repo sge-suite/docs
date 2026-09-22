@@ -62,11 +62,11 @@ Este índice é uma fotografia editorial da documentação publicada. Os documen
 - [Migration 02 — user_personal_data](doc:migration-02-user-personal-data) — **implemented** — Dados complementares opcionais do discente; CPF permanece na conta.
 - [Migration 03 — campuses](doc:migration-03-campuses) — **implemented** — Tabela de campi; representante legal e cargo permanecem textuais no próprio campus.
 - [Migration 04 — affiliations](doc:migration-04-affiliations) — **implemented** — Schema PostgreSQL, modelo, validação, factory, relações e Activity Log; login e sessão seguem na Fase 04.
-- [Migration 05 — notifications](doc:migration-05-notifications) — **planned** — Tabela nativa do Laravel para notificações internas.
-- [Migration 06 — email_messages](doc:migration-06-email-messages) — **planned** — Snapshot imutável da mensagem de e-mail preparada para envio.
-- [Migration 07 — email_delivery_attempts](doc:migration-07-email-delivery-attempts) — **planned** — Histórico append-only das tentativas de transporte de e-mails.
-- [Migration 09 — courses](doc:migration-09-courses) — **planned** — Contrato dos cursos por campus e de seus coordenadores.
-- [Migration 10 — course_id em affiliations](doc:migration-10-course-id-em-affiliations) — **planned** — Adiciona o curso obrigatório ao vínculo de discente sem criar ciclo de FK.
+- [Migration 05 — notifications](doc:migration-05-notifications) — **implemented** — Tabela nativa do Laravel para notificações internas.
+- [Migration 06 — email_messages](doc:migration-06-email-messages) — **implemented** — Snapshot imutável da mensagem de e-mail preparada para envio.
+- [Migration 07 — email_delivery_attempts](doc:migration-07-email-delivery-attempts) — **implemented** — Histórico append-only das tentativas de transporte de e-mails.
+- [Migration 09 — courses](doc:migration-09-courses) — **implemented** — Cursos por campus e dois vínculos coordenadores opcionais no cadastro inicial.
+- [Migration 10 — course_id em affiliations](doc:migration-10-course-id-em-affiliations) — **implemented** — Curso obrigatório para vínculo discente por validação do Model.
 - [Migration 11 — internship_types](doc:migration-11-internship-types) — **planned** — Contrato dos tipos de estágio e suas regras configuráveis.
 - [Migration 12 — granting_parties](doc:migration-12-granting-parties) — **planned** — Contrato das partes concedentes reutilizáveis e seu endereço atual.
 - [Migration 12A — supervisor_registration_requests](doc:migration-12a-supervisor-registration-requests) — **planned** — Solicitações tipadas de cadastro de supervisor feitas durante a abertura.

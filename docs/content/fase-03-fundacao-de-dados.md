@@ -33,8 +33,8 @@ source_refs:
 - [x] Concluir [`user_personal_data`](doc:migration-02-user-personal-data).
 - [x] Concluir [`campuses`](doc:migration-03-campuses).
 - [x] Concluir [`affiliations`](doc:migration-04-affiliations).
-- [ ] Concluir [`courses`](doc:migration-09-courses).
-- [ ] Concluir [`course_id` em affiliations](doc:migration-10-course-id-em-affiliations).
+- [x] Concluir [`courses`](doc:migration-09-courses).
+- [x] Concluir [`course_id` em affiliations](doc:migration-10-course-id-em-affiliations).
 - [ ] Concluir [`internship_types`](doc:migration-11-internship-types).
 - [ ] Concluir [`granting_parties`](doc:migration-12-granting-parties).
 - [x] Concluir [`holidays`](doc:migration-22-holidays).

@@ -27,7 +27,7 @@ A função e o escopo pertencem a `affiliations.type`, convertido para o enum `A
 {{diagram:modelo-acesso-contexto}}
 
 > [!info] Regra de contexto
-> A pessoa autentica uma única conta e escolhe um vínculo ativo. O vínculo define tipo e campus; para discente, a Migration 10 também define o curso diretamente. Para coordenador, o escopo de curso vem dos cursos que o referenciam. Para atuar em outro contexto, deve existir outro registro em `affiliations` e ele precisa ser selecionado na sessão.
+> A pessoa autentica uma única conta e escolhe um vínculo ativo. O vínculo define tipo e campus; para discente, `course_id` acrescentado pela Migration 10 define o curso diretamente. Para coordenador, o escopo de curso vem das FKs `primary_coordinator_affiliation_id` e `secondary_coordinator_affiliation_id` dos cursos que o referenciam. Para atuar em outro contexto, deve existir outro registro em `affiliations` e ele precisa ser selecionado na sessão.
 
 A caixa operacional usa `Affiliation::notifications()` após a Policy validar que o vínculo selecionado está ativo e pertence à conta autenticada. O par polimórfico de cada notificação mantém separadas as caixas de vínculos diferentes da mesma conta. Notificações de recuperação de senha e de e-mail inicial continuam na relação nativa de `User`.
 

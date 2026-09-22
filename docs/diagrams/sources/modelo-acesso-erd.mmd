@@ -3,6 +3,8 @@ erDiagram
     CAMPUSES ||--o{ COURSES : campus_id
     CAMPUSES ||--o{ AFFILIATIONS : campus_id
     COURSES o|--o{ AFFILIATIONS : course_id
+    AFFILIATIONS o|--o{ COURSES : primary_coordinator_affiliation_id
+    AFFILIATIONS o|--o{ COURSES : secondary_coordinator_affiliation_id
 
     USERS {
         bigint id PK
@@ -21,7 +23,8 @@ erDiagram
         bigint id PK
         bigint campus_id FK
         varchar name
-        bigint coordinator_affiliation_id FK
+        bigint primary_coordinator_affiliation_id FK
+        bigint secondary_coordinator_affiliation_id FK
         timestamp deactivated_at
     }
     AFFILIATIONS {

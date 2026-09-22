@@ -26,7 +26,7 @@ source_refs: https://github.com/sge-suite/sge/blob/master/database/migrations/20
 | `last_used_at` | `timestamp(0)` nullable; último vínculo explicitamente selecionado. |
 | `created_at`, `updated_at` | timestamps convencionais do Laravel. |
 
-Não há `course_id` nem `deleted_at`. A ausência de curso nesta migration é intencional: `courses` ainda não existe e a Migration 10 adicionará a FK obrigatória para vínculos de discente. Até essa alteração estar implementada, os fluxos de criação de vínculos discentes por interface não entram em produção. `Affiliation` não usa `SoftDeletes`: o ciclo de vida do vínculo usa `deactivated_at`.
+Esta migration inicial não contém `course_id` nem `deleted_at`. A ausência de curso aqui é intencional: a [Migration 10](doc:migration-10-course-id-em-affiliations), já implementada, adiciona a FK após a criação de `courses` na Migration 09. O schema final exige curso para vínculos de discente por validação do Model. `Affiliation` não usa `SoftDeletes`: o ciclo de vida do vínculo usa `deactivated_at`.
 
 ### FKs e índices
 
@@ -37,7 +37,7 @@ Não há `course_id` nem `deleted_at`. A ausência de curso nesta migration é i
 
 ## Model, relações e validação
 
-`Affiliation` usa o cast `AffiliationType` e casts datetime para `deactivated_at` e `last_used_at`. As relações são `Affiliation → User`, `Affiliation → Campus`, `User → affiliations` e `Campus → affiliations`.
+`Affiliation` usa o cast `AffiliationType` e casts datetime para `deactivated_at` e `last_used_at`. As relações iniciais são `Affiliation → User`, `Affiliation → Campus`, `User → affiliations` e `Campus → affiliations`. A Migration 10 acrescenta `Affiliation → Course` e a relação inversa de discentes; a Migration 09 acrescenta as relações dos cursos com seus vínculos coordenadores.
 
 `AffiliationValidationRules` é executado ao salvar e centraliza:
 
@@ -58,15 +58,13 @@ O campo não é auditado pelo Activity Log e não representa login, logout ou tr
 
 ## Factory e auditoria
 
-`AffiliationFactory` fornece os estados `global()`, `onCampus()`, `server()`, `student()`, `supervisor()`, `deactivated()` e `recentlyUsed()`.
+`AffiliationFactory` fornece os estados `global()`, `onCampus()`, `server()`, `student()`, `supervisor()`, `deactivated()` e `recentlyUsed()`. Após a Migration 10, `student()` também cria ou recebe um curso do mesmo campus.
 
 O Spatie Activity Log registra criação e alterações relevantes nos dados fillable, incluindo tipo, campus, matrícula, e-mail e desativação/reativação. `last_used_at` não é fillable nem auditado; uma alteração isolada não cria atividade.
 
 ## Testes verificados
 
-`tests/Feature/AffiliationTest.php` contém 22 testes e 158 assertions para schema, rollback/reaplicação, FKs, relações, validação PHP e cast enum, factory, ativação, ordenação e Activity Log. Passou no PostgreSQL por Sail em 22/09/2026.
-
-A suíte completa por Sail passou com 230 testes, 228 aprovados, 2 ignorados e 1.069 assertions. A implementação não inclui telas, sessão, middleware, Policies, Gates ou fluxo de login.
+`tests/Feature/AffiliationTest.php` cobre schema, rollback/reaplicação em ordem de dependência, FKs, relações, validação PHP e cast enum, curso obrigatório para discente, factory, ativação, ordenação e Activity Log. As alterações das Migrations 09 e 10 foram verificadas no PostgreSQL por Sail junto com `tests/Feature/CourseTest.php`. A implementação não inclui telas, sessão, middleware ou fluxo de login.
 
 ## Dependências
 

@@ -60,8 +60,8 @@ Este índice é uma fotografia editorial da documentação publicada. Os documen
 - [Migration 01A — cities](doc:migration-01a-cities) — **implemented** — Catálogo local de cidades identificado pelo código IBGE, carregado pelo `CitySeeder` antes dos endereços.
 - [Migration 01 — addresses](doc:migration-01-addresses) — **implemented** — Base backend com cidade local, validação dos campos obrigatórios, Activity Log e cópia histórica; consulta e validação de CEP continuam pendentes.
 - [Migration 02 — user_personal_data](doc:migration-02-user-personal-data) — **implemented** — Dados complementares opcionais do discente; CPF permanece na conta.
-- [Migration 03 — campuses](doc:migration-03-campuses) — **planned** — Contrato da tabela de campi e do representante legal por vínculo.
-- [Migration 04 — affiliations](doc:migration-04-affiliations) — **planned** — Contrato base dos vínculos institucionais e seu contexto de acesso.
+- [Migration 03 — campuses](doc:migration-03-campuses) — **implemented** — Tabela de campi; representante legal e cargo permanecem textuais no próprio campus.
+- [Migration 04 — affiliations](doc:migration-04-affiliations) — **implemented** — Schema PostgreSQL, modelo, validação, factory, relações e Activity Log; login e sessão seguem na Fase 04.
 - [Migration 05 — notifications](doc:migration-05-notifications) — **planned** — Extensão das notificações nativas do Laravel com contexto de vínculo.
 - [Migration 06 — email_messages](doc:migration-06-email-messages) — **planned** — Snapshot imutável da mensagem de e-mail preparada para envio.
 - [Migration 07 — email_delivery_attempts](doc:migration-07-email-delivery-attempts) — **planned** — Histórico append-only das tentativas de transporte de e-mails.

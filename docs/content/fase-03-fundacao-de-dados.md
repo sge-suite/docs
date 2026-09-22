@@ -3,7 +3,7 @@ id: fase-03-fundacao-de-dados
 title: Fase 03 — Fundação de dados
 description: Checklist da fundação de dados, enums, migrations, modelos e catálogos básicos.
 type: development-phase
-status: planned
+status: in-progress
 visibility: public
 tags: sge/desenvolvimento, sge/banco-de-dados, sge/checklist
 related: migrations, enums, migration-base-01-users, migration-base-02-cache, migration-base-03-jobs, migration-base-04-activity-log, migration-base-05-media, enum-affiliationtype, enum-brazilianstate, migration-01a-cities, migration-01-addresses, migration-02-user-personal-data, migration-03-campuses, migration-04-affiliations, migration-09-courses, migration-10-course-id-em-affiliations, migration-11-internship-types, migration-12-granting-parties, migration-22-holidays, migration-22-internship-calendar-overrides, casts, helpers, concerns, testes-existentes, fase-04-conta-e-contexto
@@ -31,8 +31,8 @@ source_refs:
 - [x] Implementar a base backend de [`addresses`](doc:migration-01-addresses), incluindo cópia histórica.
 - [ ] Implementar consulta e validação de CEP no futuro fluxo de cadastro.
 - [x] Concluir [`user_personal_data`](doc:migration-02-user-personal-data).
-- [ ] Concluir [`campuses`](doc:migration-03-campuses).
-- [ ] Concluir [`affiliations`](doc:migration-04-affiliations).
+- [x] Concluir [`campuses`](doc:migration-03-campuses).
+- [x] Concluir [`affiliations`](doc:migration-04-affiliations).
 - [ ] Concluir [`courses`](doc:migration-09-courses).
 - [ ] Concluir [`course_id` em affiliations](doc:migration-10-course-id-em-affiliations).
 - [ ] Concluir [`internship_types`](doc:migration-11-internship-types).
@@ -45,7 +45,7 @@ source_refs:
 - [ ] Preservar linhas de endereço usadas historicamente; alterações criam nova linha quando necessário.
 - [ ] Garantir CPF único e imutável pela configuração do usuário.
 - [ ] Normalizar CPF, CNPJ, CEP, UF e e-mails.
-- [ ] Permitir múltiplos vínculos por pessoa sem trocar campus dentro do vínculo.
+- [x] Permitir múltiplos vínculos por pessoa sem trocar campus dentro do vínculo.
 - [ ] Exigir curso em vínculo discente e respeitar escopo do campus.
 - [ ] Congelar regras do tipo de estágio por FK e snapshot no estágio.
 - [ ] Criar factories e testes para cenários completos, incompletos, ativos e desativados.

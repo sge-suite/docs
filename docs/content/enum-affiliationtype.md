@@ -10,7 +10,7 @@ related: migration-04-affiliations, migrations, modelo-de-dados-acesso, perfis-e
 source_refs: https://github.com/sge-suite/sge/blob/master/app/Enums/AffiliationType.php, https://github.com/sge-suite/sge/blob/master/tests/Unit/Enums/AffiliationTypeTest.php
 ---
 > [!success] Estado
-> Implementado em `app/Enums/AffiliationType.php`. Ainda precisa ser usado de forma consistente nas Policies e na migration de `affiliations`.
+> Implementado em `app/Enums/AffiliationType.php` e usado como cast e constraint da Migration 04. A integração com Policies permanece futura.
 
 ## Contrato
 
@@ -27,14 +27,14 @@ Classifica o papel funcional de uma pessoa dentro de um vínculo. Não represent
 | `Supervisor`          | `supervisor`           | Supervisor               |
 | `TeachingDirection`   | `teaching_direction`   | Direção de Ensino        |
 
-Representante legal é uma atribuição de um vínculo no cadastro de campus; não criar `LegalRepresentative` como case.
+O representante legal e seu cargo são campos textuais de `Campus`, não são um vínculo nem um case de `AffiliationType`. Não criar `LegalRepresentative`.
 
 ## Checklist de implementação
 
 - [x] Criar enum string em `App\Enums\AffiliationType`.
 - [x] Implementar `label()`, `options()` e `values()`.
-- [ ] Adicionar cast do enum no Model `Affiliation`.
-- [ ] Usar os valores no contrato de `[affiliations](doc:migration-04-affiliations)`.
+- [x] Adicionar cast do enum no Model `Affiliation`.
+- [x] Usar e restringir os valores no contrato de [`affiliations`](doc:migration-04-affiliations).
 - [x] Cobrir todos os cases, rótulos e opções com testes unitários.
 - [ ] Validar as regras de escopo de cada tipo nas Policies.
 - [x] Confirmar que este enum, vínculo ativo, escopo e estado são a única fonte de autorização; as tabelas de permissões foram removidas.

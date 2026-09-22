@@ -32,6 +32,9 @@ A função e o escopo pertencem a `affiliations.type`, convertido para o enum `A
 > [!warning] Fonte única de autorização
 > `AffiliationType`, vínculo ativo, escopo e estado do registro são os únicos insumos de autorização. Gates e Policies codificam essas regras institucionais de modo determinístico; não há regra de acesso editável em banco.
 
+> [!note] Último vínculo usado
+> `last_used_at` guarda apenas o último vínculo ativo selecionado ou escolhido numa troca explícita de contexto; não é auditoria de login. A ordenação coloca usos mais recentes primeiro, valores nulos por último e usa desempate determinístico. A integração que restaura um vínculo ou pede escolha quando todos nunca foram usados pertence à Fase 04.
+
 ## Convenção de implementação
 
 - um middleware resolve e valida o vínculo ativo da sessão, incluindo `deactivated_at`;

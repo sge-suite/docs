@@ -38,6 +38,9 @@ Referências: [modelo de acesso](doc:modelo-de-dados-acesso), [E-mails, notifica
 - [ ] Registrar middleware/serviço único para resolver o vínculo ativo em cada requisição.
 - [ ] Registrar o vínculo usado em ações relevantes.
 
+> [!info] Preparação do último contexto
+> A Migration 04 oferece `active()`, ordenação por `last_used_at DESC NULLS LAST` com desempate determinístico e `markAsUsed()` para seleção explícita. O timestamp não é atualizado em cada requisição e não representa auditoria de login. A integração com sessão, restauração automática e escolha entre vínculos permanece pendente nesta fase. Vínculos desativados nunca são restaurados; múltiplos vínculos ativos sem uso anterior exigem escolha.
+
 ## Configurações próprias
 
 - [x] Permitir alteração da própria senha; a alteração do e-mail ainda não está disponível.

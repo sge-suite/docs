@@ -6,8 +6,8 @@ type: technical-reference
 status: in-progress
 visibility: public
 tags: sge/models, sge/autenticacao, sge/dados-pessoais
-related: cast-cpfcast, migration-02-user-personal-data, concern-profilevalidationrules
-source_refs: https://github.com/sge-suite/sge/blob/master/app/Models/User.php
+related: cast-cpfcast, migration-02-user-personal-data, migration-04-affiliations, concern-profilevalidationrules
+source_refs: https://github.com/sge-suite/sge/blob/master/app/Models/User.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/AffiliationTest.php
 ---
 ## Responsabilidade atual
 
@@ -19,7 +19,7 @@ Model autenticável do Laravel. Usa `HasFactory` e `Notifiable`, representa a co
 | atributos ocultos  | `password`, `remember_token`, via `#[Hidden]`.                                 |
 | casts              | `cpf` → [Cast — CpfCast](doc:cast-cpfcast) (`CpfCast`); `password` → `hashed`.           |
 | `initials()`       | Usa `Str::initials()` e retorna primeira/última inicial quando há mais de uma. |
-| relações           | `personalData()` é um perfil opcional um-para-um para dados complementares do discente. |
+| relações           | `personalData()` é um perfil opcional um-para-um; `affiliations()` retorna os vários vínculos institucionais da conta. |
 
 ## Delimitação de responsabilidade
 
@@ -32,10 +32,10 @@ Model autenticável do Laravel. Usa `HasFactory` e `Notifiable`, representa a co
 - [x] Aplicar cast de senha com hash automático.
 - [x] Aplicar `CpfCast` no estado atual.
 - [x] Criar relação com `UserPersonalData`.
-- [ ] Criar relações com `Affiliation`, `Notification` e `EmailMessage` quando as tabelas existirem.
+- [x] Criar a relação `Affiliation`; `Notification` e `EmailMessage` permanecem futuras.
 - [x] Manter CPF em `$fillable`, docblock e casts de `User`.
 - [x] Testar conta sem dados pessoais completos.
-- [ ] Testar conta com múltiplos vínculos quando `affiliations` existir.
+- [x] Testar conta com múltiplos vínculos em PostgreSQL.
 
 ## Relacionamentos
 

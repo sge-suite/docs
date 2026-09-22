@@ -7,7 +7,7 @@ status: in-progress
 visibility: public
 tags: sge/desenvolvimento, sge/testes, sge/checklist
 related: componentes-tecnicos, desenvolvimento-checklist-de-funcionalidade
-source_refs: https://github.com/sge-suite/sge/blob/master/tests/Feature/AddressesTest.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/UserPersonalDataTest.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/CityCatalogValidationTest.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/HolidaysTest.php, https://github.com/sge-suite/sge/blob/master/tests/Unit/FetchCitiesCommandTest.php, https://github.com/sge-suite/sge/blob/master/tests/Unit/CpfCastTest.php, https://github.com/sge-suite/sge/blob/master/tests/Unit/PhoneCastTest.php, https://github.com/sge-suite/sge/blob/master/tests/Unit/Helpers/FormattingHelpersTest.php, https://github.com/sge-suite/sge/blob/master/tests/Unit/Helpers/NumberToWordsHelperTest.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/Auth/PasswordResetTest.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/Settings/SecurityTest.php
+source_refs: https://github.com/sge-suite/sge/blob/master/tests/Feature/AffiliationTest.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/AddressesTest.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/UserPersonalDataTest.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/CityCatalogValidationTest.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/HolidaysTest.php, https://github.com/sge-suite/sge/blob/master/tests/Unit/FetchCitiesCommandTest.php, https://github.com/sge-suite/sge/blob/master/tests/Unit/CpfCastTest.php, https://github.com/sge-suite/sge/blob/master/tests/Unit/PhoneCastTest.php, https://github.com/sge-suite/sge/blob/master/tests/Unit/Helpers/FormattingHelpersTest.php, https://github.com/sge-suite/sge/blob/master/tests/Unit/Helpers/NumberToWordsHelperTest.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/Auth/PasswordResetTest.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/Settings/SecurityTest.php
 ---
 Este mapa acompanha o código real no repositório Laravel irmão, em `../sge`. Ao criar uma classe ou migration, atualize a matriz e a nota técnica correspondente.
 
@@ -42,10 +42,11 @@ Este mapa acompanha o código real no repositório Laravel irmão, em `../sge`. 
 | Dados pessoais | `tests/Feature/UserPersonalDataTest.php`          | Schema PostgreSQL, constraints, relações, campos opcionais, CPF em `users`, validação e rollback da migration. |
 | Catálogo de cidades | `tests/Feature/CityCatalogValidationTest.php` / `tests/Unit/FetchCitiesCommandTest.php` | Regras compartilhadas no model/seeder, validação das respostas da coleta e preservação do catálogo diante de payloads inválidos. |
 | Feriados | `tests/Feature/HolidaysTest.php`                  | Regras compartilhadas no model e na importação, coerência de escopo/localização e preservação dos registros diante de payloads inválidos. |
+| Vínculos | `tests/Feature/AffiliationTest.php` | Schema PostgreSQL, FKs e exclusão, múltiplos vínculos, validação PHP e cast enum, lifecycle, último uso, factory e Activity Log. 22 testes e 158 assertions passaram por Sail. |
 
 ## Lacunas prioritárias
 
-- [ ] Criar testes de integração para cada migration de domínio em banco limpo, quando as migrations forem implementadas.
+- [ ] Criar testes de integração para as migrations de domínio ainda não implementadas, em banco limpo.
 - [ ] Criar testes de rollback das migrations reversíveis.
 - [ ] Ampliar a cobertura de `CurrencyHelper`, dos formatos de `DateHelper` e dos comprimentos de telefone/documentos.
 - [ ] Completar a cobertura de `null`, vazio, formato inválido e timezone em todos os helpers.

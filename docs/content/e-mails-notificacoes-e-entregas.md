@@ -11,7 +11,7 @@ source_refs:
 diagram: mensageria-fluxo
 ---
 > [!abstract] Decisão de planejamento
-> A base nativa de notificações internas da Migration 05 está implementada. Este plano continua definindo as etapas futuras de mensagens de e-mail e tentativas de entrega; não implica que esses fluxos estejam implementados.
+> A persistência das Migrations 05–07 está implementada: notificações internas, mensagens preparadas e tentativas de entrega. A geração automática, o transporte SMTP, o reenvio e as telas continuam planejados.
 
 ## Objetivo e limites
 
@@ -21,11 +21,11 @@ O termo **enviado** neste plano significa que o provedor SMTP aceitou a mensagem
 
 {{diagram:mensageria-fluxo}}
 
-## Estruturas planejadas
+## Estruturas de persistência
 
 ### `notifications`
 
-Usará a tabela nativa plural do Laravel, com `data` em `jsonb`. Cada linha representa uma notificação destinada a uma conta ou a um vínculo dentro do sistema.
+Usa a tabela nativa plural do Laravel, com `data` em `jsonb`. Cada linha representa uma notificação destinada a uma conta ou a um vínculo dentro do sistema.
 
 | Campo                               | Tipo conceitual    | Finalidade                                                                 |
 | ----------------------------------- | ------------------ | -------------------------------------------------------------------------- |
@@ -40,7 +40,7 @@ Notificações de estágio, vínculo, avaliação e demais eventos operacionais 
 
 O schema nativo não recebe coluna de deduplicação. Para evento reexecutável, a Action precisa persistir e consultar a fonte de idempotência do domínio. `email_messages.idempotency_key` cobre a mensagem de e-mail; um aviso somente interno que exigir deduplicação durável precisa de um registro operacional próprio antes de o fluxo ser ativado.
 
-O aviso de documento disponível para assinatura é uma exceção controlada por seleção humana: ao mover o documento para `awaiting_signature`, o Setor escolhe os interessados elegíveis. Para cada selecionado com conta, cria-se `notification` interna e `email_message`; para o contato externo da concedente, quando selecionado e sem conta, cria-se somente `email_message`, com `notification_id`, `user_id` e `affiliation_id` nulos. Não há caixa de texto para destinatário livre. O conteúdo usa o local de disponibilização informado pelo Setor e não pressupõe uma plataforma específica.
+O aviso de documento disponível para assinatura será uma exceção controlada por seleção humana: ao mover o documento para `awaiting_signature`, o Setor escolherá os interessados elegíveis. Para cada selecionado com conta, será criada `notification` interna e `email_message`; para o contato externo da concedente, quando selecionado e sem conta, será criada somente `email_message`, com `notification_id`, `user_id` e `affiliation_id` nulos. O Model atual rejeita esse destinatário externo até que a entidade, o motivo e a autorização da seleção tenham implementação. Não haverá caixa de texto para destinatário livre.
 
 ### `email_messages`
 
@@ -53,16 +53,16 @@ Representa uma mensagem preparada, com destinatário e conteúdo congelados no i
 | `user_id`                           | bigint nullable | Conta destinatária da recuperação de senha ou do aviso de novo vínculo.             |
 | `affiliation_id`                    | bigint nullable | Vínculo destinatário do e-mail operacional.                                        |
 | `purpose`                           | enum            | Finalidade estável, como `password_reset`, `notification` ou `new_affiliation`. |
-| `recipient_email`                   | string          | Snapshot do endereço efetivamente escolhido.                                       |
-| `subject`                           | string nullable | Assunto final, quando não expuser segredo.                                         |
+| `recipient_email`                   | text            | Snapshot criptografado do endereço efetivamente escolhido.                        |
+| `subject`                           | text nullable   | Assunto final criptografado, quando não expuser segredo.                           |
 | `content_text` / `content_html`     | text nullable   | Snapshot do conteúdo renderizado, nos casos permitidos.                            |
 | `template_key` / `template_version` | string nullable | Identificação do template utilizado.                                               |
 | `idempotency_key`                   | uuid unique     | Evita que a mesma solicitação gere mensagens duplicadas.                           |
 | `created_at` / `updated_at`         | timestamp       | Rastreabilidade.                                                                   |
 
-Para e-mails de notificação, `content_text` e `content_html` devem guardar o conteúdo final renderizado. Eles, o endereço e os metadados deverão receber proteção compatível com dados pessoais (por exemplo, cast criptografado no modelo e autorização restrita de consulta). Uma alteração posterior de template, usuário ou vínculo não poderá alterar esse snapshot.
+Para e-mails de notificação, `content_text` e `content_html` guardam o conteúdo final renderizado. O Model criptografa conteúdo, assunto e endereço, oculta esses campos na serialização e impede atualizar o snapshot. `template_key` e `template_version` devem permanecer identificadores seguros, sem dados pessoais. Alterações posteriores de template, usuário ou vínculo não alteram a mensagem já gravada.
 
-No aviso de novo vínculo, a mensagem de conta usa a finalidade `new_affiliation` e o snapshot de `users.email`. Quando `affiliations.email` é diferente, o mesmo evento prepara outra mensagem, de finalidade `notification`, para o vínculo. Cada endereço distinto tem sua própria mensagem, chave de idempotência e tentativas de entrega. Se os endereços coincidirem, prepara-se uma única mensagem `new_affiliation`, que também informa o vínculo. Dados ou links de acesso inicial são destinados somente ao e-mail da conta e nunca persistidos no conteúdo ou nos logs; o e-mail do vínculo recebe apenas informação operacional segura.
+No futuro fluxo de novo vínculo, a mensagem de conta usará `new_affiliation` e o snapshot de `users.email`. Quando `affiliations.email` for diferente, o mesmo evento preparará outra mensagem, `notification`, para o vínculo. Cada endereço distinto terá sua própria mensagem, chave de idempotência e tentativas. Se os endereços coincidirem, haverá uma única `new_affiliation`. O Model exige conteúdo persistido nulo para mensagens de conta; o corpo e eventuais dados de acesso deverão ser gerados com segurança somente no envio à conta. O e-mail do vínculo receberá apenas informação operacional segura.
 
 ### `email_delivery_attempts`
 
@@ -75,12 +75,12 @@ Cada registro representa uma tentativa real de envio de uma `email_message`; rep
 | `attempt_number`                      | smallint           | Sequência por mensagem.                                      |
 | `status`                              | enum               | `queued`, `sent` ou `failed`.                                |
 | `provider`                            | string nullable    | Provedor/transport utilizado, inicialmente SMTP configurado. |
-| `provider_message_id`                 | string nullable    | Identificador retornado pelo provedor, se disponível.        |
+| `provider_message_id`                 | text nullable      | Identificador criptografado retornado pelo provedor.          |
 | `queued_at` / `sent_at` / `failed_at` | timestamp nullable | Marcos temporais do processamento.                           |
-| `failure_reason`                      | text nullable      | Erro técnico sanitizado; nunca credenciais ou tokens.        |
+| `failure_reason`                      | string(120) nullable | Código técnico sanitizado; nunca exceção bruta.            |
 | `created_at` / `updated_at`           | timestamp          | Auditoria temporal.                                          |
 
-O Job cria ou reserva a tentativa antes de chamar o transportador. Só define `sent_at` e `status = sent` depois da aceitação pelo SMTP; exceções, recusas e esgotamento de tentativas ficam como `failed` e podem originar um reenvio autorizado. Não existe o status intermediário `sending`. O `idempotency_key` e uma restrição única em (`email_message_id`, `attempt_number`) impedem duplicidade acidental.
+O futuro Job deverá reservar a tentativa antes de chamar o transportador. Só poderá definir `sent_at` e `status = sent` depois da aceitação pelo SMTP. O Model já valida `queued → sent` e `queued → failed`, os marcos de cada estado e a imutabilidade dos estados finais. Não existe `sending`. A chave única de mensagem e a restrição (`email_message_id`, `attempt_number`) protegem contra duplicidade; a reserva concorrente e a autorização de reenvio ainda não estão implementadas.
 
 ## Regras por finalidade
 
@@ -111,8 +111,8 @@ O planejamento acima deve ser mantido antes das demais funcionalidades. A migrat
 
 1. [x] Implementar os enums de finalidade e status; ambos já têm testes unitários.
 2. [x] Criar a migration nativa de `notifications` pelo gerador do Laravel e adaptar `data` para `jsonb`; adicionar `Notifiable` a `Affiliation` e cobrir a relação e a Policy por testes PostgreSQL.
-3. Criar as migrations de mensagens e tentativas com suas FKs.
-4. Implementar Models, casts protegidos, relações e factories próprios de e-mail.
+3. [x] Criar as migrations de mensagens e tentativas com suas FKs.
+4. [x] Implementar Models, casts protegidos, relações e factories próprios de e-mail.
 5. Integrar o envio de recuperação do Fortify ao log seguro.
 6. Definir o fluxo seguro de senha inicial sem confirmação adicional de endereço de e-mail.
 7. Criar a base comum que grava Notifications nativas, mensagens e tentativas para eventos de domínio.

@@ -10,7 +10,7 @@ related: e-mails-notificacoes-e-entregas, migration-06-email-messages, enum-emai
 source_refs: https://github.com/sge-suite/sge/blob/master/app/Enums/EmailMessagePurpose.php, https://github.com/sge-suite/sge/blob/master/tests/Unit/Enums/EmailMessagePurposeTest.php
 ---
 > [!success] Estado
-> A classe e os testes unitários já existem em `app/Enums/EmailMessagePurpose.php`. A integração com `EmailMessage`, migration e fluxo de envio ainda está planejada.
+> A classe, o cast em `EmailMessage`, a migration e os testes existem. O fluxo de geração e envio ainda está planejado.
 
 ## Contrato implementado
 
@@ -36,8 +36,8 @@ O fluxo de recuperação de senha não inclui confirmação adicional de endere�
 - [x] Confirmar cases e nomes no enum atual.
 - [x] Criar `App\Enums\EmailMessagePurpose` como enum string.
 - [x] Implementar `label()`, `options()` e `values()`.
-- [ ] Adicionar cast em `EmailMessage`.
-- [ ] Usar o enum na [migration de email_messages](doc:migration-06-email-messages).
+- [x] Adicionar cast em `EmailMessage`.
+- [x] Persistir os valores do enum em [email_messages](doc:migration-06-email-messages).
 - [x] Criar testes para cases, conversão e opções.
 - [ ] Verificar que nenhum segredo aparece no conteúdo, logs ou Activity Log.
 

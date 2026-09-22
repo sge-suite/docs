@@ -25,7 +25,7 @@ Estas migrations já existem no projeto novo e não devem ser recriadas. Cada um
 
 Não há migration de permissões: as tabelas anteriormente previstas foram removidas e a autorização usa Gates e Policies com os vínculos.
 
-As migrations de [`cities`](doc:migration-01a-cities), [`addresses`](doc:migration-01-addresses), [`user_personal_data`](doc:migration-02-user-personal-data), [`campuses`](doc:migration-03-campuses), [`affiliations`](doc:migration-04-affiliations), [`notifications`](doc:migration-05-notifications) e [`holidays`](doc:migration-22-holidays) estão implementadas e verificadas em PostgreSQL. As demais continuam no backlog até o código e os testes confirmarem seus contratos; as notas individuais distinguem a base disponível das integrações futuras.
+As migrations de [`cities`](doc:migration-01a-cities), [`addresses`](doc:migration-01-addresses), [`user_personal_data`](doc:migration-02-user-personal-data), [`campuses`](doc:migration-03-campuses), [`affiliations`](doc:migration-04-affiliations), [`notifications`](doc:migration-05-notifications), [`email_messages`](doc:migration-06-email-messages), [`email_delivery_attempts`](doc:migration-07-email-delivery-attempts) e [`holidays`](doc:migration-22-holidays) estão implementadas e verificadas em PostgreSQL. Os fluxos de geração, transporte e reenvio de e-mail continuam planejados. As demais migrations permanecem no backlog até código e testes confirmarem seus contratos.
 
 > [!info] Fonte dos contratos
 > A implementação segue os contratos desta pasta e as decisões aprovadas no planejamento.
@@ -77,10 +77,10 @@ As migrations de [`cities`](doc:migration-01a-cities), [`addresses`](doc:migrati
 
 ## Prontidão para implementação
 
-- A Migration 05 está implementada: usa a migration nativa do Laravel 13, `data` em `jsonb` e `Notifiable` em `Affiliation`, sem Model customizado nem schema paralelo. A migration de `email_messages` continua planejada.
+- As Migrations 05–07 estão implementadas. `notifications` usa a base nativa do Laravel 13 com `data` em `jsonb`; as duas tabelas de e-mail têm UUIDs, FKs históricas, Models, casts e testes PostgreSQL. O fluxo de envio permanece planejado.
 - As Migrations 09 e 10 formam a sequência necessária para completar o vínculo de discente ao curso. A 09 ainda exige decidir os nomes e a obrigatoriedade das duas FKs de coordenador; a 10 já está definida para validar o curso no Model, sem `CHECK` de domínio.
 - A Migration 12 ainda precisa decidir se uma unidade da concedente é coluna própria ou parte do nome antes de fixar a unicidade e a factory.
-- As Migrations 06–07, 13–23 incluem conteúdo protegido, snapshots, estados, FKs históricas ou efeitos transacionais. Devem ser implementadas na fase funcional correspondente, com revisão do contrato e dos testes do fluxo.
+- As Migrations 13–23 incluem snapshots, estados, FKs históricas ou efeitos transacionais. Devem ser implementadas na fase funcional correspondente, com revisão do contrato e dos testes do fluxo.
 
 ## Checklist comum
 

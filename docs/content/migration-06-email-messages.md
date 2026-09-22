@@ -3,14 +3,14 @@ id: migration-06-email-messages
 title: Migration 06 — email_messages
 description: Snapshot imutável da mensagem de e-mail preparada para envio.
 type: migration-reference
-status: planned
+status: implemented
 visibility: public
 tags: sge/migrations, sge/email, sge/auditoria
 related: migration-05-notifications, enum-emailmessagepurpose, e-mails-notificacoes-e-entregas, migration-07-email-delivery-attempts
-source_refs:
+source_refs: https://github.com/sge-suite/sge/blob/master/database/migrations/2026_09_22_160834_create_email_messages_table.php, https://github.com/sge-suite/sge/blob/master/app/Models/EmailMessage.php, https://github.com/sge-suite/sge/blob/master/database/factories/EmailMessageFactory.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/EmailMessageTest.php
 ---
-> [!todo] Estado
-> Planejada. Depende de [`notifications`](doc:migration-05-notifications), `users`, `affiliations` e [`EmailMessagePurpose`](doc:enum-emailmessagepurpose).
+> [!success] Estado
+> Migration, Model, factory e testes PostgreSQL implementados. A geração e o envio de e-mails permanecem para a integração funcional.
 
 ## Contrato
 
@@ -28,20 +28,22 @@ source_refs:
 | `idempotency_key`                   | UUID único para evitar duplicidade.                               |
 | timestamps                          | auditoria temporal.                                               |
 
-Conteúdo operacional deve ser protegido e imutável. Para `Notification`, `affiliation_id` identifica o vínculo destinatário e `user_id` permanece nulo. Para `PasswordReset` e a mensagem de conta `NewAffiliation`, `user_id` identifica a conta destinatária e `affiliation_id` permanece nulo. Ao criar um vínculo, o fluxo confirma que ele pertence à conta e prepara um aviso `NewAffiliation` para `users.email`. Se `affiliations.email` for diferente, prepara também um aviso operacional `Notification` para esse endereço, com `affiliation_id`. Cada endereço distinto recebe sua própria `email_message`, chave de idempotência e sequência de tentativas. Se os endereços coincidirem, prepara somente a mensagem `NewAffiliation`, com o aviso do vínculo incluído em conteúdo seguro. Dados ou links de acesso inicial são destinados somente ao e-mail da conta; mensagens de autenticação não podem persistir token, URL assinada, código ou qualquer segredo. Um aviso de assinatura destinado ao contato externo cadastrado da concedente pode ter `notification_id`, `user_id` e `affiliation_id` nulos, mas sempre exige `recipient_email`, motivo/entidade rastreável e autorização da seleção feita pelo Setor; não há destinatário arbitrário digitado na tela.
+O Model criptografa `recipient_email`, `subject`, `content_text` e `content_html`; por isso essas colunas são `text`. O snapshot é imutável após a criação. `notification_id`, `user_id` e `affiliation_id` são FKs opcionais com exclusão restrita, validadas por finalidade no Model. Mensagens `Notification` exigem notificação interna do mesmo vínculo e snapshot do `affiliations.email`. `PasswordReset` e `NewAffiliation` exigem `user_id`, snapshot do `users.email` e conteúdo persistido nulo. A chave UUID única impede duplicação da mesma solicitação no banco.
+
+O fluxo futuro de novo vínculo enviará `NewAffiliation` a `users.email` e, quando diferente, `Notification` a `affiliations.email`. Endereços iguais produzirão uma única mensagem. Dados ou links de acesso inicial serão destinados somente à conta e não poderão ser persistidos no snapshot. O envio externo ao contato da concedente ainda exige entidade/motivo rastreável e autorização do Setor; o Model atual rejeita mensagem sem vínculo ou conta até essa integração existir.
 
 ## Checklist
 
-- [ ] Criar migration com FKs opcionais e índices de consulta/autorização.
-- [ ] Definir criptografia/proteção de conteúdo e destinatário no Model.
-- [ ] Criar Model com cast de `EmailMessagePurpose`.
-- [ ] Validar no Model o destinatário exigido para cada finalidade, sem `CHECK` de domínio.
+- [x] Criar migration com FKs opcionais e índices de consulta/autorização.
+- [x] Definir criptografia/proteção de conteúdo e destinatário no Model.
+- [x] Criar Model com cast de `EmailMessagePurpose`.
+- [x] Validar no Model o destinatário exigido para cada finalidade, sem `CHECK` de domínio.
 - [ ] Implementar idempotência por solicitação de envio.
-- [ ] Criar factory com mensagem operacional e mensagem de autenticação segura.
+- [x] Criar factory com mensagem operacional e mensagem de autenticação segura.
 - [ ] Testar aviso de novo vínculo para dois endereços distintos e um único envio quando coincidirem, sem expor dados de acesso no e-mail operacional.
-- [ ] Testar snapshot após alteração de usuário, vínculo ou template.
+- [x] Testar snapshot após alteração de usuário.
 - [ ] Testar rejeição de segredo em `content`, `data`, exceções e Activity Log.
-- [ ] Testar migrate/rollback na ordem completa.
+- [x] Testar migrate/rollback na ordem completa.
 
 ## Dependências
 

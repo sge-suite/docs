@@ -25,6 +25,8 @@ source_refs: https://github.com/sge-suite/sge/blob/master/database/migrations/20
 
 O comando `php artisan make:notifications-table --no-interaction` produz a base desse schema. A migration troca apenas `data` para `jsonb`, compatível com o cast `array` de `DatabaseNotification` no PostgreSQL. `User` reutiliza `Notifiable`, `notifications()`, `readNotifications()` e `unreadNotifications()` do framework. `Affiliation` também usa `Notifiable`; a caixa operacional consulta a relação do vínculo ativo e nunca a relação geral de `User`. Não há Model customizado nem tabela paralela do SGE.
 
+O UUID de `notifications.id` é intencional: preserva o schema e a geração de identificadores nativos de Laravel Notifications. As tabelas próprias de e-mail usam IDs `bigint` autoincrementais; somente `email_messages.notification_id` permanece UUID para referenciar esta tabela.
+
 Notificações de estágio, avaliação, documento e demais eventos operacionais têm `notifiable = Affiliation`. Recuperação de senha e o aviso inicial da conta têm `notifiable = User`. `AffiliationPolicy::viewNotifications` exige que o vínculo exista, esteja ativo e pertença à conta autenticada. A relação polimórfica limita cada consulta ao par `notifiable_type`/`notifiable_id`, inclusive quando a conta possui outros vínculos. As futuras Notifications usam `toDatabase()` e `databaseType()`; nenhuma classe de domínio foi criada nesta migration.
 
 Deduplicação durável de eventos repetíveis não deve alterar a tabela nativa. A Action que gerar um evento precisa usar a fonte de idempotência do domínio; quando ela ainda não existir, o fluxo deve definir um registro operacional próprio antes de ser ativado.
@@ -41,4 +43,4 @@ Deduplicação durável de eventos repetíveis não deve alterar a tabela nativa
 
 ## Próxima etapa
 
-[`email_messages`](doc:migration-06-email-messages) é uma etapa posterior e pode referenciar `notifications`; ela não é dependência desta migration. Veja também [E-mails, notificações e entregas](doc:e-mails-notificacoes-e-entregas).
+[`email_messages`](doc:migration-06-email-messages) e [`email_delivery_attempts`](doc:migration-07-email-delivery-attempts) já implementam a persistência relacionada. O próximo passo é integrar a recuperação de senha do Fortify ao registro seguro da mensagem e de suas tentativas, conforme [E-mails, notificações e entregas](doc:e-mails-notificacoes-e-entregas).

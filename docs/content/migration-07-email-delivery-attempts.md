@@ -30,6 +30,8 @@ Criar restrição única em (`email_message_id`, `attempt_number`). Reenvio cria
 
 O Model aceita `queued → sent` e `queued → failed`, exige os marcos e o motivo correspondentes, protege `provider_message_id` com cast criptografado e impede alterar uma tentativa finalizada. A coluna de mensagem tem FK com exclusão restrita. A lógica que reserva o próximo número sob concorrência e chama o SMTP ainda não existe.
 
+`email_message_id` segue o tipo `bigint` da chave primária de `email_messages`. `attempt_number` diferencia as tentativas da mesma mensagem; a restrição única sobre o par impede reutilizar um número já registrado.
+
 ## Checklist
 
 - [x] Criar migration e índice pela mensagem/status.

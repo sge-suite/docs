@@ -17,7 +17,7 @@ source_refs: https://github.com/sge-suite/sge/blob/master/database/migrations/20
 | Campo                               | Regra                                                             |
 | ----------------------------------- | ----------------------------------------------------------------- |
 | `id`                                | `bigint` autoincremental (`$table->id()`), chave primária.         |
-| `notification_id`                   | nullable, FK quando a mensagem deriva de notificação interna; nulo para aviso externo selecionado. |
+| `notification_id`                   | UUID nullable, FK para `notifications.id` quando a mensagem deriva de notificação interna; nulo para aviso externo selecionado. |
 | `user_id`                           | nullable; obrigatório para recuperação de senha e aviso de novo vínculo à conta. |
 | `affiliation_id`                    | nullable; obrigatório para e-mail operacional do vínculo.         |
 | `purpose`                           | enum/string de [Enum — EmailMessagePurpose](doc:enum-emailmessagepurpose) (finalidade). |
@@ -29,6 +29,8 @@ source_refs: https://github.com/sge-suite/sge/blob/master/database/migrations/20
 | timestamps                          | auditoria temporal.                                               |
 
 O Model criptografa `recipient_email`, `subject`, `content_text` e `content_html`; por isso essas colunas são `text`. O snapshot é imutável após a criação. `notification_id`, `user_id` e `affiliation_id` são FKs opcionais com exclusão restrita, validadas por finalidade no Model. Mensagens `Notification` exigem notificação interna do mesmo vínculo e snapshot do `affiliations.email`. `PasswordReset` e `NewAffiliation` exigem `user_id`, snapshot do `users.email` e conteúdo persistido nulo. A chave UUID única impede duplicação da mesma solicitação no banco.
+
+O ID autoincremental da mensagem é independente de `idempotency_key`: a primeira identifica a linha, enquanto a segunda identifica de forma única a solicitação de envio. A FK `notification_id` segue o tipo UUID da tabela nativa do Laravel.
 
 O fluxo futuro de novo vínculo enviará `NewAffiliation` a `users.email` e, quando diferente, `Notification` a `affiliations.email`. Endereços iguais produzirão uma única mensagem. Dados ou links de acesso inicial serão destinados somente à conta e não poderão ser persistidos no snapshot. O envio externo ao contato da concedente ainda exige entidade/motivo rastreável e autorização do Setor; o Model atual rejeita mensagem sem vínculo ou conta até essa integração existir.
 

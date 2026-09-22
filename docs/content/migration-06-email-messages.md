@@ -18,7 +18,7 @@ source_refs:
 | ----------------------------------- | ----------------------------------------------------------------- |
 | `id`                                | UUID, chave primária.                                             |
 | `notification_id`                   | nullable, FK quando a mensagem deriva de notificação interna; nulo para aviso externo selecionado. |
-| `user_id`                           | nullable; obrigatório para recuperação de senha e e-mail inicial. |
+| `user_id`                           | nullable; obrigatório para recuperação de senha e aviso de novo vínculo à conta. |
 | `affiliation_id`                    | nullable; obrigatório para e-mail operacional do vínculo.         |
 | `purpose`                           | enum/string de [Enum — EmailMessagePurpose](doc:enum-emailmessagepurpose) (finalidade). |
 | `recipient_email`                   | snapshot do endereço efetivamente escolhido.                      |
@@ -28,7 +28,7 @@ source_refs:
 | `idempotency_key`                   | UUID único para evitar duplicidade.                               |
 | timestamps                          | auditoria temporal.                                               |
 
-Conteúdo operacional deve ser protegido e imutável. Para `Notification`, `affiliation_id` identifica o vínculo destinatário e `user_id` permanece nulo. Para `PasswordReset` e `NewAffiliation`, `user_id` identifica a conta destinatária e `affiliation_id` permanece nulo. Mensagens de autenticação não podem persistir token, URL assinada, código ou qualquer segredo. Um aviso de assinatura destinado ao contato externo cadastrado da concedente pode ter `notification_id`, `user_id` e `affiliation_id` nulos, mas sempre exige `recipient_email`, motivo/entidade rastreável e autorização da seleção feita pelo Setor; não há destinatário arbitrário digitado na tela.
+Conteúdo operacional deve ser protegido e imutável. Para `Notification`, `affiliation_id` identifica o vínculo destinatário e `user_id` permanece nulo. Para `PasswordReset` e a mensagem de conta `NewAffiliation`, `user_id` identifica a conta destinatária e `affiliation_id` permanece nulo. Ao criar um vínculo, o fluxo confirma que ele pertence à conta e prepara um aviso `NewAffiliation` para `users.email`. Se `affiliations.email` for diferente, prepara também um aviso operacional `Notification` para esse endereço, com `affiliation_id`. Cada endereço distinto recebe sua própria `email_message`, chave de idempotência e sequência de tentativas. Se os endereços coincidirem, prepara somente a mensagem `NewAffiliation`, com o aviso do vínculo incluído em conteúdo seguro. Dados ou links de acesso inicial são destinados somente ao e-mail da conta; mensagens de autenticação não podem persistir token, URL assinada, código ou qualquer segredo. Um aviso de assinatura destinado ao contato externo cadastrado da concedente pode ter `notification_id`, `user_id` e `affiliation_id` nulos, mas sempre exige `recipient_email`, motivo/entidade rastreável e autorização da seleção feita pelo Setor; não há destinatário arbitrário digitado na tela.
 
 ## Checklist
 
@@ -38,6 +38,7 @@ Conteúdo operacional deve ser protegido e imutável. Para `Notification`, `affi
 - [ ] Validar no Model o destinatário exigido para cada finalidade, sem `CHECK` de domínio.
 - [ ] Implementar idempotência por solicitação de envio.
 - [ ] Criar factory com mensagem operacional e mensagem de autenticação segura.
+- [ ] Testar aviso de novo vínculo para dois endereços distintos e um único envio quando coincidirem, sem expor dados de acesso no e-mail operacional.
 - [ ] Testar snapshot após alteração de usuário, vínculo ou template.
 - [ ] Testar rejeição de segredo em `content`, `data`, exceções e Activity Log.
 - [ ] Testar migrate/rollback na ordem completa.

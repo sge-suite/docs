@@ -50,7 +50,7 @@ Representa uma mensagem preparada, com destinatário e conteúdo congelados no i
 | ----------------------------------- | --------------- | ---------------------------------------------------------------------------------- |
 | `id`                                | uuid            | Identificador da mensagem.                                                         |
 | `notification_id`                   | uuid nullable   | FK para `notifications` quando o e-mail deriva de um aviso interno.                |
-| `user_id`                           | bigint nullable | Conta destinatária da recuperação de senha ou e-mail inicial.                       |
+| `user_id`                           | bigint nullable | Conta destinatária da recuperação de senha ou do aviso de novo vínculo.             |
 | `affiliation_id`                    | bigint nullable | Vínculo destinatário do e-mail operacional.                                        |
 | `purpose`                           | enum            | Finalidade estável, como `password_reset`, `notification` ou `new_affiliation`. |
 | `recipient_email`                   | string          | Snapshot do endereço efetivamente escolhido.                                       |
@@ -61,6 +61,8 @@ Representa uma mensagem preparada, com destinatário e conteúdo congelados no i
 | `created_at` / `updated_at`         | timestamp       | Rastreabilidade.                                                                   |
 
 Para e-mails de notificação, `content_text` e `content_html` devem guardar o conteúdo final renderizado. Eles, o endereço e os metadados deverão receber proteção compatível com dados pessoais (por exemplo, cast criptografado no modelo e autorização restrita de consulta). Uma alteração posterior de template, usuário ou vínculo não poderá alterar esse snapshot.
+
+No aviso de novo vínculo, a mensagem de conta usa a finalidade `new_affiliation` e o snapshot de `users.email`. Quando `affiliations.email` é diferente, o mesmo evento prepara outra mensagem, de finalidade `notification`, para o vínculo. Cada endereço distinto tem sua própria mensagem, chave de idempotência e tentativas de entrega. Se os endereços coincidirem, prepara-se uma única mensagem `new_affiliation`, que também informa o vínculo. Dados ou links de acesso inicial são destinados somente ao e-mail da conta e nunca persistidos no conteúdo ou nos logs; o e-mail do vínculo recebe apenas informação operacional segura.
 
 ### `email_delivery_attempts`
 
@@ -88,7 +90,7 @@ O Job cria ou reserva a tentativa antes de chamar o transportador. Só define `s
 | Notificação operacional a usuário | `affiliations.email`, conforme o vínculo     | notificação no vínculo, `email_messages` e tentativas           | Guardar assunto e versões texto/HTML renderizadas, protegidas e imutáveis.                                             |
 | Aviso externo de assinatura    | e-mail cadastrado da concedente, quando selecionado | `email_messages` e tentativas; sem notificação interna      | Guardar o local informado, documento e conteúdo renderizado; não criar destinatário livre.                            |
 | Resumo do Setor de Estágio     | somente notificação interna do vínculo do Setor | `notifications`; sem `email_messages`                          | Guardar contagens e links filtrados do resumo diário, sem listar dados sensíveis.                                      |
-| Aviso de novo vínculo          | E-mail do vínculo definido pela regra do evento | `notifications`, `email_messages` e tentativas                 | Mesmo padrão de notificação operacional.                                                                               |
+| Aviso de novo vínculo          | `users.email` e `affiliations.email` quando distintos | notificações conforme o destinatário, uma `email_message` por endereço distinto e tentativas | Conta: `new_affiliation`; vínculo: `notification`. Endereços iguais geram um só envio. Conteúdo de acesso inicial fica restrito ao e-mail da conta. |
 
 > [!warning] Segredos não entram no log
 > Tokens de redefinição, URLs assinadas, senhas e credenciais SMTP nunca podem ser registrados em conteúdo, `data`, exceções ou Activity Log. O requisito de preservar conteúdo aplica-se às notificações operacionais; mensagens de autenticação registram somente conteúdo/metadados seguros e a prova da entrega. Não haverá confirmação adicional de endereço de e-mail.

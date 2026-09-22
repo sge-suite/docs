@@ -27,8 +27,8 @@ Base: [papéis por vínculo](doc:pessoas-e-responsabilidades), [Matriz de autori
 - [ ] Cadastrar, editar, ativar e desativar campi.
 - [ ] Administrar Administradores do Sistema e do Campus conforme permissão.
 - [ ] Reutilizar o subfluxo de conta/adicionar vínculo.
-- [ ] Disparar aviso de novo vínculo em conta nova, quando o canal de e-mail estiver permitido.
-- [ ] Avisar quando apenas um vínculo for adicionado a conta existente.
+- [ ] Avisar sobre novo vínculo em `users.email` e, se diferente, também em `affiliations.email` quando o canal de e-mail estiver permitido; dados de acesso inicial vão somente para o e-mail da conta.
+- [ ] Aplicar a mesma regra quando um vínculo for adicionado a uma conta existente, sem duplicar o envio quando os endereços coincidirem.
 
 ## Administrador do Campus
 

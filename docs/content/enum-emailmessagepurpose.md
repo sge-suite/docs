@@ -22,6 +22,8 @@ Classifica por que uma `email_message` foi criada. Não substitui `notifications
 | `Notification`      | `notification`       | Notificação operacional |
 | `NewAffiliation`    | `new_affiliation`    | Novo vínculo            |
 
+No aviso de novo vínculo, `NewAffiliation` identifica a mensagem destinada a `users.email`. Se o e-mail do vínculo for diferente, o aviso para `affiliations.email` usa `Notification`; endereços iguais geram uma única mensagem `NewAffiliation`.
+
 ## Decisões de segurança
 
 - Recuperação de senha não pode persistir token, URL assinada ou corpo sensível.

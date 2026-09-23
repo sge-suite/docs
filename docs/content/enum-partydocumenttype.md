@@ -10,7 +10,7 @@ related: migration-12-granting-parties
 source_refs: https://github.com/sge-suite/sge/blob/master/app/Enums/PartyDocumentType.php, https://github.com/sge-suite/sge/blob/master/tests/Unit/Enums/PartyDocumentTypeTest.php
 ---
 > [!success] Estado
-> Implementado em `app/Enums/PartyDocumentType.php`. A tabela de partes concedentes ainda precisa ser criada.
+> Implementado em `app/Enums/PartyDocumentType.php` e usado por `GrantingParty` na [Migration 12](doc:migration-12-granting-parties).
 
 ## Contrato
 
@@ -26,8 +26,8 @@ O número é armazenado em `granting_parties.document_number`, sempre normalizad
 - [x] Criar enum string e rótulos no código.
 - [x] Implementar `options()` e `values()`.
 - [x] Cobrir cases, valores, rótulos e opções com teste unitário.
-- [ ] Adicionar cast em `GrantingParty`.
-- [ ] Usar o enum na [migration de granting_parties](doc:migration-12-granting-parties).
-- [ ] Validar dígitos e normalização de CPF/CNPJ na entrada.
-- [ ] Testar validação dos dois tipos e documentos inválidos na integração cadastral.
-- [ ] Confirmar regra de unicidade quando houver unidades distintas com o mesmo CNPJ.
+- [x] Adicionar cast em `GrantingParty`.
+- [x] Usar o enum no model vinculado à [migration de granting_parties](doc:migration-12-granting-parties).
+- [x] Validar dígitos e normalização de CPF/CNPJ no model.
+- [x] Testar os dois tipos e documentos inválidos na base backend.
+- [x] Permitir unidades distintas com o mesmo CNPJ, sem unicidade global.

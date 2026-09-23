@@ -77,7 +77,7 @@ Essas três colunas não entram na Migration 15. Depois de criar `supervisor_eva
 }
 ```
 
-`response.supervisor.has_academic_background`, `job_role` e `experience_time` são obrigatórios fora de `Draft`. Quando `has_academic_background` for verdadeiro, `training_course` e `education_level` também são obrigatórios; quando for falso, permanecem nulos. Os dez critérios são obrigatórios fora de rascunho e precisam ser uma das chaves de `internship_type_snapshot.rules.concept_values`: `excellent`, `very_good`, `good`, `satisfactory` ou `unsatisfactory`. Os quatro comentários são opcionais em qualquer estado e ficam `null` quando não informados.
+`response.supervisor.has_academic_background`, `job_role` e `experience_time` são obrigatórios fora de `Draft`. Quando `has_academic_background` for verdadeiro, `training_course` e `education_level` também são obrigatórios; quando for falso, permanecem nulos. Os dez critérios são obrigatórios fora de rascunho e precisam ser um dos valores de `EvaluationConcept`, cujos rótulos em português são usados na interface. O snapshot conserva esses valores em `internship_type_snapshot.rules.concept_values`, com a chave `excellent` exibida como “Ótimo” e `unsatisfactory` usando o valor configurado no tipo (geralmente `0`, podendo variar por curso). Os quatro comentários são opcionais em qualquer estado e ficam `null` quando não informados.
 
 A confirmação de carga horária fica em coluna própria. Fora de `Draft`, `hours_requirement_met` é obrigatório; quando for falso, `estimated_hours_remaining` é obrigatório e positivo. Mesmo nessa situação, o supervisor preenche toda a resposta acima. A identificação de discente e supervisor vem das referências e snapshots do estágio, não de campos livres.
 

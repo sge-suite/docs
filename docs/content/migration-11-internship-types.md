@@ -3,79 +3,59 @@ id: migration-11-internship-types
 title: Migration 11 — internship_types
 description: Contrato dos tipos de estágio e suas regras configuráveis.
 type: migration-reference
-status: planned
+status: implemented
 visibility: public
 tags: sge/migrations, sge/estagio, sge/banco-de-dados
 related: migration-09-courses, service-internshipenddatecalculator
 source_refs:
 ---
-> [!todo] Estado
-> Planejada. Depende de [`courses`](doc:migration-09-courses).
+> [!success] Estado
+> Migration, Model, factory, regras Laravel em PHP e testes PostgreSQL implementados após [`courses`](doc:migration-09-courses). O snapshot do tipo pertence à futura Migration 15.
 
 ## Contrato
 
-| Campo         | Regra                                                                                       |
-| ------------- | ------------------------------------------------------------------------------------------- |
-| `id`          | bigint, chave primária.                                                                     |
-| `course_id`   | FK obrigatória para o curso.                                                                |
-| `name`        | nome do tipo, obrigatório.                                                                  |
-| `rules`       | JSONB com carga horária, pesos, valores dos conceitos, limites de jornada e margem de segurança. |
-| ciclo de vida | timestamps e eventual desativação; sem `InternshipTypeStatus` agora.                        |
+| Campo | Regra |
+| --- | --- |
+| `id` | `bigint` autoincremental, chave primária. |
+| `course_id` | `bigint` obrigatório, FK para `courses.id` com `ON DELETE RESTRICT`. |
+| `name` | Nome obrigatório, `varchar(255)`. |
+| `required_hours` | Carga horária obrigatória, inteiro positivo. |
+| `supervisor_evaluation_weight` | Peso da avaliação do supervisor, inteiro positivo. |
+| `report_weight` | Peso do relatório, inteiro positivo. |
+| `presentation_weight` | Peso da apresentação, inteiro positivo. |
+| `very_good_value`, `good_value`, `satisfactory_value`, `unsatisfactory_value` | Valores configuráveis dos conceitos, `numeric(5,1)`. |
+| `max_daily_hours` | Máximo de horas por dia, inteiro com padrão `6`; não pode ser menor que `6`. |
+| `max_weekly_hours` | Máximo de horas por semana, inteiro com padrão `30`; não pode ser menor que `30`. |
+| `safety_margin_days` | Margem de segurança para previsão do término, inteiro não negativo com padrão `7`. |
+| `deactivated_at` | Timestamp nullable; nulo significa tipo ativo. |
+| `created_at`, `updated_at` | Timestamps convencionais do Laravel. |
 
-## Regras de avaliação
+Os campos escalares substituem a coluna JSONB `rules`. Eles têm casts declarados no Model, incluindo cast `integer` para os pesos e cast `decimal:1` para os valores configuráveis dos conceitos. `EvaluationConcept` define os nomes persistidos e seus rótulos em português: a chave histórica `excellent` aparece como “Ótimo” na interface. O valor de `excellent` é o próprio `supervisor_evaluation_weight` e não tem coluna. `unsatisfactory` tem valor inicial `0`, mas permanece configurável por tipo de estágio na coluna `unsatisfactory_value`. Os limites de jornada e a margem são inteiros.
 
-`rules` será a fonte dos critérios de conclusão por modalidade. O contrato mínimo deverá conter:
+## Regras de negócio em PHP
 
-- `required_hours`: carga horária obrigatória;
-- `grade_weights`: pesos da avaliação do supervisor, do relatório e da apresentação, cuja soma obrigatoriamente é 10;
-- `concept_values`: valor numérico de cada conceito usado na avaliação do supervisor;
-- `workload_limits`: limites diário e semanal da jornada.
-- `end_date_calculation`: margem de segurança usada na previsão de término.
+As regras são aplicadas pela validação Laravel no Model ao salvar. A migration não adiciona constraints `CHECK` para validar regras de negócio; a validação acontece na aplicação.
 
-### Schema mínimo de `rules`
+- `required_hours` deve ser inteiro positivo.
+- Os três pesos devem ser inteiros positivos e sua soma deve ser exatamente `10`. O peso da avaliação do supervisor também define o valor de `excellent` e o limite superior dos demais conceitos.
+- Os quatro conceitos configuráveis devem ser números não negativos com até uma casa decimal. A sequência completa — `excellent`, `very_good`, `good`, `satisfactory` e `unsatisfactory` — deve ser estritamente decrescente; valores iguais não são permitidos. Os conceitos configuráveis não podem ultrapassar `supervisor_evaluation_weight`. `unsatisfactory` costuma começar em zero, mas cada tipo pode definir outro valor, como `1.0`.
+- `excellent` usa diretamente `supervisor_evaluation_weight`, sem duplicar esse valor em uma coluna.
+- `max_daily_hours` e `max_weekly_hours` são inteiros. O formulário começa preenchido com `6` e `30`; esses valores são limites mínimos, não podem ser reduzidos e podem ser aumentados. A jornada informada deve respeitar os limites configurados para cada dia e para a soma semanal.
+- `safety_margin_days` é inteiro não negativo, inicialmente `7`, e será congelado no estágio. A versão identifica o algoritmo de cálculo, não uma regra configurável do tipo; ela e as entradas usadas serão registradas em `projected_end_date_calculation`. A regra completa está definida por este contrato e pelo [serviço de cálculo de término](doc:service-internshipenddatecalculator).
 
-```json
-{
-  "required_hours": 300,
-  "grade_weights": {
-    "supervisor_evaluation": 4,
-    "report": 3,
-    "presentation": 3
-  },
-  "concept_values": {
-    "excellent": 4,
-    "very_good": 3,
-    "good": 2,
-    "satisfactory": 1,
-    "unsatisfactory": 0
-  },
-  "workload_limits": {
-    "max_daily_hours": 6,
-    "max_weekly_hours": 30
-  },
-  "end_date_calculation": {
-    "safety_margin_days": 7
-  }
-}
-```
+A validação também exige curso ativo na criação, troca de curso ou reativação. Uma desativação posterior do curso não bloqueia a edição de um tipo já existente enquanto sua associação não mudar. `active()` filtra tipos não desativados; esta migration não cria índices secundários explícitos.
 
-`required_hours` é inteiro positivo. Cada peso é número não negativo e a soma de `supervisor_evaluation`, `report` e `presentation` é exatamente 10; componente com peso zero não exige nota. `concept_values` contém exatamente os cinco conceitos, em ordem não crescente, entre zero e o peso de `grade_weights.supervisor_evaluation`. `concept_values.excellent` deve ser igual a `grade_weights.supervisor_evaluation`, e `concept_values.unsatisfactory` deve ser zero, para que a melhor avaliação alcance a contribuição máxima sem nova multiplicação.
-
-`workload_limits.max_daily_hours` e `workload_limits.max_weekly_hours` são inteiros. O formulário de configuração começa preenchido com `6` e `30`, respectivamente; esses valores são mínimos e não podem ser reduzidos, mas podem ser aumentados. A jornada informada deve respeitar os limites configurados para cada dia e para a soma semanal.
-
-`end_date_calculation.safety_margin_days` é inteiro não negativo, inicialmente `7`, e é congelado no estágio. A versão identifica o algoritmo de cálculo, não uma regra configurável do tipo; ela e as entradas usadas são registradas em `projected_end_date_calculation`. A regra completa está definida por este contrato e pelo [serviço de cálculo de término](doc:service-internshipenddatecalculator).
-
-Os pesos e os valores dos conceitos são configurados no tipo de estágio, nunca na resposta da avaliação nem livremente em cada estágio. As regras devem ser congeladas em `internship_type_snapshot` na criação do estágio; alterar o tipo depois não pode recalcular históricos já formalizados.
+Os pesos e os valores dos conceitos são configurados no tipo de estágio, nunca na resposta da avaliação nem livremente em cada estágio. Na criação do estágio, o snapshot pode agrupar esses valores no contrato histórico `internship_type_snapshot.rules`, montado a partir das colunas escalares, usando o peso do supervisor para `excellent`; alterar o tipo depois não pode recalcular históricos já formalizados.
 
 ## Checklist
 
 - [x] Definir que pesos e valores dos conceitos pertencem ao tipo de estágio.
-- [x] Definir o schema mínimo, a escala dos conceitos, os limites de jornada e a margem do cálculo de término.
-- [ ] Criar migration com JSONB e índice somente se uma consulta real exigir.
-- [ ] Criar Model com cast/objeto de regras validado.
-- [ ] Criar factory com regras mínimas e completas.
-- [ ] Implementar validação da carga horária obrigatória, dos pesos, conceitos e limites diário e semanal da jornada.
-- [ ] Testar tipo de outro curso/campus e alteração após uso.
-- [ ] Testar snapshot no estágio.
-- [ ] Testar conceitos fora do peso, `excellent` diferente do peso do supervisor, ordem inválida, limites menores que 6/30 e margem negativa.
-- [ ] Testar migrate/rollback na ordem completa.
+- [x] Definir campos escalares, precisão dos pesos e conceitos, limites de jornada e margem do cálculo de término.
+- [x] Criar migration sem constraints `CHECK` de regras de negócio e sem índice secundário explícito.
+- [x] Criar Model com casts e validação Laravel em PHP.
+- [x] Criar factory com regras completas.
+- [x] Implementar validação da carga horária obrigatória, dos pesos, conceitos e limites diário e semanal da jornada.
+- [x] Testar consulta de tipos por curso/campus e ciclo de desativação.
+- [ ] Testar snapshot e alteração do tipo após uso no estágio, quando a Migration 15 existir.
+- [x] Testar conceitos fora do peso, `excellent` derivado do peso do supervisor, valores repetidos, ordem inválida, limites menores que 6/30 e margem negativa.
+- [x] Testar migrate/rollback das Migrations 11, 10 e 09 na ordem das FKs.

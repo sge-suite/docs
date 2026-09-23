@@ -62,7 +62,7 @@ Há somente uma solicitação para o processo aberto pelo discente. Ela é atual
 }
 ```
 
-As sete chaves sempre existem quando o formulário é enviado; cada valor é inteiro não negativo em horas. A soma semanal deve ser positiva. Para o tipo selecionado, cada dia deve respeitar `internship_types.rules.workload_limits.max_daily_hours` e a soma da semana deve respeitar `internship_types.rules.workload_limits.max_weekly_hours`. Na configuração do tipo, esses limites começam em 6 horas diárias e 30 semanais e podem ser aumentados, nunca reduzidos. `projected_end_date` é recalculada a partir desta jornada, da carga exigida do tipo, do calendário nacional, estadual e municipal versionado aplicável ao endereço do local de trabalho e das pausas posteriormente registradas.
+As sete chaves sempre existem quando o formulário é enviado; cada valor é inteiro não negativo em horas. A soma semanal deve ser positiva. Para o tipo selecionado, cada dia deve respeitar `internship_types.max_daily_hours` e a soma da semana deve respeitar `internship_types.max_weekly_hours`. Na configuração do tipo, esses limites começam em 6 horas diárias e 30 semanais e podem ser aumentados, nunca reduzidos. `projected_end_date` é recalculada a partir desta jornada, da carga exigida do tipo, do calendário nacional, estadual e municipal versionado aplicável ao endereço do local de trabalho e das pausas posteriormente registradas.
 
 ### Caminhos condicionais de cadastro
 

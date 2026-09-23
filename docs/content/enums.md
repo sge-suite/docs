@@ -30,6 +30,7 @@ source_refs:
 | ✅ Implementado | [Enum — GeneratedDocumentStatus](doc:enum-generateddocumentstatus)    | `generated_documents.status`     |
 | ✅ Implementado | [Enum — GeneratedDocumentOrigin](doc:enum-generateddocumentorigin)    | `generated_documents.origin`     |
 | ✅ Implementado | [Enum — EvaluationStatus](doc:enum-evaluationstatus)           | `supervisor_evaluations.status`  |
+| ✅ Implementado | `EvaluationConcept` | opções de conceitos da avaliação, com rótulos em português. |
 | ✅ Implementado | [Enum — RegistrationRequestStatus](doc:enum-registrationrequeststatus)  | solicitações de cadastro pendente |
 | ✅ Implementado | [Enum — InternshipCancellationRequestStatus](doc:enum-internshipcancellationrequeststatus) | `internship_cancellation_requests.status` |
 | ✅ Implementado | [Enum — EmancipationEvidenceStatus](doc:enum-emancipationevidencestatus) | `emancipation_evidences.status` |

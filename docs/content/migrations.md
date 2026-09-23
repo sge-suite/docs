@@ -80,7 +80,7 @@ As migrations de [`cities`](doc:migration-01a-cities), [`addresses`](doc:migrati
 - As Migrations 05–07 estão implementadas. `notifications` usa a base nativa do Laravel 13 com ID UUID e `data` em `jsonb`; as duas tabelas de e-mail usam IDs `bigint` autoincrementais, FKs históricas, Models, casts e testes PostgreSQL. O fluxo de envio permanece planejado.
 - As Migrations 09 e 10 estão implementadas. A 09 usa `primary_coordinator_affiliation_id` e `secondary_coordinator_affiliation_id`, ambas nullable para cadastro inicial sem coordenadores; o Model valida tipo, atividade e campus na atribuição. A 10 vincula cada discente a um curso do mesmo campus e preserva o histórico com `ON DELETE RESTRICT`.
 - A Migration 12 usa `name` para o nome completo da concedente/unidade, permite documentos compartilhados entre unidades e deixa índices secundários e telas de cadastro para etapas futuras.
-- A Migration 12A implementa pedidos de cadastro de supervisor com snapshot JSONB, estados validados no Model, dados profissionais do pedido, associação ao vínculo resultante e bloqueio da exclusão pelo Model; autoria e revisor ficam para o Activity Log. O fluxo transacional de aprovação e a Migration 12B permanecem planejados.
+- A Migration 12A implementa pedidos de cadastro de supervisor com CPF validado e estados validados no Model, dados profissionais do pedido, associação ao vínculo resultante e bloqueio da exclusão pelo Model; autoria e revisor ficam para o Activity Log. O fluxo transacional de aprovação e a Migration 12B permanecem planejados.
 - As Migrations 13–23 incluem snapshots, estados, FKs históricas ou efeitos transacionais. Devem ser implementadas na fase funcional correspondente, com revisão do contrato e dos testes do fluxo.
 
 ## Checklist comum

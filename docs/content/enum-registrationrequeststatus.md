@@ -18,7 +18,7 @@ source_refs: https://github.com/sge-suite/sge/blob/master/app/Enums/Registration
 | `Rejected` | `rejected` | Recusada |
 | `Cancelled` | `cancelled` | Cancelada |
 
-`Draft` aceita nulos nos campos cadastrais do supervisor; fora dele, nome, telefone, e-mail, cargo e qualificação são obrigatórios e validados. `Approved` exige associação ao vínculo de supervisor ou à concedente resultante. `Rejected` e `Cancelled` exigem motivo. Não há exclusão física.
+`Draft` aceita nulos nos campos cadastrais do supervisor; fora dele, nome, CPF, telefone, e-mail, cargo e qualificação são obrigatórios e validados. `Approved` exige associação ao vínculo de supervisor ou à concedente resultante. `Rejected` e `Cancelled` exigem motivo. Não há exclusão física.
 
 ## Checklist
 

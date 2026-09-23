@@ -18,18 +18,19 @@ source_refs:
 | --- | --- |
 | `id` | bigint, chave primária. |
 | `status` | `draft`, `submitted`, `under_review`, `approved`, `rejected` ou `cancelled`; enum existente `RegistrationRequestStatus`. |
-| `submission_snapshot` | JSONB com os valores normalizados enviados e respostas externas quando houver; na 12A é nullable e sua estrutura interna ainda será definida. |
+| `submission_snapshot` | previsto para a 12B; não existe na 12A, que guarda seus dados em colunas próprias. |
 | `reviewed_at` | nullable até a análise; registra o instante da revisão. A identificação do revisor segue o contrato de cada tabela. |
 | `decision_reason` | obrigatório em recusa ou cancelamento; opcional em aprovação. |
 | timestamps | auditoria técnica; alterações e decisões relevantes também entram no `activity_log`. |
 
-Em `draft`, campos de negócio podem ser nulos. Em todos os demais estados, as colunas obrigatórias do respectivo cadastro devem ser válidas. Na Migration 19, a solicitação de estágio identifica o vínculo discente responsável pelo envio. A 12A não duplica FKs de autoria ou revisão; seus eventos e atores serão registrados pelo Activity Log após a definição do contexto por vínculo. O contrato planejado da 12B ainda prevê FKs próprias de autoria e revisão. Aprovação não cria automaticamente conta ou concedente sem uma ação de análise explícita do Setor.
+Em `draft`, campos de negócio podem ser nulos. Em todos os demais estados, as colunas obrigatórias do respectivo cadastro devem ser válidas. Na Migration 19, a solicitação de estágio identifica o vínculo discente responsável pelo envio. A 12A não duplica FKs de autoria ou revisão; seus eventos e atores serão registrados pelo Activity Log quando ele for configurado e o contexto por vínculo estiver definido. O contrato planejado da 12B ainda prevê FKs próprias de autoria e revisão. Aprovação não cria automaticamente conta ou concedente sem uma ação de análise explícita do Setor.
 
 ## `supervisor_registration_requests`
 
 | Campo | Regra |
 | --- | --- |
 | `name` | obrigatório fora de rascunho. |
+| `cpf` | informado pelo discente, válido e normalizado; obrigatório fora de rascunho. |
 | `phone` / `email` | obrigatórios fora de rascunho e normalizados. |
 | `job_role` | obrigatório fora de rascunho. |
 | `qualification` | obrigatório fora de rascunho. |
@@ -39,7 +40,7 @@ Em `draft`, campos de negócio podem ser nulos. Em todos os demais estados, as c
 
 Este pedido registra a proposta do discente e a análise do Setor. Os dados profissionais atuais ficam em `user_personal_data`, compartilhados pelos vínculos da mesma conta. Se já houver um vínculo de supervisor selecionável, a solicitação de estágio pode referenciá-lo diretamente e não precisa criar este pedido. Quando houver pendência, o registro mantém os dados profissionais enviados; após aprovação, associa um vínculo de supervisor existente ou criado em transação. No aceite, os dados necessários são copiados para `internships.supervisor_snapshot`.
 
-A Migration 12A não tem coluna CPF: `users` é a fonte do CPF da conta. A chave/formato de eventual CPF obtido em consulta externa no snapshot precisa ser definido antes de implementar a deduplicação por CPF. Cargo, qualificação, formação e experiência atuais ficam em `user_personal_data`. O supervisor preenche ou confirma esses dados no futuro formulário, e cada estágio conserva seu próprio snapshot histórico.
+A Migration 12A guarda o CPF informado pelo discente em coluna própria, validado e normalizado pelo `CpfCast`; `users.cpf` continua único na conta. A associação a uma conta existente ou a criação da conta e do vínculo será feita no futuro fluxo de aprovação. Cargo, qualificação, formação e experiência atuais ficam em `user_personal_data`. O supervisor preenche ou confirma esses dados no futuro formulário, e cada estágio conserva seu próprio snapshot histórico.
 
 ## `granting_party_registration_requests`
 

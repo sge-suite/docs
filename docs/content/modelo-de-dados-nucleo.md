@@ -20,7 +20,7 @@ diagram: modelo-nucleo-identidade
 | Entidade | Responsabilidade |
 | --- | --- |
 | `users` | identidade autenticada e credenciais |
-| `user_personal_data` | Dados complementares atuais do discente; CPF permanece em `users` |
+| `user_personal_data` | Dados pessoais atuais e dados profissionais opcionais do supervisor, compartilhados por usuário; CPF permanece em `users` |
 | `cities` | catálogo local de municípios por código IBGE e UF |
 | `addresses` | endereços atuais e cópias históricas usadas por estágios |
 | `affiliations` | função institucional, campus e e-mail contextual; a Migration 10 adiciona `course_id` obrigatório para vínculos de discente |

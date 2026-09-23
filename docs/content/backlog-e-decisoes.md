@@ -34,13 +34,13 @@ source_refs:
 ### D-004 — Dados pessoais fora de `internships`
 
 - **Status:** definido.
-- **Decisão:** CPF permanece em `users` como identificador único da conta. RG, data de nascimento, telefone e endereço atual ficam em `user_personal_data`, relacionado um-para-um com `users` e preenchido apenas no fluxo discente; os estágios manterão FKs e snapshots `jsonb` para preservar o histórico, enquanto os endereços históricos serão cópias imutáveis na própria tabela `addresses`.
+- **Decisão:** CPF permanece em `users` como identificador único da conta. RG, data de nascimento, telefone, endereço atual e campos profissionais opcionais do supervisor ficam em `user_personal_data`, relacionado um-para-um com `users` e preenchido nos fluxos pertinentes; os estágios manterão FKs e snapshots `jsonb` para preservar o histórico, enquanto os endereços históricos serão cópias imutáveis na própria tabela `addresses`.
 - **Motivo:** evita repetição de dados pessoais e mantém os documentos e estágios imunes a alterações posteriores no cadastro.
 
 ### D-005 — Configurações pessoais por tipo de vínculo
 
 - **Status:** definido.
-- **Decisão:** qualquer usuário pode alterar a própria senha e e-mail de login; o nome não é editável. Somente o discente pode editar RG, data de nascimento e endereço atual pela própria conta.
+- **Decisão:** qualquer usuário pode alterar a própria senha e e-mail de login; o nome não é editável. O discente pode editar RG, data de nascimento e endereço atual no contexto discente; o supervisor pode editar cargo, qualificação, formação e experiência no contexto de supervisor. O telefone é compartilhado pelo perfil da conta. A autorização por tipo de vínculo será implementada nos futuros formulários.
 - **Motivo:** separa dados da conta de dados necessários ao estágio e restringe a edição aos usuários que realmente precisam desses campos.
 
 ### D-006 — Canvas espacial para diagramas Mermaid

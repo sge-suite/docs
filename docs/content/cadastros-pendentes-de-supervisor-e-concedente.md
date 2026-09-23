@@ -9,22 +9,21 @@ tags: sge/estagio, sge/cadastro, sge/pendencias
 related: migration-12a-supervisor-registration-requests, migration-12b-granting-party-registration-requests, backlog-e-decisoes, migration-12-granting-parties, migration-19-internship-requests
 source_refs:
 ---
-> [!todo] Implementação
-> São duas tabelas próprias a criar antes de `internship_requests`: [`supervisor_registration_requests`](doc:migration-12a-supervisor-registration-requests) e [`granting_party_registration_requests`](doc:migration-12b-granting-party-registration-requests). A solicitação de estágio mantém as FKs para elas; não haverá FK inversa redundante, evitando dependência circular.
+> [!info] Implementação
+> A Migration 12A (`supervisor_registration_requests`) está implementada. A Migration 12B e os fluxos de envio, análise e aprovação continuam planejados. A solicitação de estágio mantém as FKs para os pedidos pendentes; não há FK inversa redundante.
 
 ## Regras comuns
 
 | Campo | Regra |
 | --- | --- |
 | `id` | bigint, chave primária. |
-| `submitted_by_affiliation_id` | FK obrigatória para o vínculo discente que informou os dados. |
-| `status` | `draft`, `submitted`, `under_review`, `approved`, `rejected` ou `cancelled`; enum próprio a criar. |
-| `raw_submission` | JSONB obrigatório no envio, com os valores recebidos e, quando houver, resposta/sugestão da BrasilAPI. Não substitui as colunas abaixo. |
-| `reviewed_by_affiliation_id` / `reviewed_at` | nulos até análise; identificam o Setor de Estágio. |
+| `status` | `draft`, `submitted`, `under_review`, `approved`, `rejected` ou `cancelled`; enum existente `RegistrationRequestStatus`. |
+| `submission_snapshot` | JSONB com os valores normalizados enviados e respostas externas quando houver; na 12A é nullable e sua estrutura interna ainda será definida. |
+| `reviewed_at` | nullable até a análise; registra o instante da revisão. A identificação do revisor segue o contrato de cada tabela. |
 | `decision_reason` | obrigatório em recusa ou cancelamento; opcional em aprovação. |
 | timestamps | auditoria técnica; alterações e decisões relevantes também entram no `activity_log`. |
 
-Em `draft`, campos de negócio podem ser nulos. Em todos os demais estados, as colunas obrigatórias do respectivo cadastro devem ser válidas. Aprovação não cria automaticamente conta ou concedente sem uma ação de análise explícita do Setor.
+Em `draft`, campos de negócio podem ser nulos. Em todos os demais estados, as colunas obrigatórias do respectivo cadastro devem ser válidas. Na Migration 19, a solicitação de estágio identifica o vínculo discente responsável pelo envio. A 12A não duplica FKs de autoria ou revisão; seus eventos e atores serão registrados pelo Activity Log após a definição do contexto por vínculo. O contrato planejado da 12B ainda prevê FKs próprias de autoria e revisão. Aprovação não cria automaticamente conta ou concedente sem uma ação de análise explícita do Setor.
 
 ## `supervisor_registration_requests`
 
@@ -38,7 +37,9 @@ Em `draft`, campos de negócio podem ser nulos. Em todos os demais estados, as c
 | `professional_experience` | texto nullable; experiência profissional declarada. |
 | `supervisor_affiliation_id` | FK nullable para o vínculo criado ou selecionado na aprovação; obrigatório quando `status = approved`. |
 
-Após a aprovação, a solicitação de estágio aponta para o vínculo selecionado; no aceite, seus valores são copiados para `internships.supervisor_snapshot`.
+Este pedido registra a proposta do discente e a análise do Setor. Os dados profissionais atuais ficam em `user_personal_data`, compartilhados pelos vínculos da mesma conta. Se já houver um vínculo de supervisor selecionável, a solicitação de estágio pode referenciá-lo diretamente e não precisa criar este pedido. Quando houver pendência, o registro mantém os dados profissionais enviados; após aprovação, associa um vínculo de supervisor existente ou criado em transação. No aceite, os dados necessários são copiados para `internships.supervisor_snapshot`.
+
+A Migration 12A não tem coluna CPF: `users` é a fonte do CPF da conta. A chave/formato de eventual CPF obtido em consulta externa no snapshot precisa ser definido antes de implementar a deduplicação por CPF. Cargo, qualificação, formação e experiência atuais ficam em `user_personal_data`. O supervisor preenche ou confirma esses dados no futuro formulário, e cada estágio conserva seu próprio snapshot histórico.
 
 ## `granting_party_registration_requests`
 

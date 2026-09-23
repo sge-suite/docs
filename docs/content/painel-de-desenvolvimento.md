@@ -59,7 +59,7 @@ Este índice é uma fotografia editorial da documentação publicada. Os documen
 - [Migration base 05 — media](doc:migration-base-05-media) — **implemented** — Estado atual do armazenamento de mídia polimórfica do Spatie Media Library.
 - [Migration 01A — cities](doc:migration-01a-cities) — **implemented** — Catálogo local de cidades identificado pelo código IBGE, carregado pelo `CitySeeder` antes dos endereços.
 - [Migration 01 — addresses](doc:migration-01-addresses) — **implemented** — Base backend com cidade local, validação dos campos obrigatórios, Activity Log e cópia histórica; consulta e validação de CEP continuam pendentes.
-- [Migration 02 — user_personal_data](doc:migration-02-user-personal-data) — **implemented** — Dados complementares opcionais do discente; CPF permanece na conta.
+- [Migration 02 — user_personal_data](doc:migration-02-user-personal-data) — **implemented** — Dados pessoais e profissionais opcionais por usuário; CPF permanece na conta.
 - [Migration 03 — campuses](doc:migration-03-campuses) — **implemented** — Tabela de campi; representante legal e cargo permanecem textuais no próprio campus.
 - [Migration 04 — affiliations](doc:migration-04-affiliations) — **implemented** — Schema PostgreSQL, modelo, validação, factory, relações e Activity Log; login e sessão seguem na Fase 04.
 - [Migration 05 — notifications](doc:migration-05-notifications) — **implemented** — Tabela nativa do Laravel para notificações internas.

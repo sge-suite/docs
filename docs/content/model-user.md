@@ -23,7 +23,7 @@ Model autenticável do Laravel. Usa `HasFactory` e `Notifiable`, representa a co
 
 ## Delimitação de responsabilidade
 
-`users` mantém autenticação e CPF. [`user_personal_data`](doc:migration-02-user-personal-data) armazena somente RG, nascimento, telefone e endereço atuais quando o futuro fluxo de vínculo discente precisar deles. Cadastro, login e a configuração atual da conta não criam esse perfil.
+`users` mantém autenticação e CPF. [`user_personal_data`](doc:migration-02-user-personal-data) guarda dados pessoais atuais e campos profissionais opcionais do supervisor em um perfil compartilhado pela conta. Cadastro e login não exigem esse perfil; o supervisor preencherá ou confirmará seus dados profissionais no futuro formulário, com edição autorizada pelo tipo de vínculo.
 
 ## Checklist
 

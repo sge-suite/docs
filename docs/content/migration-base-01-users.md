@@ -43,7 +43,7 @@ source_refs: https://github.com/sge-suite/sge/blob/master/database/migrations/00
 - [x] Criar as três tabelas base.
 - [x] Tornar e-mail e CPF únicos no estado atual.
 - [x] Configurar broker de reset para `password_reset_tokens`.
-- [x] Manter CPF e [CpfCast](doc:cast-cpfcast) em `users`; `user_personal_data` guarda somente dados complementares do discente.
+- [x] Manter CPF e [CpfCast](doc:cast-cpfcast) em `users`; `user_personal_data` guarda dados pessoais atuais e campos profissionais opcionais do supervisor.
 - [ ] Confirmar se `sessions.user_id` deve receber FK no futuro.
 - [ ] Adicionar teste de schema/rollback se essa migration for alterada.
 

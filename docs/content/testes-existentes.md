@@ -16,7 +16,7 @@ Este mapa acompanha o código real no repositório Laravel irmão, em `../sge`. 
 | Área     | Teste                                              | O que cobre                                                             |
 | -------- | -------------------------------------------------- | ----------------------------------------------------------------------- |
 | Cast     | `tests/Unit/CpfCastTest.php`                       | CPF mascarado válido, armazenamento sem máscara e CPF inválido.         |
-| Cast     | `tests/Unit/PhoneCastTest.php`                     | Telefone fixo/celular com DDD, armazenamento sem máscara, vazio e formato inválido. |
+| Cast     | `tests/Unit/PhoneCastTest.php`                     | Telefone fixo/celular com DDD, entrada com ou sem máscara, armazenamento apenas dos dígitos, vazio e formato inválido. |
 | Enums    | `tests/Unit/Enums/AffiliationTypeTest.php`         | cases, valores, labels e options de vínculo.                            |
 | Enums    | `tests/Unit/Enums/BrazilianStateTest.php`          | cases, siglas, rótulos e opções das unidades federativas.               |
 | Enums    | `tests/Unit/Enums/EmailDeliveryAttemptStatusTest.php` | cases, valores, labels e opções das tentativas de e-mail.             |

@@ -23,7 +23,7 @@ Na Migration 19, a solicitação de estágio aponta diretamente para um vínculo
 | Campo | Tipo e regra |
 | --- | --- |
 | `id` | `bigint`, chave primária. |
-| `cpf` | `varchar(11)` nullable no banco; obrigatório fora de `Draft`, validado e normalizado pelo `CpfCast`. |
+| `cpf` | `varchar(255)` nullable no banco; obrigatório fora de `Draft`, validado e normalizado pelo `CpfCast`. O banco não limita o comprimento. |
 | `name`, `phone`, `email`, `job_role`, `qualification` | `varchar(255)` nullable no banco; no Model são obrigatórios e validados fora de `Draft`. |
 | `training`, `professional_experience` | `text` nullable e opcionais. |
 | `status` | `varchar(255)` obrigatório, convertido pelo cast PHP `RegistrationRequestStatus`. |

@@ -32,7 +32,7 @@ Na Migration 19, a solicitação de estágio aponta diretamente para um vínculo
 | `decision_reason` | `text` nullable; obrigatório em `Rejected` e `Cancelled`. |
 | `created_at`, `updated_at` | timestamps nativos do Laravel. |
 
-O schema cria somente a chave primária e a FK do vínculo resultante. Não há FKs de autoria ou de revisor nesta tabela, índices secundários, unicidade ou constraints `CHECK`. A solicitação de estágio planejada na Migration 19 identifica o vínculo discente responsável pelo envio; os eventos de envio e análise também terão seus atores no Activity Log quando o contexto por vínculo for definido. A aplicação bloqueia a exclusão pelo Model e a migration instala triggers PostgreSQL para impedir `DELETE` e `TRUNCATE`; não existe coluna `deleted_at`.
+O schema cria somente a chave primária e a FK do vínculo resultante. Não há FKs de autoria ou de revisor nesta tabela, índices secundários, unicidade ou constraints `CHECK`. A solicitação de estágio planejada na Migration 19 identifica o vínculo discente responsável pelo envio; os eventos de envio e análise também terão seus atores no Activity Log quando o contexto por vínculo for definido. O Model bloqueia a exclusão pelo Eloquent; não existe coluna `deleted_at`.
 
 ## Model, relação e validação
 

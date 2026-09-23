@@ -14,11 +14,11 @@ source_refs: https://github.com/sge-suite/sge/blob/master/database/migrations/20
 
 ## Contrato
 
-`course_id` é `bigint` nullable, FK para `courses.id` com `ON DELETE RESTRICT` e índice para consultas por curso. `AffiliationValidationRules` exige o campo para `AffiliationType::Student` e o proíbe para os demais tipos. O curso escolhido deve pertencer ao mesmo campus do vínculo e estar ativo na atribuição ou reativação. Uma desativação posterior do curso não apaga o vínculo histórico nem bloqueia alterações que não mudem sua associação. Cada curso adicional da mesma conta exige outro vínculo de discente. A Migration 04 não contém essa FK porque `courses` precisa ser criada antes; não há `CHECK` de domínio.
+`course_id` é `bigint` nullable, FK para `courses.id` com `ON DELETE RESTRICT`. `AffiliationValidationRules` exige o campo para `AffiliationType::Student` e o proíbe para os demais tipos. O curso escolhido deve pertencer ao mesmo campus do vínculo e estar ativo na atribuição ou reativação. Uma desativação posterior do curso não apaga o vínculo histórico nem bloqueia alterações que não mudem sua associação. Cada curso adicional da mesma conta exige outro vínculo de discente. A Migration 04 não contém essa FK porque `courses` precisa ser criada antes; não há `CHECK` de domínio nem índice secundário explícito nesta etapa.
 
 ## Checklist
 
-- [x] Adicionar coluna `course_id` e índice para consultas de vínculos por curso.
+- [x] Adicionar coluna `course_id` e adiar índice secundário para análise das consultas reais.
 - [x] Restringir a exclusão física do curso referenciado.
 - [x] Aplicar obrigatoriedade condicional e coerência de campus no Model, sem `CHECK` de domínio.
 - [x] Atualizar Model `Affiliation` e relação com `Course`.

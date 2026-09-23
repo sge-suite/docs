@@ -26,7 +26,7 @@ source_refs: https://github.com/sge-suite/sge/blob/master/database/migrations/20
 
 O curso pode ser criado sem coordenadores, conforme a decisão para cadastro inicial. Quando atribuídos, os dois vínculos devem ser distintos, ativos, do tipo `Coordinator` e do mesmo campus do curso. `Course` valida isso no momento da atribuição, preservando referências históricas se um coordenador for desativado depois. O campus deve estar ativo ao criar, trocar de campus ou reativar o curso. Não há `CHECK` de domínio nem tabela intermediária de coordenação.
 
-O ciclo do catálogo usa `deactivated_at`, sem `SoftDeletes`; FKs impedem exclusão física de campus ou coordenador referenciado. `campus_id`, `deactivated_at` e as duas FKs de coordenador recebem índices para consultas por campus, atividade e vínculo responsável. Nomes iguais no mesmo campus não recebem restrição de unicidade nesta migration porque o contrato não distingue modalidades ou ofertas homônimas; eventual regra de catálogo precisará de decisão própria.
+O ciclo do catálogo usa `deactivated_at`, sem `SoftDeletes`; FKs impedem exclusão física de campus ou coordenador referenciado. Esta migration não cria índices secundários explícitos; a escolha ficará para uma etapa posterior, com base nas consultas reais. Nomes iguais no mesmo campus não recebem restrição de unicidade nesta migration porque o contrato não distingue modalidades ou ofertas homônimas; eventual regra de catálogo precisará de decisão própria.
 
 ## Checklist
 

@@ -10,7 +10,7 @@ related: migration-12a-supervisor-registration-requests, migration-12b-granting-
 source_refs:
 ---
 > [!info] Implementação
-> A Migration 12A (`supervisor_registration_requests`) está implementada. A Migration 12B e os fluxos de envio, análise e aprovação continuam planejados. A solicitação de estágio mantém as FKs para os pedidos pendentes; não há FK inversa redundante.
+> As Migrations 12A (`supervisor_registration_requests`) e 12B (`granting_party_registration_requests`) estão implementadas. Os fluxos de envio, análise e aprovação continuam planejados. A solicitação de estágio mantém as FKs para os pedidos pendentes; não há FK inversa redundante.
 
 ## Regras comuns
 
@@ -18,12 +18,11 @@ source_refs:
 | --- | --- |
 | `id` | bigint, chave primária. |
 | `status` | `draft`, `submitted`, `under_review`, `approved`, `rejected` ou `cancelled`; enum existente `RegistrationRequestStatus`. |
-| `submission_snapshot` | previsto para a 12B; não existe na 12A, que guarda seus dados em colunas próprias. |
-| `reviewed_at` | nullable até a análise; registra o instante da revisão. A identificação do revisor segue o contrato de cada tabela. |
+| `reviewed_at` | nullable até a análise; registra o instante da revisão. |
 | `decision_reason` | obrigatório em recusa ou cancelamento; opcional em aprovação. |
 | timestamps | auditoria técnica; alterações e decisões relevantes também entram no `activity_log`. |
 
-Em `draft`, campos de negócio podem ser nulos. Em todos os demais estados, as colunas obrigatórias do respectivo cadastro devem ser válidas. Na Migration 19, a solicitação de estágio identifica o vínculo discente responsável pelo envio. A 12A não duplica FKs de autoria ou revisão; seus eventos e atores serão registrados pelo Activity Log quando ele for configurado e o contexto por vínculo estiver definido. O contrato planejado da 12B ainda prevê FKs próprias de autoria e revisão. Aprovação não cria automaticamente conta ou concedente sem uma ação de análise explícita do Setor.
+Em `draft`, campos de negócio podem ser nulos. Em todos os demais estados, as colunas obrigatórias do respectivo cadastro devem ser válidas. Na Migration 19, a solicitação de estágio identifica o vínculo discente responsável pelo envio. As Migrations 12A e 12B não duplicam FKs de autoria ou revisão nem guardam `submission_snapshot`; seus eventos e atores serão registrados pelo Activity Log quando ele for configurado e o contexto por vínculo estiver definido. Aprovação não cria automaticamente conta ou concedente sem uma ação de análise explícita do Setor.
 
 ## `supervisor_registration_requests`
 

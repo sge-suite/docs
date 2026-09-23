@@ -67,10 +67,10 @@ Este índice é uma fotografia editorial da documentação publicada. Os documen
 - [Migration 07 — email_delivery_attempts](doc:migration-07-email-delivery-attempts) — **implemented** — Histórico append-only das tentativas de transporte de e-mails.
 - [Migration 09 — courses](doc:migration-09-courses) — **implemented** — Cursos por campus e dois vínculos coordenadores opcionais no cadastro inicial.
 - [Migration 10 — course_id em affiliations](doc:migration-10-course-id-em-affiliations) — **implemented** — Curso obrigatório para vínculo discente por validação do Model.
-- [Migration 11 — internship_types](doc:migration-11-internship-types) — **planned** — Contrato dos tipos de estágio e suas regras configuráveis.
-- [Migration 12 — granting_parties](doc:migration-12-granting-parties) — **planned** — Contrato das partes concedentes reutilizáveis e seu endereço atual.
-- [Migration 12A — supervisor_registration_requests](doc:migration-12a-supervisor-registration-requests) — **planned** — Solicitações tipadas de cadastro de supervisor feitas durante a abertura.
-- [Migration 12B — granting_party_registration_requests](doc:migration-12b-granting-party-registration-requests) — **planned** — Solicitações tipadas de cadastro de parte concedente feitas durante a abertura.
+- [Migration 11 — internship_types](doc:migration-11-internship-types) — **implemented** — Contrato dos tipos de estágio e suas regras configuráveis.
+- [Migration 12 — granting_parties](doc:migration-12-granting-parties) — **implemented** — Contrato das partes concedentes reutilizáveis e seu endereço atual.
+- [Migration 12A — supervisor_registration_requests](doc:migration-12a-supervisor-registration-requests) — **implemented** — Solicitações tipadas de cadastro de supervisor feitas durante a abertura.
+- [Migration 12B — granting_party_registration_requests](doc:migration-12b-granting-party-registration-requests) — **implemented** — Solicitações tipadas de cadastro de parte concedente feitas durante a abertura.
 - [Migration 13 — document_templates](doc:migration-13-document-templates) — **planned** — Contrato do catálogo de templates DOCX do SGE.
 - [Migration 14 — template_versions](doc:migration-14-template-versions) — **planned** — Contrato das versões imutáveis dos templates DOCX.
 - [Migration 15 — internships](doc:migration-15-internships) — **planned** — Contrato do processo de estágio, referências atuais e snapshots históricos.

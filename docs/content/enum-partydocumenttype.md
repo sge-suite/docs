@@ -6,11 +6,11 @@ type: enum-reference
 status: implemented
 visibility: public
 tags: sge/enums, sge/concedente
-related: migration-12-granting-parties
+related: migration-12-granting-parties, migration-12b-granting-party-registration-requests
 source_refs: https://github.com/sge-suite/sge/blob/master/app/Enums/PartyDocumentType.php, https://github.com/sge-suite/sge/blob/master/tests/Unit/Enums/PartyDocumentTypeTest.php
 ---
 > [!success] Estado
-> Implementado em `app/Enums/PartyDocumentType.php` e usado por `GrantingParty` na [Migration 12](doc:migration-12-granting-parties).
+> Implementado em `app/Enums/PartyDocumentType.php` e usado por `GrantingParty` na [Migration 12](doc:migration-12-granting-parties) e por `GrantingPartyRegistrationRequest` na [Migration 12B](doc:migration-12b-granting-party-registration-requests).
 
 ## Contrato
 
@@ -19,7 +19,7 @@ source_refs: https://github.com/sge-suite/sge/blob/master/app/Enums/PartyDocumen
 | `CPF`  | `cpf`            | CPF    |
 | `CNPJ` | `cnpj`           | CNPJ   |
 
-O número é armazenado em `granting_parties.document_number`, sempre normalizado e sem pontuação. Não criar colunas separadas para CPF e CNPJ.
+O número é armazenado em `granting_parties.document_number` e `granting_party_registration_requests.document_number`, sempre normalizado e sem pontuação. Não criar colunas separadas para CPF e CNPJ.
 
 ## Checklist de implementação
 

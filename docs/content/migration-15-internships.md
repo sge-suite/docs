@@ -30,7 +30,7 @@ O vínculo discente de origem é `internship_requests.affiliation_id`. `internsh
 | `granting_party_id`                | FK obrigatória da parte concedente aprovada.                                        |
 | `workplace_address_id`             | FK obrigatória para nova linha de `addresses`, copiada do endereço atual da concedente. |
 | `student_snapshot`                 | JSONB com identificação, período/semestre e dados pessoais; não contém o endereço estruturado. |
-| `internship_type_snapshot`         | JSONB com carga horária, pesos, conceitos e exceções do tipo aplicados ao estágio. |
+| `internship_type_snapshot`         | JSONB com carga horária, pesos, conceitos e limites de jornada do tipo aplicados ao estágio. |
 | `granting_party_snapshot`          | JSONB com os dados aprovados da concedente.                                         |
 | `supervisor_snapshot`              | JSONB com os dados aprovados do supervisor.                                         |
 | `activities`                       | texto obrigatório com as atividades previstas.                                     |

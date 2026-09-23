@@ -9,7 +9,7 @@ tags: sge/services, sge/calculos, sge/estagio
 related: migration-22-holidays, migration-22-internship-calendar-overrides, migration-23-internship-work-schedules
 source_refs:
 ---
-Serviço puro, sem Eloquent e sem relógio global. Recebe um DTO com data inicial, carga exigida, jornada pactuada e eventuais vigências criadas por aditivos já formalizados, pausas, feriados, margem e versão da fórmula. Retorna `ProjectedEndDateResult` com data de conclusão da carga, data final projetada, horas creditadas e snapshot compacto das entradas.
+Serviço puro, sem Eloquent e sem relógio global. Recebe um DTO com data inicial, carga exigida, jornada pactuada e eventuais vigências criadas por aditivos já formalizados, pausas, feriados, margem e versão do algoritmo de cálculo. A versão identifica a implementação da fórmula usada; ela não é uma regra configurável em `internship_types`. O resultado e essa versão ficam registrados em `internships.projected_end_date_calculation` para auditoria. Retorna `ProjectedEndDateResult` com data de conclusão da carga, data final projetada, horas creditadas e snapshot compacto das entradas.
 
 ## Invariantes
 

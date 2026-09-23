@@ -62,7 +62,7 @@ Há somente uma solicitação para o processo aberto pelo discente. Ela é atual
 }
 ```
 
-As sete chaves sempre existem quando o formulário é enviado; cada valor é inteiro não negativo em horas. A soma semanal deve ser positiva e atender aos limites ordinários e às exceções declaradas em `internship_types.rules.workload_exceptions`. `projected_end_date` é recalculada a partir desta jornada, da carga exigida do tipo, do calendário nacional, estadual e municipal versionado aplicável ao endereço do local de trabalho e das pausas posteriormente registradas.
+As sete chaves sempre existem quando o formulário é enviado; cada valor é inteiro não negativo em horas. A soma semanal deve ser positiva. Para o tipo selecionado, cada dia deve respeitar `internship_types.rules.workload_limits.max_daily_hours` e a soma da semana deve respeitar `internship_types.rules.workload_limits.max_weekly_hours`. Na configuração do tipo, esses limites começam em 6 horas diárias e 30 semanais e podem ser aumentados, nunca reduzidos. `projected_end_date` é recalculada a partir desta jornada, da carga exigida do tipo, do calendário nacional, estadual e municipal versionado aplicável ao endereço do local de trabalho e das pausas posteriormente registradas.
 
 ### Caminhos condicionais de cadastro
 
@@ -78,7 +78,7 @@ As duas solicitações pendentes de cadastro são estruturas de domínio própri
 - `affiliation_id` deve ser o vínculo discente ativo e autorizado;
 - o curso deve ser elegível para o vínculo;
 - ao escolher um curso, a interface apresenta apenas seus tipos de estágio ativos: um tipo é selecionado automaticamente quando for único; mais de um exige seleção explícita;
-- a validação no servidor confirma a relação entre curso e tipo e aplica `workload_exceptions` do tipo à jornada diária e semanal;
+- a validação no servidor confirma a relação entre curso e tipo, exige que os limites configurados no tipo sejam de pelo menos 6 horas diárias e 30 semanais e valida a jornada diária e semanal contra esses limites;
 - a parte concedente deve estar cadastrada antes de ser aceita; o número de processo de credenciamento é opcional e preenche o documento quando aplicável;
 - a data prevista de término é calculada, e não digitada, a partir do tipo e da jornada.
 - envio e reenvio exigem ação explícita de ciência; versão, hash do texto e instante são persistidos juntos.
@@ -94,7 +94,7 @@ As duas solicitações pendentes de cadastro são estruturas de domínio própri
 - [x] Especificar as migrations tipadas das solicitações de cadastro pendente antes desta migration.
 - [x] Definir o histórico privado de evidências e o aceite versionado das normas.
 - [ ] Criar migration, Model, Policies, índices e constraints de unicidade.
-- [ ] Testar filtros de curso/tipo e exceções de carga horária no servidor.
+- [ ] Testar filtros de curso/tipo e limites de carga horária no servidor.
 
 ## Dependências
 

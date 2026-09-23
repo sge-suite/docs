@@ -19,9 +19,9 @@ source_refs: https://github.com/sge-suite/sge/blob/master/database/migrations/20
 | `id` | `bigint` | não | `PK` | Identificador interno. |
 | `city_id` | `bigint` | não | `FK`, índice | Referencia `cities.id`; exclusão `RESTRICT`. A UF é obtida da cidade. |
 | `street` | `varchar(255)` | não | — | Rua ou logradouro obrigatório. |
-| `number` | `varchar(32)` | não | — | Número textual obrigatório; aceita `123 A`, `0` e `s/n`. |
-| `neighborhood` | `varchar(120)` | não | — | Bairro obrigatório. |
-| `zip_code` | `char(8)` | sim | — | Valor opcional; sem validação de formato ou limpeza de dígitos nesta etapa. |
+| `number` | `varchar(255)` | não | — | Número textual obrigatório; aceita `123 A`, `0` e `s/n`. |
+| `neighborhood` | `varchar(255)` | não | — | Bairro obrigatório. |
+| `zip_code` | `varchar(255)` | sim | — | Valor opcional; sem validação de formato ou limpeza de dígitos nesta etapa. |
 | `created_at` | `timestamp(0)` | sim | — | Timestamp nativo do Laravel; preenchido pelo Eloquent no timezone institucional. |
 | `updated_at` | `timestamp(0)` | sim | — | Timestamp nativo do Laravel; atualizado pelo Eloquent. |
 
@@ -35,7 +35,7 @@ A cidade é obrigatória e selecionada no [catálogo local](doc:migration-01a-ci
 
 `AddressValidationRules` centraliza as regras aplicadas no evento `saving` do model: cidade existente, logradouro, número e bairro obrigatórios, todos com os limites do schema. O número é textual, sem restringir os valores ao formato numérico. Não há Form Request porque ainda não existe endpoint de cadastro.
 
-O CEP omitido, nulo ou vazio é persistido como `null`. Valores informados não passam por validação de CEP, normalização por helper ou remoção de máscara; permanecem sujeitos ao limite físico de `char(8)` no PostgreSQL. Essa coluna pode apresentar espaços de preenchimento ao ler valores menores que oito caracteres. A validação de oito dígitos e o tratamento de máscaras serão definidos em uma etapa futura.
+O CEP omitido, nulo ou vazio é persistido como `null`. Valores informados não passam por validação de CEP, normalização por helper ou remoção de máscara; `varchar(255)` preserva o valor sem preenchimento de espaços. A validação de oito dígitos e o tratamento de máscaras serão definidos em uma etapa futura.
 
 O Activity Log registra os campos cadastrais, somente quando há mudanças, sem registros vazios. A autoria vem do próprio mecanismo de auditoria. `AddressFactory` usa `CityFactory` para criar fixtures independentes de rede e da carga completa do catálogo.
 
@@ -64,12 +64,12 @@ A cidade deverá continuar sendo resolvida exclusivamente no catálogo local: pr
 ./vendor/bin/sail exec laravel.test vendor/bin/pint --dirty --format agent
 ```
 
-Os testes afetados passaram no banco PostgreSQL `testing`: 50 testes e 209 assertions, incluindo cidades e a guarda global de migrations. Pint e PHPStan nos arquivos da implementação também passaram.
+Os testes de endereços, cidades e guarda global de migrations passaram no banco PostgreSQL `testing`: 50 testes e 214 assertions. Pint e PHPStan nos arquivos da implementação também passaram.
 
 ## Checklist
 
 - [x] Definir cidade por FK para catálogo IBGE e CEP opcional.
-- [x] Confirmar campos obrigatórios e limites textuais.
+- [x] Confirmar campos obrigatórios e usar o limite padrão de 255 caracteres para os campos textuais.
 - [x] Criar migration reversível `create_addresses_table` com índice em `city_id` e FK `RESTRICT`.
 - [x] Criar `Address`, `AddressFactory`, `CityFactory` e relacionamentos existentes.
 - [x] Validar cidade, logradouro, bairro e número textual, incluindo `s/n`.

@@ -6,7 +6,7 @@ type: technical-reference
 status: planned
 visibility: public
 tags: sge/services, sge/avaliacao, sge/calculos
-related: migration-11-internship-types, migration-18-avaliacoes
+related: migration-11-internship-types, migration-18-supervisor-evaluations
 source_refs:
 ---
 Serviço puro que recebe o snapshot de regras do tipo, os dez conceitos da avaliação aprovada e as notas lançadas pelo orientador. Retorna as contribuições e, quando completas, a nota consolidada.
@@ -33,4 +33,4 @@ Não existe nota mínima configurada. O serviço não decide aprovação acadêm
 ## Referências
 
 - [Migration 11 — internship_types](doc:migration-11-internship-types)
-- [Migration 18 — avaliações](doc:migration-18-avaliacoes)
+- [Migration 18 — supervisor_evaluations](doc:migration-18-supervisor-evaluations)

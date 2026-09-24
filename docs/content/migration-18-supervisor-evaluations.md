@@ -1,22 +1,22 @@
 ---
-id: migration-18-avaliacoes
-title: Migration 18 — avaliações
-description: Estrutura planejada para rascunhos, envios e análise das avaliações do supervisor.
+id: migration-18-supervisor-evaluations
+title: Migration 18 — supervisor_evaluations
+description: Schema e validações das avaliações do supervisor, com fluxos funcionais ainda planejados.
 type: migration-reference
-status: planned
+status: implemented
 visibility: public
 tags: sge/migrations, sge/avaliacao, sge/banco-de-dados
 related: enum-evaluationstatus, backlog-e-decisoes, fase-09-avaliacao-e-conclusao
 source_refs:
 ---
 > [!info] Estado
-> Planejada. O ciclo de rascunho, envio, devolução, aprovação e escolha da avaliação vigente está definido. Os campos, critérios e regras condicionais do formulário fixo estão mapeados; pesos e valores dos conceitos pertencem ao tipo de estágio e são lidos do snapshot do estágio.
+> Schema, Model, factory e testes PostgreSQL implementados. O ciclo de rascunho, envio, devolução e aprovação é validado no Model; os fluxos de liberação, autorização e escolha transacional da avaliação vigente permanecem planejados. Os campos, critérios e regras condicionais do formulário fixo estão mapeados; pesos e valores dos conceitos pertencem ao tipo de estágio e são lidos do snapshot do estágio.
 
 ## Escopo
 
-`supervisor_evaluations` armazenará um único formulário por estágio e supervisor. Ele é atualizado somente em `Draft` ou após devolução em `Returned`; o `activity_log` preserva cada alteração e transição sem criar versões de formulário. A liberação da avaliação e a referência para a resposta vigente pertencem a `internships`. O cálculo da resposta usa a configuração congelada em `internship_type_snapshot`, e não o cadastro atual de `internship_types`. Relatório e apresentação são lançados separadamente pelo Orientador.
+`supervisor_evaluations` armazena um único formulário por estágio e supervisor. Ele é atualizado somente em `Draft` ou após devolução em `Returned`; o `activity_log` preserva cada alteração e transição sem criar versões de formulário. A liberação da avaliação e a referência para a resposta vigente pertencem a `internships`. O cálculo da resposta usa a configuração congelada em `internship_type_snapshot`, e não o cadastro atual de `internship_types`. Relatório e apresentação são lançados separadamente pelo Orientador.
 
-## Contrato proposto
+## Contrato implementado
 
 | Campo                        | Regra                                                                         |
 | ---------------------------- | ----------------------------------------------------------------------------- |
@@ -26,11 +26,11 @@ source_refs:
 | `status`                     | [Enum — EvaluationStatus](doc:enum-evaluationstatus) (`EvaluationStatus`).                       |
 | `response`                   | JSONB com as respostas do supervisor, validado conforme o formulário fixo e as regras congeladas no tipo. |
 | `hours_requirement_met`      | boolean nullable em `Draft`; obrigatório fora dele e precisa ser `true` para aprovação. |
-| `estimated_hours_remaining`  | smallint nullable; justificativa/estimativa obrigatória quando a carga não foi cumprida. |
-| `form_version`               | Identificador da versão do formulário fixo usada no envio.                               |
+| `estimated_hours_remaining`  | smallint nullable; estimativa positiva obrigatória quando a carga não foi cumprida. |
+| `form_version`               | smallint positivo, padrão `1`, identifica a versão do formulário fixo usada no envio.                               |
 | `submitted_at`               | Preenchido quando o rascunho é congelado e enviado.                           |
 | `reviewed_at`                | Preenchido quando o Setor de Estágio aprova ou devolve.                       |
-| `reviewed_by_affiliation_id` | FK nullable para o vínculo do Setor de Estágio que realizou a análise.        |
+| `reviewed_by_affiliation_id` | FK nullable para vínculo do Setor de Estágio, obrigatória quando a resposta é devolvida ou aprovada.        |
 | `review_notes`               | Justificativa nullable, obrigatória na devolução.                             |
 | `cancelled_at` / `cancellation_reason` | Nulos até o cancelamento; motivo obrigatório e sem exclusão física. |
 | timestamps                   | Auditoria técnica; ações relevantes também devem ir para o Activity Log.      |
@@ -54,7 +54,7 @@ Essas três colunas não entram na Migration 15. Depois de criar `supervisor_eva
     "training_course": "Tecnologia em ...",
     "education_level": "superior",
     "job_role": "Supervisor de estágio",
-    "experience_time": "5 anos"
+    "experience_time": null
   },
   "criteria": {
     "performance": "excellent",
@@ -77,7 +77,7 @@ Essas três colunas não entram na Migration 15. Depois de criar `supervisor_eva
 }
 ```
 
-`response.supervisor.has_academic_background`, `job_role` e `experience_time` são obrigatórios fora de `Draft`. Quando `has_academic_background` for verdadeiro, `training_course` e `education_level` também são obrigatórios; quando for falso, permanecem nulos. Os dez critérios são obrigatórios fora de rascunho e precisam ser um dos valores de `EvaluationConcept`, cujos rótulos em português são usados na interface. O snapshot conserva esses valores em `internship_type_snapshot.rules.concept_values`, com a chave `excellent` exibida como “Ótimo” e `unsatisfactory` usando o valor configurado no tipo (geralmente `0`, podendo variar por curso). Os quatro comentários são opcionais em qualquer estado e ficam `null` quando não informados.
+`response.supervisor.has_academic_background` e `job_role` são obrigatórios fora de `Draft`. Quando `has_academic_background` for verdadeiro, `training_course` e `education_level` são obrigatórios e `experience_time` fica nulo; quando for falso, os dados de formação ficam nulos e `experience_time` é obrigatório. Essa regra segue os ramos do formulário atual do supervisor. Os dez critérios são obrigatórios fora de rascunho e precisam ser um dos valores de `EvaluationConcept`, cujos rótulos em português são usados na interface. O snapshot conserva esses valores em `internship_type_snapshot.rules.concept_values`, com a chave `excellent` exibida como “Ótimo” e `unsatisfactory` usando o valor configurado no tipo (geralmente `0`, podendo variar por curso). Os quatro comentários são opcionais em qualquer estado e ficam `null` quando não informados.
 
 A confirmação de carga horária fica em coluna própria. Fora de `Draft`, `hours_requirement_met` é obrigatório; quando for falso, `estimated_hours_remaining` é obrigatório e positivo. Mesmo nessa situação, o supervisor preenche toda a resposta acima. A identificação de discente e supervisor vem das referências e snapshots do estágio, não de campos livres.
 
@@ -114,14 +114,14 @@ A confirmação de carga horária fica em coluna própria. Fora de `Draft`, `hou
 - [x] Definir cálculo consolidado a partir do snapshot do tipo de estágio.
 - [x] Registrar decisão em [D-009](doc:backlog-e-decisoes#d-009-ciclo-e-validade-da-avaliacao-do-supervisor).
 
-## Checklist de implementação após aprovação
+## Checklist de implementação
 
-- [ ] Confirmar o contrato de campos contra critérios e escalas aprovados.
-- [ ] Criar [`EvaluationStatus`](doc:enum-evaluationstatus).
-- [ ] Criar `supervisor_evaluations`, depois acrescentar as referências de avaliação vigente em `internships`, Models, casts e índices.
-- [ ] Implementar liberação, notificação, salvamento de rascunho e envio imutável.
+- [x] Confirmar o contrato de campos contra critérios e escalas aprovados.
+- [x] Criar [`EvaluationStatus`](doc:enum-evaluationstatus).
+- [x] Criar `supervisor_evaluations`, depois acrescentar as referências de avaliação vigente em `internships`, Models, casts e índices.
+- [ ] Implementar liberação, notificação e ações de salvamento/envio; o Model já valida rascunho parcial e imutabilidade após envio.
 - [ ] Implementar autosave Livewire em `Draft` e edição integral em `Returned` com auditoria de alterações.
 - [ ] Atualizar a avaliação vigente em transação após aprovação.
 - [ ] Testar autorização, devolução, aprovação, cálculo e pendências.
-- [ ] Testar migrate/rollback na ordem completa.
+- [x] Testar migrate/rollback da Migration 18 junto à Migration 15; a ordem completa depende das migrations ainda planejadas.
 - [ ] Atualizar [fase de avaliação](doc:fase-09-avaliacao-e-conclusao).

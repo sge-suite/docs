@@ -6,10 +6,10 @@ type: development-phase
 status: planned
 visibility: public
 tags: sge/desenvolvimento, sge/avaliacao, sge/checklist
-related: fluxos-principais, migration-18-avaliacoes, backlog-e-decisoes, fase-10-servicos-transversais
+related: fluxos-principais, migration-18-supervisor-evaluations, backlog-e-decisoes, fase-10-servicos-transversais
 source_refs:
 ---
-Base: [avaliação e conclusão](doc:fluxos-principais#6-acompanhamento-academico-e-conclusao). O ciclo de resposta, a origem dos pesos e o contrato do formulário fixo estão definidos na [modelagem final da avaliação](doc:migration-18-avaliacoes).
+Base: [avaliação e conclusão](doc:fluxos-principais#6-acompanhamento-academico-e-conclusao). O ciclo de resposta, a origem dos pesos e o contrato do formulário fixo estão definidos na [modelagem final da avaliação](doc:migration-18-supervisor-evaluations).
 
 ## Decisão antes do código
 

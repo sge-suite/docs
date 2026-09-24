@@ -6,7 +6,7 @@ type: decisions
 status: in-progress
 visibility: public
 tags: sge/decisoes, sge/backlog
-related: e-mails-notificacoes-e-entregas, enum-evaluationstatus, enum-brazilianstate, enum-holidayscope, migration-01a-cities, migration-01-addresses, migration-18-avaliacoes, fluxos-principais, migration-13-document-templates, migration-14-template-versions, migration-16-generated-documents, migration-12-granting-parties, glossario, modelo-de-dados-acesso, matriz-de-autorizacao, migration-11-internship-types, migration-15-internships, migration-19-internship-requests, migration-20-internship-request-corrections, migration-base-04-activity-log, helper-numbertowordshelper, migration-21-internship-cancellation-requests, migration-22-holidays, migration-22-internship-calendar-overrides, migration-23-internship-work-schedules, geracao-de-documentos-docx-e-variaveis, schedules, ciclos-de-status
+related: e-mails-notificacoes-e-entregas, enum-evaluationstatus, enum-brazilianstate, enum-holidayscope, migration-01a-cities, migration-01-addresses, migration-18-supervisor-evaluations, fluxos-principais, migration-13-document-templates, migration-14-template-versions, migration-16-generated-documents, migration-12-granting-parties, glossario, modelo-de-dados-acesso, matriz-de-autorizacao, migration-11-internship-types, migration-15-internships, migration-19-internship-requests, migration-20-internship-request-corrections, migration-base-04-activity-log, helper-numbertowordshelper, migration-21-internship-cancellation-requests, migration-22-holidays, migration-22-internship-calendar-overrides, migration-23-internship-work-schedules, geracao-de-documentos-docx-e-variaveis, schedules, ciclos-de-status
 source_refs:
 ---
 ## Próximas definições
@@ -68,7 +68,7 @@ source_refs:
 - **Decisão:** após a liberação e notificação, o supervisor poderá salvar a avaliação como `Draft`, com campos ainda nulos. Em `Submitted`, `Returned`, `Approved` e `Cancelled`, todos os campos obrigatórios do caminho condicional escolhido estarão preenchidos. O Setor de Estágio poderá aprovar ou devolver, mas não editar respostas. `Returned` reabre o mesmo registro para edição integral e novo envio; cada alteração e transição fica no `activity_log`. O supervisor poderá cancelar um `Submitted` ou `Returned`, sem exclusão física e com motivo. A aprovação exige a confirmação de carga horária cumprida; se ela não estiver cumprida, o Setor devolve a resposta. A avaliação vigente será o `Approved` mais recente por data de envio.
 - **Motivo:** preserva um único formulário por estágio e supervisor, permite correção integral sem criar versões artificiais e mantém a auditoria de valores e estados fora da interface do supervisor.
 - **Autorização:** a análise pertence ao vínculo `AffiliationType::InternshipOffice`; `AffiliationType::Coordinator` continua representando o coordenador de curso.
-- **Referências:** [Enum — EvaluationStatus](doc:enum-evaluationstatus), [Migration de avaliações](doc:migration-18-avaliacoes) e [fluxo de avaliação](doc:fluxos-principais#6-acompanhamento-academico-e-conclusao).
+- **Referências:** [Enum — EvaluationStatus](doc:enum-evaluationstatus), [Migration de avaliações](doc:migration-18-supervisor-evaluations) e [fluxo de avaliação](doc:fluxos-principais#6-acompanhamento-academico-e-conclusao).
 
 ### D-010 — Templates DOCX versionados e saída sem arquivo final
 
@@ -102,7 +102,7 @@ source_refs:
 - **Status:** definido.
 - **Decisão:** cada tipo de estágio definirá a carga horária, os pesos da avaliação do supervisor, do relatório e da apresentação, e os valores numéricos dos conceitos da avaliação. Os três pesos devem totalizar 10. Na criação do estágio, essas regras serão copiadas para o snapshot do tipo; alterações posteriores no cadastro do tipo não recalcularão estágios já iniciados.
 - **Motivo:** os critérios de conclusão variam por modalidade e precisam permanecer auditáveis no contexto em que o estágio foi realizado.
-- **Referências:** [Migration 11 — internship_types](doc:migration-11-internship-types), [Migration 15 — internships](doc:migration-15-internships) e [Migration 18 — avaliações](doc:migration-18-avaliacoes).
+- **Referências:** [Migration 11 — internship_types](doc:migration-11-internship-types), [Migration 15 — internships](doc:migration-15-internships) e [Migration 18 — supervisor_evaluations](doc:migration-18-supervisor-evaluations).
 
 ### D-015 — Solicitação única e correções orientadas
 

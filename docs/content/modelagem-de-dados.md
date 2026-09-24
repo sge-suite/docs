@@ -51,7 +51,7 @@ Depois do aceite, o estágio concentra as vigências de jornada, pausas, o cálc
 
 {{diagram:modelo-nucleo-execucao}}
 
-Detalhes dos contratos: [internships](doc:migration-15-internships), [internship_pauses](doc:migration-17-internship-pauses), [avaliações](doc:migration-18-avaliacoes), [internship_cancellation_requests](doc:migration-21-internship-cancellation-requests), [holidays](doc:migration-22-holidays), [internship_calendar_overrides](doc:migration-22-internship-calendar-overrides) e [internship_work_schedules](doc:migration-23-internship-work-schedules).
+Detalhes dos contratos: [internships](doc:migration-15-internships), [internship_pauses](doc:migration-17-internship-pauses), [avaliações](doc:migration-18-supervisor-evaluations), [internship_cancellation_requests](doc:migration-21-internship-cancellation-requests), [holidays](doc:migration-22-holidays), [internship_calendar_overrides](doc:migration-22-internship-calendar-overrides) e [internship_work_schedules](doc:migration-23-internship-work-schedules).
 
 ## Documentos e versões
 

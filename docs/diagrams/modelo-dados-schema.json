@@ -36,7 +36,7 @@
     "content/migration-19-internship-requests.md",
     "content/migration-15-internships.md",
     "content/migration-16-generated-documents.md",
-    "content/migration-18-avaliacoes.md"
+    "content/migration-18-supervisor-evaluations.md"
   ],
   "data": {
     "notation": "logical relational database schema",

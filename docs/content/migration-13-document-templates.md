@@ -20,14 +20,13 @@ source_refs: https://github.com/sge-suite/sge/blob/master/database/migrations/20
 | --- | --- | --- | --- |
 | `id` | `bigint` | não | Chave primária Laravel. |
 | `campus_id` | `bigint` | sim | FK para `campuses.id` com exclusão `RESTRICT`; nulo indica modelo global. |
-| `key` | `varchar(255)` | não | Chave estável em `snake_case`, imutável após a criação. |
 | `name` | `varchar(255)` | não | Nome legível obrigatório. |
 | `description` | `text` | sim | Finalidade opcional. |
 | `document_type` | `varchar(255)` | não | Cast de `GeneratedDocumentType`. |
 | `deactivated_at` | `timestamp(0)` | sim | Marca indisponibilidade para novas versões ou gerações futuras. |
 | `created_at` / `updated_at` | `timestamp(0)` | sim | Timestamps nativos. |
 
-O índice único de `(campus_id, key)` usa `NULLS NOT DISTINCT` no PostgreSQL. Assim, a chave não se repete entre templates globais nem dentro do mesmo campus; um template global e templates de campi diferentes podem usar a mesma chave. O Model aplica a mesma regra antes da gravação e exige campus ativo ao atribuir um template local. `active()` filtra a desativação; `availableToCampus()` reúne os templates globais e os daquele campus. Esses scopes ainda não substituem autorização por vínculo.
+O `id` identifica o template lógico e será referenciado por `template_versions.document_template_id` na Migration 14. Não há `key` nem unicidade de `name`: nomes iguais podem identificar templates diferentes, inclusive no mesmo campus. A aplicação não depende de chaves de template fixas no código. `campus_id` possui índice simples; o Model exige campus ativo ao atribuir um template local. `active()` filtra a desativação; `availableToCampus()` reúne os templates globais e os daquele campus. Esses scopes ainda não substituem autorização por vínculo.
 
 O Activity Log registra alterações do catálogo. A desativação preserva o registro; os fluxos futuros de versão e geração deverão respeitar `deactivated_at`. A relação com `template_versions` e a proteção de versões utilizadas pertencem à Migration 14 e aos fluxos documentais.
 
@@ -37,8 +36,8 @@ O template padrão manterá o marcador `${PARAGRAFO_REMUNERACAO}`. Na geração,
 
 - [x] Definir identificação, categoria e escopo global/por campus.
 - [x] Criar migration, Model e factory de `DocumentTemplate`.
-- [x] Validar chave, escopo, campos obrigatórios e desativação.
-- [x] Testar schema, unicidade global/local, FK, casts, scopes, Activity Log e rollback em PostgreSQL.
+- [x] Validar escopo, campos obrigatórios e desativação.
+- [x] Testar schema sem `key`, FK, nomes repetidos, casts, scopes, Activity Log e rollback em PostgreSQL.
 - [ ] Relacionar versões e proteger versões já utilizadas na Migration 14.
 - [ ] Autorizar upload somente ao vínculo permitido do Setor de Estágio.
 - [ ] Usar `Media` para armazenar o DOCX da versão.

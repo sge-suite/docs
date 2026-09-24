@@ -82,7 +82,7 @@ As migrations de [`cities`](doc:migration-01a-cities), [`addresses`](doc:migrati
 - A Migration 12 usa `name` para o nome completo da concedente/unidade, permite documentos compartilhados entre unidades e deixa índices secundários e telas de cadastro para etapas futuras.
 - A Migration 12A implementa pedidos de cadastro de supervisor com CPF validado e estados validados no Model, dados profissionais do pedido, associação ao vínculo resultante e bloqueio da exclusão pelo Model; autoria e revisor ficam para o Activity Log. O fluxo transacional de aprovação permanece planejado.
 - A Migration 12B implementa pedidos de cadastro de concedente com CPF/CNPJ, endereço proposto e estados validados no Model, relação com a concedente resultante e bloqueio da exclusão pelo Model. Autoria e revisor ficam para o Activity Log; a aprovação transacional permanece planejada.
-- A Migration 13 implementa o catálogo lógico de templates globais ou por campus, com chave única no escopo, categoria por enum, desativação e Activity Log. Versões DOCX e autorização permanecem planejadas.
+- A Migration 13 implementa o catálogo lógico de templates globais ou por campus, sem chave textual, com categoria por enum, desativação e Activity Log. Versões DOCX e autorização permanecem planejadas.
 - As Migrations 14–23 incluem snapshots, estados, FKs históricas ou efeitos transacionais. Devem ser implementadas na fase funcional correspondente, com revisão do contrato e dos testes do fluxo.
 
 ## Checklist comum

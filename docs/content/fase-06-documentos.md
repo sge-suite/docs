@@ -13,7 +13,7 @@ Referências: [fluxo de formalização](doc:fluxos-principais#3-analise-e-formal
 
 ## Checklist
 
-- [x] Criar `document_templates` com chave única por escopo e desativação.
+- [x] Criar `document_templates` global ou por campus, sem chave textual, com desativação.
 - [ ] Criar `template_versions` e armazenar o DOCX da versão.
 - [ ] Permitir upload DOCX somente ao vínculo autorizado do Setor de Estágio.
 - [x] Definir catálogo fixo de variáveis em português com `${NOME_DA_VARIAVEL}`.

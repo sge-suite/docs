@@ -25,7 +25,7 @@ Estas migrations já existem no projeto novo e não devem ser recriadas. Cada um
 
 Não há migration de permissões: as tabelas anteriormente previstas foram removidas e a autorização usa Gates e Policies com os vínculos.
 
-As migrations de [`cities`](doc:migration-01a-cities), [`addresses`](doc:migration-01-addresses), [`user_personal_data`](doc:migration-02-user-personal-data), [`campuses`](doc:migration-03-campuses), [`affiliations`](doc:migration-04-affiliations), [`notifications`](doc:migration-05-notifications), [`email_messages`](doc:migration-06-email-messages), [`email_delivery_attempts`](doc:migration-07-email-delivery-attempts), [`courses`](doc:migration-09-courses), [`course_id` em `affiliations`](doc:migration-10-course-id-em-affiliations), [`internship_types`](doc:migration-11-internship-types), [`granting_parties`](doc:migration-12-granting-parties), [`supervisor_registration_requests`](doc:migration-12a-supervisor-registration-requests), [`granting_party_registration_requests`](doc:migration-12b-granting-party-registration-requests), [`document_templates`](doc:migration-13-document-templates), [`template_versions`](doc:migration-14-template-versions), [`internships`](doc:migration-15-internships), [`supervisor_evaluations`](doc:migration-18-supervisor-evaluations), [`internship_requests`](doc:migration-19-internship-requests) e [`holidays`](doc:migration-22-holidays) estão implementadas e verificadas em PostgreSQL. Os fluxos de geração, transporte e reenvio de e-mail continuam planejados. As demais migrations permanecem no backlog até código e testes confirmarem seus contratos.
+Todas as migrations listadas abaixo estão implementadas. As sete últimas também tiveram aplicação, rollback e reaplicação verificados no PostgreSQL de testes. Os fluxos de geração documental, recálculo, análise e autorização ainda têm etapas pendentes descritas nas notas individuais.
 
 > [!info] Fonte dos contratos
 > A implementação segue os contratos desta pasta e as decisões aprovadas no planejamento.
@@ -35,9 +35,17 @@ As migrations de [`cities`](doc:migration-01a-cities), [`addresses`](doc:migrati
 
 ## Ordem de execução
 
-| Ordem | Migration                                                | Tabela/alteração           | Dependências principais                                                                                    |
-| ----: | -------------------------------------------------------- | -------------------------- | ---------------------------------------------------------------------------------------------------------- |
+A tabela segue a ordem dos nomes dos arquivos em `database/migrations`. Os números identificam as notas de domínio e não determinam a execução. Por isso, `22` vem antes de `01`, e `16`/`17` aparecem depois de `19`.
+
+| Número | Migration | Tabela/alteração | Dependências principais |
+| --- | --- | --- | --- |
+| Base 01 | [Users](doc:migration-base-01-users) | contas, reset e sessões | — |
+| Base 02 | [Cache](doc:migration-base-02-cache) | cache e locks | — |
+| Base 03 | [Jobs](doc:migration-base-03-jobs) | filas | — |
+| Base 04 | [Activity Log](doc:migration-base-04-activity-log) | auditoria | `users` |
+| Base 05 | [Media](doc:migration-base-05-media) | arquivos polimórficos | — |
 |  01A | [Migration 01A — cities](doc:migration-01a-cities)                           | catálogo local de cidades  | código IBGE                                                                                               |
+|    22 | [Migration 22 — holidays](doc:migration-22-holidays)                       | feriados persistidos       | `cities`, [Enum — HolidayScope](doc:enum-holidayscope), [Enum — BrazilianState](doc:enum-brazilianstate) |
 |    01 | [Migration 01 — addresses](doc:migration-01-addresses)                     | endereços atuais           | `cities`                                                                                                  |
 |    02 | [Migration 02 — user_personal_data](doc:migration-02-user-personal-data)            | dados pessoais e profissionais por usuário | `users`, `addresses`                                                                                 |
 |    03 | [Migration 03 — campuses](doc:migration-03-campuses)                      | campi                      | `addresses`                                                                                                |
@@ -54,16 +62,15 @@ As migrations de [`cities`](doc:migration-01a-cities), [`addresses`](doc:migrati
 |    13 | [Migration 13 — document_templates](doc:migration-13-document-templates)            | templates                  | `campuses`, [Enum — GeneratedDocumentType](doc:enum-generateddocumenttype)                               |
 |    14 | [Migration 14 — template_versions](doc:migration-14-template-versions)             | versões de templates       | `document_templates`, `affiliations`, `media`                                                             |
 |    15 | [Migration 15 — internships](doc:migration-15-internships)                   | estágios e snapshots       | `users`, `addresses`, `affiliations`, `courses`, `internship_types`, `granting_parties`, [Enum — InternshipStatus](doc:enum-internshipstatus) |
-|    16 | [Migration 16 — generated_documents](doc:migration-16-generated-documents)           | documentos gerados         | `internships`, `template_versions`, `affiliations`, enums documentais                                      |
-|    17 | [Migration 17 — internship_pauses](doc:migration-17-internship-pauses)             | pausas                     | `internships`                                                                                              |
 |    18 | [Migration 18 — supervisor_evaluations](doc:migration-18-supervisor-evaluations)                   | avaliações e referência vigente | `internships`, `affiliations`, [Enum — EvaluationStatus](doc:enum-evaluationstatus)                                      |
 |    19 | [Migration 19 — internship_requests](doc:migration-19-internship-requests)           | solicitações de estágio    | `affiliations`, `courses`, `internship_types`, `granting_parties`, `supervisor_registration_requests`, `granting_party_registration_requests`, `internships`, [Enum — InternshipRequestStatus](doc:enum-internshiprequeststatus) |
-|   19A | [Migration 19A — emancipation_evidences](doc:migration-19a-emancipation-evidences)        | provas de emancipação e autoria da confirmação | `internship_requests`, `user_personal_data`, `affiliations`, `media`, [Enum — EmancipationEvidenceStatus](doc:enum-emancipationevidencestatus) |
-|    20 | [Migration 20 — internship_request_corrections](doc:migration-20-internship-request-corrections) | correções de solicitações | `internship_requests`, `affiliations`, [Enum — InternshipRequestCorrectionStatus](doc:enum-internshiprequestcorrectionstatus)                  |
-|    21 | [Migration 21 — internship_cancellation_requests](doc:migration-21-internship-cancellation-requests) | pedidos de cancelamento | `internships`, `affiliations`, [Enum — InternshipCancellationRequestStatus](doc:enum-internshipcancellationrequeststatus) |
-|    22 | [Migration 22 — holidays](doc:migration-22-holidays)                       | feriados persistidos       | `cities`, [Enum — HolidayScope](doc:enum-holidayscope), [Enum — BrazilianState](doc:enum-brazilianstate) |
-|   22A | [Migration 22A — internship_calendar_overrides](doc:migration-22-internship-calendar-overrides) | exceções por estágio      | `internships`, `affiliations`                                                                             |
-|    23 | [Migration 23 — internship_work_schedules](doc:migration-23-internship-work-schedules)      | jornada e aditivos         | `internships`, `generated_documents`, `affiliations`, calendário e exceções                              |
+|    16 | [Migration 16 — generated_documents](doc:migration-16-generated-documents)           | documentos gerados         | `internships`, `template_versions`, enums documentais                                      |
+|    17 | [Migration 17 — internship_pauses](doc:migration-17-internship-pauses)             | pausas                     | `internships`                                                                                              |
+|   19A | [Migration 19A — emancipation_evidences](doc:migration-19a-emancipation-evidences)        | provas de emancipação | `internship_requests`, `media`, [Enum — EmancipationEvidenceStatus](doc:enum-emancipationevidencestatus) |
+|    20 | [Migration 20 — internship_request_corrections](doc:migration-20-internship-request-corrections) | correções de solicitações | `internship_requests`, [Enum — InternshipRequestCorrectionStatus](doc:enum-internshiprequestcorrectionstatus)                  |
+|    21 | [Migration 21 — internship_cancellation_requests](doc:migration-21-internship-cancellation-requests) | pedidos de cancelamento | `internships`, [Enum — InternshipCancellationRequestStatus](doc:enum-internshipcancellationrequeststatus) |
+|   22A | [Migration 22A — internship_calendar_overrides](doc:migration-22-internship-calendar-overrides) | exceções por estágio      | `internships`                                                                             |
+|    23 | [Migration 23 — internship_work_schedules](doc:migration-23-internship-work-schedules)      | jornada e aditivos         | `internships`, `generated_documents`, calendário e exceções                              |
 
 ## Dependências críticas
 
@@ -83,11 +90,11 @@ As migrations de [`cities`](doc:migration-01a-cities), [`addresses`](doc:migrati
 - A Migration 12A implementa pedidos de cadastro de supervisor com CPF validado e estados validados no Model, dados profissionais do pedido, associação ao vínculo resultante e bloqueio da exclusão pelo Model; autoria e revisor ficam para o Activity Log. O fluxo transacional de aprovação permanece planejado.
 - A Migration 12B implementa pedidos de cadastro de concedente com CPF/CNPJ, endereço proposto e estados validados no Model, relação com a concedente resultante e bloqueio da exclusão pelo Model. Autoria e revisor ficam para o Activity Log; a aprovação transacional permanece planejada.
 - A Migration 13 implementa o catálogo lógico de templates globais ou por campus, sem chave textual, com categoria por enum, desativação e Activity Log.
-- A Migration 14 implementa versões DOCX por template, mídia privada no Media Library, hash único por template e seleção da versão validada mais recente. Uma geração referencia a versão usada; não cria outra versão. A proteção contra alteração/exclusão após uso será concluída com a Migration 16.
+- A Migration 14 implementa versões DOCX por template, mídia privada no Media Library, hash único por template e seleção da versão validada mais recente. Uma geração referencia a versão usada; não cria outra versão. A FK da Migration 16 restringe a exclusão física da versão usada.
 - A Migration 15 implementa o estágio com FKs para vínculos, curso, tipo e concedente, snapshots históricos, jornada inicial e data projetada; o cálculo automático e a criação pelo aceite da solicitação ficam para o fluxo funcional.
 - A Migration 18 cria as avaliações do supervisor e as referências de liberação e avaliação vigente em `internships`, com validações do formulário no Model. Liberação, autorização, aprovação transacional e cálculo de nota permanecem no fluxo funcional.
-- A Migration 19 implementa a solicitação com FKs para curso, tipo, concedente, supervisor e estágio, jornada em JSONB, estados, validações condicionais no Model, Activity Log e data do aceite dos termos. Checkbox, cálculo da data projetada, evidência de emancipação e aprovação transacional permanecem para o fluxo e a Migration 19A.
-- As Migrations 16–17, 19A e 20–23 incluem snapshots, estados, FKs históricas ou efeitos transacionais. Devem ser implementadas na fase funcional correspondente, com revisão do contrato e dos testes do fluxo.
+- A Migration 19 implementa a solicitação com FKs para curso, tipo, concedente, supervisor e estágio, jornada em JSONB, estados, validações condicionais no Model, Activity Log e data do aceite dos termos. Checkbox, cálculo da data projetada e aprovação transacional permanecem para o fluxo; a Migration 19A já exige evidência no caminho emancipado.
+- As Migrations 16, 17, 19A, 20, 21, 22A e 23 agora têm schema, Models, factories, relações e validações do registro. Geração/assinatura, upload/autorização, decisões, recálculo e concorrência transacional permanecem para os fluxos funcionais. Ainda faltam testes Pest específicos desses sete contratos.
 
 ## Checklist comum
 

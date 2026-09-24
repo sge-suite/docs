@@ -42,15 +42,17 @@ Este índice é uma fotografia editorial da documentação publicada. Os documen
 - [Enum — GeneratedDocumentOrigin](doc:enum-generateddocumentorigin) — **implemented** — Origem do documento registrado no processo de estágio.
 - [Enum — GeneratedDocumentStatus](doc:enum-generateddocumentstatus) — **implemented** — Ciclo de vida de cada documento gerado ou registrado no estágio.
 - [Enum — GeneratedDocumentType](doc:enum-generateddocumenttype) — **implemented** — Tipos de documentos registrados no processo de estágio.
-- [Enum — InternshipCancellationRequestStatus](doc:enum-internshipcancellationrequeststatus) — **implemented** — Ciclo do pedido de cancelamento de estágio formalizado; integração com o modelo ainda pendente.
-- [Enum — InternshipRequestCorrectionStatus](doc:enum-internshiprequestcorrectionstatus) — **implemented** — Ciclo de cada pendência devolvida na solicitação de estágio; integração ainda pendente.
-- [Enum — InternshipRequestStatus](doc:enum-internshiprequeststatus) — **implemented** — Ciclo de preenchimento, envio e análise da solicitação nativa de estágio; integração ainda pendente.
+- [Enum — InternshipCancellationRequestStatus](doc:enum-internshipcancellationrequeststatus) — **implemented** — Ciclo do pedido de cancelamento de estágio formalizado; fluxo decisório pendente.
+- [Enum — InternshipRequestCorrectionStatus](doc:enum-internshiprequestcorrectionstatus) — **implemented** — Ciclo de cada pendência devolvida na solicitação de estágio; fluxo de análise pendente.
+- [Enum — InternshipRequestStatus](doc:enum-internshiprequeststatus) — **implemented** — Ciclo de preenchimento, envio e análise da solicitação nativa de estágio; transições do fluxo pendentes.
 - [Enum — InternshipStatus](doc:enum-internshipstatus) — **implemented** — Ciclo de formalização e execução de um estágio já criado no SGE; integração ainda pendente.
-- [Enum — LegalCapacityDeclaration](doc:enum-legalcapacitydeclaration) — **implemented** — Opção declarada pelo discente para a capacidade civil no formulário de abertura; integração ainda pendente.
+- [Enum — LegalCapacityDeclaration](doc:enum-legalcapacitydeclaration) — **implemented** — Opção declarada pelo discente para a capacidade civil; interface e análise manual pendentes.
 - [Enum — PartyDocumentType](doc:enum-partydocumenttype) — **implemented** — Tipo de documento de identificação da parte concedente.
 - [Enum — RegistrationRequestStatus](doc:enum-registrationrequeststatus) — **implemented** — Ciclo das solicitações de cadastro de supervisor e parte concedente.
 
 ## Migrations
+
+Sequência física dos arquivos em `database/migrations`; os números permanecem como identificadores das notas.
 
 - [Migration base 01 — users](doc:migration-base-01-users) — **implemented** — Estado atual das tabelas de autenticação, reset de senha e sessões.
 - [Migration base 02 — cache](doc:migration-base-02-cache) — **implemented** — Estado atual das tabelas de cache e locks do Laravel.
@@ -58,6 +60,7 @@ Este índice é uma fotografia editorial da documentação publicada. Os documen
 - [Migration base 04 — activity_log](doc:migration-base-04-activity-log) — **implemented** — Estado atual da auditoria baseada no Spatie Activity Log.
 - [Migration base 05 — media](doc:migration-base-05-media) — **implemented** — Estado atual do armazenamento de mídia polimórfica do Spatie Media Library.
 - [Migration 01A — cities](doc:migration-01a-cities) — **implemented** — Catálogo local de cidades identificado pelo código IBGE, carregado pelo `CitySeeder` antes dos endereços.
+- [Migration 22 — holidays](doc:migration-22-holidays) — **implemented** — Base persistida de feriados nacional, estadual e municipal, com importação BrasilAPI para nacionais e estaduais.
 - [Migration 01 — addresses](doc:migration-01-addresses) — **implemented** — Base backend com cidade local, validação dos campos obrigatórios, Activity Log e cópia histórica; consulta e validação de CEP continuam pendentes.
 - [Migration 02 — user_personal_data](doc:migration-02-user-personal-data) — **implemented** — Dados pessoais e profissionais opcionais por usuário; CPF permanece na conta.
 - [Migration 03 — campuses](doc:migration-03-campuses) — **implemented** — Tabela de campi; representante legal e cargo permanecem textuais no próprio campus.
@@ -74,16 +77,15 @@ Este índice é uma fotografia editorial da documentação publicada. Os documen
 - [Migration 13 — document_templates](doc:migration-13-document-templates) — **implemented** — Contrato do catálogo de templates DOCX do SGE.
 - [Migration 14 — template_versions](doc:migration-14-template-versions) — **in-progress** — Versões DOCX privadas, com preservação após uso; validação do upload e integração com geração ainda pendentes.
 - [Migration 15 — internships](doc:migration-15-internships) — **in-progress** — Contrato do processo de estágio, referências atuais e snapshots históricos.
-- [Migration 16 — generated_documents](doc:migration-16-generated-documents) — **planned** — Contrato dos documentos gerados ou registrados no estágio.
-- [Migration 17 — internship_pauses](doc:migration-17-internship-pauses) — **planned** — Contrato das pausas de estágio e sua validação temporal.
 - [Migration 18 — supervisor_evaluations](doc:migration-18-supervisor-evaluations) — **implemented** — Schema, Model, factory e testes da avaliação do supervisor; fluxo funcional pendente.
 - [Migration 19 — internship_requests](doc:migration-19-internship-requests) — **implemented** — Contrato da solicitação única de abertura de estágio preenchida pelo discente.
-- [Migration 19A — emancipation_evidences](doc:migration-19a-emancipation-evidences) — **planned** — Histórico privado das provas de emancipação e sua análise manual.
-- [Migration 20 — internship_request_corrections](doc:migration-20-internship-request-corrections) — **planned** — Pendências operacionais que direcionam a edição da solicitação de estágio.
-- [Migration 21 — internship_cancellation_requests](doc:migration-21-internship-cancellation-requests) — **planned** — Pedidos rastreáveis de cancelamento de estágio formalizado feitos pelo discente.
-- [Migration 22 — holidays](doc:migration-22-holidays) — **implemented** — Base persistida de feriados nacional, estadual e municipal, com importação BrasilAPI para nacionais e estaduais.
-- [Migration 22A — internship_calendar_overrides](doc:migration-22-internship-calendar-overrides) — **planned** — Exceções de expediente específicas de um estágio.
-- [Migration 23 — internship_work_schedules](doc:migration-23-internship-work-schedules) — **planned** — Jornada semanal pactuada, preservada por vigência somente quando um aditivo formalizado a alterar.
+- [Migration 16 — generated_documents](doc:migration-16-generated-documents) — **implemented** — Contrato dos documentos gerados ou registrados no estágio.
+- [Migration 17 — internship_pauses](doc:migration-17-internship-pauses) — **implemented** — Contrato das pausas de estágio e sua validação temporal.
+- [Migration 19A — emancipation_evidences](doc:migration-19a-emancipation-evidences) — **implemented** — Histórico privado das provas de emancipação e sua análise manual.
+- [Migration 20 — internship_request_corrections](doc:migration-20-internship-request-corrections) — **implemented** — Pendências operacionais que direcionam a edição da solicitação de estágio.
+- [Migration 21 — internship_cancellation_requests](doc:migration-21-internship-cancellation-requests) — **implemented** — Pedidos rastreáveis de cancelamento de estágio formalizado feitos pelo discente.
+- [Migration 22A — internship_calendar_overrides](doc:migration-22-internship-calendar-overrides) — **implemented** — Exceções de expediente específicas de um estágio.
+- [Migration 23 — internship_work_schedules](doc:migration-23-internship-work-schedules) — **implemented** — Jornada semanal pactuada, preservada por vigência somente quando um aditivo formalizado a alterar.
 
 ## Componentes técnicos
 

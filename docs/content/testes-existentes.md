@@ -59,6 +59,8 @@ Este mapa acompanha o código real no repositório Laravel irmão, em `../sge`. 
 
 ## Lacunas prioritárias
 
+- As Migrations 16, 17, 19A, 20, 21, 22A e 23 já possuem schema e Models, mas ainda precisam de testes Pest específicos de regras, FKs, rollback e fluxos.
+
 - [ ] Criar testes de integração para as migrations de domínio ainda não implementadas, em banco limpo.
 - [ ] Criar testes de rollback das migrations reversíveis.
 - [ ] Ampliar a cobertura de `CurrencyHelper`, dos formatos de `DateHelper` e dos comprimentos de telefone/documentos.

@@ -11,7 +11,7 @@ source_refs: https://github.com/sge-suite/sge/blob/master/app/Enums/InternshipRe
 diagram: enum-correction-status
 ---
 > [!success] Estado
-> A classe e os testes unitários já existem. A integração com `InternshipRequestCorrection`, migration e fluxo de análise ainda está planejada. Este enum controla a pendência; não substitui o status da solicitação nem o [`activity_log`](doc:migration-base-04-activity-log).
+> A classe e os testes unitários já existem. O cast em `InternshipRequestCorrection` e a Migration 20 já existem; o fluxo de análise ainda está planejado. Este enum controla a pendência; não substitui o status da solicitação nem o [`activity_log`](doc:migration-base-04-activity-log).
 
 ## Contrato
 
@@ -32,7 +32,7 @@ Somente uma correção em `Open` pode existir por solicitação. Uma correção 
 
 - [x] Criar enum string, rótulos, `options()` e `values()`.
 - [ ] Adicionar cast em `InternshipRequestCorrection`.
-- [ ] Usar o enum na [migration de internship_request_corrections](doc:migration-20-internship-request-corrections).
+- [x] Usar o valor inicial do enum na [migration de internship_request_corrections](doc:migration-20-internship-request-corrections).
 - [ ] Garantir por constraint/validação que só exista uma pendência aberta por solicitação.
 - [x] Testar cases, valores, rótulos e opções.
 - [ ] Testar devolução, reenvio, nova devolução, aprovação e desistência no fluxo de domínio.

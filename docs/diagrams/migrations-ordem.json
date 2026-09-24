@@ -1,7 +1,7 @@
 {
   "id": "migrations-ordem",
   "kind": "flowchart",
-  "title": "Ordem de implementação das migrations",
+  "title": "Dependências principais das migrations",
   "description": "Dependências principais entre as migrations atuais e planejadas do SGE.",
   "summary": "A fundação começa com users e dados pessoais, passa por campi, vínculos, cursos e tipos de estágio, e então chega a solicitações, estágios, documentos, jornadas, pausas e comunicação.",
   "source": {

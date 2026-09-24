@@ -10,7 +10,7 @@ related: migration-16-generated-documents, fluxos-principais
 source_refs: https://github.com/sge-suite/sge/blob/master/app/Enums/GeneratedDocumentStatus.php, https://github.com/sge-suite/sge/blob/master/tests/Unit/Enums/GeneratedDocumentStatusTest.php
 ---
 > [!success] Estado
-> Implementado em `app/Enums/GeneratedDocumentStatus.php`. A integração com `generated_documents` e as transições ainda está pendente.
+> Implementado em `app/Enums/GeneratedDocumentStatus.php`. O cast em `GeneratedDocument` e a Migration 16 já existem; as guardas de transição do fluxo ainda estão pendentes.
 
 ## Contrato
 
@@ -21,7 +21,7 @@ source_refs: https://github.com/sge-suite/sge/blob/master/app/Enums/GeneratedDoc
 | `Signed`            | `signed`             | Assinado              |
 | `Cancelled`         | `cancelled`          | Cancelado             |
 
-O status pertence ao documento, não ao estágio. `Cancelled` encerra o ciclo do documento e não cancela automaticamente o estágio. O cancelamento exige motivo, data e o vínculo responsável. O arquivo final não é armazenado pelo SGE.
+O status pertence ao documento, não ao estágio. `Cancelled` encerra o ciclo do documento e não cancela automaticamente o estágio. O cancelamento exige motivo e data; a autoria fica no Activity Log. O arquivo final não é armazenado pelo SGE.
 
 A transição de um documento assinável para `AwaitingSignature` exige que o Setor informe o local de disponibilização para assinatura em campo textual genérico e, se optar por disparar o aviso, selecione ao menos um interessado elegível. A plataforma é somente um valor informado no registro; não é case do enum nem constante do sistema.
 
@@ -34,8 +34,8 @@ Quando a data de início vencer antes da assinatura, o documento continua `Await
 - [x] Criar enum string e rótulos no código.
 - [x] Implementar `options()` e `values()`.
 - [x] Cobrir cases, valores, rótulos e opções com teste unitário.
-- [ ] Adicionar cast em `GeneratedDocument`.
-- [ ] Usar o enum na [migration de generated_documents](doc:migration-16-generated-documents).
+- [x] Adicionar cast em `GeneratedDocument`.
+- [x] Usar o valor inicial do enum na [migration de generated_documents](doc:migration-16-generated-documents).
 - [ ] Implementar guardas para transições e documentos já assinados.
 - [ ] Exigir local de disponibilização e validar os interessados selecionados na transição para `AwaitingSignature`.
 - [ ] Testar geração, assinatura, cancelamento, reemissão e documento externo na integração documental.

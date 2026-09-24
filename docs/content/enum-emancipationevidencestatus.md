@@ -10,7 +10,7 @@ related: migration-19a-emancipation-evidences
 source_refs: https://github.com/sge-suite/sge/blob/master/app/Enums/EmancipationEvidenceStatus.php, https://github.com/sge-suite/sge/blob/master/tests/Unit/Enums/EmancipationEvidenceStatusTest.php
 ---
 > [!success] Estado
-> A classe e os testes unitários já existem em `app/Enums/EmancipationEvidenceStatus.php`. A integração com `emancipation_evidences`, as guardas de transição e o acesso à mídia privada continuam planejados.
+> A classe e os testes unitários já existem em `app/Enums/EmancipationEvidenceStatus.php`. O cast em `EmancipationEvidence` e a coleção privada já existem; guardas de transição e autorização do acesso continuam planejadas.
 
 | Case | Valor | Rótulo |
 | --- | --- | --- |
@@ -26,5 +26,6 @@ O arquivo é enviado diretamente pelo formulário do SGE e fica em mídia privad
 
 - [x] Criar enum, rótulos, `values()` e `options()`.
 - [x] Cobrir cases, valores, rótulos e opções com teste unitário.
-- [ ] Adicionar cast e guardas de transição.
+- [x] Adicionar cast no Model.
+- [ ] Implementar guardas de transição e autorização da mídia.
 - [ ] Testar envio, devolução, nova evidência, aprovação e cancelamento no fluxo de domínio.

@@ -67,7 +67,7 @@ As sete chaves sempre existem quando o formulário é enviado; cada valor é int
 
 - Concedente: exatamente uma de `granting_party_id` ou `granting_party_registration_request_id` deve ser informada no envio. A segunda aponta para um registro próprio, com documento, endereço, representante, contatos, área, conselho e processo, aguardando análise do Setor.
 - Supervisor: exatamente uma de `supervisor_affiliation_id` ou `supervisor_registration_request_id` deve ser informada no envio. A segunda preserva nome, CPF, telefone, e-mail, cargo, qualificação, formação e experiência propostos pelo discente até que o Setor crie/associe o vínculo de supervisor. O supervisor completa ou confirma seus dados profissionais atuais em `user_personal_data` no futuro fluxo do formulário.
-- Capacidade civil: o rádio oferece `adult`, `minor` e `emancipated_minor`. `adult` só é válido para quem tiver 18 anos completos na data do envio. `minor` exige os quatro campos de responsável legal. `emancipated_minor` dispensará responsável legal e exigirá ao menos uma [evidência](doc:migration-19a-emancipation-evidences) enviada; o aceite final exigirá evidência aprovada pelo Setor. Essas validações dependem da Migration 19A e ainda não estão implementadas. Se a devolução apontar comprovante inválido, o discente cria novo envio ou troca para `minor` e informa o responsável.
+- Capacidade civil: o rádio oferece `adult`, `minor` e `emancipated_minor`. `adult` só é válido para quem tiver 18 anos completos na data do envio. `minor` exige os quatro campos de responsável legal. `emancipated_minor` dispensará responsável legal e exigirá ao menos uma [evidência](doc:migration-19a-emancipation-evidences) enviada; o aceite final exigirá evidência aprovada pelo Setor. A Migration 19A já implementa no Model a exigência de anexo no envio e de evidência aprovada no aceite; a análise manual e a autorização ficam para o fluxo. Se a devolução apontar comprovante inválido, o discente cria novo envio ou troca para `minor` e informa o responsável.
 - Remuneração: `is_remunerated = true` exige `grant_value`; se for `false`, ambos os valores monetários ficam nulos, salvo decisão posterior que admita auxílio sem bolsa.
 
 As duas solicitações pendentes de cadastro são estruturas de domínio próprias, conforme [Cadastros pendentes de supervisor e concedente](doc:cadastros-pendentes-de-supervisor-e-concedente) e [D-011](doc:backlog-e-decisoes#d-011-solicitacoes-pendentes-sao-registros-proprios); não são JSON genérico nem notificações. As migrations que as criam devem preceder a FK desta tabela. As duas migrations de cadastro pendente já existem no código; esta tabela usa somente FKs para esses caminhos.
@@ -95,7 +95,7 @@ As duas solicitações pendentes de cadastro são estruturas de domínio própri
 - [x] Criar migration, Model, factory, relações, índice por vínculo/status e FK única para o estágio.
 - [ ] Criar Policies e fluxos de envio, análise, aceite e reenvio.
 - [x] Testar no Model a compatibilidade de curso/tipo, os limites de carga horária e os ramos condicionais.
-- [ ] Implementar seleção na interface, cálculo da data projetada e validação da evidência de emancipação após a Migration 19A.
+- [ ] Implementar seleção na interface, cálculo da data projetada e fluxo de análise da evidência de emancipação e autorização por vínculo.
 
 ## Dependências
 

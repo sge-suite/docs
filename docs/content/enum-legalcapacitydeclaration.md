@@ -10,7 +10,7 @@ related: migration-19-internship-requests
 source_refs: https://github.com/sge-suite/sge/blob/master/app/Enums/LegalCapacityDeclaration.php, https://github.com/sge-suite/sge/blob/master/tests/Unit/Enums/LegalCapacityDeclarationTest.php
 ---
 > [!info] Escopo
-> A classe, os testes unitários, o cast no Model e a coluna da Migration 19 já existem. A interface e a análise do comprovante continuam planejadas. Este enum registra a opção escolhida no formulário; não substitui a data de nascimento nem aprova automaticamente uma emancipação.
+> A classe, os testes unitários, o cast no Model e a coluna da Migration 19 já existem. A exigência de comprovante na solicitação também está implementada pela Migration 19A; interface, upload e análise manual continuam planejados. Este enum registra a opção escolhida no formulário; não substitui a data de nascimento nem aprova automaticamente uma emancipação.
 
 ## Contrato
 

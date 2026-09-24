@@ -1,6 +1,6 @@
 ---
-id: fase-03-fundacao-de-dados
-title: Fase 03 — Fundação de dados
+id: fase-01-fundacao-de-dados
+title: Fase 01 — Fundação de dados
 description: Checklist da fundação de dados, enums, migrations, modelos e catálogos básicos.
 type: development-phase
 status: completed
@@ -64,4 +64,4 @@ source_refs:
 
 ## Próxima fase
 
-[Fase 10 — Activity Log e backend transversal](doc:fase-10-servicos-transversais)
+[Fase 02 — Activity Log](doc:fase-02-activity-log)

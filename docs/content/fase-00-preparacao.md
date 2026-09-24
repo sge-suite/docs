@@ -6,7 +6,7 @@ type: development-phase
 status: completed
 visibility: public
 tags: sge/desenvolvimento, sge/checklist
-related: fase-01-contratos-de-e-mail
+related: fase-01-fundacao-de-dados
 source_refs:
 ---
 > [!success] Estado
@@ -30,4 +30,4 @@ source_refs:
 
 ## Próxima fase
 
-[Fase 01 — Contratos de e-mail e notificações](doc:fase-01-contratos-de-e-mail)
+[Fase 01 — Fundação de dados](doc:fase-01-fundacao-de-dados)

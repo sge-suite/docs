@@ -77,15 +77,15 @@
             "items": [
               "fases-de-desenvolvimento",
               "fase-00-preparacao",
-              "fase-01-contratos-de-e-mail",
-              "fase-03-fundacao-de-dados",
+              "fase-01-fundacao-de-dados",
+              "fase-02-activity-log",
+              "fase-03-integracao-de-email",
               "fase-04-conta-e-contexto",
               "fase-05-administracao",
               "fase-06-documentos",
               "fase-07-abertura-do-estagio",
               "fase-08-estagio-em-andamento",
-              "fase-09-avaliacao-e-conclusao",
-              "fase-10-servicos-transversais"
+              "fase-09-avaliacao-e-conclusao"
             ]
           },
           {

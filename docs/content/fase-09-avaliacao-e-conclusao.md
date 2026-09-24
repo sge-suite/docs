@@ -6,7 +6,7 @@ type: development-phase
 status: planned
 visibility: public
 tags: sge/desenvolvimento, sge/avaliacao, sge/checklist
-related: fluxos-principais, migration-18-supervisor-evaluations, backlog-e-decisoes, fase-10-servicos-transversais
+related: fluxos-principais, migration-18-supervisor-evaluations, backlog-e-decisoes
 source_refs:
 ---
 Base: [avaliação e conclusão](doc:fluxos-principais#6-acompanhamento-academico-e-conclusao). O ciclo de resposta, a origem dos pesos e o contrato do formulário fixo estão definidos na [modelagem final da avaliação](doc:migration-18-supervisor-evaluations).
@@ -45,6 +45,6 @@ Implemente o cálculo puro das notas e as transições/autorização no backend 
 > [!warning] Nota mínima
 > Não há nota mínima de aprovação configurada. Não criar corte acadêmico enquanto essa regra não for informada no tipo de estágio.
 
-## Próxima fase
+## Encerramento do roteiro atual
 
-[Fase 10 — Serviços transversais](doc:fase-10-servicos-transversais)
+[Índice das fases de desenvolvimento](doc:fases-de-desenvolvimento)

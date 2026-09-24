@@ -21,15 +21,15 @@ Este índice é uma fotografia editorial da documentação publicada. Os documen
 Para a sequência de execução atual, incluindo a próxima fase transversal de auditoria, consulte [Fases de desenvolvimento](doc:fases-de-desenvolvimento).
 
 - [Fase 00 — Preparação](doc:fase-00-preparacao) — **completed** — Checklist do ambiente, qualidade e fluxo de trabalho do projeto novo.
-- [Fase 01 — Integração de e-mail](doc:fase-01-contratos-de-e-mail) — **planned** — Backend comum para preparação, transporte, tentativas e reprocessamento de e-mails.
-- [Fase 03 — Fundação de dados](doc:fase-03-fundacao-de-dados) — **completed** — Migrations, Models, factories e testes PostgreSQL da base de dados.
+- [Fase 01 — Fundação de dados](doc:fase-01-fundacao-de-dados) — **completed** — Migrations, Models, factories e testes PostgreSQL da base de dados.
+- [Fase 02 — Activity Log](doc:fase-02-activity-log) — **in-progress** — Próxima etapa: cobrir entidades de negócio e vincular autoria ao contexto ativo.
+- [Fase 03 — Integração de e-mail](doc:fase-03-integracao-de-email) — **planned** — Backend comum para preparação, transporte, tentativas e reprocessamento de e-mails.
 - [Fase 04 — Conta e contexto](doc:fase-04-conta-e-contexto) — **planned** — Checklist de autenticação, vínculos ativos e configurações próprias.
 - [Fase 05 — Administração hierárquica](doc:fase-05-administracao) — **planned** — Backend e interfaces administrativas em ordem de escopo, do global ao local.
 - [Fase 06 — Documentos](doc:fase-06-documentos) — **planned** — Checklist de templates DOCX, versões, geração e acompanhamento de assinatura.
 - [Fase 07 — Abertura do estágio](doc:fase-07-abertura-do-estagio) — **planned** — Checklist de criação da solicitação, envio, análise e formalização inicial do estágio.
 - [Fase 08 — Estágio em andamento](doc:fase-08-estagio-em-andamento) — **planned** — Checklist de pausas, substituições, aditivos, cancelamento e histórico do estágio.
 - [Fase 09 — Avaliação e conclusão](doc:fase-09-avaliacao-e-conclusao) — **planned** — Checklist de avaliações, notas, requisitos de encerramento e conclusão do estágio.
-- [Fase 10 — Activity Log e serviços transversais](doc:fase-10-servicos-transversais) — **in-progress** — Próxima etapa: cobrir entidades de negócio e vincular autoria ao contexto ativo.
 - [Fases de desenvolvimento](doc:fases-de-desenvolvimento) — **in-progress** — Índice das fases executáveis do desenvolvimento do SGE.
 
 ## Enums

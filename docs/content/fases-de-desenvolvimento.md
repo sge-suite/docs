@@ -6,17 +6,17 @@ type: development-hub
 status: in-progress
 visibility: public
 tags: sge/desenvolvimento, sge/checklist
-related: fase-00-preparacao, fase-01-contratos-de-e-mail, fase-03-fundacao-de-dados, fase-04-conta-e-contexto, fase-05-administracao, fase-06-documentos, fase-07-abertura-do-estagio, fase-08-estagio-em-andamento, fase-09-avaliacao-e-conclusao, fase-10-servicos-transversais, componentes-tecnicos, enums, migrations
+related: fase-00-preparacao, fase-03-integracao-de-email, fase-01-fundacao-de-dados, fase-04-conta-e-contexto, fase-05-administracao, fase-06-documentos, fase-07-abertura-do-estagio, fase-08-estagio-em-andamento, fase-09-avaliacao-e-conclusao, fase-02-activity-log, componentes-tecnicos, enums, migrations
 source_refs:
 ---
-Esta lista mostra a ordem de execução atual. Os números das fases preservam seus identificadores e não determinam prioridade. As migrations e Models de domínio estão implementados; agora o trabalho avança pelas bases de backend que serão reutilizadas pelos fluxos e telas.
+Esta lista mostra a ordem atual de execução; a numeração acompanha essa sequência. As migrations e Models de domínio estão implementados; agora o trabalho avança pelas bases de backend que serão reutilizadas pelos fluxos e telas.
 
 ## Ordem atual
 
 - [x] [00 — Preparação](doc:fase-00-preparacao)
-- [x] [03 — Fundação de dados](doc:fase-03-fundacao-de-dados) — migrations, Models, factories e cobertura de banco concluídos.
-- [ ] **Próxima: [10 — Activity Log e backend transversal](doc:fase-10-servicos-transversais)** — aplicar auditoria consistente a todas as entidades de negócio.
-- [ ] [01 — Integração de e-mail](doc:fase-01-contratos-de-e-mail) — simplificar preparação, transporte, tentativas e reprocessamento após fechar a auditoria.
+- [x] [01 — Fundação de dados](doc:fase-01-fundacao-de-dados) — migrations, Models, factories e cobertura de banco concluídos.
+- [ ] **Próxima: [02 — Activity Log](doc:fase-02-activity-log)** — aplicar auditoria consistente a todas as entidades de negócio.
+- [ ] [03 — Integração de e-mail](doc:fase-03-integracao-de-email) — simplificar preparação, transporte, tentativas e reprocessamento após fechar a auditoria.
 - [ ] [04 — Conta e contexto](doc:fase-04-conta-e-contexto) — resolver vínculo ativo no backend e então construir sua seleção na interface.
 - [ ] [05 — Administração](doc:fase-05-administracao) — implementar backend e interface seguindo a hierarquia de perfis, do Administrador do Sistema para baixo.
 - [ ] [06 — Documentos](doc:fase-06-documentos) — fechar validação, geração e assinatura com serviços de backend reutilizáveis.

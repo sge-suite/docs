@@ -1,7 +1,7 @@
 ---
 id: fases-de-desenvolvimento
 title: Fases de desenvolvimento
-description: Índice das fases executáveis do desenvolvimento do SGE.
+description: Ordem atual das entregas, do backend compartilhado às interfaces por perfil.
 type: development-hub
 status: in-progress
 visibility: public
@@ -9,21 +9,30 @@ tags: sge/desenvolvimento, sge/checklist
 related: fase-00-preparacao, fase-01-contratos-de-e-mail, fase-03-fundacao-de-dados, fase-04-conta-e-contexto, fase-05-administracao, fase-06-documentos, fase-07-abertura-do-estagio, fase-08-estagio-em-andamento, fase-09-avaliacao-e-conclusao, fase-10-servicos-transversais, componentes-tecnicos, enums, migrations
 source_refs:
 ---
-Abra a primeira fase pendente e siga seus links. O checkbox desta página é apenas um resumo; o detalhe deve ser marcado na nota da fase.
+Esta lista mostra a ordem de execução atual. Os números das fases preservam seus identificadores e não determinam prioridade. As migrations e Models de domínio estão implementados; agora o trabalho avança pelas bases de backend que serão reutilizadas pelos fluxos e telas.
 
-## Ordem
+## Ordem atual
 
 - [x] [00 — Preparação](doc:fase-00-preparacao)
-- [ ] [01 — Contratos de e-mail e notificações](doc:fase-01-contratos-de-e-mail)
-- **02 — Não definida** — não há documento ou entrega associada a esta numeração.
-- [ ] [03 — Fundação de dados](doc:fase-03-fundacao-de-dados)
-- [ ] [04 — Conta, autenticação e contexto](doc:fase-04-conta-e-contexto)
-- [ ] [05 — Administração e catálogos](doc:fase-05-administracao)
-- [ ] [06 — Templates e documentos](doc:fase-06-documentos)
-- [ ] [07 — Abertura e análise](doc:fase-07-abertura-do-estagio)
-- [ ] [08 — Estágio em andamento](doc:fase-08-estagio-em-andamento)
-- [ ] [09 — Avaliação e conclusão](doc:fase-09-avaliacao-e-conclusao)
-- [ ] [10 — Serviços transversais](doc:fase-10-servicos-transversais)
+- [x] [03 — Fundação de dados](doc:fase-03-fundacao-de-dados) — migrations, Models, factories e cobertura de banco concluídos.
+- [ ] **Próxima: [10 — Activity Log e backend transversal](doc:fase-10-servicos-transversais)** — aplicar auditoria consistente a todas as entidades de negócio.
+- [ ] [01 — Integração de e-mail](doc:fase-01-contratos-de-e-mail) — simplificar preparação, transporte, tentativas e reprocessamento após fechar a auditoria.
+- [ ] [04 — Conta e contexto](doc:fase-04-conta-e-contexto) — resolver vínculo ativo no backend e então construir sua seleção na interface.
+- [ ] [05 — Administração](doc:fase-05-administracao) — implementar backend e interface seguindo a hierarquia de perfis, do Administrador do Sistema para baixo.
+- [ ] [06 — Documentos](doc:fase-06-documentos) — fechar validação, geração e assinatura com serviços de backend reutilizáveis.
+- [ ] [07 — Abertura do estágio](doc:fase-07-abertura-do-estagio) — completar Actions e regras transacionais antes e junto do formulário.
+- [ ] [08 — Estágio em andamento](doc:fase-08-estagio-em-andamento) — concluir cálculos, transições, notificações e schedules antes das telas correspondentes.
+- [ ] [09 — Avaliação e conclusão](doc:fase-09-avaliacao-e-conclusao) — finalizar autorização, cálculo e transições de avaliação e conclusão.
+
+## Trabalho de backend antes das telas de domínio
+
+1. Cobrir as entidades de negócio no Activity Log com autoria pelo vínculo ativo, alterações úteis e proteção de dados sensíveis.
+2. Fechar a integração de e-mail: preparação por finalidade, transporte, registro de tentativas, envio após commit, reprocessamento e idempotência.
+3. Criar resolução do vínculo ativo, contexto de autorização e Policies com testes negativos e positivos por perfil.
+4. Implementar Services puros e Actions transacionais para cálculos, formalização, correções, cancelamentos e associações dos cadastros pendentes.
+5. Preparar validação e geração DOCX, notificações e Jobs idempotentes, com testes de concorrência, falhas e efeitos após commit.
+
+As tarefas de backend sem dependência visual podem avançar antes das telas. A seleção de vínculo é a primeira interface compartilhada; depois, cada conjunto de telas acompanha seu backend e percorre os perfis do nível administrativo mais amplo aos papéis de campus, estágio e curso, e então aos participantes do estágio.
 
 ## Navegação
 

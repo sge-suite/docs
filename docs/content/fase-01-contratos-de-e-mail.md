@@ -1,36 +1,47 @@
 ---
 id: fase-01-contratos-de-e-mail
-title: Fase 01 — Contratos de e-mail
-description: Checklist para fechar notificações, mensagens e tentativas de e-mail.
+title: Fase 01 — Integração de e-mail
+description: Simplificação e fechamento do backend de preparação, envio e reprocessamento de e-mails.
 type: development-phase
 status: planned
 visibility: public
 tags: sge/desenvolvimento, sge/email, sge/checklist
-related: enums, e-mails-notificacoes-e-entregas, enum-emailmessagepurpose, enum-emaildeliveryattemptstatus, migration-05-notifications, migration-06-email-messages, migration-07-email-delivery-attempts, fase-03-fundacao-de-dados
+related: enums, e-mails-notificacoes-e-entregas, enum-emailmessagepurpose, enum-emaildeliveryattemptstatus, migration-05-notifications, migration-06-email-messages, migration-07-email-delivery-attempts, fase-10-servicos-transversais
 source_refs:
 ---
-> [!important] Precedência
-> Feche este contrato antes de implementar conta, notificações de domínio ou qualquer fluxo que envie e-mail. A implementação física aguarda `users` e `affiliations`.
+As tabelas `notifications`, `email_messages` e `email_delivery_attempts`, seus enums, Models e validações já existem. Esta fase implementa uma API de backend fácil de usar nos fluxos e concentra nela persistência, segurança, idempotência e transporte.
 
-## Checklist
+## Backend de envio
 
-- [ ] Aprovar a separação entre `notifications`, `email_messages` e `email_delivery_attempts`.
-- [ ] Confirmar campos, índices, FKs, estados e [enums](doc:enums) correspondentes.
-- [ ] Confirmar que recuperação de senha não registra token, URL assinada ou conteúdo sensível.
-- [x] Não implementar confirmação adicional de endereço de e-mail ou código de confirmação.
-- [ ] Confirmar finalidades e destinatários das notificações operacionais.
-- [ ] Definir perfis autorizados a consultar conteúdo e solicitar reenvio.
-- [ ] Definir retenção e descarte conforme auditoria e LGPD.
-- [ ] Registrar decisões em [E-mails, notificações e entregas](doc:e-mails-notificacoes-e-entregas).
+- [ ] Rever o contrato final de finalidades, destinatários, conteúdo persistido e retenção.
+- [ ] Criar um ponto de entrada único para preparar e solicitar o envio de uma mensagem, sem repetir detalhes de criptografia e persistência nos fluxos.
+- [ ] Reservar tentativas com sequência segura e concorrência controlada.
+- [ ] Despachar envio somente depois do commit da transação de domínio.
+- [ ] Registrar `queued`, `sent` e `failed` com provedor e motivo sanitizado.
+- [ ] Configurar timeout, retry, backoff e limite de tentativas por finalidade.
+- [ ] Permitir reprocessamento autorizado sem alterar a mensagem original nem duplicar efeitos.
+- [ ] Integrar a recuperação de senha sem persistir tokens, URLs assinadas ou corpos que os revelem.
+- [ ] Validar modelos de e-mail reais pelo Mailpit para cada finalidade e destinatário.
+- [ ] Testar idempotência, concorrência, falha do transporte, reprocessamento e proteção contra vazamento em logs.
 
-## Referências executáveis
+## Notificações
 
-- [Enum de finalidade](doc:enum-emailmessagepurpose).
-- [Enum de tentativa](doc:enum-emaildeliveryattemptstatus).
-- [Migration de notifications](doc:migration-05-notifications).
-- [Migration de email_messages](doc:migration-06-email-messages).
-- [Migration de tentativas](doc:migration-07-email-delivery-attempts).
+- [ ] Criar notificações operacionais somente na conta ou vínculo destinatário adequado.
+- [ ] Manter leitura interna independente da entrega de e-mail.
+- [ ] Definir destinatários e canais para novo vínculo, documento disponível, correções, avaliações e eventos do estágio.
+- [ ] Manter o resumo do Setor de Estágio como notificação agrupada interna quando o contrato assim determinar.
+
+## Interface administrativa futura
+
+- [ ] Definir autorização de consulta de tentativas e solicitação de reenvio por vínculo.
+- [ ] Exibir histórico sem revelar tokens, credenciais, conteúdo protegido ou dados de outro escopo.
+
+## Critério de saída
+
+- [ ] Fluxos chamam uma interface de backend comum e idempotente.
+- [ ] Falhas são observáveis, tentativas anteriores permanecem intactas e reprocessar não duplica mensagens.
+- [ ] Segredos não aparecem em Activity Log, exceções, propriedades ou telas sem autorização.
 
 ## Próxima fase
 
-[Fase 03 — Fundação de dados](doc:fase-03-fundacao-de-dados)
+[Fase 04 — Conta e contexto](doc:fase-04-conta-e-contexto)

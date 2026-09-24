@@ -11,6 +11,8 @@ source_refs:
 ---
 Base: [acompanhamento do estágio](doc:fluxos-principais#4-estagio-em-andamento).
 
+Priorize primeiro o cálculo puro da data final e as Actions transacionais de pausa, jornada, aditivo, substituição e cancelamento. Implemente Jobs/schedules idempotentes e testes antes das telas operacionais.
+
 ## Checklist
 
 - [ ] Liberar o estágio pelo Setor de Estágio somente após requisitos documentais e assinaturas.

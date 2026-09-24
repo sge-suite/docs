@@ -11,6 +11,8 @@ source_refs:
 ---
 Referências: [modelo de acesso](doc:modelo-de-dados-acesso), [E-mails, notificações e entregas](doc:e-mails-notificacoes-e-entregas) e [fluxo de login](doc:fluxos-principais#1-acesso-e-vinculo).
 
+O trabalho começa pelo backend: serviço único para resolver e validar o vínculo ativo, proteção das rotas e testes de sessão/troca. Depois será criada a tela de seleção, antes das interfaces administrativas.
+
 ## Login e recuperação de senha
 
 - [x] Configurar Fortify para autenticar por `users.email`.
@@ -45,9 +47,10 @@ Referências: [modelo de acesso](doc:modelo-de-dados-acesso), [E-mails, notifica
 
 - [x] Permitir alteração da própria senha; a alteração do e-mail ainda não está disponível.
 - [x] Impedir alteração do nome na configuração atual.
+- [ ] Manter o CPF imutável após criação da conta.
 - [ ] Permitir ao discente alterar RG, nascimento e endereço atual.
 - [ ] Impedir edição de dados pessoais por outro vínculo.
 
 ## Próxima fase
 
-[Fase 05 — Administração e catálogos](doc:fase-05-administracao)
+[Fase 05 — Administração hierárquica](doc:fase-05-administracao)

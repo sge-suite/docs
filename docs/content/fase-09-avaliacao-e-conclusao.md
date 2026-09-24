@@ -11,6 +11,8 @@ source_refs:
 ---
 Base: [avaliação e conclusão](doc:fluxos-principais#6-acompanhamento-academico-e-conclusao). O ciclo de resposta, a origem dos pesos e o contrato do formulário fixo estão definidos na [modelagem final da avaliação](doc:migration-18-supervisor-evaluations).
 
+Implemente o cálculo puro das notas e as transições/autorização no backend antes de montar os formulários de avaliação e conclusão.
+
 ## Decisão antes do código
 
 - [ ] Definir quando a avaliação do supervisor será liberada.

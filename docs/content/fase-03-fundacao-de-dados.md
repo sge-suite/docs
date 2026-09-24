@@ -3,7 +3,7 @@ id: fase-03-fundacao-de-dados
 title: Fase 03 — Fundação de dados
 description: Checklist da fundação de dados, enums, migrations, modelos e catálogos básicos.
 type: development-phase
-status: in-progress
+status: completed
 visibility: public
 tags: sge/desenvolvimento, sge/banco-de-dados, sge/checklist
 related: migrations, enums, migration-base-01-users, migration-base-02-cache, migration-base-03-jobs, migration-base-04-activity-log, migration-base-05-media, enum-affiliationtype, enum-brazilianstate, migration-01a-cities, migration-01-addresses, migration-02-user-personal-data, migration-03-campuses, migration-04-affiliations, migration-09-courses, migration-10-course-id-em-affiliations, migration-11-internship-types, migration-12-granting-parties, migration-22-holidays, migration-22-internship-calendar-overrides, casts, helpers, concerns, testes-existentes, fase-04-conta-e-contexto
@@ -21,47 +21,47 @@ source_refs:
 - [x] [Migration base de mídia](doc:migration-base-05-media).
 - [x] Decidir que não haverá migration de permissões; autorização será por vínculos, Gates e Policies.
 
-> [!warning] Implementado não significa encerrado
-> As migrations base existem no código, mas suas integrações com o domínio, políticas de segurança, testes de schema e decisões de transição continuam sendo acompanhadas nas notas individuais.
+> [!info] Escopo concluído
+> A fundação de schema, Models, relações, factories e testes PostgreSQL das migrations implementadas está concluída. Policies, integração de Activity Log, Jobs e fluxos de tela continuam nas fases próprias.
 
 ## Dados cadastrais
 
 - [x] Criar e testar as classes dos enums estáveis; a integração com Models, migrations e fluxos continua nas etapas específicas.
 - [x] Concluir [`cities`](doc:migration-01a-cities), executar `php artisan cities:fetch` quando necessário e carregar o catálogo com `CitySeeder` sem rede.
 - [x] Implementar a base backend de [`addresses`](doc:migration-01-addresses), incluindo cópia histórica.
-- [ ] Implementar consulta e validação de CEP no futuro fluxo de cadastro.
+- [ ] Implementar consulta de CEP no futuro fluxo de cadastro; endereço segue o contrato atual sem validação de formato do CEP.
 - [x] Concluir [`user_personal_data`](doc:migration-02-user-personal-data).
 - [x] Concluir [`campuses`](doc:migration-03-campuses).
 - [x] Concluir [`affiliations`](doc:migration-04-affiliations).
 - [x] Concluir [`courses`](doc:migration-09-courses).
 - [x] Concluir [`course_id` em affiliations](doc:migration-10-course-id-em-affiliations).
-- [ ] Concluir [`internship_types`](doc:migration-11-internship-types).
-- [ ] Concluir [`granting_parties`](doc:migration-12-granting-parties).
+- [x] Concluir [`internship_types`](doc:migration-11-internship-types).
+- [x] Concluir [`granting_parties`](doc:migration-12-granting-parties).
 - [x] Concluir [`holidays`](doc:migration-22-holidays).
-- [ ] Concluir exceções por estágio em [`internship_calendar_overrides`](doc:migration-22-internship-calendar-overrides).
+- [x] Concluir exceções por estágio em [`internship_calendar_overrides`](doc:migration-22-internship-calendar-overrides).
 
 ## Regras de dados
 
-- [ ] Preservar linhas de endereço usadas historicamente; alterações criam nova linha quando necessário.
-- [ ] Garantir CPF único e imutável pela configuração do usuário.
-- [ ] Normalizar CPF, CNPJ, CEP, UF e e-mails.
+- [x] Preservar linhas de endereço usadas historicamente; alterações criam nova linha quando necessário.
+- [x] Garantir CPF único e normalizado na conta.
+- [ ] Impedir alteração do CPF em futuros fluxos de configuração da conta; pertence à [Fase 04](doc:fase-04-conta-e-contexto).
+- [x] Normalizar CPF, CNPJ, UF e e-mails pelos casts e validações aplicáveis; CEP não tem validação de formato.
 - [x] Permitir múltiplos vínculos por pessoa sem trocar campus dentro do vínculo.
-- [ ] Exigir curso em vínculo discente e respeitar escopo do campus.
-- [ ] Congelar regras do tipo de estágio por FK e snapshot no estágio.
-- [ ] Criar factories e testes para cenários completos, incompletos, ativos e desativados.
+- [x] Exigir curso em vínculo discente e respeitar escopo do campus.
+- [x] Congelar regras do tipo de estágio por FK e snapshot no estágio.
+- [x] Criar factories e testes para cenários completos, incompletos, ativos e desativados.
 
 ## Componentes que sustentam a fundação
 
-- [ ] Confirmar [casts](doc:casts) nos Models corretos.
-- [ ] Usar [helpers](doc:helpers) somente para formatação/normalização, sem regra de autorização.
-- [ ] Reutilizar [concerns](doc:concerns) para validações compartilhadas.
-- [ ] Cobrir as lacunas em [testes existentes](doc:testes-existentes).
+- [x] Confirmar [casts](doc:casts) nos Models corretos.
+- [x] Usar [helpers](doc:helpers) somente para formatação/normalização, sem regra de autorização.
+- [x] Reutilizar [concerns](doc:concerns) para validações compartilhadas.
+- [x] Criar testes PostgreSQL para as migrations e Models; lacunas de autorização e fluxos estão mapeadas em [testes existentes](doc:testes-existentes).
 
 ## Critério de saída
 
-- [ ] Todas as migrations 01–04 e 09–12 passam em banco limpo.
-- [ ] Modelos, relações, casts, índices e autorização básica estão cobertos.
+- [x] As migrations implementadas passam na suíte PostgreSQL e seus Models, relações, casts, índices e validações têm testes.
 
 ## Próxima fase
 
-[Fase 04 — Conta, autenticação e contexto](doc:fase-04-conta-e-contexto)
+[Fase 10 — Activity Log e backend transversal](doc:fase-10-servicos-transversais)

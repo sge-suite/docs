@@ -11,6 +11,8 @@ source_refs:
 ---
 Referências: [fluxo de formalização](doc:fluxos-principais#3-analise-e-formalizacao), [contrato do motor e catálogo](doc:geracao-de-documentos-docx-e-variaveis), [migration de templates](doc:migration-13-document-templates) e [migration de documentos gerados](doc:migration-16-generated-documents).
 
+Comece pela validação OOXML, armazenamento privado e serviço de geração temporária. Em seguida, conecte as telas de upload, revisão e acompanhamento; a regra de dados e a autorização permanecem no backend.
+
 ## Checklist
 
 - [x] Criar `document_templates` global ou por campus, sem chave textual, com desativação.

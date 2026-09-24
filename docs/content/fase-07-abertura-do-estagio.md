@@ -11,6 +11,8 @@ source_refs:
 ---
 Base: [fluxo de abertura](doc:fluxos-principais#2-solicitacao).
 
+Antes do formulário, implemente e teste as Actions de envio, análise, correção e formalização, incluindo snapshots, cópia de endereço e efeitos transacionais. O formulário será um cliente dessas regras, não o lugar onde elas vivem.
+
 ## Formulário e solicitação do discente
 
 - [x] Criar `internship_requests` com status inicial `draft`.

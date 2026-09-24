@@ -6,11 +6,11 @@ type: enum-reference
 status: implemented
 visibility: public
 tags: sge/enums, sge/documentos
-related: enum-generateddocumentorigin, enum-generateddocumentstatus, migration-16-generated-documents
+related: enum-generateddocumentorigin, enum-generateddocumentstatus, migration-13-document-templates, migration-16-generated-documents
 source_refs: https://github.com/sge-suite/sge/blob/master/app/Enums/GeneratedDocumentType.php, https://github.com/sge-suite/sge/blob/master/tests/Unit/Enums/GeneratedDocumentTypeTest.php
 ---
 > [!info] Decisão
-> O catálogo está definido com três casos e o enum já foi implementado em `app/Enums/GeneratedDocumentType.php`. A integração com `generated_documents` ainda está pendente.
+> O catálogo tem três casos e é usado pelo cast de `DocumentTemplate`. A integração com `generated_documents` ainda está pendente.
 
 ## Contrato
 
@@ -32,6 +32,7 @@ O atestado de orientação terá um template ativo administrado pelo setor de es
 - [x] Definir que aditivo não terá entidade própria inicialmente.
 - [x] Criar enum string e rótulos.
 - [x] Implementar `options()` e `values()`.
+- [x] Adicionar cast em `DocumentTemplate`.
 - [ ] Adicionar cast em `GeneratedDocument`.
 - [ ] Usar o enum na [migration de generated_documents](doc:migration-16-generated-documents).
 - [ ] Validar combinação de tipo, origem e status.

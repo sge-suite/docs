@@ -1,46 +1,48 @@
 ---
 id: migration-13-document-templates
 title: Migration 13 — document_templates
-description: Contrato do catálogo de templates DOCX do SGE.
+description: Catálogo implementado de templates DOCX lógicos, globais ou por campus.
 type: migration-reference
-status: planned
+status: implemented
 visibility: public
 tags: sge/migrations, sge/documentos
-related: geracao-de-documentos-docx-e-variaveis, migration-14-template-versions, fluxos-principais
-source_refs:
+related: geracao-de-documentos-docx-e-variaveis, migration-14-template-versions, enum-generateddocumenttype, fluxos-principais
+source_refs: https://github.com/sge-suite/sge/blob/master/database/migrations/2026_09_23_212413_create_document_templates_table.php, https://github.com/sge-suite/sge/blob/master/app/Models/DocumentTemplate.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/DocumentTemplateTest.php
 ---
-> [!todo] Estado
-> Planejada. Depende de [`campuses`](doc:migration-03-campuses) e [`GeneratedDocumentType`](doc:enum-generateddocumenttype), mas não de `internships`: o catálogo pode ser preparado antes dos processos.
+> [!success] Estado
+> Migration, Model, factory, relação com campus, cast do tipo documental, validação, Activity Log e testes PostgreSQL implementados. Versões, arquivos DOCX, upload, autorização e geração ainda não fazem parte desta etapa.
 
 ## Contrato
 
-Representa o documento lógico/template, separado de suas versões. O arquivo DOCX pertence à versão e será armazenado por `Media`; a tabela não deve guardar o binário diretamente.
+`document_templates` representa o template lógico, separado de suas versões. O arquivo DOCX pertence à futura `template_versions` e será armazenado por `Media`; esta tabela não guarda arquivo nem dados de geração.
 
-O template padrão mantém o marcador `${PARAGRAFO_REMUNERACAO}`. Na geração, `RemunerationParagraphFormatter` preenche esse marcador com o §1º completo de remuneração ou de não remuneração, conforme `is_remunerated`, bolsa e auxílio-transporte. O texto aprovado desse parágrafo é regra de domínio centralizada no serviço; não há tabela genérica de regras ou cláusulas. O número de processo de credenciamento é apenas outro dado de substituição quando houver.
+| Coluna | Tipo PostgreSQL | Nulo | Regra |
+| --- | --- | --- | --- |
+| `id` | `bigint` | não | Chave primária Laravel. |
+| `campus_id` | `bigint` | sim | FK para `campuses.id` com exclusão `RESTRICT`; nulo indica modelo global. |
+| `key` | `varchar(255)` | não | Chave estável em `snake_case`, imutável após a criação. |
+| `name` | `varchar(255)` | não | Nome legível obrigatório. |
+| `description` | `text` | sim | Finalidade opcional. |
+| `document_type` | `varchar(255)` | não | Cast de `GeneratedDocumentType`. |
+| `deactivated_at` | `timestamp(0)` | sim | Marca indisponibilidade para novas versões ou gerações futuras. |
+| `created_at` / `updated_at` | `timestamp(0)` | sim | Timestamps nativos. |
 
-No uso pelo Setor de Estágio, enviar uma nova versão apenas substitui o texto ativo de um template existente. Modelos inteiramente próprios de uma concedente, como os de instituições parceiras específicas, são templates independentes. Quando o credenciamento alterar materialmente o documento, o Setor escolhe manualmente o template e a versão ativos na geração; não há associação ou regra automática que selecione um modelo por concedente, remuneração ou credenciamento.
+O índice único de `(campus_id, key)` usa `NULLS NOT DISTINCT` no PostgreSQL. Assim, a chave não se repete entre templates globais nem dentro do mesmo campus; um template global e templates de campi diferentes podem usar a mesma chave. O Model aplica a mesma regra antes da gravação e exige campus ativo ao atribuir um template local. `active()` filtra a desativação; `availableToCampus()` reúne os templates globais e os daquele campus. Esses scopes ainda não substituem autorização por vínculo.
 
-| Campo | Regra |
-| --- | --- |
-| `id` | bigint, chave primária. |
-| `campus_id` | FK nullable; nulo para modelo global, preenchido para modelo próprio do campus. |
-| `key` | chave estável e única no escopo, em `snake_case`. |
-| `name` / `description` | identificação humana e finalidade. |
-| `document_type` | cast de `GeneratedDocumentType`; categoria do registro gerado. |
-| `deactivated_at` | bloqueia novas versões/gerações sem apagar histórico. |
-| timestamps | auditoria; autoria detalhada fica nas versões e no Activity Log. |
+O Activity Log registra alterações do catálogo. A desativação preserva o registro; os fluxos futuros de versão e geração deverão respeitar `deactivated_at`. A relação com `template_versions` e a proteção de versões utilizadas pertencem à Migration 14 e aos fluxos documentais.
+
+O template padrão manterá o marcador `${PARAGRAFO_REMUNERACAO}`. Na geração, `RemunerationParagraphFormatter` preencherá o parágrafo completo conforme a remuneração. Essa regra e a escolha manual do template para modelos especiais ou credenciamentos permanecem no [contrato de geração](doc:geracao-de-documentos-docx-e-variaveis); não há seleção automática por concedente.
 
 ## Checklist
 
 - [x] Definir identificação, categoria e escopo global/por campus.
-- [ ] Criar migration e Model `DocumentTemplate`.
-- [ ] Relacionar versões sem permitir exclusão destrutiva de versão utilizada.
+- [x] Criar migration, Model e factory de `DocumentTemplate`.
+- [x] Validar chave, escopo, campos obrigatórios e desativação.
+- [x] Testar schema, unicidade global/local, FK, casts, scopes, Activity Log e rollback em PostgreSQL.
+- [ ] Relacionar versões e proteger versões já utilizadas na Migration 14.
 - [ ] Autorizar upload somente ao vínculo permitido do Setor de Estágio.
-- [ ] Usar `Media` para armazenar o DOCX.
-- [ ] Testar template ativo, inativo e acesso por campus/permissão.
-- [ ] Testar migrate/rollback na ordem completa.
-
-O catálogo, a sintaxe e o fluxo estão em [Geração de documentos DOCX e variáveis](doc:geracao-de-documentos-docx-e-variaveis).
+- [ ] Usar `Media` para armazenar o DOCX da versão.
+- [ ] Testar acesso por vínculo/permissão e geração com versão ativa.
 
 ## Dependências
 

@@ -13,7 +13,8 @@ Referências: [fluxo de formalização](doc:fluxos-principais#3-analise-e-formal
 
 ## Checklist
 
-- [ ] Criar `document_templates` e `template_versions`.
+- [x] Criar `document_templates` com chave única por escopo e desativação.
+- [ ] Criar `template_versions` e armazenar o DOCX da versão.
 - [ ] Permitir upload DOCX somente ao vínculo autorizado do Setor de Estágio.
 - [x] Definir catálogo fixo de variáveis em português com `${NOME_DA_VARIAVEL}`.
 - [ ] Implementar inspeção OOXML e validação de variáveis antes de ativar uma versão.

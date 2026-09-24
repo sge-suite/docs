@@ -71,7 +71,7 @@ Este índice é uma fotografia editorial da documentação publicada. Os documen
 - [Migration 12 — granting_parties](doc:migration-12-granting-parties) — **implemented** — Contrato das partes concedentes reutilizáveis e seu endereço atual.
 - [Migration 12A — supervisor_registration_requests](doc:migration-12a-supervisor-registration-requests) — **implemented** — Solicitações tipadas de cadastro de supervisor feitas durante a abertura.
 - [Migration 12B — granting_party_registration_requests](doc:migration-12b-granting-party-registration-requests) — **implemented** — Solicitações tipadas de cadastro de parte concedente feitas durante a abertura.
-- [Migration 13 — document_templates](doc:migration-13-document-templates) — **planned** — Contrato do catálogo de templates DOCX do SGE.
+- [Migration 13 — document_templates](doc:migration-13-document-templates) — **implemented** — Contrato do catálogo de templates DOCX do SGE.
 - [Migration 14 — template_versions](doc:migration-14-template-versions) — **planned** — Contrato das versões imutáveis dos templates DOCX.
 - [Migration 15 — internships](doc:migration-15-internships) — **planned** — Contrato do processo de estágio, referências atuais e snapshots históricos.
 - [Migration 16 — generated_documents](doc:migration-16-generated-documents) — **planned** — Contrato dos documentos gerados ou registrados no estágio.

@@ -6,7 +6,7 @@ type: development-phase
 status: completed
 visibility: public
 tags: sge/desenvolvimento, sge/banco-de-dados, sge/checklist
-related: migrations, enums, migration-base-01-users, migration-base-02-cache, migration-base-03-jobs, migration-base-04-activity-log, migration-base-05-media, enum-affiliationtype, enum-brazilianstate, migration-01a-cities, migration-01-addresses, migration-02-user-personal-data, migration-03-campuses, migration-04-affiliations, migration-09-courses, migration-10-course-id-em-affiliations, migration-11-internship-types, migration-12-granting-parties, migration-22-holidays, migration-22-internship-calendar-overrides, casts, helpers, concerns, testes-existentes, fase-04-conta-e-contexto
+related: migrations, enums, migration-base-01-users, migration-base-02-cache, migration-base-03-jobs, migration-base-04-activity-log, migration-base-05-media, enum-affiliationtype, enum-brazilianstate, migration-01a-cities, migration-01-addresses, migration-02-user-personal-data, migration-03-campuses, migration-04-affiliations, migration-09-courses, migration-10-course-id-em-affiliations, migration-11-internship-types, migration-12-granting-parties, migration-22-holidays, migration-22-internship-calendar-overrides, casts, helpers, concerns, testes-existentes, fase-02-conta-e-contexto
 source_refs:
 ---
 > [!info] Ordem
@@ -44,7 +44,7 @@ source_refs:
 
 - [x] Preservar linhas de endereço usadas historicamente; alterações criam nova linha quando necessário.
 - [x] Garantir CPF único e normalizado na conta.
-- [ ] Impedir alteração do CPF em futuros fluxos de configuração da conta; pertence à [Fase 04](doc:fase-04-conta-e-contexto).
+- [ ] Impedir alteração do CPF em futuros fluxos de configuração da conta; pertence à [Fase 04](doc:fase-02-conta-e-contexto).
 - [x] Normalizar CPF, CNPJ, UF e e-mails pelos casts e validações aplicáveis; CEP não tem validação de formato.
 - [x] Permitir múltiplos vínculos por pessoa sem trocar campus dentro do vínculo.
 - [x] Exigir curso em vínculo discente e respeitar escopo do campus.
@@ -64,4 +64,4 @@ source_refs:
 
 ## Próxima fase
 
-[Fase 02 — Activity Log](doc:fase-02-activity-log)
+[Fase 02 — Conta e contexto](doc:fase-02-conta-e-contexto)

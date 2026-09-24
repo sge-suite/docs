@@ -6,7 +6,7 @@ type: technical-reference
 status: implemented
 visibility: public
 tags: sge/concerns, sge/autenticacao, sge/seguranca
-related: fase-04-conta-e-contexto, actions, action-resetuserpassword
+related: fase-02-conta-e-contexto, actions, action-resetuserpassword
 source_refs: https://github.com/sge-suite/sge/blob/master/app/Concerns/PasswordValidationRules.php
 ---
 ## Contrato
@@ -25,9 +25,9 @@ Trait usado por Actions/fluxos que precisam validar senha. Não salva senha e n�
 - [x] Usar `current_password` para senha atual.
 - [ ] Cobrir diretamente todos os requisitos em testes de autenticação.
 - [ ] Confirmar política institucional antes de alterar tamanho/requisitos.
-- [ ] Atualizar [fase de conta](doc:fase-04-conta-e-contexto) e [Actions](doc:actions) ao mudar o contrato.
+- [ ] Atualizar [fase de conta](doc:fase-02-conta-e-contexto) e [Actions](doc:actions) ao mudar o contrato.
 
 ## Relacionamentos
 
 - [ResetUserPassword](doc:action-resetuserpassword)
-- [Conta e contexto](doc:fase-04-conta-e-contexto)
+- [Conta e contexto](doc:fase-02-conta-e-contexto)

@@ -6,7 +6,7 @@ type: technical-reference
 status: implemented
 visibility: public
 tags: sge/concerns, sge/validacao, sge/autorizacao
-related: model-user, fase-04-conta-e-contexto
+related: model-user, fase-02-conta-e-contexto
 source_refs: https://github.com/sge-suite/sge/blob/master/app/Concerns/ProfileValidationRules.php
 ---
 ## Contrato
@@ -30,4 +30,4 @@ Trait que compõe regras para perfil do `User`.
 ## Relacionamentos
 
 - [Model User](doc:model-user)
-- [Conta e contexto](doc:fase-04-conta-e-contexto)
+- [Conta e contexto](doc:fase-02-conta-e-contexto)

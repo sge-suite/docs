@@ -6,7 +6,7 @@ type: technical-hub
 status: in-progress
 visibility: public
 tags: sge/desenvolvimento, sge/actions, sge/checklist
-related: action-resetuserpassword, migration-01-addresses, concerns, componentes-tecnicos, fase-04-conta-e-contexto
+related: action-resetuserpassword, migration-01-addresses, concerns, componentes-tecnicos, fase-02-conta-e-contexto
 source_refs:
 ---
 ## Inventário
@@ -25,4 +25,4 @@ source_refs:
 ## Navegação
 
 - [Componentes técnicos](doc:componentes-tecnicos)
-- [Fase de conta e contexto](doc:fase-04-conta-e-contexto)
+- [Fase de conta e contexto](doc:fase-02-conta-e-contexto)

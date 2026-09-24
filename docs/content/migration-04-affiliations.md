@@ -6,11 +6,11 @@ type: migration-reference
 status: implemented
 visibility: public
 tags: sge/migrations, sge/banco-de-dados, sge/autorizacao
-related: migration-03-campuses, migration-10-course-id-em-affiliations, enum-affiliationtype, migration-09-courses, modelo-de-dados-acesso, fase-04-conta-e-contexto
+related: migration-03-campuses, migration-10-course-id-em-affiliations, enum-affiliationtype, migration-09-courses, modelo-de-dados-acesso, fase-02-conta-e-contexto
 source_refs: https://github.com/sge-suite/sge/blob/master/database/migrations/2026_09_22_105745_create_affiliations_table.php, https://github.com/sge-suite/sge/blob/master/app/Models/Affiliation.php, https://github.com/sge-suite/sge/blob/master/app/Concerns/AffiliationValidationRules.php, https://github.com/sge-suite/sge/blob/master/database/factories/AffiliationFactory.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/AffiliationTest.php
 ---
 > [!success] Estado
-> Migration, model, validação, factory, relações e Activity Log estão implementados. A migration depende de `users` e [`campuses`](doc:migration-03-campuses). O contrato foi verificado no PostgreSQL por Sail. A seleção na sessão e a integração com login permanecem na [Fase 04](doc:fase-04-conta-e-contexto).
+> Migration, model, validação, factory, relações e Activity Log estão implementados. A migration depende de `users` e [`campuses`](doc:migration-03-campuses). O contrato foi verificado no PostgreSQL por Sail. A seleção na sessão e a integração com login permanecem na [Fase 04](doc:fase-02-conta-e-contexto).
 
 ## Schema PostgreSQL
 

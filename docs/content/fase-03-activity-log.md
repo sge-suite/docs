@@ -1,12 +1,12 @@
 ---
-id: fase-02-activity-log
-title: Fase 02 — Activity Log
+id: fase-03-activity-log
+title: Fase 03 — Activity Log
 description: Cobertura consistente de auditoria nas entidades de negócio, com autoria ligada ao vínculo ativo.
 type: development-phase
-status: in-progress
+status: planned
 visibility: public
 tags: sge/desenvolvimento, sge/auditoria, sge/checklist
-related: migration-base-04-activity-log, modelo-de-dados-historico, e-mails-notificacoes-e-entregas, fase-03-integracao-de-email
+related: migration-base-04-activity-log, modelo-de-dados-historico, e-mails-notificacoes-e-entregas, fase-04-integracao-de-email
 source_refs:
 ---
 Esta é a próxima etapa de implementação. O Activity Log será preparado antes dos fluxos funcionais para que ações futuras já tenham autoria e histórico consistentes.
@@ -26,7 +26,7 @@ O inventário deve cobrir todas as entidades de negócio. Tabelas internas do La
 
 ## Depois da auditoria
 
-- [ ] Prosseguir para [Integração de e-mail](doc:fase-03-integracao-de-email), incluindo envio pós-commit, tentativas, idempotência e reprocessamento.
+- [ ] Prosseguir para [Integração de e-mail](doc:fase-04-integracao-de-email), incluindo envio pós-commit, tentativas, idempotência e reprocessamento.
 - [ ] Preparar Policies e Actions para serem usadas por interfaces e comandos sem duplicar autorização.
 - [ ] Manter operações demoradas em Jobs e garantir idempotência e tratamento observável de falhas.
 - [ ] Configurar monitoramento, backups e teste de restauração quando os fluxos de produção estiverem definidos.
@@ -39,4 +39,4 @@ O inventário deve cobrir todas as entidades de negócio. Tabelas internas do La
 
 ## Próxima etapa
 
-[Fase 03 — Integração de e-mail](doc:fase-03-integracao-de-email)
+[Fase 04 — Integração de e-mail](doc:fase-04-integracao-de-email)

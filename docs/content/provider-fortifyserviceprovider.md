@@ -6,7 +6,7 @@ type: technical-reference
 status: implemented
 visibility: public
 tags: sge/providers, sge/autenticacao, sge/seguranca
-related: fase-04-conta-e-contexto, action-resetuserpassword, e-mails-notificacoes-e-entregas, concern-passwordvalidationrules
+related: fase-02-conta-e-contexto, action-resetuserpassword, e-mails-notificacoes-e-entregas, concern-passwordvalidationrules
 source_refs: https://github.com/sge-suite/sge/blob/master/app/Providers/FortifyServiceProvider.php
 ---
 ## Boot atual
@@ -25,7 +25,7 @@ source_refs: https://github.com/sge-suite/sge/blob/master/app/Providers/FortifyS
 - [x] Configurar limiter de login por e-mail e IP.
 - [ ] Testar limite, janela de tempo e diferença entre e-mails/IPs.
 - [ ] Integrar log seguro de mensagens de recuperação.
-- [ ] Definir o fluxo seguro de primeiro acesso conforme [fase de conta](doc:fase-04-conta-e-contexto).
+- [ ] Definir o fluxo seguro de primeiro acesso conforme [fase de conta](doc:fase-02-conta-e-contexto).
 - [ ] Revisar se o rate limit atende criação de conta e reenvio.
 
 ## Relacionamentos

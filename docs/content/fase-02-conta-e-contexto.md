@@ -1,12 +1,12 @@
 ---
-id: fase-04-conta-e-contexto
-title: Fase 04 — Conta e contexto
+id: fase-02-conta-e-contexto
+title: Fase 02 — Conta e contexto
 description: Checklist de autenticação, vínculos ativos e configurações próprias.
 type: development-phase
 status: planned
 visibility: public
 tags: sge/desenvolvimento, sge/autenticacao, sge/checklist
-related: modelo-de-dados-acesso, e-mails-notificacoes-e-entregas, fluxos-principais, fase-05-administracao
+related: modelo-de-dados-acesso, e-mails-notificacoes-e-entregas, fluxos-principais, fase-03-activity-log, fase-05-administracao
 source_refs:
 ---
 Referências: [modelo de acesso](doc:modelo-de-dados-acesso), [E-mails, notificações e entregas](doc:e-mails-notificacoes-e-entregas) e [fluxo de login](doc:fluxos-principais#1-acesso-e-vinculo).
@@ -53,4 +53,4 @@ O trabalho começa pelo backend: serviço único para resolver e validar o vínc
 
 ## Próxima fase
 
-[Fase 05 — Administração hierárquica](doc:fase-05-administracao)
+[Fase 03 — Activity Log](doc:fase-03-activity-log)

@@ -1,12 +1,12 @@
 ---
-id: fase-03-integracao-de-email
-title: Fase 03 — Integração de e-mail
+id: fase-04-integracao-de-email
+title: Fase 04 — Integração de e-mail
 description: Simplificação e fechamento do backend de preparação, envio e reprocessamento de e-mails.
 type: development-phase
 status: planned
 visibility: public
 tags: sge/desenvolvimento, sge/email, sge/checklist
-related: enums, e-mails-notificacoes-e-entregas, enum-emailmessagepurpose, enum-emaildeliveryattemptstatus, migration-05-notifications, migration-06-email-messages, migration-07-email-delivery-attempts, fase-02-activity-log
+related: enums, e-mails-notificacoes-e-entregas, enum-emailmessagepurpose, enum-emaildeliveryattemptstatus, migration-05-notifications, migration-06-email-messages, migration-07-email-delivery-attempts, fase-03-activity-log
 source_refs:
 ---
 As tabelas `notifications`, `email_messages` e `email_delivery_attempts`, seus enums, Models e validações já existem. Esta fase implementa uma API de backend fácil de usar nos fluxos e concentra nela persistência, segurança, idempotência e transporte.
@@ -44,4 +44,4 @@ As tabelas `notifications`, `email_messages` e `email_delivery_attempts`, seus e
 
 ## Próxima fase
 
-[Fase 04 — Conta e contexto](doc:fase-04-conta-e-contexto)
+[Fase 05 — Administração hierárquica](doc:fase-05-administracao)

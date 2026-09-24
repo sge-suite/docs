@@ -6,7 +6,7 @@ type: technical-hub
 status: in-progress
 visibility: public
 tags: sge/desenvolvimento, sge/validacao, sge/checklist
-related: concern-passwordvalidationrules, concern-profilevalidationrules, migration-01a-cities, migration-01-addresses, migration-22-holidays, componentes-tecnicos, fase-04-conta-e-contexto
+related: concern-passwordvalidationrules, concern-profilevalidationrules, migration-01a-cities, migration-01-addresses, migration-22-holidays, componentes-tecnicos, fase-02-conta-e-contexto
 source_refs:
 ---
 Concerns devem conter regras coesas e reutilizáveis, sem conhecer uma tela específica. Cada método precisa deixar claro quando é usado e quais mensagens/contratos produz.
@@ -29,4 +29,4 @@ Concerns devem conter regras coesas e reutilizáveis, sem conhecer uma tela espe
 ## Navegação
 
 - [Componentes técnicos](doc:componentes-tecnicos)
-- [Fase de conta e contexto](doc:fase-04-conta-e-contexto)
+- [Fase de conta e contexto](doc:fase-02-conta-e-contexto)

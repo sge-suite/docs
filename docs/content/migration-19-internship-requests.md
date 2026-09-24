@@ -3,14 +3,14 @@ id: migration-19-internship-requests
 title: Migration 19 — internship_requests
 description: Contrato da solicitação única de abertura de estágio preenchida pelo discente.
 type: migration-reference
-status: planned
+status: implemented
 visibility: public
 tags: sge/migrations, sge/estagio, sge/formularios
 related: enum-legalcapacitydeclaration, enum-internshiprequeststatus, migration-base-04-activity-log, migration-19a-emancipation-evidences, cadastros-pendentes-de-supervisor-e-concedente, backlog-e-decisoes, migration-04-affiliations, migration-09-courses, migration-11-internship-types, migration-12-granting-parties, migration-12a-supervisor-registration-requests, migration-12b-granting-party-registration-requests, migration-15-internships, migration-20-internship-request-corrections
 source_refs:
 ---
-> [!todo] Estado
-> Planejada. Implementa o formulário nativo de abertura antes de existir um estágio formalizado. A tabela é criada depois de `internships` apenas porque ela guarda a FK única `internship_id`; o fluxo continua sendo solicitação, aceite e criação do estágio.
+> [!success] Estado
+> Migration, Model, factory, relações e testes PostgreSQL implementados. A tabela vem depois de `internships` por causa da FK única `internship_id`; o fluxo de envio, análise, aceite e criação transacional do estágio ainda será implementado.
 
 ## Contrato
 
@@ -28,7 +28,7 @@ source_refs:
 | `student_year_semester` | string nullable em `Draft`; período/semestre declarado pelo discente e congelado no snapshot no aceite. |
 | `legal_capacity_declaration` | [`LegalCapacityDeclaration`](doc:enum-legalcapacitydeclaration) nullable em `Draft`; rádio obrigatório no envio: maior, menor ou menor emancipado. |
 | `legal_guardian_name` | texto nullable; obrigatório quando a opção for `minor`. |
-| `legal_guardian_cpf` | `char(11)` nullable; obrigatório quando a opção for `minor`, normalizado e validado. |
+| `legal_guardian_cpf` | `varchar(255)` nullable; obrigatório quando a opção for `minor`, normalizado e validado pelo `CpfCast`. |
 | `legal_guardian_kinship` | `varchar(80)` nullable; obrigatório quando a opção for `minor`. |
 | `legal_guardian_email` | `varchar(255)` nullable; obrigatório quando a opção for `minor`. |
 | `activities` | texto nullable em `Draft`; obrigatório no envio. |
@@ -42,11 +42,10 @@ source_refs:
 | `observations` | texto nullable; observações complementares. |
 | `status` | [`InternshipRequestStatus`](doc:enum-internshiprequeststatus): rascunho, enviada, em análise, com pendência, aceita, recusada ou desistida. |
 | `internship_id` | FK nullable e única para o estágio criado depois do aceite. |
-| `terms_version` / `terms_content_hash` | versão e SHA-256 do texto institucional aceito no último envio. |
-| `terms_accepted_at` | instante do aceite explícito; nulo em `Draft` e atualizado a cada reenvio. |
+| `terms_accepted_at` | data e hora do aceite explícito; nulo antes do primeiro envio e atualizado em cada reenvio. Não há coluna de versão, hash ou booleano. |
 | timestamps | auditoria temporal. |
 
-Há somente uma solicitação para o processo aberto pelo discente. Ela é atualizada no mesmo registro quando o discente salva ou responde uma pendência; o Livewire pode persistir valores nulos enquanto estiver em `Draft`. Nos demais estados, todos os campos obrigatórios do caminho condicional escolhido devem estar válidos; campos de ramos não escolhidos continuam nulos. Cada alteração relevante é registrada no [`activity_log`](doc:migration-base-04-activity-log), com atributos anteriores e novos quando permitido. Ao ser aceita pela primeira vez, os valores validados criam `internships`, que preserva `student_affiliation_id = affiliation_id`, as demais FKs, a jornada inicial e os snapshots históricos próprios. Se a solicitação já possuir `internship_id`, uma correção aprovada atualiza apenas os campos autorizados do estágio existente, recalcula os derivados e preserva os documentos anteriores no histórico.
+Há somente uma solicitação para o processo aberto pelo discente. Ela é atualizada no mesmo registro quando o discente salva ou responde uma pendência; o Livewire pode persistir valores nulos enquanto estiver em `Draft`. Nos demais estados, todos os campos obrigatórios do caminho condicional escolhido devem estar válidos; campos de ramos não escolhidos continuam nulos. O Model registra criação e alterações no [`activity_log`](doc:migration-base-04-activity-log); a identificação do autor por vínculo será configurada no fluxo. Não há FK de revisor nesta tabela. Ao ser aceita pela primeira vez, os valores validados criam `internships`, que preserva `student_affiliation_id = affiliation_id`, as demais FKs, a jornada inicial e os snapshots históricos próprios. Se a solicitação já possuir `internship_id`, uma correção aprovada atualiza apenas os campos autorizados do estágio existente, recalcula os derivados e preserva os documentos anteriores no histórico.
 
 ### Contrato de `weekly_hours`
 
@@ -62,16 +61,16 @@ Há somente uma solicitação para o processo aberto pelo discente. Ela é atual
 }
 ```
 
-As sete chaves sempre existem quando o formulário é enviado; cada valor é inteiro não negativo em horas. A soma semanal deve ser positiva. Para o tipo selecionado, cada dia deve respeitar `internship_types.max_daily_hours` e a soma da semana deve respeitar `internship_types.max_weekly_hours`. Na configuração do tipo, esses limites começam em 6 horas diárias e 30 semanais e podem ser aumentados, nunca reduzidos. `projected_end_date` é recalculada a partir desta jornada, da carga exigida do tipo, do calendário nacional, estadual e municipal versionado aplicável ao endereço do local de trabalho e das pausas posteriormente registradas.
+As sete chaves sempre existem quando o formulário é enviado; cada valor é inteiro não negativo em horas. A soma semanal deve ser positiva. Para o tipo selecionado, cada dia deve respeitar `internship_types.max_daily_hours` e a soma da semana deve respeitar `internship_types.max_weekly_hours`. Na configuração do tipo, esses limites começam em 6 horas diárias e 30 semanais e podem ser aumentados, nunca reduzidos. `projected_end_date` deverá ser calculada pelo fluxo a partir desta jornada, da carga exigida do tipo, do calendário nacional, estadual e municipal aplicável ao endereço do local de trabalho e das pausas posteriormente registradas. Por enquanto, o Model exige a data preenchida fora de `Draft` e valida que ela não antecede o início; o cálculo automático ainda não existe.
 
 ### Caminhos condicionais de cadastro
 
 - Concedente: exatamente uma de `granting_party_id` ou `granting_party_registration_request_id` deve ser informada no envio. A segunda aponta para um registro próprio, com documento, endereço, representante, contatos, área, conselho e processo, aguardando análise do Setor.
 - Supervisor: exatamente uma de `supervisor_affiliation_id` ou `supervisor_registration_request_id` deve ser informada no envio. A segunda preserva nome, CPF, telefone, e-mail, cargo, qualificação, formação e experiência propostos pelo discente até que o Setor crie/associe o vínculo de supervisor. O supervisor completa ou confirma seus dados profissionais atuais em `user_personal_data` no futuro fluxo do formulário.
-- Capacidade civil: o rádio oferece `adult`, `minor` e `emancipated_minor`. `adult` só é válido para quem tiver 18 anos completos na data do envio. `minor` exige os quatro campos de responsável legal. `emancipated_minor` exige ao menos uma [evidência](doc:migration-19a-emancipation-evidences) enviada e dispensa responsável legal neste envio; o aceite final exige evidência aprovada pelo Setor. Se a devolução apontar comprovante inválido, o discente cria novo envio ou troca para `minor` e informa o responsável.
+- Capacidade civil: o rádio oferece `adult`, `minor` e `emancipated_minor`. `adult` só é válido para quem tiver 18 anos completos na data do envio. `minor` exige os quatro campos de responsável legal. `emancipated_minor` dispensará responsável legal e exigirá ao menos uma [evidência](doc:migration-19a-emancipation-evidences) enviada; o aceite final exigirá evidência aprovada pelo Setor. Essas validações dependem da Migration 19A e ainda não estão implementadas. Se a devolução apontar comprovante inválido, o discente cria novo envio ou troca para `minor` e informa o responsável.
 - Remuneração: `is_remunerated = true` exige `grant_value`; se for `false`, ambos os valores monetários ficam nulos, salvo decisão posterior que admita auxílio sem bolsa.
 
-As duas solicitações pendentes de cadastro são estruturas de domínio próprias, conforme [Cadastros pendentes de supervisor e concedente](doc:cadastros-pendentes-de-supervisor-e-concedente) e [D-011](doc:backlog-e-decisoes#d-011-solicitacoes-pendentes-sao-registros-proprios); não são JSON genérico nem notificações. As migrations que as criam devem preceder a FK desta tabela. Enquanto elas não existirem no código, este contrato não deve ser implementado de forma incompleta com campos de texto livres.
+As duas solicitações pendentes de cadastro são estruturas de domínio próprias, conforme [Cadastros pendentes de supervisor e concedente](doc:cadastros-pendentes-de-supervisor-e-concedente) e [D-011](doc:backlog-e-decisoes#d-011-solicitacoes-pendentes-sao-registros-proprios); não são JSON genérico nem notificações. As migrations que as criam devem preceder a FK desta tabela. As duas migrations de cadastro pendente já existem no código; esta tabela usa somente FKs para esses caminhos.
 
 ## Validações do formulário
 
@@ -81,7 +80,7 @@ As duas solicitações pendentes de cadastro são estruturas de domínio própri
 - a validação no servidor confirma a relação entre curso e tipo, exige que os limites configurados no tipo sejam de pelo menos 6 horas diárias e 30 semanais e valida a jornada diária e semanal contra esses limites;
 - a parte concedente deve estar cadastrada antes de ser aceita; o número de processo de credenciamento é opcional e preenche o documento quando aplicável;
 - a data prevista de término é calculada, e não digitada, a partir do tipo e da jornada.
-- envio e reenvio exigem ação explícita de ciência; versão, hash do texto e instante são persistidos juntos.
+- envio e reenvio exigirão checkbox explícito de ciência na interface; somente a data e hora do aceite serão persistidas em `terms_accepted_at`.
 
 ## Checklist
 
@@ -92,9 +91,11 @@ As duas solicitações pendentes de cadastro são estruturas de domínio própri
 - [x] Mapear todas as colunas do formulário de abertura e seus casts.
 - [x] Fechar os critérios de validação da parte concedente e do supervisor pendentes.
 - [x] Especificar as migrations tipadas das solicitações de cadastro pendente antes desta migration.
-- [x] Definir o histórico privado de evidências e o aceite versionado das normas.
-- [ ] Criar migration, Model, Policies, índices e constraints de unicidade.
-- [ ] Testar filtros de curso/tipo e limites de carga horária no servidor.
+- [x] Definir o histórico privado de evidências e o aceite das normas por data e hora.
+- [x] Criar migration, Model, factory, relações, índice por vínculo/status e FK única para o estágio.
+- [ ] Criar Policies e fluxos de envio, análise, aceite e reenvio.
+- [x] Testar no Model a compatibilidade de curso/tipo, os limites de carga horária e os ramos condicionais.
+- [ ] Implementar seleção na interface, cálculo da data projetada e validação da evidência de emancipação após a Migration 19A.
 
 ## Dependências
 

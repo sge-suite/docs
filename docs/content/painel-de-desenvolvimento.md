@@ -77,7 +77,7 @@ Este índice é uma fotografia editorial da documentação publicada. Os documen
 - [Migration 16 — generated_documents](doc:migration-16-generated-documents) — **planned** — Contrato dos documentos gerados ou registrados no estágio.
 - [Migration 17 — internship_pauses](doc:migration-17-internship-pauses) — **planned** — Contrato das pausas de estágio e sua validação temporal.
 - [Migration 18 — supervisor_evaluations](doc:migration-18-supervisor-evaluations) — **implemented** — Schema, Model, factory e testes da avaliação do supervisor; fluxo funcional pendente.
-- [Migration 19 — internship_requests](doc:migration-19-internship-requests) — **planned** — Contrato da solicitação única de abertura de estágio preenchida pelo discente.
+- [Migration 19 — internship_requests](doc:migration-19-internship-requests) — **implemented** — Contrato da solicitação única de abertura de estágio preenchida pelo discente.
 - [Migration 19A — emancipation_evidences](doc:migration-19a-emancipation-evidences) — **planned** — Histórico privado das provas de emancipação e sua análise manual.
 - [Migration 20 — internship_request_corrections](doc:migration-20-internship-request-corrections) — **planned** — Pendências operacionais que direcionam a edição da solicitação de estágio.
 - [Migration 21 — internship_cancellation_requests](doc:migration-21-internship-cancellation-requests) — **planned** — Pedidos rastreáveis de cancelamento de estágio formalizado feitos pelo discente.

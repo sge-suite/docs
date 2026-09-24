@@ -13,7 +13,7 @@ Base: [fluxo de abertura](doc:fluxos-principais#2-solicitacao).
 
 ## Formulário e solicitação do discente
 
-- [ ] Criar `internship_requests` com status inicial `draft`.
+- [x] Criar `internship_requests` com status inicial `draft`.
 - [ ] Salvar o `draft` incrementalmente com Livewire, aceitando campos nulos fora dos identificadores técnicos.
 - [ ] Exigir, ao enviar ou em qualquer estado não terminal, todos os campos obrigatórios conforme o caminho condicional escolhido.
 - [ ] Exibir ao discente a lista das próprias solicitações com status e última atualização, sem expor Activity Log.
@@ -51,6 +51,7 @@ Base: [fluxo de abertura](doc:fluxos-principais#2-solicitacao).
 ## Envio e análise
 
 - [ ] Exibir erros sem perder dados do rascunho.
+- [ ] Exigir checkbox de concordância no envio e reenvio; registrar a data e hora em `terms_accepted_at`.
 - [ ] Enviar para análise e bloquear edição indevida.
 - [ ] Solicitar pendência com motivo.
 - [ ] Permitir correção e reenvio pelo discente.

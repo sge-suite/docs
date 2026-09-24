@@ -3,14 +3,14 @@ id: migration-16-generated-documents
 title: Migration 16 — generated_documents
 description: Contrato dos documentos gerados ou registrados no estágio.
 type: migration-reference
-status: planned
+status: implemented
 visibility: public
 tags: sge/migrations, sge/documentos, sge/historico
 related: migration-15-internships, migration-14-template-versions, enum-generateddocumenttype, enum-generateddocumentstatus, geracao-de-documentos-docx-e-variaveis, enum-generateddocumentorigin
 source_refs:
 ---
-> [!todo] Estado
-> Planejada. Depende de [`internships`](doc:migration-15-internships), [`template_versions`](doc:migration-14-template-versions) e dos enums documentais.
+> [!success] Estado
+> Migration, Model, factory, relações e validações do registro implementados. A geração/transmissão e a análise de assinaturas continuam no fluxo funcional.
 
 ## Contrato
 
@@ -26,10 +26,10 @@ source_refs:
 | `snapshot`            | JSONB dos dados usados na geração; obrigatório para `sge` e nulo para `granting_party`. |
 | `generation_token`    | UUID idempotente, único para impedir duplicação por retry da mesma ação.        |
 | `output_filename` / `template_sha256` | nome entregue e hash do template usado; não são caminho de arquivo final. |
-| `generated_by_affiliation_id` / `generated_at` | autoria e instante da geração bem-sucedida. |
+| `generated_at` | instante da geração bem-sucedida pelo SGE; a autoria é registrada no Activity Log. |
 | `cancelled_at`        | timestamp nullable, obrigatório quando o documento for cancelado.     |
 | `cancellation_reason` | texto nullable, obrigatório quando o documento for cancelado.         |
-| `cancelled_by_affiliation_id` | FK nullable para o vínculo que efetuou ou confirmou o cancelamento. |
+
 | timestamps            | auditoria.                                                            |
 
 O SGE registra a geração ou a existência, mas não armazena PDF, DOCX de saída ou documentos assinados. Cada geração pelo SGE referencia a versão validada mais recente no momento da geração; não cria uma linha em `template_versions`. A FK para a versão deve restringir sua exclusão física após uso, e a versão usada não pode ser alterada de forma destrutiva. Versões nunca usadas podem ser excluídas com sua mídia. O SGE armazena apenas templates, versões e snapshots. Para documento de origem `sge`, a `snapshot` preserva o catálogo/valores resolvidos, os valores monetários e o texto do §1º de remuneração efetivamente inserido no marcador `${PARAGRAFO_REMUNERACAO}`. Nunca inclui prova de emancipação, token, senha ou log. O status de assinatura é do documento; cancelar o documento não cancela automaticamente o estágio.
@@ -55,16 +55,16 @@ Um aditivo é um `generated_documents` com `type = addendum`, versão de templat
 ## Checklist
 
 - [x] Confirmar catálogo de tipos e transições de status atuais.
-- [ ] Criar migration com FKs, índices por estágio/status e nulabilidade condicional.
-- [ ] Criar Model com casts dos três enums e JSONB.
-- [ ] Validar combinações de origem, tipo, template e status.
-- [ ] Implementar snapshot imutável e Activity Log.
-- [ ] Exigir local de disponibilização genérico ao marcar `awaiting_signature`, sem nome de plataforma hardcoded.
+- [x] Criar migration com FKs, índice por estágio/status e nulabilidade condicional.
+- [x] Criar Model com casts dos três enums e JSONB.
+- [x] Validar combinações de origem, tipo, template e status no Model.
+- [x] Implementar snapshot imutável no Model e Activity Log de criação/alteração.
+- [x] Exigir local de disponibilização genérico ao marcar `awaiting_signature`, sem nome de plataforma hardcoded.
 - [ ] Exibir interessados elegíveis como checkboxes e enviar o aviso selecionado após o commit da transição.
 - [ ] Implementar acompanhamento manual de assinatura externa quando aplicável.
 - [ ] Testar geração, assinatura, cancelamento, aditivo e documento da concedente.
 - [ ] Testar que nenhum arquivo final seja armazenado.
-- [ ] Testar migrate/rollback na ordem completa.
+- [ ] Testar migrate/rollback na ordem completa após as migrations dependentes.
 
 ## Enums relacionados
 

@@ -3,14 +3,14 @@ id: migration-23-internship-work-schedules
 title: Migration 23 — internship_work_schedules
 description: Vigências da jornada criadas por aditivos após a jornada inicial do estágio.
 type: migration-reference
-status: planned
+status: implemented
 visibility: public
 tags: sge/migrations, sge/jornada, sge/calculos
 related: migration-15-internships, migration-16-generated-documents, migration-17-internship-pauses, migration-22-holidays, migration-22-internship-calendar-overrides, service-internshipenddatecalculator
 source_refs:
 ---
-> [!todo] Estado
-> Planejada. A jornada inicial fica em `internships.weekly_hours`. Esta tabela só registra alterações posteriores criadas por aditivo formalizado e conferido pelo Setor de Estágio.
+> [!success] Estado
+> Migration, Model, factory e relações implementados. A jornada inicial permanece em `internships.weekly_hours`; a aplicação transacional do aditivo e o recálculo ainda pertencem ao fluxo funcional.
 
 ## Contrato da tabela
 
@@ -22,13 +22,13 @@ source_refs:
 | `ends_on` | `date` | sim | índice composto | Último dia inclusivo; nulo apenas na vigência atual. |
 | `weekly_hours` | `jsonb` | não | — | Objeto com as sete chaves de dia da semana e inteiros não negativos em horas. |
 | `generated_document_id` | `bigint` | não | `FK`, índice | Referencia o aditivo formalizado em `generated_documents.id`. |
-| `created_by_affiliation_id` | `bigint` | não | `FK`, índice | Vínculo que registrou a vigência; exclusão `RESTRICT`. |
+
 | `created_at` | `timestamp(0)` | não | — | Instante de criação. |
 | `updated_at` | `timestamp(0)` | não | — | Instante da última alteração técnica permitida. |
 
 `internships.weekly_hours` vale desde `planned_start_date` até o dia anterior ao primeiro aditivo efetivado. As linhas desta tabela representam apenas vigências posteriores; a aplicação impede sobreposição e lacunas entre elas. Cada nova vigência começa no dia seguinte ao encerramento da anterior.
 
-O banco deve garantir, quando o PostgreSQL estiver disponível, que `ends_on` seja nulo ou maior/igual a `starts_on`, que `weekly_hours` contenha exatamente os dias esperados e que cada valor seja inteiro não negativo. A referência ao aditivo assinado e a continuidade temporal também devem ser validadas na Action e nos testes.
+O Model valida que `ends_on` seja nulo ou maior/igual a `starts_on`, que `weekly_hours` contenha exatamente os dias esperados e que cada valor seja inteiro não negativo dentro dos limites do snapshot. Também verifica a referência a um aditivo assinado do mesmo estágio, sobreposição e continuidade com a vigência anterior. A Action ainda deverá serializar essas mudanças com lock no estágio; não há SQL bruto nem `CHECK` adicional na migration.
 
 ## Regras de negócio
 
@@ -46,12 +46,13 @@ Uma pausa não é uma jornada e não altera `weekly_hours`. Uma exceção de fer
 
 ## Checklist
 
-- [ ] Criar migration `create_internship_work_schedules_table` com tipos SQL, FKs e índices.
-- [ ] Criar Model com cast de `weekly_hours` e relações para estágio, documento e vínculo criador.
-- [ ] Validar exatamente as sete chaves de `weekly_hours` e os limites do snapshot do tipo.
-- [ ] Garantir no banco e na Action que vigências do mesmo estágio não se sobreponham.
+- [x] Criar migration `create_internship_work_schedules_table` com tipos SQL, FKs e índices.
+- [x] Criar Model com cast de `weekly_hours` e relações para estágio e documento; autoria no Activity Log.
+- [x] Validar exatamente as sete chaves de `weekly_hours` e os limites do snapshot do tipo no Model.
+- [x] Rejeitar sobreposição e lacuna com a vigência anterior no Model.
+- [ ] Garantir serialização concorrente das alterações na Action transacional.
 - [ ] Exigir aditivo e assinaturas conferidas para cada vigência posterior.
-- [ ] Impedir lacunas indevidas e impedir edição/exclusão depois do primeiro uso.
+- [x] Impedir reescrita da jornada e exclusão física pelo Model; permitir apenas encerramento único da vigência.
 - [ ] Recalcular a previsão somente após a nova vigência ser efetivada.
 - [ ] Testar jornada inicial em `internships`, aditivo, vigência encerrada, sobreposição, lacuna, pausa e reprocessamento idempotente.
 - [ ] Testar migrate/rollback na ordem completa.

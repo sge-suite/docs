@@ -63,8 +63,8 @@ Um aditivo é um `generated_documents` com `type = addendum`, versão de templat
 - [ ] Exibir interessados elegíveis como checkboxes e enviar o aviso selecionado após o commit da transição.
 - [ ] Implementar acompanhamento manual de assinatura externa quando aplicável.
 - [ ] Testar geração, assinatura, cancelamento, aditivo e documento da concedente.
-- [ ] Testar que nenhum arquivo final seja armazenado.
-- [ ] Testar migrate/rollback na ordem completa após as migrations dependentes.
+- [x] Testar que nenhum arquivo final seja armazenado.
+- [x] Testar migrate/rollback na ordem completa após as migrations dependentes.
 
 ## Enums relacionados
 

@@ -53,15 +53,20 @@ Este mapa acompanha o código real no repositório Laravel irmão, em `../sge`. 
 | Avaliações do supervisor | `tests/Feature/SupervisorEvaluationTest.php` | Schema PostgreSQL com respostas em colunas e rollback da Migration 18, FKs restritas, histórico do supervisor responsável, unicidade por estágio/supervisor, casts, rascunho, ramos condicionais do formulário, critérios, carga horária, análise, cancelamento, imutabilidade do envio, Activity Log e avaliação aprovada vigente. |
 | Solicitações de estágio | `tests/Feature/InternshipRequestTest.php` | Schema PostgreSQL e rollback da Migration 19, FKs restritas, unicidade do estágio associado, casts, rascunho e envio, aceite dos termos por data, curso/tipo, caminhos de concedente e supervisor, capacidade civil e CPF do responsável, jornada, remuneração, Activity Log, aceite e bloqueio de exclusão. |
 | Estágios | `tests/Feature/InternshipTest.php` | Schema PostgreSQL da Migration 15, FKs restritas, snapshots e jornada inicial em JSONB, casts, vínculo discente e tipo do curso, limites históricos de jornada, remuneração, status, Activity Log e rollback. |
+| Documentos gerados | `tests/Feature/GeneratedDocumentTest.php` | Schema PostgreSQL da Migration 16, FKs, token único, origem SGE/externa, template validado, snapshot, transições, cancelamento, Activity Log e rollback com dependências. |
+| Pausas de estágio | `tests/Feature/InternshipPauseTest.php` | Schema da Migration 17, FK restrita, datas, sobreposição, estágio em andamento, Activity Log e rollback. |
+| Evidências de emancipação | `tests/Feature/EmancipationEvidenceTest.php` | Schema da Migration 19A, mídia privada por envio, análise, vínculo com a solicitação, FK restrita e rollback. |
+| Correções de solicitação | `tests/Feature/InternshipRequestCorrectionTest.php` | Schema JSONB da Migration 20, seções, estados, uma correção aberta, datas, FK restrita e rollback. |
+| Pedidos de cancelamento | `tests/Feature/InternshipCancellationRequestTest.php` | Schema da Migration 21, estados, motivos, data efetiva, pedido pendente único, FK restrita e rollback. |
+| Exceções de calendário | `tests/Feature/InternshipCalendarOverrideTest.php` | Schema da Migration 22A, unicidade por estágio/data, motivo, Activity Log e rollback. |
+| Vigências de jornada | `tests/Feature/InternshipWorkScheduleTest.php` | Schema JSONB da Migration 23, aditivo assinado, limites diários e semanais, continuidade, imutabilidade, FKs restritas e rollback. |
 | Notificações | `tests/Feature/NotificationsTest.php` | Schema PostgreSQL nativo com `jsonb` e UUID, relação polimórfica, leitura/não leitura, isolamento entre vínculos da mesma conta, notificações destinadas a `User`, Policy de vínculo ativo e rollback/reaplicação. 7 testes e 77 assertions passaram por Sail. |
 | Mensagens de e-mail | `tests/Feature/EmailMessageTest.php` | Schema PostgreSQL, FKs, ID `bigint`, criptografia de destinatário e conteúdo, snapshot imutável, regras por finalidade e unicidade da chave UUID de idempotência. |
 | Tentativas de entrega | `tests/Feature/EmailDeliveryAttemptTest.php` | Schema PostgreSQL com ID e FK `bigint`, sequência única, estados e marcos, motivo sanitizado, preservação de tentativas anteriores e rollback/reaplicação na ordem das FKs. |
 
 ## Lacunas prioritárias
 
-- As Migrations 16, 17, 19A, 20, 21, 22A e 23 já possuem schema e Models, mas ainda precisam de testes Pest específicos de regras, FKs, rollback e fluxos.
-
-- [ ] Criar testes de integração para as migrations de domínio ainda não implementadas, em banco limpo.
+- [ ] Criar testes de integração para as futuras migrations de domínio, em banco limpo.
 - [ ] Criar testes de rollback das migrations reversíveis.
 - [ ] Ampliar a cobertura de `CurrencyHelper`, dos formatos de `DateHelper` e dos comprimentos de telefone/documentos.
 - [ ] Completar a cobertura de `null`, vazio, formato inválido e timezone em todos os helpers.

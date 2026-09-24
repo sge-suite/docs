@@ -55,7 +55,7 @@ Uma pausa não é uma jornada e não altera `weekly_hours`. Uma exceção de fer
 - [x] Impedir reescrita da jornada e exclusão física pelo Model; permitir apenas encerramento único da vigência.
 - [ ] Recalcular a previsão somente após a nova vigência ser efetivada.
 - [ ] Testar jornada inicial em `internships`, aditivo, vigência encerrada, sobreposição, lacuna, pausa e reprocessamento idempotente.
-- [ ] Testar migrate/rollback na ordem completa.
+- [x] Testar migrate/rollback na ordem completa.
 
 ## Dependências
 

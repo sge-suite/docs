@@ -31,4 +31,4 @@ Pausas não podem se sobrepor, só podem ser criadas em estágio `InProgress`, n
 - [ ] Atualizar status `Paused`/`InProgress` pela Action de sincronização, com autorização e sem update direto.
 - [x] Registrar criação, alteração e remoção no Activity Log.
 - [ ] Testar pausa válida, sobreposição, intervalo invertido e impacto na data final.
-- [ ] Testar migrate/rollback na ordem completa.
+- [x] Testar migrate/rollback na ordem completa.

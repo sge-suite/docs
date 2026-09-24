@@ -14,7 +14,7 @@ source_refs:
 
 ## Escopo
 
-`supervisor_evaluations` armazena um único formulário por estágio e supervisor. Ele é atualizado somente em `Draft` ou após devolução em `Returned`; o `activity_log` preserva cada alteração e transição sem criar versões de formulário. A liberação da avaliação e a referência para a resposta vigente pertencem a `internships`. O cálculo da resposta usa a configuração congelada em `internship_type_snapshot`, e não o cadastro atual de `internship_types`. Relatório e apresentação são lançados separadamente pelo Orientador.
+`supervisor_evaluations` armazena um único formulário fixo por estágio e supervisor, com cada resposta em sua própria coluna. Ele é atualizado somente em `Draft` ou após devolução em `Returned`; o `activity_log` preserva cada alteração e transição sem criar versões de formulário. A liberação da avaliação e a referência para a resposta vigente pertencem a `internships`. O cálculo da nota usa a configuração congelada em `internship_type_snapshot`, e não o cadastro atual de `internship_types`. Relatório e apresentação são lançados separadamente pelo Orientador.
 
 ## Contrato implementado
 
@@ -24,13 +24,15 @@ source_refs:
 | `internship_id`              | FK obrigatória para o estágio.                                                |
 | `supervisor_affiliation_id`  | FK obrigatória para o vínculo de supervisor responsável pelo envio.           |
 | `status`                     | [Enum — EvaluationStatus](doc:enum-evaluationstatus) (`EvaluationStatus`).                       |
-| `response`                   | JSONB com as respostas do supervisor, validado conforme o formulário fixo e as regras congeladas no tipo. |
+| `has_academic_background`    | boolean nullable em `Draft`; seleciona o ramo de formação ou experiência. |
+| `training_course` / `education_level` | Formação acadêmica; obrigatórios somente quando há formação na área. |
+| `job_role` / `experience_time` | Cargo obrigatório fora de `Draft`; tempo de experiência obrigatório somente no ramo sem formação. |
+| Dez colunas de critérios | Conceitos de `EvaluationConcept`, obrigatórios fora de `Draft`. |
+| Quatro colunas de comentários | Pareceres opcionais, cada um em `text` nullable. |
 | `hours_requirement_met`      | boolean nullable em `Draft`; obrigatório fora dele e precisa ser `true` para aprovação. |
 | `estimated_hours_remaining`  | smallint nullable; estimativa positiva obrigatória quando a carga não foi cumprida. |
-| `form_version`               | smallint positivo, padrão `1`, identifica a versão do formulário fixo usada no envio.                               |
 | `submitted_at`               | Preenchido quando o rascunho é congelado e enviado.                           |
 | `reviewed_at`                | Preenchido quando o Setor de Estágio aprova ou devolve.                       |
-| `reviewed_by_affiliation_id` | FK nullable para vínculo do Setor de Estágio, obrigatória quando a resposta é devolvida ou aprovada.        |
 | `review_notes`               | Justificativa nullable, obrigatória na devolução.                             |
 | `cancelled_at` / `cancellation_reason` | Nulos até o cancelamento; motivo obrigatório e sem exclusão física. |
 | timestamps                   | Auditoria técnica; ações relevantes também devem ir para o Activity Log.      |
@@ -45,41 +47,22 @@ Campos relacionados em `internships`:
 
 Essas três colunas não entram na Migration 15. Depois de criar `supervisor_evaluations`, a própria Migration 18 altera `internships` para acrescentar `evaluation_released_at`, `evaluation_released_by_affiliation_id` e `current_supervisor_evaluation_id`, com suas FKs. Essa ordem evita dependência circular entre as tabelas.
 
-## Schema de `response`
+## Respostas em colunas
 
-```json
-{
-  "supervisor": {
-    "has_academic_background": true,
-    "training_course": "Tecnologia em ...",
-    "education_level": "superior",
-    "job_role": "Supervisor de estágio",
-    "experience_time": null
-  },
-  "criteria": {
-    "performance": "excellent",
-    "comprehension": "very_good",
-    "technical_knowledge": "good",
-    "organization": "excellent",
-    "initiative": "excellent",
-    "attendance": "very_good",
-    "discipline": "excellent",
-    "sociability": "very_good",
-    "cooperation": "excellent",
-    "responsibility": "excellent"
-  },
-  "comments": {
-    "considerations": null,
-    "suggestions_to_institution": null,
-    "performance_issues": null,
-    "other_observations": null
-  }
-}
-```
+O formulário é fixo. Não há tabela de definições do formulário, versão por envio ou JSONB de respostas. Cada campo do formulário possui coluna própria em `supervisor_evaluations`; isso permite validação e consulta direta. O Activity Log registra alterações de atributos e transições. A associação ao supervisor que respondeu permanece em `supervisor_affiliation_id`, mesmo que o vínculo de supervisor em `internships` mude depois.
 
-`response.supervisor.has_academic_background` e `job_role` são obrigatórios fora de `Draft`. Quando `has_academic_background` for verdadeiro, `training_course` e `education_level` são obrigatórios e `experience_time` fica nulo; quando for falso, os dados de formação ficam nulos e `experience_time` é obrigatório. Essa regra segue os ramos do formulário atual do supervisor. Os dez critérios são obrigatórios fora de rascunho e precisam ser um dos valores de `EvaluationConcept`, cujos rótulos em português são usados na interface. O snapshot conserva esses valores em `internship_type_snapshot.rules.concept_values`, com a chave `excellent` exibida como “Ótimo” e `unsatisfactory` usando o valor configurado no tipo (geralmente `0`, podendo variar por curso). Os quatro comentários são opcionais em qualquer estado e ficam `null` quando não informados.
+| Grupo | Colunas |
+| --- | --- |
+| Formação e atuação | `has_academic_background`, `training_course`, `education_level`, `job_role`, `experience_time` |
+| Critérios | `performance`, `comprehension`, `technical_knowledge`, `organization`, `initiative`, `attendance`, `discipline`, `sociability`, `cooperation`, `responsibility` |
+| Comentários | `considerations`, `suggestions_to_institution`, `performance_issues`, `other_observations` |
+| Carga horária | `hours_requirement_met`, `estimated_hours_remaining` |
 
-A confirmação de carga horária fica em coluna própria. Fora de `Draft`, `hours_requirement_met` é obrigatório; quando for falso, `estimated_hours_remaining` é obrigatório e positivo. Mesmo nessa situação, o supervisor preenche toda a resposta acima. A identificação de discente e supervisor vem das referências e snapshots do estágio, não de campos livres.
+`has_academic_background` e `job_role` são obrigatórios fora de `Draft`. Quando `has_academic_background` for verdadeiro, `training_course` e `education_level` são obrigatórios e `experience_time` fica nulo; quando for falso, os dados de formação ficam nulos e `experience_time` é obrigatório. Essa regra segue os ramos do formulário atual do supervisor. Os dez critérios são obrigatórios fora de rascunho e precisam ser um dos valores de `EvaluationConcept`, cujos rótulos em português são usados na interface. O snapshot do tipo de estágio conserva os valores dos conceitos, com a chave `excellent` exibida como “Ótimo” e `unsatisfactory` usando o valor configurado no tipo. Os quatro comentários são opcionais em qualquer estado.
+
+Fora de `Draft`, `hours_requirement_met` é obrigatório. Quando for falso, `estimated_hours_remaining` é obrigatório e positivo; o supervisor ainda preenche os demais campos. A identificação do discente vem do estágio, não de texto livre na avaliação.
+
+`reviewed_at` registra quando o Setor de Estágio devolveu ou aprovou a avaliação. Não há `reviewed_by_affiliation_id`: a autoria da análise deverá ser obtida pelo *causer* por vínculo no Activity Log, cuja configuração de autoria ainda está pendente. O Model já registra alterações de atributos com `LogsActivity`.
 
 ## Regras de ciclo e validade
 
@@ -99,7 +82,7 @@ A confirmação de carga horária fica em coluna própria. Fora de `Draft`, `hou
 - Índice em `internship_id`, `status` e `submitted_at` para localizar a lista e a resposta vigente.
 - Índice em `supervisor_affiliation_id` para autorização e consultas do supervisor.
 - Restrição única em `internship_id` e `supervisor_affiliation_id`, pois o mesmo formulário é reutilizado após devolução.
-- FKs de análise devem apontar para vínculos e ser validadas pelas Policies.
+- A autorização de análise deve ser validada pela Policy usando o vínculo do Setor de Estágio; a autoria será registrada no Activity Log quando o *causer* por vínculo for configurado.
 - A referência vigente deve aceitar no máximo uma avaliação por estágio.
 
 ## Checklist de decisão
@@ -118,7 +101,7 @@ A confirmação de carga horária fica em coluna própria. Fora de `Draft`, `hou
 
 - [x] Confirmar o contrato de campos contra critérios e escalas aprovados.
 - [x] Criar [`EvaluationStatus`](doc:enum-evaluationstatus).
-- [x] Criar `supervisor_evaluations`, depois acrescentar as referências de avaliação vigente em `internships`, Models, casts e índices.
+- [x] Criar `supervisor_evaluations` com respostas em colunas, sem versão do formulário nem FK de revisor; acrescentar as referências de avaliação vigente em `internships`, Models, casts e índices.
 - [ ] Implementar liberação, notificação e ações de salvamento/envio; o Model já valida rascunho parcial e imutabilidade após envio.
 - [ ] Implementar autosave Livewire em `Draft` e edição integral em `Returned` com auditoria de alterações.
 - [ ] Atualizar a avaliação vigente em transação após aprovação.

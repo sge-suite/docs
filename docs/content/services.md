@@ -31,7 +31,7 @@ O conjunto documental é detalhado em [Geração de documentos DOCX e variáveis
 
 ## Actions correspondentes
 
-- `AcceptInternshipRequest` — valida cadastros/aceite, cria estágio, snapshots e jornada inicial em uma transação;
+- `AcceptInternshipRequest` — valida cadastros/aceite, cria estágio com snapshots e jornada inicial em uma transação;
 - `RecalculateProjectedEndDate` — bloqueia o estágio, calcula, persiste resultado/base e registra auditoria;
 - `ApproveSupervisorEvaluation` — valida carga, escolhe avaliação vigente e recalcula notas;
 - `UpdateAdvisorGrades` — autoriza o orientador e recalcula a nota consolidada;

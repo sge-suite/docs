@@ -36,8 +36,8 @@ Um estágio nasce quando a solicitação é aceita, inicialmente em `PendingForm
 
 - [x] Implementar o enum string e rótulos no código.
 - [x] Implementar `options()` e `values()`.
-- [ ] Adicionar cast em `Internship`.
-- [ ] Usar o enum na [migration de internships](doc:migration-15-internships).
+- [x] Adicionar cast em `Internship`.
+- [x] Usar o valor inicial do enum na [migration de internships](doc:migration-15-internships).
 - [ ] Implementar guardas para transições permitidas.
 - [ ] Usar a mesma guarda na Action manual e em [Schedules](doc:schedules), sem `update` direto de status.
 - [x] Testar cases, valores, rótulos e opções.

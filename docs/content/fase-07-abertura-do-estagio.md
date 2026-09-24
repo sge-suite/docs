@@ -36,7 +36,7 @@ Base: [fluxo de abertura](doc:fluxos-principais#2-solicitacao).
 
 ## Formalização inicial
 
-- [ ] Criar `internships` com status inicial `pending_formalization` somente após aceitar a solicitação.
+- [ ] Criar `internships` com `student_affiliation_id`, jornada inicial e status `pending_formalization` somente após aceitar a solicitação.
 - [ ] Copiar para o estágio os dados aprovados, os snapshots históricos e as referências históricas de endereço.
 - [ ] Associar `internship_id` à mesma solicitação que originou o estágio.
 

@@ -21,10 +21,10 @@ Base: [acompanhamento do estágio](doc:fluxos-principais#4-estagio-em-andamento)
 - [ ] Sincronizar o status imediatamente ao criar/alterar/remover pausa, além da reconciliação diária.
 - [ ] Usar calendário nacional, estadual e municipal versionado conforme a cidade/UF do endereço histórico do local de trabalho, sem dependência de rede no cálculo.
 - [ ] Permitir ao Setor de Estágio liberar ou bloquear uma data específica em `internship_calendar_overrides`, com motivo e auditoria; recessos, folgas, pontes e fechamentos devem ser representados por pausas, não por `holidays`.
-- [ ] Criar a jornada inicial pactuada e impedir sua edição ordinária durante o estágio.
+- [ ] Gravar a jornada inicial em `internships.weekly_hours` e impedir sua edição ordinária durante o estágio.
 - [ ] Permitir nova vigência de jornada somente após aditivo com assinaturas conferidas; impedir sobreposição/lacuna e reescrita de dias passados.
 - [ ] Recalcular término com carga horária, jornada pactuada ou aditivo formalizado, calendário, pausas e margem congelada.
-- [ ] Persistir versão, entradas e resultado em `projected_end_date_calculation`.
+- [ ] Recalcular e persistir `internships.projected_end_date` após pausas, feriados aplicáveis e aditivos formalizados, sem JSONB de fórmula.
 - [ ] Implementar substituição autorizada de orientador/supervisor.
 - [ ] Preservar pessoa anterior e motivo da substituição.
 - [ ] Gerar aditivo pelo fluxo de documentos.

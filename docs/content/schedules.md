@@ -65,7 +65,7 @@ A própria Action cria a notificação interna na mesma transação da transiç�
 | início ou término de pausa | notificação interna e e-mail | entra no resumo diário. |
 | previsão de término a sete dias | notificação interna e e-mail, uma única vez | entra no resumo diário. |
 
-O lembrete de término usa exclusivamente a `projected_end_date` vigente, porque ela já incorpora jornada, calendário, exceções e pausas. A chave estável do aviso inclui estágio, versão/resultado atual do cálculo, limiar de sete dias e destinatário. Assim, a rotina diária só envia uma vez para a mesma previsão; se um evento autorizado alterar a data, a mudança relevante da previsão é comunicada pelo próprio fluxo de alteração, não por uma sequência de lembretes.
+O lembrete de término usa exclusivamente a `projected_end_date` vigente, porque ela já incorpora jornada, calendário, exceções e pausas. A chave estável do aviso inclui estágio, data projetada vigente, limiar de sete dias e destinatário. Assim, a rotina diária só envia uma vez para a mesma previsão; se um evento autorizado alterar a data, a mudança relevante da previsão é comunicada pelo próprio fluxo de alteração, não por uma sequência de lembretes.
 
 O resumo do Setor agrega, no mínimo, estágios iniciados, pausados ou retomados no dia, estágios com término previsto em sete dias e estágios cuja previsão já passou sem conclusão. Ele é somente interno e não expõe dados sensíveis na listagem resumida.
 

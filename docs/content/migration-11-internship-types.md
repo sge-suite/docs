@@ -41,7 +41,7 @@ As regras são aplicadas pela validação Laravel no Model ao salvar. A migratio
 - Os quatro conceitos configuráveis devem ser números não negativos com até uma casa decimal. A sequência completa — `excellent`, `very_good`, `good`, `satisfactory` e `unsatisfactory` — deve ser estritamente decrescente; valores iguais não são permitidos. Os conceitos configuráveis não podem ultrapassar `supervisor_evaluation_weight`. `unsatisfactory` costuma começar em zero, mas cada tipo pode definir outro valor, como `1.0`.
 - `excellent` usa diretamente `supervisor_evaluation_weight`, sem duplicar esse valor em uma coluna.
 - `max_daily_hours` e `max_weekly_hours` são inteiros. O formulário começa preenchido com `6` e `30`; esses valores são limites mínimos, não podem ser reduzidos e podem ser aumentados. A jornada informada deve respeitar os limites configurados para cada dia e para a soma semanal.
-- `safety_margin_days` é inteiro não negativo, inicialmente `7`, e será congelado no estágio. A versão identifica o algoritmo de cálculo, não uma regra configurável do tipo; ela e as entradas usadas serão registradas em `projected_end_date_calculation`. A regra completa está definida por este contrato e pelo [serviço de cálculo de término](doc:service-internshipenddatecalculator).
+- `safety_margin_days` é inteiro não negativo, inicialmente `7`, e será congelado no estágio. O cálculo automático usa essa margem e grava somente a previsão em `internships.projected_end_date`; não persiste fórmula, versão de algoritmo ou entradas. A regra completa está definida por este contrato e pelo [serviço de cálculo de término](doc:service-internshipenddatecalculator).
 
 A validação também exige curso ativo na criação, troca de curso ou reativação. Uma desativação posterior do curso não bloqueia a edição de um tipo já existente enquanto sua associação não mudar. `active()` filtra tipos não desativados; esta migration não cria índices secundários explícitos.
 
@@ -58,4 +58,4 @@ Os pesos e os valores dos conceitos são configurados no tipo de estágio, nunca
 - [x] Testar consulta de tipos por curso/campus e ciclo de desativação.
 - [ ] Testar snapshot e alteração do tipo após uso no estágio, quando a Migration 15 existir.
 - [x] Testar conceitos fora do peso, `excellent` derivado do peso do supervisor, valores repetidos, ordem inválida, limites menores que 6/30 e margem negativa.
-- [x] Testar migrate/rollback das Migrations 11, 10 e 09 na ordem das FKs.
+- [x] Testar migrate/rollback das Migrations 15, 11, 10 e 09 na ordem das FKs.

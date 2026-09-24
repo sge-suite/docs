@@ -1,7 +1,7 @@
 ---
 id: service-internshipenddatecalculator
 title: Service — InternshipEndDateCalculator
-description: Contrato técnico do cálculo reproduzível da previsão de término.
+description: Contrato técnico do cálculo automático da previsão de término.
 type: technical-reference
 status: planned
 visibility: public
@@ -9,7 +9,7 @@ tags: sge/services, sge/calculos, sge/estagio
 related: migration-22-holidays, migration-22-internship-calendar-overrides, migration-23-internship-work-schedules
 source_refs:
 ---
-Serviço puro, sem Eloquent e sem relógio global. Recebe um DTO com data inicial, carga exigida, jornada pactuada e eventuais vigências criadas por aditivos já formalizados, pausas, feriados, margem e versão do algoritmo de cálculo. A versão identifica a implementação da fórmula usada; ela não é uma regra configurável em `internship_types`. O resultado e essa versão ficam registrados em `internships.projected_end_date_calculation` para auditoria. Retorna `ProjectedEndDateResult` com data de conclusão da carga, data final projetada, horas creditadas e snapshot compacto das entradas.
+Serviço puro, sem Eloquent e sem relógio global. Recebe um DTO com data inicial, carga exigida, jornada inicial de `internships.weekly_hours`, eventuais vigências criadas por aditivos formalizados, pausas, feriados e margem. Retorna `ProjectedEndDateResult` com data de conclusão da carga, data final projetada e horas creditadas. Somente a data final projetada é persistida em `internships.projected_end_date`; o estágio não guarda fórmula, versão de algoritmo nem JSONB das entradas.
 
 ## Invariantes
 
@@ -19,14 +19,13 @@ Serviço puro, sem Eloquent e sem relógio global. Recebe um DTO com data inicia
 - cada data usa no máximo uma jornada vigente;
 - o último dia credita `min(jornada_do_dia, horas_restantes)`;
 - margem é contada em dias corridos; após a margem, a data avança até um dia programado não bloqueado;
-- versão de algoritmo desconhecida falha explicitamente;
 - máximo defensivo de dez anos de iteração, configurável apenas em teste.
 
-O calendário de feriados nacional, estadual e municipal versionado, aplicável à cidade e à UF do endereço histórico do local de trabalho, é carregado antes da chamada; o serviço não consulta API. A fonte externa, quando usada, serve somente à importação administrativa do calendário, nunca durante o cálculo. O resultado usado em `internships.projected_end_date_calculation` guarda somente os feriados que afetaram o intervalo, pausas, exceções aplicadas e a versão/hash usada na auditoria.
+O calendário de feriados nacional, estadual e municipal versionado, aplicável à cidade e à UF do endereço histórico do local de trabalho, é carregado antes da chamada; o serviço não consulta API. A fonte externa, quando usada, serve somente à importação administrativa do calendário, nunca durante o cálculo. O serviço usa os feriados, pausas e exceções aplicáveis ao intervalo; o resultado persistido no estágio é a data projetada. Mudanças autorizadas da previsão são registradas no Activity Log.
 
 ## Recalculo
 
-Criação do estágio, nova pausa, alteração/cancelamento de pausa, ativação de jornada vinculada a aditivo com assinaturas conferidas e correção da data inicial disparam `RecalculateProjectedEndDate`. A Action usa lock pessimista, recalcula dentro da transação e registra valor anterior/novo no Activity Log. Não há alteração temporária ou direta de jornada fora desse fluxo de aditivo.
+Criação do estágio, nova pausa, alteração/cancelamento de pausa, ativação de jornada vinculada a aditivo com assinaturas conferidas e correção da data inicial disparam `RecalculateProjectedEndDate`. A Action usa lock pessimista, recalcula dentro da transação e registra as datas anterior e nova no Activity Log. Não há alteração temporária ou direta de jornada fora desse fluxo de aditivo.
 
 ## Referências
 

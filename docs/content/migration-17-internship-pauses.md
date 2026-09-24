@@ -3,14 +3,14 @@ id: migration-17-internship-pauses
 title: Migration 17 — internship_pauses
 description: Contrato das pausas de estágio e sua validação temporal.
 type: migration-reference
-status: planned
+status: implemented
 visibility: public
 tags: sge/migrations, sge/estagio, sge/historico
 related: migration-15-internships, service-internshipenddatecalculator, schedules
 source_refs:
 ---
-> [!todo] Estado
-> Planejada. Depende de [`internships`](doc:migration-15-internships).
+> [!success] Estado
+> Migration, Model, factory, relação e validação de datas/sobreposição implementados. A sincronização do status e o recálculo do término permanecem no fluxo funcional.
 
 ## Contrato
 
@@ -26,9 +26,9 @@ Pausas não podem se sobrepor, só podem ser criadas em estágio `InProgress`, n
 
 ## Checklist
 
-- [ ] Criar migration, Model, relação e índices por estágio/período.
-- [ ] Definir validação de intervalo e sobreposição.
+- [x] Criar migration, Model, factory, relação e índice por estágio/período.
+- [x] Definir validação de intervalo e sobreposição no Model.
 - [ ] Atualizar status `Paused`/`InProgress` pela Action de sincronização, com autorização e sem update direto.
-- [ ] Registrar criação, alteração e remoção no Activity Log.
+- [x] Registrar criação, alteração e remoção no Activity Log.
 - [ ] Testar pausa válida, sobreposição, intervalo invertido e impacto na data final.
 - [ ] Testar migrate/rollback na ordem completa.

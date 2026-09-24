@@ -72,7 +72,7 @@ Este índice é uma fotografia editorial da documentação publicada. Os documen
 - [Migration 12A — supervisor_registration_requests](doc:migration-12a-supervisor-registration-requests) — **implemented** — Solicitações tipadas de cadastro de supervisor feitas durante a abertura.
 - [Migration 12B — granting_party_registration_requests](doc:migration-12b-granting-party-registration-requests) — **implemented** — Solicitações tipadas de cadastro de parte concedente feitas durante a abertura.
 - [Migration 13 — document_templates](doc:migration-13-document-templates) — **implemented** — Contrato do catálogo de templates DOCX do SGE.
-- [Migration 14 — template_versions](doc:migration-14-template-versions) — **planned** — Contrato das versões imutáveis dos templates DOCX.
+- [Migration 14 — template_versions](doc:migration-14-template-versions) — **in-progress** — Versões DOCX privadas, com preservação após uso; validação do upload e integração com geração ainda pendentes.
 - [Migration 15 — internships](doc:migration-15-internships) — **planned** — Contrato do processo de estágio, referências atuais e snapshots históricos.
 - [Migration 16 — generated_documents](doc:migration-16-generated-documents) — **planned** — Contrato dos documentos gerados ou registrados no estágio.
 - [Migration 17 — internship_pauses](doc:migration-17-internship-pauses) — **planned** — Contrato das pausas de estágio e sua validação temporal.

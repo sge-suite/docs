@@ -73,7 +73,7 @@ source_refs:
 ### D-010 — Templates DOCX versionados e saída sem arquivo final
 
 - **Status:** definido.
-- **Decisão:** templates DOCX serão cadastrados separadamente dos tipos de documento. Depois de utilizado, um template não será editado: qualquer alteração cria uma nova versão. Cada documento gerado pelo SGE referencia a versão e a snapshot de dados usadas na geração; o SGE não armazena o arquivo DOCX/PDF final ou o documento assinado.
+- **Decisão:** templates DOCX serão cadastrados separadamente dos tipos de documento. O catálogo de variáveis é fixo no código e cada DOCX usa as variáveis necessárias. Cada arquivo diferente enviado e validado cria uma versão; cada geração usa a versão validada mais recente e referencia exatamente a versão e a snapshot de dados usadas. Após uso, uma correção cria outra versão e a anterior permanece. Uma versão nunca usada pode ser excluída fisicamente com sua mídia. O SGE não armazena o arquivo DOCX/PDF final ou o documento assinado.
 - **Motivo:** permite rastrear e, quando necessário, reproduzir a geração histórica sem misturar template, tipo documental e arquivo final.
 - **Referências:** [Migration 13 — document_templates](doc:migration-13-document-templates), [Migration 14 — template_versions](doc:migration-14-template-versions) e [Migration 16 — generated_documents](doc:migration-16-generated-documents).
 

@@ -11,6 +11,8 @@ source_refs:
 ---
 ## Decisão técnica
 
+Cada upload validado de um DOCX diferente cria uma versão do template lógico. O catálogo de variáveis é fixo no código; cada arquivo usa as variáveis necessárias. A geração usa a versão validada mais recente e registra a versão exata em `generated_documents`, sem criar uma versão nova por documento. Se uma correção substituir um arquivo já usado, o anterior permanece; versões nunca usadas podem ser excluídas fisicamente.
+
 O arquivo DOCX versionado será processado localmente com `PhpOffice\PhpWord\TemplateProcessor`. A dependência `phpoffice/phpword` deverá ser direta no `composer.json`; a imagem de execução precisa das extensões `zip`, `xml`, `dom`, `mbstring` e `intl`. `brick/math` também será dependência direta porque o código de moeda o utiliza, ainda que Laravel já o instale transitivamente.
 
 O marcador canônico é `${NOME_DA_VARIAVEL}`: letras maiúsculas, números e `_`, sem espaços, barras, acentos ou chaves duplas. Somente essa sintaxe será aceita nos templates cadastrados.
@@ -32,7 +34,7 @@ Helpers continuam restritos a formatação pura (`CurrencyHelper`, `NumberToWord
 
 ## Fluxo de geração
 
-1. o Setor escolhe um template lógico e uma versão ativa compatível com o campus e o tipo documental;
+1. o Setor escolhe um template lógico e a versão validada mais recente compatível com o campus e o tipo documental;
 2. a Policy valida o vínculo ativo e o estágio;
 3. a Action adquire lock por estágio, versão e token idempotente;
 4. o builder carrega o contexto histórico, sem usar cadastro atual no lugar de snapshot já congelado;
@@ -195,7 +197,7 @@ A versão armazena `required_variables` e `optional_variables`. Na geração, va
 - TCE padrão, credenciamento, SEDUC, EMATER, aditivo, rescisão e atestado;
 - falha antes/depois da criação do temporário com limpeza garantida;
 - duas requisições concorrentes e retry idempotente;
-- renderização visual de todas as páginas antes de ativar cada versão.
+- renderização visual de todas as páginas antes de disponibilizar cada versão.
 
 ## Referências
 

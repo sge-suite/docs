@@ -14,7 +14,7 @@ source_refs: https://github.com/sge-suite/sge/blob/master/database/migrations/20
 
 ## Contrato
 
-`document_templates` representa o template lógico, separado de suas versões. O arquivo DOCX pertence à futura `template_versions` e será armazenado por `Media`; esta tabela não guarda arquivo nem dados de geração.
+`document_templates` representa o template lógico, separado de suas versões. O arquivo DOCX pertence a `template_versions` e é armazenado pelo Media Library; esta tabela não guarda arquivo nem dados de geração.
 
 | Coluna | Tipo PostgreSQL | Nulo | Regra |
 | --- | --- | --- | --- |
@@ -26,9 +26,9 @@ source_refs: https://github.com/sge-suite/sge/blob/master/database/migrations/20
 | `deactivated_at` | `timestamp(0)` | sim | Marca indisponibilidade para novas versões ou gerações futuras. |
 | `created_at` / `updated_at` | `timestamp(0)` | sim | Timestamps nativos. |
 
-O `id` identifica o template lógico e será referenciado por `template_versions.document_template_id` na Migration 14. Não há `key` nem unicidade de `name`: nomes iguais podem identificar templates diferentes, inclusive no mesmo campus. A aplicação não depende de chaves de template fixas no código. `campus_id` possui índice simples; o Model exige campus ativo ao atribuir um template local. `active()` filtra a desativação; `availableToCampus()` reúne os templates globais e os daquele campus. Esses scopes ainda não substituem autorização por vínculo.
+O `id` identifica o template lógico e é referenciado por `template_versions.document_template_id` na Migration 14. Não há `key` nem unicidade de `name`: nomes iguais podem identificar templates diferentes, inclusive no mesmo campus. A aplicação não depende de chaves de template fixas no código. `campus_id` possui índice simples; o Model exige campus ativo ao atribuir um template local. `active()` filtra a desativação; `availableToCampus()` reúne os templates globais e os daquele campus. Esses scopes ainda não substituem autorização por vínculo.
 
-O Activity Log registra alterações do catálogo. A desativação preserva o registro; os fluxos futuros de versão e geração deverão respeitar `deactivated_at`. A relação com `template_versions` e a proteção de versões utilizadas pertencem à Migration 14 e aos fluxos documentais.
+O Activity Log registra alterações do catálogo. A desativação preserva o registro; os fluxos futuros de versão e geração deverão respeitar `deactivated_at`. A relação com `template_versions` está implementada na Migration 14; a proteção de versões utilizadas será concluída com `generated_documents`.
 
 O template padrão manterá o marcador `${PARAGRAFO_REMUNERACAO}`. Na geração, `RemunerationParagraphFormatter` preencherá o parágrafo completo conforme a remuneração. Essa regra e a escolha manual do template para modelos especiais ou credenciamentos permanecem no [contrato de geração](doc:geracao-de-documentos-docx-e-variaveis); não há seleção automática por concedente.
 
@@ -41,7 +41,7 @@ O template padrão manterá o marcador `${PARAGRAFO_REMUNERACAO}`. Na geração,
 - [ ] Relacionar versões e proteger versões já utilizadas na Migration 14.
 - [ ] Autorizar upload somente ao vínculo permitido do Setor de Estágio.
 - [ ] Usar `Media` para armazenar o DOCX da versão.
-- [ ] Testar acesso por vínculo/permissão e geração com versão ativa.
+- [ ] Testar acesso por vínculo/permissão e geração com a versão validada mais recente.
 
 ## Dependências
 

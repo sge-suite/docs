@@ -14,14 +14,15 @@ Referências: [fluxo de formalização](doc:fluxos-principais#3-analise-e-formal
 ## Checklist
 
 - [x] Criar `document_templates` global ou por campus, sem chave textual, com desativação.
-- [ ] Criar `template_versions` e armazenar o DOCX da versão.
+- [x] Criar `template_versions` com coleção privada do Media Library para um DOCX por versão.
+- [ ] Implementar o fluxo de upload com inspeção e validação antes de disponibilizar a versão mais recente.
 - [ ] Permitir upload DOCX somente ao vínculo autorizado do Setor de Estágio.
 - [x] Definir catálogo fixo de variáveis em português com `${NOME_DA_VARIAVEL}`.
-- [ ] Implementar inspeção OOXML e validação de variáveis antes de ativar uma versão.
+- [ ] Implementar inspeção OOXML e validação de variáveis antes de disponibilizar uma versão.
 - [ ] Adicionar `phpoffice/phpword` e declarar `brick/math` diretamente no Composer; validar extensões PHP.
-- [ ] Validar os templates antes de ativá-los, removendo dados fixos indevidos.
+- [ ] Validar os templates antes de disponibilizá-los, removendo dados fixos indevidos.
 - [ ] Corrigir o template de credenciamento e reconstruir/renderizar a rescisão.
-- [ ] Impedir alteração destrutiva de versão já utilizada.
+- [ ] Impedir alteração destrutiva e exclusão de versão já utilizada; permitir exclusão física da versão sem documentos gerados.
 - [ ] Criar `generated_documents` com tipo, origem, status e snapshot quando gerado pelo SGE.
 - [ ] Registrar documento externo sem receber/armazenar arquivo e com template nulo.
 - [ ] Gerar usando somente dados autorizados pelo contexto do estágio.
@@ -34,7 +35,7 @@ Referências: [fluxo de formalização](doc:fluxos-principais#3-analise-e-formal
 - [ ] Acompanhar assinatura externa manualmente.
 - [ ] Armazenar `protocol_number` retornado pelo SIGAA quando houver.
 - [ ] Tratar aditivo como `GeneratedDocumentType::Addendum`.
-- [ ] Testar dados completos/opcionais, acentuação e versão inativa.
+- [ ] Testar dados completos/opcionais, acentuação e versão ainda não validada.
 - [ ] Testar marcadores em tabelas/cabeçalhos, arquivo malicioso, sobras e revisão visual de todas as páginas.
 
 ## Critério de saída

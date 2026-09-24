@@ -1,7 +1,7 @@
 ---
 id: migration-01-addresses
 title: Migration 01 — addresses
-description: Base backend de endereços reutilizáveis e cópia histórica na própria tabela.
+description: Base backend de endereços próprios de cada cadastro e cópia histórica na própria tabela.
 type: migration-reference
 status: implemented
 visibility: public
@@ -28,6 +28,12 @@ source_refs: https://github.com/sge-suite/sge/blob/master/database/migrations/20
 A migration usa `$table->timestamps()`, com a nulabilidade padrão do Laravel. O Eloquent converte esses campos automaticamente em datas, sem casts explícitos no model. Inserções diretas que não passem pelo Eloquent podem deixar os timestamps nulos. O `down()` remove a tabela.
 
 A cidade é obrigatória e selecionada no [catálogo local](doc:migration-01a-cities), criado antes desta tabela. Não há `complement`, UF duplicada, tabela de snapshots, `copied_from_address_id` ou campos de autoria. A tabela não usa `SoftDeletes` nem Scout/Searchable.
+
+## Propriedade dos endereços
+
+`addresses` centraliza as colunas de endereço, mas suas linhas não são compartilhadas. Cada linha pode pertencer a no máximo um registro proprietário, seja em `user_personal_data`, `campuses`, `granting_parties` ou nos futuros endereços históricos de `internships`. Isso vale também para dois registros da mesma tabela: conteúdo idêntico recebe IDs diferentes. Um novo proprietário recebe uma nova linha, nunca o `address_id` já vinculado a outro registro. A cópia histórica cria outra linha na mesma tabela.
+
+O schema atual contém FKs nos cadastros proprietários, mas ainda não impõe essa exclusividade entre todas as tabelas. Os futuros fluxos de integração devem respeitar a regra ao criar e trocar endereços; uma garantia no banco exige desenho próprio antes de ser declarada implementada.
 
 ## Model, validação e auditoria
 

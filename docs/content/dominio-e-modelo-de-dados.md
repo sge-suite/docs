@@ -39,7 +39,7 @@ Esta página é o ponto de entrada do modelo de dados. Os campos e relacionament
 - O vínculo ativo define função, campus e curso usados por Gates e Policies.
 - Solicitação, estágio, documento e avaliação possuem ciclos independentes.
 - Cadastros atuais mantêm relacionamentos por FK; fatos históricos relevantes são congelados em snapshots.
-- A base de [`addresses`](doc:migration-01-addresses) já permite copiar endereços para novas linhas na mesma tabela; a integração e o bloqueio de alterações históricas ficam para a formalização.
+- Cada linha de [`addresses`](doc:migration-01-addresses) pertence a no máximo um cadastro ou registro histórico; endereços idênticos de proprietários distintos têm IDs diferentes. A base já permite criar cópias históricas, mas a exclusividade ainda não é garantida pelo schema atual.
 - Alterações relevantes registram autoria e vínculo no Activity Log.
 - Templates são versionados; documentos gerados preservam a versão e os dados usados, sem armazenar permanentemente o arquivo final.
 - A jornada pactuada, os feriados e as pausas são registros próprios porque afetam a previsão de término; uma nova vigência de jornada só é criada por aditivo formalizado.

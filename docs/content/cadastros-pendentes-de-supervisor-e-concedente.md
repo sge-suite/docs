@@ -55,7 +55,7 @@ A Migration 12A guarda o CPF informado pelo discente em coluna própria, validad
 | `credentialing_process_number` | nullable. |
 | `granting_party_id` | FK nullable para o cadastro criado ou selecionado; obrigatório quando `status = approved`. |
 
-Na aprovação, o Setor cria ou seleciona `granting_parties` e `addresses`; CNPJ repetido não impede uma unidade distinta. A solicitação pendente mantém o envio original, a decisão e o vínculo resultante, enquanto a tabela de concedentes guarda somente o cadastro atual.
+Na aprovação, o Setor cria ou seleciona `granting_parties`. Uma concedente nova recebe uma linha própria em `addresses`, mesmo que outro cadastro tenha endereço idêntico; o pedido preserva o endereço proposto em suas colunas. CNPJ repetido não impede uma unidade distinta. A solicitação pendente mantém o envio original, a decisão e o vínculo resultante, enquanto a tabela de concedentes guarda somente o cadastro atual.
 
 ## Integridade e interface
 

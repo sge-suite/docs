@@ -75,7 +75,7 @@ Detalhes dos contratos: [activity_log](doc:migration-base-04-activity-log), [not
 
 ## Regras do modelo
 
-- FKs apontam para cadastros atuais; snapshots e cópias históricas de endereço preservam os valores usados em um processo já iniciado.
+- FKs apontam para cadastros atuais; snapshots e cópias históricas de endereço preservam os valores usados em um processo já iniciado. Cada cadastro ou registro histórico usa sua própria linha de `addresses`, mesmo quando os valores coincidem.
 - A solicitação origina no máximo um estágio, mas correções e evidências podem ser várias.
 - `internships` é o agregado operacional: jornadas, pausas, documentos, avaliações e cancelamentos dependem dele.
 - Templates podem ter muitas versões, mas um documento gerado referencia apenas a versão usada na geração.

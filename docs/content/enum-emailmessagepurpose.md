@@ -14,22 +14,21 @@ source_refs: https://github.com/sge-suite/sge/blob/master/app/Enums/EmailMessage
 
 ## Contrato implementado
 
-Classifica por que uma `email_message` foi criada. Não substitui `notifications.type`, que identifica o tipo específico do aviso operacional.
+Classifica a finalidade da mensagem de notificação ou da tentativa de envio. Não substitui `notifications.type`, que identifica o tipo específico do aviso operacional.
 
 | Case                | Valor persistido     | Rótulo                  |
 | ------------------- | -------------------- | ----------------------- |
-| `PasswordReset`     | `password_reset`     | Recuperação de senha    |
 | `Notification`      | `notification`       | Notificação operacional |
 | `NewAffiliation`    | `new_affiliation`    | Novo vínculo            |
 
-No aviso de novo vínculo, `NewAffiliation` identifica a mensagem destinada a `users.email`. Se o e-mail do vínculo for diferente, o aviso para `affiliations.email` usa `Notification`; endereços iguais geram uma única mensagem `NewAffiliation`.
+`NewAffiliation` identifica a tentativa do convite inicial destinada a `users.email`, sem `email_message`. `Notification` identifica uma mensagem operacional com conteúdo e suas tentativas. Recuperação de senha não usa esse enum porque não é registrada nessas tabelas.
 
 ## Decisões de segurança
 
 - Recuperação de senha não pode persistir token, URL assinada ou corpo sensível.
-- Mensagens operacionais podem guardar o conteúdo renderizado, protegido e imutável.
+- Mensagens operacionais guardam o conteúdo renderizado e imutável, sem cast criptografado.
 
-O fluxo de recuperação de senha não inclui confirmação adicional de endereço de e-mail nem um case específico para isso.
+O fluxo de recuperação de senha não inclui confirmação adicional de endereço de e-mail e não cria registros de mensagem ou tentativa.
 
 ## Checklist de implementação
 
@@ -37,7 +36,7 @@ O fluxo de recuperação de senha não inclui confirmação adicional de endere�
 - [x] Criar `App\Enums\EmailMessagePurpose` como enum string.
 - [x] Implementar `label()`, `options()` e `values()`.
 - [x] Adicionar cast em `EmailMessage`.
-- [x] Persistir os valores do enum em [email_messages](doc:migration-06-email-messages).
+- [x] Persistir `Notification` em [email_messages](doc:migration-06-email-messages) e ambas as finalidades nas tentativas.
 - [x] Criar testes para cases, conversão e opções.
 - [ ] Verificar que nenhum segredo aparece no conteúdo, logs ou Activity Log.
 

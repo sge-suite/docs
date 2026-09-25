@@ -14,13 +14,15 @@ As tabelas `notifications`, `email_messages` e `email_delivery_attempts`, seus e
 ## Backend de envio
 
 - [ ] Rever o contrato final de finalidades, destinatários, conteúdo persistido e retenção.
-- [ ] Criar um ponto de entrada único para preparar e solicitar o envio de uma mensagem, sem repetir detalhes de criptografia e persistência nos fluxos.
+- [ ] Criar um ponto de entrada único para preparar e solicitar o envio de uma mensagem, sem repetir detalhes de persistência nos fluxos.
 - [ ] Reservar tentativas com sequência segura e concorrência controlada.
 - [ ] Despachar envio somente depois do commit da transação de domínio.
 - [ ] Registrar `queued`, `sent` e `failed` com provedor e motivo sanitizado.
 - [ ] Configurar timeout, retry, backoff e limite de tentativas por finalidade.
 - [ ] Permitir reprocessamento autorizado sem alterar a mensagem original nem duplicar efeitos.
-- [ ] Integrar a recuperação de senha sem persistir tokens, URLs assinadas ou corpos que os revelem.
+- [ ] Manter a recuperação de senha fora de `email_messages` e `email_delivery_attempts`; não persistir token, URL, destinatário ou corpo desse envio.
+- [ ] Fazer o link do convite inicial abrir a tela de recuperação com o e-mail preenchido; a pessoa solicita o link de redefinição com um clique. O envio inicial registra somente `email_delivery_attempts` e nenhuma mensagem com conteúdo.
+- [ ] Reservar a tentativa de convite no momento da solicitação, com `requested_by_affiliation_id` quando houver vínculo ativo; o Job posterior preserva essa autoria. Para envio automático, o campo é nulo.
 - [ ] Validar modelos de e-mail reais pelo Mailpit para cada finalidade e destinatário.
 - [ ] Testar idempotência, concorrência, falha do transporte, reprocessamento e proteção contra vazamento em logs.
 

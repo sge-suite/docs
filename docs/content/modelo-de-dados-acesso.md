@@ -31,7 +31,7 @@ A função e o escopo pertencem a `affiliations.type`, convertido para o enum `A
 
 A caixa operacional usa `Affiliation::notifications()` após a Policy validar que o vínculo selecionado está ativo e pertence à conta autenticada. O par polimórfico de cada notificação mantém separadas as caixas de vínculos diferentes da mesma conta. Notificações de recuperação de senha e de e-mail inicial continuam na relação nativa de `User`.
 
-`email_messages` mantém o destino escolhido no momento da preparação: `affiliation_id` e notificação do mesmo vínculo para avisos operacionais; `user_id` para recuperação de senha e aviso de novo vínculo à conta. O Model valida essa correspondência e criptografa o endereço e o conteúdo. Essas relações não substituem a Policy na futura consulta administrativa nem autorizam misturar mensagens de dois vínculos da mesma conta. `email_delivery_attempts` guarda o histórico de transporte de cada mensagem.
+`email_messages` armazena somente o conteúdo imutável de notificações operacionais, ligado a `notification_id`, sem cast criptografado. `email_delivery_attempts` guarda o destinatário e o histórico do transporte; `requested_by_affiliation_id` identifica o vínculo que pediu o envio, e a conta pode ser obtida por `affiliations.user_id`. Envio automático usa vínculo nulo. O convite inicial cria apenas uma tentativa, com `email_message_id` nulo; recuperação de senha não cria registros nessas tabelas. A futura consulta administrativa deverá respeitar o escopo de cada vínculo.
 
 > [!warning] Fonte única de autorização
 > `AffiliationType`, vínculo ativo, escopo e estado do registro são os únicos insumos de autorização. Gates e Policies codificam essas regras institucionais de modo determinístico; não há regra de acesso editável em banco.

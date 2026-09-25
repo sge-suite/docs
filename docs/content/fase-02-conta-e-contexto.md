@@ -26,7 +26,7 @@ O contexto de vínculo ativo, a proteção do painel, a tela de seleção e o co
 ## Criação de conta
 
 - [x] Disponibilizar `php artisan admin:create` para criar a primeira conta Administrador do Sistema e seu vínculo ativo em uma transação Eloquent. O comando só prossegue quando não existe administrador do sistema ativo; contas comuns e vínculos administradores desativados não impedem o bootstrap.
-- [x] Solicitar nome, CPF com 11 dígitos sem pontuação, e-mail, número de registro institucional e senha com confirmação oculta. O mesmo e-mail é salvo na conta e no vínculo; o vínculo não recebe campus nem curso.
+- [x] Solicitar nome, CPF com 11 dígitos sem pontuação, e-mail, número de registro institucional e senha com confirmação oculta. Exibir as regras de senha antes do primeiro campo e validá-las na primeira entrada; só pedir a confirmação depois que a senha passar. O mesmo e-mail é salvo na conta e no vínculo; o vínculo não recebe campus nem curso.
 - [x] Validar campos, CPF e unicidade de CPF/e-mail antes de gravar. O comando não envia e-mail. A criação é atribuída ao sistema no Activity Log e a senha e seu hash ficam fora do evento.
 - [x] Não exigir confirmação ou código de verificação de e-mail para o bootstrap inicial.
 - [ ] Implementar a criação de contas e vínculos pelo fluxo da aplicação.

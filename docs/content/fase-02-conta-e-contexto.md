@@ -11,7 +11,7 @@ source_refs:
 ---
 Referências: [modelo de acesso](doc:modelo-de-dados-acesso), [E-mails, notificações e entregas](doc:e-mails-notificacoes-e-entregas) e [fluxo de login](doc:fluxos-principais#1-acesso-e-vinculo).
 
-O contexto de vínculo ativo, a proteção do painel e a tela de seleção estão implementados. A execução dos testes via Sail ainda depende do Docker/Podman neste ambiente. Criação de conta e convite inicial permanecem pendentes.
+O contexto de vínculo ativo, a proteção do painel, a tela de seleção e o comando de bootstrap do primeiro Administrador do Sistema estão implementados. Os testes da aplicação via Sail dependem de Docker/Podman ativo neste ambiente.
 
 ## Login e recuperação de senha
 
@@ -25,9 +25,14 @@ O contexto de vínculo ativo, a proteção do painel e a tela de seleção estã
 
 ## Criação de conta
 
-- [ ] Criar conta e vínculo em transação.
-- [x] Não exigir confirmação ou código de verificação de e-mail.
+- [x] Disponibilizar `php artisan admin:create` para criar a primeira conta Administrador do Sistema e seu vínculo ativo em uma transação Eloquent. O comando só prossegue quando não existe administrador do sistema ativo; contas comuns e vínculos administradores desativados não impedem o bootstrap.
+- [x] Solicitar nome, CPF com 11 dígitos sem pontuação, e-mail, número de registro institucional e senha com confirmação oculta. O mesmo e-mail é salvo na conta e no vínculo; o vínculo não recebe campus nem curso.
+- [x] Validar campos, CPF e unicidade de CPF/e-mail antes de gravar. O comando não envia e-mail. A criação é atribuída ao sistema no Activity Log e a senha e seu hash ficam fora do evento.
+- [x] Não exigir confirmação ou código de verificação de e-mail para o bootstrap inicial.
+- [ ] Implementar a criação de contas e vínculos pelo fluxo da aplicação.
 - [ ] Enviar convite inicial e registrar somente a tentativa de entrega, sem conteúdo salvo. O link deve abrir a tela de recuperação de senha com o e-mail preenchido; a pessoa solicita o link de redefinição nessa tela. Esse fluxo de convite ainda não foi implementado.
+
+`CreateAdminCommandTest` cobre a criação, validações, unicidade, bloqueio por administrador ativo, vínculo inativo, confirmação, execução não interativa, auditoria e rollback. A execução via Sail está pendente de Docker/Podman ativo.
 
 ## Seleção de vínculo
 

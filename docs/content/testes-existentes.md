@@ -37,7 +37,9 @@ Este mapa acompanha o código real no repositório Laravel irmão, em `../sge`. 
 | Helpers  | `tests/Unit/Helpers/NumberToWordsHelperTest.php`   | números e valores em reais por extenso, incluindo entradas inválidas.  |
 | Auth     | `tests/Feature/Auth/*`                             | login, confirmação, reset de senha.                                     |
 | Settings | `tests/Feature/Settings/*`                         | atualização de perfil e segurança.                                      |
-| App      | `tests/Feature/DashboardTest.php`                  | acesso ao dashboard.                                                    |
+| App      | `tests/Feature/DashboardTest.php`                  | acesso ao dashboard com vínculo ativo.                                  |
+| Contexto | `tests/Feature/ActiveAffiliationContextTest.php` | seleção automática, último vínculo usado, escolha, troca, sessão inválida, desativação e vínculo de outra conta. |
+| Auditoria Eloquent | `tests/Feature/DatabaseAuditTest.php` | inventário de Models, alterações e exclusões Eloquent, autoria, catálogo de cidades, Jobs, mídia, notificações e transações. |
 | Endereços | `tests/Feature/AddressesTest.php`                  | Schema e rollback em PostgreSQL, relações, factories, regras obrigatórias, CEP opcional sem validação de formato, cópia histórica e Activity Log. |
 | Dados pessoais e profissionais | `tests/Feature/UserPersonalDataTest.php`          | Schema PostgreSQL, constraints, relações, campos profissionais opcionais compartilhados entre vínculos de supervisor do mesmo usuário, CPF em `users`, validação e rollback da migration. |
 | Catálogo de cidades | `tests/Feature/CityCatalogValidationTest.php` / `tests/Unit/FetchCitiesCommandTest.php` | Regras compartilhadas no model/seeder, validação das respostas da coleta e preservação do catálogo diante de payloads inválidos. |
@@ -61,8 +63,8 @@ Este mapa acompanha o código real no repositório Laravel irmão, em `../sge`. 
 | Exceções de calendário | `tests/Feature/InternshipCalendarOverrideTest.php` | Schema da Migration 22A, unicidade por estágio/data, motivo, Activity Log e rollback. |
 | Vigências de jornada | `tests/Feature/InternshipWorkScheduleTest.php` | Schema JSONB da Migration 23, aditivo assinado, limites diários e semanais, continuidade, imutabilidade, FKs restritas e rollback. |
 | Notificações | `tests/Feature/NotificationsTest.php` | Schema PostgreSQL nativo com `jsonb` e UUID, relação polimórfica, leitura/não leitura, isolamento entre vínculos da mesma conta, notificações destinadas a `User`, Policy de vínculo ativo e rollback/reaplicação. 7 testes e 77 assertions passaram por Sail. |
-| Mensagens de e-mail | `tests/Feature/EmailMessageTest.php` | Schema PostgreSQL, FKs, ID `bigint`, criptografia de destinatário e conteúdo, snapshot imutável, regras por finalidade e unicidade da chave UUID de idempotência. |
-| Tentativas de entrega | `tests/Feature/EmailDeliveryAttemptTest.php` | Schema PostgreSQL com ID e FK `bigint`, sequência única, estados e marcos, motivo sanitizado, preservação de tentativas anteriores e rollback/reaplicação na ordem das FKs. |
+| Mensagens de e-mail | `tests/Feature/EmailMessageTest.php` | Schema PostgreSQL, conteúdo de notificação sem destinatário, snapshot imutável, finalidade e chave UUID única de idempotência. |
+| Tentativas de entrega | `tests/Feature/EmailDeliveryAttemptTest.php` | Schema PostgreSQL, mensagem opcional para convite, destinatário e vínculo solicitante, estados, marcos, motivo sanitizado e imutabilidade das tentativas concluídas. |
 
 ## Lacunas prioritárias
 
@@ -74,6 +76,8 @@ Este mapa acompanha o código real no repositório Laravel irmão, em `../sge`. 
 - [ ] Cobrir `ResetUserPassword` com senha fraca, confirmação divergente e sucesso.
 - [ ] Cobrir `AppServiceProvider` e `FortifyServiceProvider` por comportamento observável.
 - [ ] Completar testes de autorização dos catálogos e fluxos de estágio; a caixa de notificações já cobre propriedade da conta e vínculo ativo.
+
+Os novos testes de contexto, auditoria e senha foram escritos, mas sua execução via Sail ainda está pendente porque Docker/Podman não está rodando neste ambiente.
 
 ## Comandos
 

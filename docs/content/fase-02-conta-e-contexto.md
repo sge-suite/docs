@@ -32,7 +32,7 @@ O contexto de vínculo ativo, a proteção do painel, a tela de seleção e o co
 - [ ] Implementar a criação de contas e vínculos pelo fluxo da aplicação.
 - [ ] Enviar convite inicial e registrar somente a tentativa de entrega, sem conteúdo salvo. O link deve abrir a tela de recuperação de senha com o e-mail preenchido; a pessoa solicita o link de redefinição nessa tela. Esse fluxo de convite ainda não foi implementado.
 
-`CreateAdminCommandTest` cobre os caminhos de conta nova e CPF existente, e-mails da conta e do vínculo, validações, bloqueio por administrador ativo, vínculo inativo, confirmação, execução não interativa, auditoria e rollback. Os 17 cenários passaram pelo Sail.
+`CreateAdminCommandTest` cobre os caminhos de conta nova e CPF existente, e-mails da conta e do vínculo, validações, bloqueio por administrador ativo, vínculo inativo, confirmação, execução não interativa, auditoria e rollback. `ProfileUpdateTest` cobre a alteração do e-mail da conta, unicidade e preservação do e-mail do vínculo.
 
 ## Seleção de vínculo
 
@@ -50,7 +50,7 @@ O contexto de vínculo ativo, a proteção do painel, a tela de seleção e o co
 
 ## Configurações próprias
 
-- [x] Permitir alteração da própria senha; a alteração do e-mail ainda não está disponível.
+- [x] Permitir alteração da própria senha e do e-mail da conta autenticada. O novo e-mail passa a ser usado no login e na recuperação de senha; a alteração não modifica `affiliations.email` e, no escopo atual, não pede confirmação por e-mail.
 - [x] Impedir alteração do nome na configuração atual.
 - [ ] Manter o CPF imutável após criação da conta.
 - [ ] Permitir ao discente alterar RG, nascimento e endereço atual.

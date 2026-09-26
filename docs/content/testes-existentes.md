@@ -37,7 +37,7 @@ Este mapa acompanha o código real no repositório Laravel irmão, em `../sge`. 
 | Helpers  | `tests/Unit/Helpers/NumberToWordsHelperTest.php`   | números e valores em reais por extenso, incluindo entradas inválidas.  |
 | Auth     | `tests/Feature/Auth/*`                             | login, confirmação, reset de senha.                                     |
 | Console  | `tests/Feature/CreateAdminCommandTest.php`         | `admin:create`: CPF primeiro; conta nova ou novo vínculo em conta existente, e-mail próprio do vínculo, validações, senha fora da auditoria, administrador ativo, cancelamento, não interativo e rollback. 17 cenários passaram pelo Sail. |
-| Settings | `tests/Feature/Settings/*`                         | atualização de perfil e segurança.                                      |
+| Settings | `tests/Feature/Settings/*`                         | alteração do e-mail da conta sem alterar e-mail de vínculo, unicidade e atualização de senha. |
 | App      | `tests/Feature/DashboardTest.php`                  | acesso ao dashboard com vínculo ativo.                                  |
 | Contexto | `tests/Feature/ActiveAffiliationContextTest.php` | seleção automática, último vínculo usado, escolha, troca, sessão inválida, desativação e vínculo de outra conta. |
 | Auditoria Eloquent | `tests/Feature/DatabaseAuditTest.php` | inventário de Models, alterações e exclusões Eloquent, autoria, catálogo de cidades, Jobs, mídia, notificações e transações. |

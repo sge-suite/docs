@@ -30,7 +30,7 @@ O sistema trabalha com uma conta por pessoa e, quando aplicável, com um **vínc
 | **Definido** | A regra foi aprovada para o produto, mas sua implementação completa ainda está pendente. |
 | **Planejado** | O trabalho ainda não começou ou depende de decisão anterior. |
 
-No estado atual, login, recuperação de senha, dashboard, perfil somente para consulta e alteração de senha estão disponíveis. O contexto de vínculo ativo, a seleção/troca de vínculo, o bootstrap do primeiro Administrador do Sistema por `admin:create` e o Activity Log Eloquent também estão implementados. A base de Models e migrations do domínio de estágios existe; cadastro de contas pela interface, convite e os fluxos operacionais de solicitação, documentação, execução, avaliação e conclusão ainda não estão disponíveis como jornadas completas.
+No estado atual, login, recuperação de senha, dashboard, perfil com e-mail da conta editável e nome somente para consulta, e alteração de senha estão disponíveis. O contexto de vínculo ativo, a seleção/troca de vínculo, o bootstrap do primeiro Administrador do Sistema por `admin:create` e o Activity Log Eloquent também estão implementados. A base de Models e migrations do domínio de estágios existe; cadastro de contas pela interface, convite e os fluxos operacionais de solicitação, documentação, execução, avaliação e conclusão ainda não estão disponíveis como jornadas completas.
 
 ## 3. Quem participa
 

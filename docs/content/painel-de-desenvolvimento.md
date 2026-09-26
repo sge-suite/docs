@@ -22,8 +22,8 @@ Para a sequência de execução atual, incluindo a próxima fase transversal de 
 
 - [Fase 00 — Preparação](doc:fase-00-preparacao) — **completed** — Checklist do ambiente, qualidade e fluxo de trabalho do projeto novo.
 - [Fase 01 — Fundação de dados](doc:fase-01-fundacao-de-dados) — **completed** — Migrations, Models, factories e testes PostgreSQL da base de dados.
-- [Fase 02 — Conta e contexto](doc:fase-02-conta-e-contexto) — **planned** — Resolver vínculo ativo e criar sua seleção antes das interfaces administrativas.
-- [Fase 03 — Activity Log](doc:fase-03-activity-log) — **planned** — Cobrir entidades de negócio e vincular autoria ao contexto ativo.
+- [Fase 02 — Conta e contexto](doc:fase-02-conta-e-contexto) — **in-progress** — Contexto ativo e bootstrap do primeiro administrador implementados; cadastro pela interface, convite e configurações pessoais pendentes.
+- [Fase 03 — Activity Log](doc:fase-03-activity-log) — **completed** — Cobertura Eloquent, autoria por vínculo e suíte completa validadas; 561 testes passaram e 2 foram ignorados.
 - [Fase 04 — Integração de e-mail](doc:fase-04-integracao-de-email) — **planned** — Backend comum para preparação, transporte, tentativas e reprocessamento de e-mails.
 - [Fase 05 — Administração hierárquica](doc:fase-05-administracao) — **planned** — Backend e interfaces administrativas em ordem de escopo, do global ao local.
 - [Fase 06 — Documentos](doc:fase-06-documentos) — **planned** — Checklist de templates DOCX, versões, geração e acompanhamento de assinatura.
@@ -35,19 +35,19 @@ Para a sequência de execução atual, incluindo a próxima fase transversal de 
 ## Enums
 
 - [Enum — AffiliationType](doc:enum-affiliationtype) — **implemented** — Tipos funcionais permitidos para um vínculo institucional do SGE.
-- [Enum — BrazilianState](doc:enum-brazilianstate) — **implemented** — Unidades federativas usadas por cidades, endereços, campi e calendários; integração com os modelos ainda pendente.
+- [Enum — BrazilianState](doc:enum-brazilianstate) — **implemented** — Unidades federativas usadas em Models e validações de cidades, feriados e pedidos de cadastro.
 - [Enum — HolidayScope](doc:enum-holidayscope) — **implemented** — Escopo nacional, estadual ou municipal de um feriado.
-- [Enum — EmailDeliveryAttemptStatus](doc:enum-emaildeliveryattemptstatus) — **implemented** — Estados da tentativa de transporte de uma mensagem de e-mail; integração com o modelo ainda pendente.
-- [Enum — EmailMessagePurpose](doc:enum-emailmessagepurpose) — **implemented** — Finalidades estáveis para mensagens de e-mail do SGE; integração com o modelo ainda pendente.
-- [Enum — EmancipationEvidenceStatus](doc:enum-emancipationevidencestatus) — **implemented** — Ciclo da prova privada de emancipação analisada pelo Setor de Estágio; integração com o modelo ainda pendente.
-- [Enum — EvaluationStatus](doc:enum-evaluationstatus) — **implemented** — Ciclo persistido das respostas de avaliação enviadas pelo supervisor; migration e integração ainda pendentes.
+- [Enum — EmailDeliveryAttemptStatus](doc:enum-emaildeliveryattemptstatus) — **implemented** — Cast e validação do Model `EmailDeliveryAttempt`; transporte e reenvio permanecem pendentes.
+- [Enum — EmailMessagePurpose](doc:enum-emailmessagepurpose) — **implemented** — Casts e validações de `EmailMessage` e `EmailDeliveryAttempt`; o fluxo de envio permanece pendente.
+- [Enum — EmancipationEvidenceStatus](doc:enum-emancipationevidencestatus) — **implemented** — Cast e validação do Model `EmancipationEvidence`; upload HTTP e análise ainda pendentes.
+- [Enum — EvaluationStatus](doc:enum-evaluationstatus) — **implemented** — Cast e validação do Model `SupervisorEvaluation`, com schema da Migration 18; fluxo funcional de análise pendente.
 - [Enum — GeneratedDocumentOrigin](doc:enum-generateddocumentorigin) — **implemented** — Origem do documento registrado no processo de estágio.
 - [Enum — GeneratedDocumentStatus](doc:enum-generateddocumentstatus) — **implemented** — Ciclo de vida de cada documento gerado ou registrado no estágio.
 - [Enum — GeneratedDocumentType](doc:enum-generateddocumenttype) — **implemented** — Tipos de documentos registrados no processo de estágio.
 - [Enum — InternshipCancellationRequestStatus](doc:enum-internshipcancellationrequeststatus) — **implemented** — Ciclo do pedido de cancelamento de estágio formalizado; fluxo decisório pendente.
 - [Enum — InternshipRequestCorrectionStatus](doc:enum-internshiprequestcorrectionstatus) — **implemented** — Ciclo de cada pendência devolvida na solicitação de estágio; fluxo de análise pendente.
 - [Enum — InternshipRequestStatus](doc:enum-internshiprequeststatus) — **implemented** — Ciclo de preenchimento, envio e análise da solicitação nativa de estágio; transições do fluxo pendentes.
-- [Enum — InternshipStatus](doc:enum-internshipstatus) — **implemented** — Ciclo de formalização e execução de um estágio já criado no SGE; integração ainda pendente.
+- [Enum — InternshipStatus](doc:enum-internshipstatus) — **implemented** — Cast e validação de status no Model `Internship`; operações funcionais do ciclo de estágio permanecem pendentes.
 - [Enum — LegalCapacityDeclaration](doc:enum-legalcapacitydeclaration) — **implemented** — Opção declarada pelo discente para a capacidade civil; interface e análise manual pendentes.
 - [Enum — PartyDocumentType](doc:enum-partydocumenttype) — **implemented** — Tipo de documento de identificação da parte concedente.
 - [Enum — RegistrationRequestStatus](doc:enum-registrationrequeststatus) — **implemented** — Ciclo das solicitações de cadastro de supervisor e parte concedente.
@@ -66,7 +66,7 @@ Sequência física dos arquivos em `database/migrations`; os números permanecem
 - [Migration 01 — addresses](doc:migration-01-addresses) — **implemented** — Base backend com cidade local, validação dos campos obrigatórios, Activity Log e cópia histórica; consulta e validação de CEP continuam pendentes.
 - [Migration 02 — user_personal_data](doc:migration-02-user-personal-data) — **implemented** — Dados pessoais e profissionais opcionais por usuário; CPF permanece na conta.
 - [Migration 03 — campuses](doc:migration-03-campuses) — **implemented** — Tabela de campi; representante legal e cargo permanecem textuais no próprio campus.
-- [Migration 04 — affiliations](doc:migration-04-affiliations) — **implemented** — Schema PostgreSQL, modelo, validação, factory, relações e Activity Log; login e sessão seguem na Fase 04.
+- [Migration 04 — affiliations](doc:migration-04-affiliations) — **implemented** — Schema, Model, validação, factory, relações e Activity Log; contexto de sessão e seleção de vínculo estão implementados na Fase 02.
 - [Migration 05 — notifications](doc:migration-05-notifications) — **implemented** — Tabela nativa do Laravel para notificações internas.
 - [Migration 06 — email_messages](doc:migration-06-email-messages) — **implemented** — Snapshot imutável da mensagem de e-mail preparada para envio.
 - [Migration 07 — email_delivery_attempts](doc:migration-07-email-delivery-attempts) — **implemented** — Histórico append-only das tentativas de transporte de e-mails.

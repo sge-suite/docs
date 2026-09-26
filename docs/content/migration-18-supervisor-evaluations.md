@@ -62,7 +62,7 @@ O formulário é fixo. Não há tabela de definições do formulário, versão p
 
 Fora de `Draft`, `hours_requirement_met` é obrigatório. Quando for falso, `estimated_hours_remaining` é obrigatório e positivo; o supervisor ainda preenche os demais campos. A identificação do discente vem do estágio, não de texto livre na avaliação.
 
-`reviewed_at` registra quando o Setor de Estágio devolveu ou aprovou a avaliação. Não há `reviewed_by_affiliation_id`: a autoria da análise deverá ser obtida pelo *causer* por vínculo no Activity Log, cuja configuração de autoria ainda está pendente. O Model já registra alterações de atributos com `LogsActivity`.
+`reviewed_at` registra quando o Setor de Estágio devolveu ou aprovou a avaliação. Não há `reviewed_by_affiliation_id`: as alterações Eloquent já registram no Activity Log o vínculo ativo como *causer* e a conta nos metadados. O fluxo de revisão e sua autorização ainda não estão disponíveis; quando forem implementados, a autoria virá do contexto validado da requisição.
 
 ## Regras de ciclo e validade
 
@@ -82,7 +82,7 @@ Fora de `Draft`, `hours_requirement_met` é obrigatório. Quando for falso, `est
 - Índice em `internship_id`, `status` e `submitted_at` para localizar a lista e a resposta vigente.
 - Índice em `supervisor_affiliation_id` para autorização e consultas do supervisor.
 - Restrição única em `internship_id` e `supervisor_affiliation_id`, pois o mesmo formulário é reutilizado após devolução.
-- A autorização de análise deve ser validada pela Policy usando o vínculo do Setor de Estágio; a autoria será registrada no Activity Log quando o *causer* por vínculo for configurado.
+- A futura Policy de análise deverá exigir o vínculo do Setor de Estágio. O `SetAuditActor` já configura o vínculo ativo como *causer* do Activity Log em ações humanas.
 - A referência vigente deve aceitar no máximo uma avaliação por estágio.
 
 ## Checklist de decisão

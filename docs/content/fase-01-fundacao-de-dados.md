@@ -22,7 +22,7 @@ source_refs:
 - [x] Decidir que não haverá migration de permissões; autorização será por vínculos, Gates e Policies.
 
 > [!info] Escopo concluído
-> A fundação de schema, Models, relações, factories e testes PostgreSQL das migrations implementadas está concluída. Policies, integração de Activity Log, Jobs e fluxos de tela continuam nas fases próprias.
+> A fundação de schema, Models, relações, factories e testes PostgreSQL das migrations implementadas está concluída. O contexto de vínculo da Fase 02 e a integração do Activity Log Eloquent da Fase 03 também já têm implementação. Fluxos de cadastro pela interface, Jobs de domínio e telas de estágio continuam nas fases próprias.
 
 ## Dados cadastrais
 
@@ -44,7 +44,7 @@ source_refs:
 
 - [x] Preservar linhas de endereço usadas historicamente; alterações criam nova linha quando necessário.
 - [x] Garantir CPF único e normalizado na conta.
-- [ ] Impedir alteração do CPF em futuros fluxos de configuração da conta; pertence à [Fase 04](doc:fase-02-conta-e-contexto).
+- [ ] Impedir alteração do CPF em futuros fluxos de configuração da conta; pertence à [Fase 02](doc:fase-02-conta-e-contexto).
 - [x] Normalizar CPF, CNPJ, UF e e-mails pelos casts e validações aplicáveis; CEP não tem validação de formato.
 - [x] Permitir múltiplos vínculos por pessoa sem trocar campus dentro do vínculo.
 - [x] Exigir curso em vínculo discente e respeitar escopo do campus.

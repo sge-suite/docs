@@ -7,11 +7,11 @@ status: in-progress
 visibility: public
 tags: sge/desenvolvimento, sge/autenticacao, sge/checklist
 related: modelo-de-dados-acesso, e-mails-notificacoes-e-entregas, fluxos-principais, fase-03-activity-log, fase-05-administracao
-source_refs:
+source_refs: https://github.com/sge-suite/sge/blob/master/app/Support/ActiveAffiliationContext.php, https://github.com/sge-suite/sge/blob/master/app/Http/Middleware/RequireActiveAffiliation.php, https://github.com/sge-suite/sge/blob/master/app/Http/Controllers/AffiliationSelectionController.php, https://github.com/sge-suite/sge/blob/master/app/Console/Commands/CreateAdmin.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/ActiveAffiliationContextTest.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/CreateAdminCommandTest.php
 ---
 Referências: [modelo de acesso](doc:modelo-de-dados-acesso), [E-mails, notificações e entregas](doc:e-mails-notificacoes-e-entregas) e [fluxo de login](doc:fluxos-principais#1-acesso-e-vinculo).
 
-O contexto de vínculo ativo, a proteção do painel, a tela de seleção e o comando de bootstrap do primeiro Administrador do Sistema estão implementados. Os testes da aplicação via Sail dependem de Docker/Podman ativo neste ambiente.
+O contexto de vínculo ativo, a proteção do painel, a tela de seleção e o comando de bootstrap do primeiro Administrador do Sistema estão implementados. Os testes do comando e a suíte completa passaram via Sail: 561 testes passaram e 2 foram ignorados, de 563.
 
 ## Login e recuperação de senha
 
@@ -25,14 +25,14 @@ O contexto de vínculo ativo, a proteção do painel, a tela de seleção e o co
 
 ## Criação de conta
 
-- [x] Disponibilizar `php artisan admin:create` para criar a primeira conta Administrador do Sistema e seu vínculo ativo em uma transação Eloquent. O comando só prossegue quando não existe administrador do sistema ativo; contas comuns e vínculos administradores desativados não impedem o bootstrap.
-- [x] Solicitar nome, CPF com 11 dígitos sem pontuação, e-mail, número de registro institucional e senha com confirmação oculta. Exibir as regras de senha antes do primeiro campo e validá-las na primeira entrada; só pedir a confirmação depois que a senha passar. O mesmo e-mail é salvo na conta e no vínculo; o vínculo não recebe campus nem curso.
-- [x] Validar campos, CPF e unicidade de CPF/e-mail antes de gravar. O comando não envia e-mail. A criação é atribuída ao sistema no Activity Log e a senha e seu hash ficam fora do evento.
+- [x] Disponibilizar `php artisan admin:create` para criar o primeiro vínculo ativo de Administrador do Sistema em uma transação Eloquent. O comando só prossegue quando não existe administrador do sistema ativo; contas comuns e vínculos administradores desativados não impedem o bootstrap.
+- [x] Solicitar primeiro o CPF com 11 dígitos sem pontuação. Se a conta não existir, pedir nome, e-mail da conta, registro institucional e senha com confirmação oculta; o mesmo e-mail é salvo na conta e no vínculo. Se a conta já existir para o CPF, conservar seus dados e pedir somente o e-mail do novo vínculo e o registro institucional, sem pedir nova senha. O vínculo não recebe campus nem curso. Para uma nova conta, exibir as regras de senha antes do primeiro campo e validá-las na primeira entrada; só pedir a confirmação depois que a senha passar.
+- [x] Validar campos e CPF antes de gravar. Para uma nova conta, exigir e-mail de conta ainda não usado; o e-mail do vínculo da conta existente é validado como endereço, sem exigir unicidade entre contas. O comando não envia e-mail. A criação é atribuída ao sistema no Activity Log e a senha e seu hash ficam fora do evento.
 - [x] Não exigir confirmação ou código de verificação de e-mail para o bootstrap inicial.
 - [ ] Implementar a criação de contas e vínculos pelo fluxo da aplicação.
 - [ ] Enviar convite inicial e registrar somente a tentativa de entrega, sem conteúdo salvo. O link deve abrir a tela de recuperação de senha com o e-mail preenchido; a pessoa solicita o link de redefinição nessa tela. Esse fluxo de convite ainda não foi implementado.
 
-`CreateAdminCommandTest` cobre a criação, validações, unicidade, bloqueio por administrador ativo, vínculo inativo, confirmação, execução não interativa, auditoria e rollback. A execução via Sail está pendente de Docker/Podman ativo.
+`CreateAdminCommandTest` cobre os caminhos de conta nova e CPF existente, e-mails da conta e do vínculo, validações, bloqueio por administrador ativo, vínculo inativo, confirmação, execução não interativa, auditoria e rollback. Os 17 cenários passaram pelo Sail.
 
 ## Seleção de vínculo
 
@@ -56,6 +56,6 @@ O contexto de vínculo ativo, a proteção do painel, a tela de seleção e o co
 - [ ] Permitir ao discente alterar RG, nascimento e endereço atual.
 - [ ] Impedir edição de dados pessoais por outro vínculo.
 
-## Próxima fase
+## Fase seguinte na sequência
 
-[Fase 03 — Activity Log](doc:fase-03-activity-log)
+O contexto da conta e do vínculo ativo está implementado. [Fase 03 — Activity Log](doc:fase-03-activity-log) registra a etapa seguinte, também já implementada; a criação de contas pela interface, o convite e as demais pendências desta fase continuam em aberto.

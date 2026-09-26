@@ -7,7 +7,7 @@ status: in-progress
 visibility: public
 tags: sge/desenvolvimento, sge/testes, sge/checklist
 related: componentes-tecnicos, desenvolvimento-checklist-de-funcionalidade
-source_refs: https://github.com/sge-suite/sge/blob/master/tests/Feature/AffiliationTest.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/CourseTest.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/NotificationsTest.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/EmailMessageTest.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/EmailDeliveryAttemptTest.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/AddressesTest.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/UserPersonalDataTest.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/CityCatalogValidationTest.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/HolidaysTest.php, https://github.com/sge-suite/sge/blob/master/tests/Unit/FetchCitiesCommandTest.php, https://github.com/sge-suite/sge/blob/master/tests/Unit/CpfCastTest.php, https://github.com/sge-suite/sge/blob/master/tests/Unit/PhoneCastTest.php, https://github.com/sge-suite/sge/blob/master/tests/Unit/Helpers/FormattingHelpersTest.php, https://github.com/sge-suite/sge/blob/master/tests/Unit/Helpers/NumberToWordsHelperTest.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/Auth/PasswordResetTest.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/Settings/SecurityTest.php
+source_refs: https://github.com/sge-suite/sge/blob/master/tests/Feature/AffiliationTest.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/CourseTest.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/NotificationsTest.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/EmailMessageTest.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/EmailDeliveryAttemptTest.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/AddressesTest.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/UserPersonalDataTest.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/CityCatalogValidationTest.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/HolidaysTest.php, https://github.com/sge-suite/sge/blob/master/tests/Unit/FetchCitiesCommandTest.php, https://github.com/sge-suite/sge/blob/master/tests/Unit/CpfCastTest.php, https://github.com/sge-suite/sge/blob/master/tests/Unit/PhoneCastTest.php, https://github.com/sge-suite/sge/blob/master/tests/Unit/Helpers/FormattingHelpersTest.php, https://github.com/sge-suite/sge/blob/master/tests/Unit/Helpers/NumberToWordsHelperTest.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/Auth/PasswordResetTest.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/Settings/SecurityTest.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/CreateAdminCommandTest.php
 ---
 Este mapa acompanha o código real no repositório Laravel irmão, em `../sge`. Ao criar uma classe ou migration, atualize a matriz e a nota técnica correspondente.
 
@@ -36,6 +36,7 @@ Este mapa acompanha o código real no repositório Laravel irmão, em `../sge`. 
 | Helpers  | `tests/Unit/Helpers/FormattingHelpersTest.php`     | timezone/data, placeholders, telefone com DDI e telefone internacional. |
 | Helpers  | `tests/Unit/Helpers/NumberToWordsHelperTest.php`   | números e valores em reais por extenso, incluindo entradas inválidas.  |
 | Auth     | `tests/Feature/Auth/*`                             | login, confirmação, reset de senha.                                     |
+| Console  | `tests/Feature/CreateAdminCommandTest.php`         | `admin:create`: CPF primeiro; conta nova ou novo vínculo em conta existente, e-mail próprio do vínculo, validações, senha fora da auditoria, administrador ativo, cancelamento, não interativo e rollback. 17 cenários passaram pelo Sail. |
 | Settings | `tests/Feature/Settings/*`                         | atualização de perfil e segurança.                                      |
 | App      | `tests/Feature/DashboardTest.php`                  | acesso ao dashboard com vínculo ativo.                                  |
 | Contexto | `tests/Feature/ActiveAffiliationContextTest.php` | seleção automática, último vínculo usado, escolha, troca, sessão inválida, desativação e vínculo de outra conta. |
@@ -77,7 +78,7 @@ Este mapa acompanha o código real no repositório Laravel irmão, em `../sge`. 
 - [ ] Cobrir `AppServiceProvider` e `FortifyServiceProvider` por comportamento observável.
 - [ ] Completar testes de autorização dos catálogos e fluxos de estágio; a caixa de notificações já cobre propriedade da conta e vínculo ativo.
 
-Os novos testes de contexto, auditoria e senha foram escritos, mas sua execução via Sail ainda está pendente porque Docker/Podman não está rodando neste ambiente.
+Os 17 cenários de `admin:create` estão incluídos na suíte completa, executada via Sail: 561 testes passaram e 2 foram ignorados, de 563.
 
 ## Comandos
 

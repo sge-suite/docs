@@ -3,11 +3,11 @@ id: fase-03-activity-log
 title: Fase 03 — Activity Log
 description: Auditoria de alterações Eloquent nas tabelas de negócio, com autoria pelo vínculo ativo.
 type: development-phase
-status: in-progress
+status: completed
 visibility: public
 tags: sge/desenvolvimento, sge/auditoria, sge/checklist
 related: migration-base-04-activity-log, modelo-de-dados-historico, e-mails-notificacoes-e-entregas, fase-04-integracao-de-email
-source_refs:
+source_refs: https://github.com/sge-suite/sge/blob/master/app/Http/Middleware/SetAuditActor.php, https://github.com/sge-suite/sge/blob/master/app/Support/AuditInfrastructureModel.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/DatabaseAuditTest.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/ActiveAffiliationContextTest.php
 ---
 
 A aplicação usa o **Spatie Activity Log** e a tabela `activity_log` criada pela migration base `2026_08_06_201115_create_activity_log_table.php`. O escopo decidido é registrar mutações feitas por Models Eloquent. Não há gatilho PostgreSQL de auditoria.
@@ -36,7 +36,7 @@ CPF, CNPJ, e-mail, endereço e demais campos cadastrais de negócio entram nos v
 
 `LogsActivity` observa eventos dos Models. O `CitySeeder` usa `save()` por Model, e `User::delete()` exclui os dados pessoais pelo Model antes da conta, preservando os eventos Eloquent na mesma transação. Operações com Query Builder, SQL direto, `upsert`, exclusões exclusivamente por cascata no banco e escrita em tabelas técnicas não fazem parte da cobertura solicitada. O bloqueio de edição de `activity_log` se aplica ao Model e ao comando de limpeza do pacote; acesso SQL direto ao banco não é protegido por esse mecanismo.
 
-`DatabaseAuditTest` verifica criação, edição, exclusão, valores antigos/novos, autoria por vínculo, exclusão de credenciais, lote do catálogo, mídia, notificações, cascata via Model e rollback transacional. Os testes de e-mail verificam o histórico técnico sem `LogsActivity`, e os testes de senha verificam o evento sem hash. `ActiveAffiliationContextTest` verifica escolha, troca, sessão inválida, vínculo desativado e vínculo alheio. A execução dos testes afetados e da suíte completa via Sail está pendente porque Docker/Podman não está rodando neste ambiente. Pint e `git diff --check` passaram.
+`DatabaseAuditTest` verifica criação, edição, exclusão, valores antigos/novos, autoria por vínculo, exclusão de credenciais, lote do catálogo, mídia, notificações, cascata via Model e rollback transacional. Os testes de e-mail verificam o histórico técnico sem `LogsActivity`, e os testes de senha verificam o evento sem hash. `ActiveAffiliationContextTest` verifica escolha, troca, sessão inválida, vínculo desativado e vínculo alheio. Os testes direcionados de auditoria e contexto e a suíte completa passaram via Sail: 561 testes passaram e 2 foram ignorados, de 563. Pint e `git diff --check` passaram.
 
 ## Próxima etapa
 

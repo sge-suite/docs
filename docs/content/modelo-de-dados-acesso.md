@@ -37,7 +37,7 @@ A caixa operacional usa `Affiliation::notifications()` após a Policy validar qu
 > `AffiliationType`, vínculo ativo, escopo e estado do registro são os únicos insumos de autorização. Gates e Policies codificam essas regras institucionais de modo determinístico; não há regra de acesso editável em banco.
 
 > [!note] Último vínculo usado
-> `last_used_at` guarda apenas o último vínculo ativo selecionado ou escolhido numa troca explícita de contexto; não é auditoria de login. A ordenação coloca usos mais recentes primeiro, valores nulos por último e usa desempate determinístico. A integração que restaura um vínculo ou pede escolha quando todos nunca foram usados pertence à Fase 04.
+> `last_used_at` guarda apenas o último vínculo ativo selecionado ou escolhido numa troca explícita de contexto; não é auditoria de login. O contexto implementado restaura o último vínculo ainda ativo; quando nenhum vínculo tem uso anterior, pede escolha explícita. A seleção e a troca atualizam o campo, mas requisições comuns e restauração não. A validação ocorre em cada requisição funcional; detalhes e testes estão na [Fase 02](doc:fase-02-conta-e-contexto).
 
 ## Convenção de implementação
 

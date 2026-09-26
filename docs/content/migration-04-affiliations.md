@@ -10,7 +10,7 @@ related: migration-03-campuses, migration-10-course-id-em-affiliations, enum-aff
 source_refs: https://github.com/sge-suite/sge/blob/master/database/migrations/2026_09_22_105745_create_affiliations_table.php, https://github.com/sge-suite/sge/blob/master/app/Models/Affiliation.php, https://github.com/sge-suite/sge/blob/master/app/Concerns/AffiliationValidationRules.php, https://github.com/sge-suite/sge/blob/master/database/factories/AffiliationFactory.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/AffiliationTest.php
 ---
 > [!success] Estado
-> Migration, model, validação, factory, relações e Activity Log estão implementados. A migration depende de `users` e [`campuses`](doc:migration-03-campuses). O contrato foi verificado no PostgreSQL por Sail. A seleção na sessão e a integração com login permanecem na [Fase 04](doc:fase-02-conta-e-contexto).
+> Migration, Model, validação, factory, relações e Activity Log estão implementados. A migration depende de `users` e [`campuses`](doc:migration-03-campuses). O contrato foi verificado no PostgreSQL por Sail. A resolução do vínculo após o login, a sessão, a tela de seleção e a troca pelo menu do perfil estão implementadas na [Fase 02](doc:fase-02-conta-e-contexto).
 
 ## Schema PostgreSQL
 
@@ -54,7 +54,7 @@ O scope `active()` filtra `deactivated_at IS NULL`. `orderByLastUsedAt()` ordena
 
 `last_used_at` é memória operacional do último vínculo selecionado ou usado numa troca explícita de contexto. `markAsUsed()` atualiza o timestamp somente quando chamado para um vínculo persistido e ativo. Leituras e requisições comuns não o atualizam.
 
-O campo não é auditado pelo Activity Log e não representa login, logout ou trilha de autenticação. A futura integração da Fase 04 poderá restaurar um vínculo ativo mais recentemente usado; vínculo desativado nunca é elegível. Se houver um único vínculo ativo, o fluxo poderá selecioná-lo diretamente. Com múltiplos vínculos ativos e nenhum uso anterior, a Fase 04 deverá pedir escolha em vez de selecionar pelo desempate técnico.
+O campo não é auditado pelo Activity Log e não representa login, logout ou trilha de autenticação. `ActiveAffiliationContext` restaura o vínculo ativo mais recentemente usado; vínculo desativado nunca é elegível. Se houver um único vínculo ativo, ele é selecionado automaticamente. Com múltiplos vínculos e nenhum uso anterior, a pessoa escolhe em `affiliations/select`, sem seleção baseada no desempate técnico. Somente a seleção ou troca explícita atualiza `last_used_at`.
 
 ## Factory e auditoria
 
@@ -64,7 +64,7 @@ O Spatie Activity Log registra criação e alterações relevantes nos dados fil
 
 ## Testes verificados
 
-`tests/Feature/AffiliationTest.php` cobre schema, rollback/reaplicação em ordem de dependência, FKs, relações, validação PHP e cast enum, curso obrigatório para discente, factory, ativação, ordenação e Activity Log. As alterações das Migrations 09 e 10 foram verificadas no PostgreSQL por Sail junto com `tests/Feature/CourseTest.php`. A implementação não inclui telas, sessão, middleware ou fluxo de login.
+`tests/Feature/AffiliationTest.php` cobre schema, rollback/reaplicação em ordem de dependência, FKs, relações, validação PHP e cast enum, curso obrigatório para discente, factory, ativação, ordenação e Activity Log. As alterações das Migrations 09 e 10 foram verificadas no PostgreSQL por Sail junto com `tests/Feature/CourseTest.php`. A tela de seleção, sessão e middleware são cobertos separadamente por `ActiveAffiliationContextTest`, `DashboardTest` e os testes da Fase 02.
 
 ## Dependências
 

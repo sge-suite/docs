@@ -30,7 +30,7 @@ O sistema trabalha com uma conta por pessoa e, quando aplicável, com um **vínc
 | **Definido** | A regra foi aprovada para o produto, mas sua implementação completa ainda está pendente. |
 | **Planejado** | O trabalho ainda não começou ou depende de decisão anterior. |
 
-No estado atual, login, recuperação de senha, dashboard, perfil somente para consulta, alteração de senha, helpers, providers, enums e a infraestrutura básica já existem. O domínio específico de estágios — vínculos institucionais, solicitações, documentos, execução, avaliações e conclusão — permanece planejado.
+No estado atual, login, recuperação de senha, dashboard, perfil somente para consulta e alteração de senha estão disponíveis. O contexto de vínculo ativo, a seleção/troca de vínculo, o bootstrap do primeiro Administrador do Sistema por `admin:create` e o Activity Log Eloquent também estão implementados. A base de Models e migrations do domínio de estágios existe; cadastro de contas pela interface, convite e os fluxos operacionais de solicitação, documentação, execução, avaliação e conclusão ainda não estão disponíveis como jornadas completas.
 
 ## 3. Quem participa
 
@@ -117,18 +117,18 @@ O supervisor preenche a avaliação quando ela for liberada e o orientador regis
 | Área | Estado | Próximo resultado esperado |
 | --- | --- | --- |
 | Preparação do projeto | **Concluída** | Manter ambiente, qualidade e fluxo de revisão. |
-| Conta e autenticação | **Implementada parcialmente** | Integrar primeiro acesso e vínculo institucional. |
-| Fundação técnica | **Implementada parcialmente** | Conectar enums, helpers e infraestrutura aos Models e migrations de domínio. |
-| E-mails e documentos | **Definidos** | Implementar estruturas, integrações e controles de segurança planejados. |
-| Domínio de estágios | **Planejado** | Criar cadastros, solicitações, formalização, execução, avaliação e conclusão. |
+| Conta e autenticação | **Implementada parcialmente** | Contexto de vínculo e bootstrap do primeiro administrador existem; cadastro pela interface, convite e configurações pessoais ainda faltam. |
+| Fundação técnica | **Implementada parcialmente** | Models e migrations de domínio existem; completar autorizações, Actions transacionais e integração das jornadas. |
+| E-mails e documentos | **Estruturas implementadas; fluxos pendentes** | Transporte de e-mail, geração documental e assinatura ainda precisam ser integrados. |
+| Domínio de estágios | **Base de dados implementada; fluxos pendentes** | Entidades e estados existem no backend; implementar jornadas, decisões e interfaces. |
 
-As fases previstas são: preparação; contratos de e-mail; fundação de dados; conta e contexto; administração; documentos; abertura do estágio; estágio em andamento; avaliação e conclusão; e serviços transversais. A numeração da fase 02 não possui entrega associada no planejamento atual.
+A sequência é: 00 — preparação; 01 — fundação de dados; 02 — conta e contexto; 03 — Activity Log; 04 — integração de e-mail; 05 — administração; 06 — documentos; 07 — abertura do estágio; 08 — estágio em andamento; e 09 — avaliação e conclusão. O contexto de vínculo da Fase 02 e a implementação da auditoria Eloquent da Fase 03 estão no código; a Fase 04 é o próximo bloco ainda não iniciado.
 
 ## 8. Referência técnica resumida
 
 O projeto atual usa Laravel 13, PHP 8.3 ou superior, Livewire 4, Flux UI, Tailwind CSS, Vite, PostgreSQL, Laravel Fortify, Spatie Activitylog, Spatie Medialibrary, Laravel Scout e Meilisearch. A aplicação já possui autenticação, rotas protegidas, configurações de perfil e segurança, filas, cache, auditoria e infraestrutura de mídia.
 
-Policies, Gates, Models e migrations do domínio de estágio ainda precisam ser implementados. Comandos agendados de domínio também são planejados: o `routes/console.php` atual registra apenas o comando padrão do Laravel.
+A base de Models e migrations do domínio de estágio já existe, assim como Policies básicas para vínculo e consulta de atividades. Ainda faltam autorizações e Actions para várias jornadas, interfaces funcionais, transporte de e-mail, geração documental e comandos agendados do domínio. O projeto já tem comandos Artisan de bootstrap e importação; `routes/console.php` ainda não agenda tarefas de domínio.
 
 ## 9. Onde aprofundar
 

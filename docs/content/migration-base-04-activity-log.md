@@ -7,7 +7,7 @@ status: implemented
 visibility: public
 tags: sge/migrations, sge/auditoria, sge/banco-de-dados
 related:
-source_refs: https://github.com/sge-suite/sge/blob/master/database/migrations/2026_08_06_201115_create_activity_log_table.php
+source_refs: https://github.com/sge-suite/sge/blob/master/database/migrations/2026_08_06_201115_create_activity_log_table.php, https://github.com/sge-suite/sge/blob/master/app/Http/Middleware/SetAuditActor.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/DatabaseAuditTest.php
 ---
 > [!success] Estado
 > Implementada no arquivo `2026_08_06_201115_create_activity_log_table.php` e usada pelo pacote Spatie Activity Log.
@@ -39,7 +39,7 @@ O arquivo não define `down()`. Isso deve ser tratado como limitação/documenta
 - [x] Criar tabela e morphs de sujeito/causador.
 - [x] Criar JSON de alterações/propriedades.
 - [ ] Decidir se a migration deve ganhar `down()` antes de ser usada em produção.
-- [ ] Definir eventos obrigatórios para endereço, e-mail, vínculo, status e documentos.
+- [x] Definir e implementar eventos Eloquent para entidades de negócio, incluindo campos cadastrais de e-mail; tabelas de entrega mantêm histórico técnico próprio.
 - [ ] Definir retenção e acesso por perfil.
-- [ ] Testar redaction de dados sensíveis.
-- [ ] Relacionar actor ao vínculo ativo nas ações do domínio.
+- [x] Testar a exclusão de senhas, hashes, tokens e outros dados protegidos dos valores registrados.
+- [x] Relacionar o autor ao vínculo ativo em ações humanas; registrar ações sem pessoa autenticada como sistema.

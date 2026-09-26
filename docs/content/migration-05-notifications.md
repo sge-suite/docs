@@ -27,14 +27,14 @@ O comando `php artisan make:notifications-table --no-interaction` produz a base 
 
 O UUID de `notifications.id` é intencional: preserva o schema e a geração de identificadores nativos de Laravel Notifications. As tabelas próprias de e-mail usam IDs `bigint` autoincrementais; somente `email_messages.notification_id` permanece UUID para referenciar esta tabela.
 
-Notificações de estágio, avaliação, documento e demais eventos operacionais têm `notifiable = Affiliation`. Recuperação de senha e o aviso inicial da conta têm `notifiable = User`. `AffiliationPolicy::viewNotifications` exige que o vínculo exista, esteja ativo e pertença à conta autenticada. A relação polimórfica limita cada consulta ao par `notifiable_type`/`notifiable_id`, inclusive quando a conta possui outros vínculos. As futuras Notifications usam `toDatabase()` e `databaseType()`; nenhuma classe de domínio foi criada nesta migration.
+Notificações operacionais de estágio, avaliação e documento usarão `notifiable = Affiliation`. `AffiliationPolicy::viewNotifications` exige que o vínculo exista, esteja ativo e pertença à conta autenticada. A relação polimórfica limita cada consulta ao par `notifiable_type`/`notifiable_id`, inclusive quando a conta possui outros vínculos. `User` também aceita notificações pelo Laravel, mas recuperação de senha, convite inicial e novo vínculo são enviados pelo canal de e-mail e não criam linhas em `notifications`. As classes de domínio e a integração aos seus fluxos ainda não foram criadas.
 
 Deduplicação durável de eventos repetíveis não deve alterar a tabela nativa. A Action que gerar um evento precisa usar a fonte de idempotência do domínio; quando ela ainda não existir, o fluxo deve definir um registro operacional próprio antes de ser ativado.
 
 ## Checklist
 
 - [x] Gerar a migration com `php artisan make:notifications-table --no-interaction` e adaptar `data` para `jsonb`.
-- [x] Usar o canal `database`, `toDatabase()` e `databaseType()` nas Notifications futuras.
+- [ ] Criar Notifications de domínio com canal `database`, `toDatabase()` e `databaseType()` quando os respectivos fluxos forem implementados.
 - [x] Adicionar `Notifiable` a `Affiliation` e consultar a caixa operacional pelo vínculo ativo.
 - [ ] Garantir que `data` não contenha tokens, senhas, códigos ou URLs sensíveis.
 - [x] Testar criação e leitura/não leitura pelo Model nativo para `Affiliation` e `User`.

@@ -19,10 +19,11 @@ Classifica a finalidade da mensagem de notificação ou da tentativa de envio. N
 | Case                | Valor persistido     | Rótulo                  |
 | ------------------- | -------------------- | ----------------------- |
 | `Notification`      | `notification`       | Notificação operacional |
+| `AccountCreated`    | `account_created`    | Conta criada            |
 | `NewAffiliation`    | `new_affiliation`    | Novo vínculo            |
 | `AccountEmailChanged` | `account_email_changed` | Alteração de e-mail da conta |
 
-`NewAffiliation` identifica a tentativa do convite inicial destinada a `users.email`, sem `email_message`. `AccountEmailChanged` identifica o aviso ao endereço antigo ou novo, também sem conteúdo persistido. `Notification` identifica uma mensagem operacional com conteúdo e suas tentativas. Recuperação de senha não usa esse enum porque não é registrada nessas tabelas.
+`AccountCreated` identifica o convite enviado ao criar uma conta e seu primeiro vínculo, sem `email_message`; o template informa o vínculo e aponta para a solicitação de definição da senha. `NewAffiliation` identifica os avisos enviados ao e-mail da conta e ao e-mail do novo vínculo, sem `email_message`, com link para login. `AccountEmailChanged` identifica o aviso ao endereço antigo ou novo, com conteúdo persistido em `email_messages`. `Notification` identifica uma mensagem operacional com conteúdo e suas tentativas. Recuperação de senha não usa esse enum porque não é registrada nessas tabelas.
 
 ## Decisões de segurança
 
@@ -37,7 +38,7 @@ O fluxo de recuperação de senha não inclui confirmação adicional de endere�
 - [x] Criar `App\Enums\EmailMessagePurpose` como enum string.
 - [x] Implementar `label()`, `options()` e `values()`.
 - [x] Adicionar cast em `EmailMessage`.
-- [x] Persistir `Notification` em [email_messages](doc:migration-06-email-messages) e as três finalidades nas tentativas.
+- [x] Persistir `Notification` e `AccountEmailChanged` em [email_messages](doc:migration-06-email-messages); `AccountCreated` e `NewAffiliation` registram somente tentativas.
 - [x] Criar testes para cases, conversão e opções.
 - [ ] Verificar que nenhum segredo aparece no conteúdo, logs ou Activity Log.
 

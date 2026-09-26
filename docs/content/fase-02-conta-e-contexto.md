@@ -7,11 +7,11 @@ status: in-progress
 visibility: public
 tags: sge/desenvolvimento, sge/autenticacao, sge/checklist
 related: modelo-de-dados-acesso, e-mails-notificacoes-e-entregas, fluxos-principais, fase-03-activity-log, fase-05-administracao
-source_refs: https://github.com/sge-suite/sge/blob/master/app/Support/ActiveAffiliationContext.php, https://github.com/sge-suite/sge/blob/master/app/Http/Middleware/RequireActiveAffiliation.php, https://github.com/sge-suite/sge/blob/master/app/Http/Controllers/AffiliationSelectionController.php, https://github.com/sge-suite/sge/blob/master/app/Console/Commands/CreateAdmin.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/ActiveAffiliationContextTest.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/CreateAdminCommandTest.php
+source_refs: https://github.com/sge-suite/sge/blob/master/app/Support/ActiveAffiliationContext.php, https://github.com/sge-suite/sge/blob/master/app/Http/Middleware/RequireActiveAffiliation.php, https://github.com/sge-suite/sge/blob/master/app/Http/Controllers/AffiliationSelectionController.php, https://github.com/sge-suite/sge/blob/master/app/Console/Commands/CreateAdmin.php, https://github.com/sge-suite/sge/blob/master/resources/views/pages/settings/%E2%9A%A1security.blade.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/ActiveAffiliationContextTest.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/CreateAdminCommandTest.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/Settings/SecurityTest.php
 ---
 Referências: [modelo de acesso](doc:modelo-de-dados-acesso), [E-mails, notificações e entregas](doc:e-mails-notificacoes-e-entregas) e [fluxo de login](doc:fluxos-principais#1-acesso-e-vinculo).
 
-O contexto de vínculo ativo, a proteção do painel, a tela de seleção e o comando de bootstrap do primeiro Administrador do Sistema estão implementados. Os testes do comando e a suíte completa passaram via Sail: 569 testes passaram e 3 foram ignorados, de 572.
+O contexto de vínculo ativo, a proteção do painel, a seleção e troca de vínculo, `admin:create` e as configurações próprias de senha e e-mail da conta estão implementados. O cadastro de contas pela interface e a edição de outros dados pessoais continuam pendentes.
 
 ## Login e recuperação de senha
 
@@ -25,14 +25,14 @@ O contexto de vínculo ativo, a proteção do painel, a tela de seleção e o co
 
 ## Criação de conta
 
-- [x] Disponibilizar `php artisan admin:create` para criar o primeiro vínculo ativo de Administrador do Sistema em uma transação Eloquent. O comando só prossegue quando não existe administrador do sistema ativo; contas comuns e vínculos administradores desativados não impedem o bootstrap.
-- [x] Solicitar primeiro o CPF com 11 dígitos sem pontuação. Se a conta não existir, pedir nome, e-mail da conta, registro institucional e senha com confirmação oculta; o mesmo e-mail é salvo na conta e no vínculo. Se a conta já existir para o CPF, conservar seus dados e pedir somente o e-mail do novo vínculo e o registro institucional, sem pedir nova senha. O vínculo não recebe campus nem curso. Para uma nova conta, exibir as regras de senha antes do primeiro campo e validá-las na primeira entrada; só pedir a confirmação depois que a senha passar.
-- [x] Validar campos e CPF antes de gravar. Para uma nova conta, exigir e-mail de conta ainda não usado; o e-mail do vínculo da conta existente é validado como endereço, sem exigir unicidade entre contas. O comando não envia e-mail. A criação é atribuída ao sistema no Activity Log e a senha e seu hash ficam fora do evento.
+- [x] Disponibilizar `php artisan admin:create` para criar uma conta com seu primeiro vínculo ativo de Administrador do Sistema ou adicionar esse vínculo a uma conta encontrada pelo CPF. O comando pode ser executado mesmo quando já existe outro Administrador do Sistema ativo.
+- [x] Solicitar primeiro o CPF com 11 dígitos sem pontuação. Se a conta não existir, pedir nome, e-mail e registro institucional; o mesmo e-mail é salvo na conta e no primeiro vínculo. Se a conta já existir para o CPF, conservar seus dados e pedir somente o e-mail do novo vínculo e o registro institucional. O vínculo de Administrador do Sistema não recebe campus nem curso. O comando nunca pede senha: gera uma senha aleatória desconhecida e enfileira um convite para a pessoa solicitar o link de definição de senha.
+- [x] Validar campos, CPF de 11 dígitos e e-mail antes de gravar. Para uma conta nova, exigir e-mail ainda não usado e compartilhá-lo com o primeiro vínculo. Ao adicionar vínculo a uma conta existente, preservar os dados da conta e enfileirar aviso para `users.email` e `affiliations.email`; se os endereços forem iguais, enviar apenas um aviso. O aviso leva ao login. As gravações são transacionais; o Activity Log identifica o ator como `terminal` e exclui senha/hash.
 - [x] Não exigir confirmação ou código de verificação de e-mail para o bootstrap inicial.
 - [ ] Implementar a criação de contas e vínculos pelo fluxo da aplicação.
-- [ ] Enviar convite inicial e registrar somente a tentativa de entrega, sem conteúdo salvo. O link deve abrir a tela de recuperação de senha com o e-mail preenchido; a pessoa solicita o link de redefinição nessa tela. Esse fluxo de convite ainda não foi implementado.
+- [x] No `admin:create`, registrar somente as tentativas de envio, sem salvar o corpo. O convite confirma a criação da conta e informa o primeiro vínculo; seu link abre a recuperação com o e-mail preenchido para solicitar a definição da senha. O aviso de vínculo novo informa a criação e leva ao login.
 
-`CreateAdminCommandTest` cobre os caminhos de conta nova e CPF existente, e-mails da conta e do vínculo, validações, bloqueio por administrador ativo, vínculo inativo, confirmação, execução não interativa, auditoria e rollback. `ProfileUpdateTest` cobre a alteração do e-mail da conta, unicidade e preservação do e-mail do vínculo.
+`CreateAdminCommandTest` cobre conta nova e CPF existente, e-mails da conta e do vínculo, validações, criação mesmo com outro administrador ativo, confirmação, execução não interativa, autoria `terminal` e rollback. `ProfileUpdateTest` verifica a exibição do e-mail da conta e o encaminhamento para Segurança. `SecurityTest` cobre a troca do e-mail, senha atual, confirmação do novo endereço, unicidade, preservação do e-mail do vínculo, autoria e reserva dos dois avisos. Os testes substituem a fila e não enviam e-mails para SMTP/Mailpit.
 
 ## Seleção de vínculo
 
@@ -50,7 +50,7 @@ O contexto de vínculo ativo, a proteção do painel, a tela de seleção e o co
 
 ## Configurações próprias
 
-- [x] Permitir alteração da própria senha e do e-mail da conta autenticada. O novo e-mail passa a ser usado no login e na recuperação de senha; a alteração não modifica `affiliations.email` e, no escopo atual, não pede confirmação por e-mail.
+- [x] Exibir o e-mail da conta sem edição em Perfil, com link para Segurança. Em Segurança, exigir confirmação de senha para acessar a página e pedir a senha atual e duas entradas iguais do novo e-mail no formulário de troca. Validar formato e unicidade, normalizar o endereço e exigir vínculo ativo da própria conta. A atualização de `users.email` e a reserva de dois avisos na fila ocorrem na mesma transação: um para o endereço anterior e outro para o novo. O novo e-mail passa a ser usado no login e na recuperação de senha; `affiliations.email` permanece igual. O fluxo não exige confirmação pelo novo endereço antes da troca.
 - [x] Impedir alteração do nome na configuração atual.
 - [ ] Manter o CPF imutável após criação da conta.
 - [ ] Permitir ao discente alterar RG, nascimento e endereço atual.
@@ -58,4 +58,4 @@ O contexto de vínculo ativo, a proteção do painel, a tela de seleção e o co
 
 ## Fase seguinte na sequência
 
-O contexto da conta e do vínculo ativo está implementado. [Fase 03 — Activity Log](doc:fase-03-activity-log) registra a etapa seguinte, também já implementada; a criação de contas pela interface, o convite e as demais pendências desta fase continuam em aberto.
+O contexto e as configurações de acesso implementados dão suporte às próximas fases. A criação de contas pela interface e a edição de dados pessoais continuam em aberto; veja também as pendências registradas em [Fase 03 — Activity Log](doc:fase-03-activity-log).

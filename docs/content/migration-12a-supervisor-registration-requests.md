@@ -32,7 +32,7 @@ Na Migration 19, a solicitação de estágio aponta diretamente para um vínculo
 | `decision_reason` | `text` nullable; obrigatório em `Rejected` e `Cancelled`. |
 | `created_at`, `updated_at` | timestamps nativos do Laravel. |
 
-O schema cria somente a chave primária e a FK do vínculo resultante. Não há FKs de autoria ou de revisor nesta tabela, índices secundários, unicidade ou constraints `CHECK`. A solicitação de estágio planejada na Migration 19 identifica o vínculo discente responsável pelo envio; o Activity Log será configurado depois para registrar atores e alterações do pedido. O Model bloqueia a exclusão pelo Eloquent; não existe coluna `deleted_at`.
+O schema cria somente a chave primária e a FK do vínculo resultante. Não há FKs de autoria ou de revisor nesta tabela, índices secundários, unicidade ou constraints `CHECK`. A solicitação de estágio da Migration 19 identifica o vínculo discente responsável pelo envio. O Model participa do Activity Log Eloquent e registra a autoria conforme o contexto da requisição; as Actions e Policies da análise ainda estão pendentes. O Model bloqueia a exclusão pelo Eloquent; não existe coluna `deleted_at`.
 
 ## Model, relação e validação
 
@@ -44,7 +44,7 @@ A identidade da conta fica em `users`, que possui CPF único, nome e e-mail. O p
 
 ## Auditoria
 
-A tabela não duplica os campos de negócio em JSONB. O Activity Log será configurado depois para registrar autoria e alterações do pedido. Respostas de consultas externas não são persistidas nesta tabela.
+A tabela não duplica os campos de negócio em JSONB. O Activity Log registra os campos configurados no Model e a autoria disponível no contexto; respostas de consultas externas não são persistidas nesta tabela.
 
 ## Testes verificados
 

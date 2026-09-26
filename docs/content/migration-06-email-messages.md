@@ -10,7 +10,7 @@ related: migration-05-notifications, enum-emailmessagepurpose, e-mails-notificac
 source_refs: https://github.com/sge-suite/sge/blob/master/database/migrations/2026_09_22_160834_create_email_messages_table.php, https://github.com/sge-suite/sge/blob/master/app/Models/EmailMessage.php, https://github.com/sge-suite/sge/blob/master/database/factories/EmailMessageFactory.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/EmailMessageTest.php
 ---
 > [!success] Estado
-> Migration, Model, factory e testes implementados. A geração e o envio de e-mails permanecem para a integração funcional.
+> Migration, Model, factory, testes e backend de envio em fila implementados.
 
 ## Contrato
 
@@ -18,18 +18,18 @@ source_refs: https://github.com/sge-suite/sge/blob/master/database/migrations/20
 | --- | --- |
 | `id` | `bigint` autoincremental, chave primária. |
 | `notification_id` | UUID nullable, FK para `notifications.id`. |
-| `purpose` | `Notification`; mensagens de convite e recuperação não são armazenadas. |
-| `subject` | Assunto renderizado da notificação. |
+| `purpose` | `Notification` ou `AccountEmailChanged`; convite e recuperação não criam mensagem. |
+| `subject` | Assunto da notificação ou do aviso. |
 | `content_text` / `content_html` | Conteúdo renderizado, ao menos uma versão obrigatória. |
 | `template_key` / `template_version` | Identificadores opcionais do template. |
 | `idempotency_key` | UUID único para a mensagem. |
 | timestamps | Criação e atualização. |
 
-O Model permite somente conteúdo de notificação, exige notificação interna existente, oculta assunto e corpo na serialização e bloqueia atualização e exclusão via Eloquent. O conteúdo é armazenado sem cast criptografado. Destinatário e solicitante pertencem à tentativa de entrega, não à mensagem. A recuperação de senha não cria linha nesta tabela; o convite inicial também não cria mensagem e usa `email_message_id` nulo na tentativa. Não existe migration de conversão: as migrations originais foram ajustadas antes de haver dados de produção.
+O Model permite conteúdo de notificação operacional e aviso de alteração de e-mail. A notificação interna, quando vinculada, deve existir; o aviso de alteração não se vincula a uma notificação interna. O Model oculta assunto e corpo na serialização e bloqueia atualização e exclusão via Eloquent. O conteúdo é armazenado sem cast criptografado. Destinatário e solicitante pertencem à tentativa de entrega, não à mensagem. O aviso de alteração salva assunto, HTML e texto completos, com os endereços anterior e novo, para preservar o mesmo conteúdo nos reenvios. Recuperação de senha e convite inicial não criam mensagem.
 
 ## Limites e testes
 
-`EmailMessageTest` verifica o esquema, a finalidade, o conteúdo e a imutabilidade. A criação automática e a reserva idempotente do envio pertencem à Fase 04. SQL direto pode contornar as regras do Model; o acesso ao banco precisa ser restrito.
+`EmailMessageTest` verifica o esquema, a finalidade, o conteúdo e a imutabilidade; `EmailDeliveryFlowTest` cobre a criação do aviso, idempotência e reenvio. SQL direto pode contornar as regras do Model; o acesso ao banco precisa ser restrito.
 
 ## Dependências
 

@@ -18,13 +18,13 @@ Este índice é uma fotografia editorial da documentação publicada. Os documen
 
 ## Fases
 
-Para a sequência de execução atual, incluindo a próxima fase transversal de auditoria, consulte [Fases de desenvolvimento](doc:fases-de-desenvolvimento).
+Para a sequência e o andamento atuais, consulte [Fases de desenvolvimento](doc:fases-de-desenvolvimento).
 
 - [Fase 00 — Preparação](doc:fase-00-preparacao) — **completed** — Checklist do ambiente, qualidade e fluxo de trabalho do projeto novo.
 - [Fase 01 — Fundação de dados](doc:fase-01-fundacao-de-dados) — **completed** — Migrations, Models, factories e testes PostgreSQL da base de dados.
-- [Fase 02 — Conta e contexto](doc:fase-02-conta-e-contexto) — **in-progress** — Contexto ativo e bootstrap do primeiro administrador implementados; cadastro pela interface, convite e configurações pessoais pendentes.
-- [Fase 03 — Activity Log](doc:fase-03-activity-log) — **completed** — Cobertura Eloquent, autoria por vínculo e suíte completa validadas; 569 testes passaram e 3 foram ignorados.
-- [Fase 04 — Integração de e-mail](doc:fase-04-integracao-de-email) — **in-progress** — Backend comum de envio em fila e reprocessamento implementado; ligação aos fluxos de domínio pendente.
+- [Fase 02 — Conta e contexto](doc:fase-02-conta-e-contexto) — **in-progress** — Contexto, `admin:create`, troca própria de senha/e-mail e avisos de conta/vínculo implementados; cadastro pela interface e outras edições pessoais pendentes.
+- [Fase 03 — Activity Log](doc:fase-03-activity-log) — **in-progress** — Eventos Eloquent e autoria implementados; auditoria dos demais campos de `UserPersonalData` precisa ser alinhada ao contrato.
+- [Fase 04 — Integração de e-mail](doc:fase-04-integracao-de-email) — **in-progress** — Pipeline em fila e três fluxos de conta integrados; notificações operacionais de domínio e administração de entregas pendentes.
 - [Fase 05 — Administração hierárquica](doc:fase-05-administracao) — **planned** — Backend e interfaces administrativas em ordem de escopo, do global ao local.
 - [Fase 06 — Documentos](doc:fase-06-documentos) — **planned** — Checklist de templates DOCX, versões, geração e acompanhamento de assinatura.
 - [Fase 07 — Abertura do estágio](doc:fase-07-abertura-do-estagio) — **planned** — Checklist de criação da solicitação, envio, análise e formalização inicial do estágio.
@@ -37,8 +37,8 @@ Para a sequência de execução atual, incluindo a próxima fase transversal de 
 - [Enum — AffiliationType](doc:enum-affiliationtype) — **implemented** — Tipos funcionais permitidos para um vínculo institucional do SGE.
 - [Enum — BrazilianState](doc:enum-brazilianstate) — **implemented** — Unidades federativas usadas em Models e validações de cidades, feriados e pedidos de cadastro.
 - [Enum — HolidayScope](doc:enum-holidayscope) — **implemented** — Escopo nacional, estadual ou municipal de um feriado.
-- [Enum — EmailDeliveryAttemptStatus](doc:enum-emaildeliveryattemptstatus) — **implemented** — Cast e validação do Model `EmailDeliveryAttempt`; transporte e reenvio permanecem pendentes.
-- [Enum — EmailMessagePurpose](doc:enum-emailmessagepurpose) — **implemented** — Casts e validações de `EmailMessage` e `EmailDeliveryAttempt`; o fluxo de envio permanece pendente.
+- [Enum — EmailDeliveryAttemptStatus](doc:enum-emaildeliveryattemptstatus) — **implemented** — Estados usados pelo Job de entrega e pela Action de reprocessamento.
+- [Enum — EmailMessagePurpose](doc:enum-emailmessagepurpose) — **implemented** — Finalidades dos fluxos de notificação, conta criada, novo vínculo e alteração de e-mail já implementados.
 - [Enum — EmancipationEvidenceStatus](doc:enum-emancipationevidencestatus) — **implemented** — Cast e validação do Model `EmancipationEvidence`; upload HTTP e análise ainda pendentes.
 - [Enum — EvaluationStatus](doc:enum-evaluationstatus) — **implemented** — Cast e validação do Model `SupervisorEvaluation`, com schema da Migration 18; fluxo funcional de análise pendente.
 - [Enum — GeneratedDocumentOrigin](doc:enum-generateddocumentorigin) — **implemented** — Origem do documento registrado no processo de estágio.
@@ -97,7 +97,7 @@ Sequência física dos arquivos em `database/migrations`; os números permanecem
 - [Cast — PhoneCast](doc:cast-phonecast) — **implemented** — Cast Eloquent que valida telefone fixo/celular com DDD e persiste somente os dígitos.
 - [Casts](doc:casts) — **in-progress** — Índice dos casts Eloquent que transformam dados entre entrada, domínio e banco.
 - [Concern — PasswordValidationRules](doc:concern-passwordvalidationrules) — **implemented** — Regras compartilhadas para criação/alteração e confirmação de senha.
-- [Concern — ProfileValidationRules](doc:concern-profilevalidationrules) — **implemented** — Regras compartilhadas para nome e e-mail de perfil.
+- [Concern — ProfileValidationRules](doc:concern-profilevalidationrules) — **in-progress** — Trait de validação existente; a tela de Segurança usa regras próprias e o trait ainda precisa ser integrado/testado.
 - [Concern — CityValidationRules](doc:migration-01a-cities) — **implemented** — Regras compartilhadas para código IBGE, nome e UF do catálogo local.
 - [Concern — HolidayValidationRules](doc:migration-22-holidays) — **implemented** — Regras compartilhadas para data, nome, escopo, UF e cidade dos feriados.
 - [Concerns](doc:concerns) — **in-progress** — Índice dos traits que centralizam regras reutilizáveis de validação.
@@ -111,8 +111,8 @@ Sequência física dos arquivos em `database/migrations`; os números permanecem
 - [Helper — Funções globais](doc:helper-funcoes-globais) — **implemented** — Funções globais carregadas pelo Composer que delegam a helpers de domínio.
 - [Helper — NumberToWordsHelper](doc:helper-numbertowordshelper) — **implemented** — Conversão determinística de números e valores em reais para texto por extenso.
 - [Helpers](doc:helpers) — **in-progress** — Índice dos helpers de formatação, normalização e apresentação do SGE.
-- [Model — User](doc:model-user) — **in-progress** — Estado atual do Model de autenticação e seus casts, atributos e relações futuras.
-- [Provider — AppServiceProvider](doc:provider-appserviceprovider) — **implemented** — Configuração global atual de Eloquent, locale, timezone e moeda.
+- [Model — User](doc:model-user) — **in-progress** — Conta autenticável, autoria no Activity Log, recuperação de senha enfileirada e relações; falta ampliar a auditoria dos campos de `UserPersonalData`.
+- [Provider — AppServiceProvider](doc:provider-appserviceprovider) — **implemented** — Auditoria, integridade de `activity_log`, proteção Eloquent, locale, timezone e moeda.
 - [Provider — FortifyServiceProvider](doc:provider-fortifyserviceprovider) — **implemented** — Configuração atual de Actions, telas e rate limiting de autenticação do Fortify.
 - [Providers](doc:providers) — **in-progress** — Índice dos Service Providers que configuram autenticação, locale, moeda e comportamento Eloquent.
 - [Desenvolvimento — Checklist de funcionalidade](doc:desenvolvimento-checklist-de-funcionalidade) — **maintained** — Checklist reutilizável para implementar qualquer funcionalidade ou regra do SGE.
@@ -124,7 +124,7 @@ Sequência física dos arquivos em `database/migrations`; os números permanecem
 
 ## Integrações
 
-- [E-mails, notificações e entregas](doc:e-mails-notificacoes-e-entregas) — **defined** — Contrato planejado para notificações internas, mensagens de e-mail e tentativas de entrega.
+- [E-mails, notificações e entregas](doc:e-mails-notificacoes-e-entregas) — **in-progress** — Pipeline de e-mail em fila integrado à conta; notificações de domínio e telas administrativas pendentes.
 - [Geração de documentos DOCX e variáveis](doc:geracao-de-documentos-docx-e-variaveis) — **defined** — Arquitetura da geração DOCX, validação de templates e catálogo canônico de variáveis.
 
 ## Decisões

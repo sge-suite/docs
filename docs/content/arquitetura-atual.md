@@ -46,10 +46,10 @@ A implementação atual utiliza:
 | ----------------------- | ----------- | ------------------------------------------------------------------------------------ |
 | Autenticação            | ✅          | Fortify, páginas Livewire e rotas protegidas                                         |
 | Usuários                | ✅          | `app/Models/User.php` e migration `users`                                            |
-| Autorização             | Planejado   | Gates/Policies nativos, `AffiliationType` e vínculo ativo; sem tabelas de permissões |
+| Autorização             | Parcial     | Gates/Policies nativos, `AffiliationType` e vínculo ativo; faltam autorizações dos fluxos operacionais |
 | Auditoria               | ✅          | tabela `activity_log`                                                                |
 | Infraestrutura de mídia | ✅          | tabela `media`/Spatie Medialibrary; templates DOCX e versionamento seguem planejados |
-| Estágios                | Planejado   | Domínio e fluxos definidos nas páginas funcionais; ainda sem implementação de domínio |
+| Estágios                | Parcial     | Models, migrations, validações e auditoria existem; faltam Actions, Policies completas e jornadas da aplicação |
 | Relatórios              | Planejado   | Devem consumir o domínio e respeitar o escopo do vínculo ativo                       |
 
 ## Regras de arquitetura

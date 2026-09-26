@@ -16,9 +16,9 @@ Esta área reúne a execução técnica, as decisões de negócio e os contratos
 | Área | Status | Leitura correta |
 | --- | --- | --- |
 | Preparação do projeto | **Concluída** | Ambiente, qualidade e fluxo de trabalho inicial validados. |
-| Conta e autenticação | **Implementada parcialmente** | Login, recuperação de senha, perfil, dashboard e contexto de vínculo ativo existem; `admin:create` cria o primeiro vínculo administrador, reutilizando a conta pelo CPF ou criando uma conta. Cadastro de outras contas pela interface, convite e edição de dados pessoais seguem pendentes. |
+| Conta e autenticação | **Implementada parcialmente** | Login, recuperação, contexto ativo e configurações de senha/e-mail estão disponíveis; `admin:create` cria conta e primeiro vínculo ou adiciona vínculo a CPF existente, e enfileira os avisos correspondentes. Cadastro pela interface e edição de outros dados pessoais seguem pendentes. |
 | Componentes técnicos básicos | **Implementados parcialmente** | Helpers, casts, enums, contexto de vínculo, Activity Log e Policies básicas têm código; autorização e ações dos fluxos de estágio ainda precisam ser integradas. |
-| E-mail e documentos | **Estruturas implementadas; fluxos pendentes** | Migrations e Models de mensagens, tentativas, templates e versões existem; transporte de e-mail, geração e assinatura documental permanecem pendentes. |
+| E-mail e documentos | **Implementada parcialmente** | Envio em fila, templates Markdown e avisos de conta/vínculo/troca de e-mail estão integrados. Notificações de domínio, telas administrativas, geração e assinatura documental permanecem pendentes. |
 | Domínio de estágios | **Base de dados implementada; fluxos pendentes** | Models e migrations cobrem solicitações, formalização, execução e avaliações; as jornadas completas, autorizações e interfaces ainda não estão disponíveis. |
 
 Os status individuais ficam nas páginas vinculadas e no [painel de desenvolvimento](doc:painel-de-desenvolvimento). Em páginas de código, **Implementado** significa que o artefato existe; a própria página deve informar se ainda faltam integração, autorização, migration ou testes.

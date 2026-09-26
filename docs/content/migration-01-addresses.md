@@ -70,7 +70,7 @@ A cidade deverá continuar sendo resolvida exclusivamente no catálogo local: pr
 ./vendor/bin/sail exec laravel.test vendor/bin/pint --dirty --format agent
 ```
 
-Os testes de endereços, cidades e guarda global de migrations passaram no banco PostgreSQL `testing`: 50 testes e 214 assertions. Pint e PHPStan nos arquivos da implementação também passaram.
+Os testes cobrem o schema PostgreSQL, endereços, cidades e a guarda global de migrations; o mapa atual está em [Testes existentes](doc:testes-existentes).
 
 ## Checklist
 

@@ -1,9 +1,9 @@
 ---
 id: concern-profilevalidationrules
 title: Concern — ProfileValidationRules
-description: Regras compartilhadas para nome e e-mail de perfil.
+description: Trait disponível para validar nome e e-mail de perfil; não usada pela tela de Segurança atual.
 type: technical-reference
-status: implemented
+status: in-progress
 visibility: public
 tags: sge/concerns, sge/validacao, sge/autorizacao
 related: model-user, fase-02-conta-e-contexto
@@ -11,7 +11,7 @@ source_refs: https://github.com/sge-suite/sge/blob/master/app/Concerns/ProfileVa
 ---
 ## Contrato
 
-Trait que compõe regras para perfil do `User`.
+Trait que compõe regras para nome e e-mail do `User`. A tela de Perfil atual somente exibe o e-mail; a troca é implementada na página Livewire de Segurança, com confirmação do endereço, senha atual, vínculo ativo e avisos para os dois endereços. Este trait ainda não é reutilizado por esse formulário.
 
 | Método                       | Regras                                                                                     |
 | ---------------------------- | ------------------------------------------------------------------------------------------ |
@@ -22,10 +22,9 @@ Trait que compõe regras para perfil do `User`.
 ## Checklist
 
 - [x] Centralizar regras de nome e e-mail.
-- [x] Permitir edição do próprio e-mail sem conflito consigo mesmo.
-- [ ] Testar criação, edição, e-mail duplicado e e-mail inválido.
-- [ ] Confirmar normalização/lowercase no Fortify e na tela de perfil.
-- [ ] Separar regras de dados pessoais quando `user_personal_data` for implementado.
+- [ ] Integrar o trait aos formulários que realmente editarem nome/e-mail; a troca atual em Segurança mantém regras próprias.
+- [ ] Criar testes diretos do trait para formato, duplicidade e normalização.
+- [ ] Separar regras de dados pessoais quando `user_personal_data` for editado pela aplicação.
 
 ## Relacionamentos
 

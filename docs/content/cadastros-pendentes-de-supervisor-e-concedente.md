@@ -22,7 +22,7 @@ source_refs:
 | `decision_reason` | obrigatório em recusa ou cancelamento; opcional em aprovação. |
 | timestamps | auditoria técnica; alterações e decisões relevantes também entram no `activity_log`. |
 
-Em `draft`, campos de negócio podem ser nulos. Em todos os demais estados, as colunas obrigatórias do respectivo cadastro devem ser válidas. Na Migration 19, a solicitação de estágio identifica o vínculo discente responsável pelo envio. As Migrations 12A e 12B não duplicam FKs de autoria ou revisão nem guardam `submission_snapshot`; seus eventos e atores serão registrados pelo Activity Log quando ele for configurado e o contexto por vínculo estiver definido. Aprovação não cria automaticamente conta ou concedente sem uma ação de análise explícita do Setor.
+Em `draft`, campos de negócio podem ser nulos. Em todos os demais estados, as colunas obrigatórias do respectivo cadastro devem ser válidas. Na Migration 19, a solicitação de estágio identifica o vínculo discente responsável pelo envio. As Migrations 12A e 12B não duplicam FKs de autoria ou revisão nem guardam `submission_snapshot`; quando seus Models forem alterados por Eloquent, o Activity Log registra eventos e o contexto de autoria disponível. As Actions e Policies dos fluxos de análise ainda estão pendentes. Aprovação não cria automaticamente conta ou concedente sem uma ação de análise explícita do Setor.
 
 ## `supervisor_registration_requests`
 

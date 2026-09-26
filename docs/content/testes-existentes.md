@@ -7,7 +7,7 @@ status: in-progress
 visibility: public
 tags: sge/desenvolvimento, sge/testes, sge/checklist
 related: componentes-tecnicos, desenvolvimento-checklist-de-funcionalidade
-source_refs: https://github.com/sge-suite/sge/blob/master/tests/Feature/AffiliationTest.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/CourseTest.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/NotificationsTest.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/EmailMessageTest.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/EmailDeliveryAttemptTest.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/AddressesTest.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/UserPersonalDataTest.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/CityCatalogValidationTest.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/HolidaysTest.php, https://github.com/sge-suite/sge/blob/master/tests/Unit/FetchCitiesCommandTest.php, https://github.com/sge-suite/sge/blob/master/tests/Unit/CpfCastTest.php, https://github.com/sge-suite/sge/blob/master/tests/Unit/PhoneCastTest.php, https://github.com/sge-suite/sge/blob/master/tests/Unit/Helpers/FormattingHelpersTest.php, https://github.com/sge-suite/sge/blob/master/tests/Unit/Helpers/NumberToWordsHelperTest.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/Auth/PasswordResetTest.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/Settings/SecurityTest.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/CreateAdminCommandTest.php
+source_refs: https://github.com/sge-suite/sge/blob/master/tests/Feature/AffiliationTest.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/CourseTest.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/NotificationsTest.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/EmailMessageTest.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/EmailDeliveryAttemptTest.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/AddressesTest.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/UserPersonalDataTest.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/CityCatalogValidationTest.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/HolidaysTest.php, https://github.com/sge-suite/sge/blob/master/tests/Unit/FetchCitiesCommandTest.php, https://github.com/sge-suite/sge/blob/master/tests/Unit/CpfCastTest.php, https://github.com/sge-suite/sge/blob/master/tests/Unit/PhoneCastTest.php, https://github.com/sge-suite/sge/blob/master/tests/Unit/Helpers/FormattingHelpersTest.php, https://github.com/sge-suite/sge/blob/master/tests/Unit/Helpers/NumberToWordsHelperTest.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/Auth/PasswordResetTest.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/Settings/SecurityTest.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/CreateAdminCommandTest.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/EmailDeliveryFlowTest.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/AccordionComponentTest.php
 ---
 Este mapa acompanha o código real no repositório Laravel irmão, em `../sge`. Ao criar uma classe ou migration, atualize a matriz e a nota técnica correspondente.
 
@@ -36,8 +36,8 @@ Este mapa acompanha o código real no repositório Laravel irmão, em `../sge`. 
 | Helpers  | `tests/Unit/Helpers/FormattingHelpersTest.php`     | timezone/data, placeholders, telefone com DDI e telefone internacional. |
 | Helpers  | `tests/Unit/Helpers/NumberToWordsHelperTest.php`   | números e valores em reais por extenso, incluindo entradas inválidas.  |
 | Auth     | `tests/Feature/Auth/*`                             | login, confirmação, reset de senha.                                     |
-| Console  | `tests/Feature/CreateAdminCommandTest.php`         | `admin:create`: CPF primeiro; conta nova ou novo vínculo em conta existente, e-mail próprio do vínculo, validações, senha fora da auditoria, administrador ativo, cancelamento, não interativo e rollback. 17 cenários passaram pelo Sail. |
-| Settings | `tests/Feature/Settings/*`                         | alteração do e-mail da conta sem alterar e-mail de vínculo, unicidade e atualização de senha. |
+| Console  | `tests/Feature/CreateAdminCommandTest.php`         | `admin:create`: CPF primeiro; conta e primeiro vínculo com e-mail igual ou novo vínculo em conta existente; validação de e-mail/CPF, avisos enfileirados, autoria `terminal`, ausência da senha na auditoria, administrador ativo já existente, cancelamento, não interativo e rollback. |
+| Settings | `tests/Feature/Settings/*`                         | Perfil exibe e-mail com acesso a Segurança; troca de e-mail exige senha, confirmação do endereço e vínculo ativo, preserva o e-mail do vínculo, registra autoria e reserva dois avisos; unicidade e atualização de senha. |
 | App      | `tests/Feature/DashboardTest.php`                  | acesso ao dashboard com vínculo ativo.                                  |
 | Contexto | `tests/Feature/ActiveAffiliationContextTest.php` | seleção automática, último vínculo usado, escolha, troca, sessão inválida, desativação e vínculo de outra conta. |
 | Auditoria Eloquent | `tests/Feature/DatabaseAuditTest.php` | inventário de Models, alterações e exclusões Eloquent, autoria, catálogo de cidades, Jobs, mídia, notificações e transações. |
@@ -63,9 +63,11 @@ Este mapa acompanha o código real no repositório Laravel irmão, em `../sge`. 
 | Pedidos de cancelamento | `tests/Feature/InternshipCancellationRequestTest.php` | Schema da Migration 21, estados, motivos, data efetiva, pedido pendente único, FK restrita e rollback. |
 | Exceções de calendário | `tests/Feature/InternshipCalendarOverrideTest.php` | Schema da Migration 22A, unicidade por estágio/data, motivo, Activity Log e rollback. |
 | Vigências de jornada | `tests/Feature/InternshipWorkScheduleTest.php` | Schema JSONB da Migration 23, aditivo assinado, limites diários e semanais, continuidade, imutabilidade, FKs restritas e rollback. |
-| Notificações | `tests/Feature/NotificationsTest.php` | Schema PostgreSQL nativo com `jsonb` e UUID, relação polimórfica, leitura/não leitura, isolamento entre vínculos da mesma conta, notificações destinadas a `User`, Policy de vínculo ativo e rollback/reaplicação. 7 testes e 77 assertions passaram por Sail. |
-| Mensagens de e-mail | `tests/Feature/EmailMessageTest.php` | Schema PostgreSQL, conteúdo de notificação sem destinatário, snapshot imutável, finalidade e chave UUID única de idempotência. |
-| Tentativas de entrega | `tests/Feature/EmailDeliveryAttemptTest.php` | Schema PostgreSQL, mensagem opcional para convite, destinatário e vínculo solicitante, estados, marcos, motivo sanitizado e imutabilidade das tentativas concluídas. |
+| Notificações | `tests/Feature/NotificationsTest.php` | Schema PostgreSQL nativo com `jsonb` e UUID, relação polimórfica, leitura/não leitura, isolamento entre vínculos da mesma conta, notificações destinadas a `User`, Policy de vínculo ativo e rollback/reaplicação. |
+| Mensagens de e-mail | `tests/Feature/EmailMessageTest.php` | Schema PostgreSQL, conteúdo de notificação e aviso de alteração de e-mail sem destinatário, snapshot imutável, finalidade e chave UUID única de idempotência. |
+| Tentativas de entrega | `tests/Feature/EmailDeliveryAttemptTest.php` | Schema PostgreSQL, mensagem obrigatória para notificação e aviso de alteração e ausente em conta criada/novo vínculo, destinatário e vínculo solicitante, estados, marcos, motivo sanitizado e imutabilidade das tentativas concluídas. |
+| Entregas de e-mail | `tests/Feature/EmailDeliveryFlowTest.php` | Reserva idempotente, autoria do solicitante, fila após commit, renderização de templates, conteúdo anterior/novo do aviso e falha/reprocessamento; testes sem entrega SMTP. |
+| Interface | `tests/Feature/AccordionComponentTest.php` | Componente genérico com título/conteúdo fornecidos pela chamada e atributos de acessibilidade. |
 
 ## Lacunas prioritárias
 
@@ -73,12 +75,12 @@ Este mapa acompanha o código real no repositório Laravel irmão, em `../sge`. 
 - [ ] Criar testes de rollback das migrations reversíveis.
 - [ ] Ampliar a cobertura de `CurrencyHelper`, dos formatos de `DateHelper` e dos comprimentos de telefone/documentos.
 - [ ] Completar a cobertura de `null`, vazio, formato inválido e timezone em todos os helpers.
-- [ ] Cobrir `ProfileValidationRules` e todos os requisitos de `PasswordValidationRules`.
-- [ ] Cobrir `ResetUserPassword` com senha fraca, confirmação divergente e sucesso.
-- [ ] Cobrir `AppServiceProvider` e `FortifyServiceProvider` por comportamento observável.
+- [ ] Integrar e testar diretamente `ProfileValidationRules`; o formulário atual de Segurança usa regras próprias.
+- [ ] Ampliar os casos negativos de `PasswordValidationRules` e cobrir tokens de redefinição expirados/reutilizados.
+- [ ] Cobrir locale/timezone de `AppServiceProvider` e configurações de `FortifyServiceProvider`; autoria e integridade do Activity Log já têm testes de feature.
 - [ ] Completar testes de autorização dos catálogos e fluxos de estágio; a caixa de notificações já cobre propriedade da conta e vínculo ativo.
 
-Os 17 cenários de `admin:create` estão incluídos na suíte completa, executada via Sail: 569 testes passaram e 3 foram ignorados, de 572.
+Os testes de `admin:create` e da troca de e-mail usam fila falsa; os testes de templates validam a renderização em memória. A matriz descreve cobertura, não uma execução recente da suíte.
 
 ## Comandos
 

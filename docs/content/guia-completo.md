@@ -30,7 +30,7 @@ O sistema trabalha com uma conta por pessoa e, quando aplicável, com um **vínc
 | **Definido** | A regra foi aprovada para o produto, mas sua implementação completa ainda está pendente. |
 | **Planejado** | O trabalho ainda não começou ou depende de decisão anterior. |
 
-No estado atual, login, recuperação de senha, dashboard, perfil com e-mail da conta editável e nome somente para consulta, e alteração de senha estão disponíveis. O contexto de vínculo ativo, a seleção/troca de vínculo, o bootstrap do primeiro Administrador do Sistema por `admin:create` e o Activity Log Eloquent também estão implementados. A base de Models e migrations do domínio de estágios existe; cadastro de contas pela interface, convite e os fluxos operacionais de solicitação, documentação, execução, avaliação e conclusão ainda não estão disponíveis como jornadas completas.
+No estado atual, login, recuperação de senha, dashboard, seleção e troca de vínculo, configurações de senha/e-mail e o comando `admin:create` estão disponíveis. Perfil exibe o e-mail da conta e encaminha sua alteração para Segurança; os e-mails de criação, novo vínculo e alteração usam fila. O Activity Log registra eventos Eloquent, com uma lacuna documentada para os campos de `UserPersonalData`. A base de Models e migrations de estágio existe; cadastro de contas pela interface e jornadas de solicitação, documentação, execução, avaliação e conclusão ainda não estão disponíveis como fluxos completos.
 
 ## 3. Quem participa
 
@@ -117,12 +117,12 @@ O supervisor preenche a avaliação quando ela for liberada e o orientador regis
 | Área | Estado | Próximo resultado esperado |
 | --- | --- | --- |
 | Preparação do projeto | **Concluída** | Manter ambiente, qualidade e fluxo de revisão. |
-| Conta e autenticação | **Implementada parcialmente** | Contexto de vínculo e bootstrap do primeiro administrador existem; cadastro pela interface, convite e configurações pessoais ainda faltam. |
+| Conta e autenticação | **Implementada parcialmente** | Contexto, `admin:create`, alteração de senha/e-mail e avisos de conta/vínculo existem; cadastro pela interface e edição de outros dados pessoais ainda faltam. |
 | Fundação técnica | **Implementada parcialmente** | Models e migrations de domínio existem; completar autorizações, Actions transacionais e integração das jornadas. |
-| E-mails e documentos | **Estruturas implementadas; fluxos pendentes** | Transporte de e-mail, geração documental e assinatura ainda precisam ser integrados. |
+| E-mails e documentos | **Implementada parcialmente** | Pipeline em fila e avisos de conta, vínculo e e-mail estão integrados; notificações operacionais de domínio, telas administrativas, geração e assinatura ainda faltam. |
 | Domínio de estágios | **Base de dados implementada; fluxos pendentes** | Entidades e estados existem no backend; implementar jornadas, decisões e interfaces. |
 
-A sequência é: 00 — preparação; 01 — fundação de dados; 02 — conta e contexto; 03 — Activity Log; 04 — integração de e-mail; 05 — administração; 06 — documentos; 07 — abertura do estágio; 08 — estágio em andamento; e 09 — avaliação e conclusão. O contexto de vínculo da Fase 02 e a implementação da auditoria Eloquent da Fase 03 estão no código; a Fase 04 é o próximo bloco ainda não iniciado.
+A sequência é: 00 — preparação; 01 — fundação de dados; 02 — conta e contexto; 03 — Activity Log; 04 — integração de e-mail; 05 — administração; 06 — documentos; 07 — abertura do estágio; 08 — estágio em andamento; e 09 — avaliação e conclusão. As Fases 02–04 têm implementação parcial ou completa, com lacunas específicas descritas em seus checklists; as interfaces de domínio e fluxos operacionais ainda são as próximas entregas.
 
 ## 8. Referência técnica resumida
 

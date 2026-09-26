@@ -42,4 +42,5 @@ O arquivo não define `down()`. Isso deve ser tratado como limitação/documenta
 - [x] Definir e implementar eventos Eloquent para entidades de negócio, incluindo campos cadastrais de e-mail; tabelas de entrega mantêm histórico técnico próprio.
 - [ ] Definir retenção e acesso por perfil.
 - [x] Testar a exclusão de senhas, hashes, tokens e outros dados protegidos dos valores registrados.
-- [x] Relacionar o autor ao vínculo ativo em ações humanas; registrar ações sem pessoa autenticada como sistema.
+- [x] Relacionar ações humanas ao vínculo ativo; identificar `admin:create` como `terminal` e Jobs/seeders/comandos sem pessoa autenticada como `system`.
+- [ ] Completar registro de todos os campos de negócio de `UserPersonalData`; hoje somente `emancipation_verified_at` é incluído.

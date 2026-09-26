@@ -17,9 +17,9 @@ source_refs: https://github.com/sge-suite/sge/blob/master/database/migrations/20
 | Campo | Regra |
 | --- | --- |
 | `id` | `bigint` autoincremental, chave primária. |
-| `email_message_id` | `bigint` nullable, FK para o conteúdo de uma notificação. Nulo para convite inicial. |
+| `email_message_id` | `bigint` nullable, FK para o conteúdo de notificação ou aviso de alteração de e-mail. Nulo para conta criada e novo vínculo. |
 | `delivery_key` | UUID estável do envio, com sequência única por chave. |
-| `purpose` | `Notification`, `NewAffiliation` ou `AccountEmailChanged`. |
+| `purpose` | `Notification`, `AccountCreated`, `NewAffiliation` ou `AccountEmailChanged`. |
 | `recipient_email` | Destinatário efetivo do envio. |
 | `requested_by_affiliation_id` | FK nullable para o vínculo que solicitou o envio. A conta é `affiliations.user_id`; nulo identifica envio automático. |
 | `attempt_number` | Sequência de 1 a 3 por `delivery_key`. |
@@ -29,11 +29,11 @@ source_refs: https://github.com/sge-suite/sge/blob/master/database/migrations/20
 | `failure_reason` | Código técnico sanitizado, sem exceção bruta. |
 | timestamps | Criação e atualização. |
 
-O Model captura o vínculo ativo do `CauserResolver` no momento da criação; solicitações humanas sem vínculo válido são rejeitadas. A tentativa de convite exige mensagem nula, e a tentativa de notificação exige mensagem existente e destinatário correspondente. As transições permitidas são `queued → sent` e `queued → failed`. Identidade e tentativa finalizada são imutáveis; exclusão via Model é bloqueada. Não há `LogsActivity` nessas tabelas, pois elas são o próprio histórico técnico do envio.
+O Model captura o vínculo ativo do `CauserResolver` no momento da criação; solicitações humanas sem vínculo válido são rejeitadas. As tentativas de conta criada e novo vínculo exigem mensagem nula; notificações e avisos de alteração exigem mensagem existente. O destinatário da notificação deve corresponder à entidade notificada. As transições permitidas são `queued → sent` e `queued → failed`. Identidade e tentativa finalizada são imutáveis; exclusão via Model é bloqueada. Não há `LogsActivity` nessas tabelas, pois elas são o próprio histórico técnico do envio.
 
-A restrição única (`delivery_key`, `attempt_number`) cobre também convites e avisos de alteração de e-mail, que não têm `email_message_id`. A restrição por mensagem também permanece. `RequestEmailDelivery` reutiliza tentativas com a mesma chave e rejeita dados incompatíveis. `SendEmailDelivery` recebe o ID da tentativa, preservando a autoria registrada na reserva; envio automático tem solicitante nulo. A tentativa é bloqueada durante o envio para impedir que dois workers enviem simultaneamente a mesma linha.
+A restrição única (`delivery_key`, `attempt_number`) cobre também convites, que não têm `email_message_id`. A restrição por mensagem também permanece. `RequestEmailDelivery` reutiliza tentativas com a mesma chave e rejeita dados incompatíveis. `SendEmailDelivery` recebe o ID da tentativa, preservando a autoria registrada na reserva; envio automático tem solicitante nulo. A tentativa é bloqueada durante o envio para impedir que dois workers enviem simultaneamente a mesma linha.
 
-`delivery_key` pertence à migration de criação da tabela. Como o projeto ainda não tem dados de produção, a alteração é aplicada com `migrate:fresh` durante o desenvolvimento.
+`delivery_key` pertence à migration de criação da tabela. O aviso de alteração de e-mail persiste assunto, texto e HTML já renderizados em `email_messages`; a tentativa referencia esse snapshot imutável para que o reenvio preserve os endereços antigo e novo sem coluna adicional.
 
 ## Limites e testes
 

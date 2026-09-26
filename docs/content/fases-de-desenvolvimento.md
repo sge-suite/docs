@@ -9,14 +9,14 @@ tags: sge/desenvolvimento, sge/checklist
 related: fase-00-preparacao, fase-04-integracao-de-email, fase-01-fundacao-de-dados, fase-02-conta-e-contexto, fase-05-administracao, fase-06-documentos, fase-07-abertura-do-estagio, fase-08-estagio-em-andamento, fase-09-avaliacao-e-conclusao, fase-03-activity-log, componentes-tecnicos, enums, migrations
 source_refs:
 ---
-Esta lista registra a sequência e o estado atuais. A fundação de dados está concluída. O contexto de vínculo ativo e o comando `admin:create` da Fase 02 estão implementados; a criação de contas pela interface, o convite inicial e partes das configurações próprias ainda estão pendentes. A cobertura Eloquent da Fase 03 e sua validação pela suíte completa estão concluídas.
+Esta lista registra a sequência e o estado atuais. A fundação de dados está concluída. Contexto de vínculo, criação administrativa pelo terminal e configurações de senha/e-mail estão implementados; cadastros pela interface e outras edições pessoais seguem pendentes. A auditoria Eloquent está implementada, mas a cobertura de campos de `UserPersonalData` ainda diverge do contrato definido.
 
 ## Ordem atual
 
 - [x] [00 — Preparação](doc:fase-00-preparacao)
 - [x] [01 — Fundação de dados](doc:fase-01-fundacao-de-dados) — migrations, Models, factories e cobertura de banco concluídos.
-- **02 — Conta e contexto (em andamento):** contexto ativo, seleção e bootstrap do primeiro Administrador do Sistema implementados; cadastro pela interface, convite e configurações pessoais seguem pendentes.
-- [x] **03 — Activity Log (concluída):** cobertura Eloquent das entidades de negócio, autoria por vínculo ativo e proteção de dados sensíveis implementadas e validadas pela suíte completa via Sail.
+- **02 — Conta e contexto (em andamento):** contexto ativo, seleção/troca, `admin:create`, alteração própria de senha/e-mail e avisos correspondentes implementados; cadastro pela interface e edição de outros dados pessoais pendentes.
+- **03 — Activity Log (em andamento):** auditoria Eloquent e autoria por vínculo implementadas. Falta alinhar a auditoria de `UserPersonalData` com o contrato de registrar os campos cadastrais.
 - **[04 — Integração de e-mail](doc:fase-04-integracao-de-email) (em andamento):** backend de reserva, envio em fila, transporte e reprocessamento implementado; integração nos fluxos de domínio e telas administrativas pendente.
 
 - [ ] [05 — Administração](doc:fase-05-administracao) — implementar backend e interface seguindo a hierarquia de perfis, do Administrador do Sistema para baixo.
@@ -29,7 +29,7 @@ Esta lista registra a sequência e o estado atuais. A fundação de dados está 
 
 1. **Implementado:** resolver e validar o vínculo ativo, selecionar ou restaurar o contexto, disponibilizá-lo a Policies/Actions e registrar a autoria nas alterações Eloquent.
 2. **Concluído:** cobertura dos Models de negócio no Activity Log com autoria pelo vínculo, valores anteriores/novos, exclusão de segredos e validação pela suíte completa.
-3. **Próximo bloco:** integrar e-mail com preparação por finalidade, transporte, tentativas, envio após commit, reprocessamento e idempotência.
+3. **Em andamento:** o backend de e-mail com filas, idempotência e reprocessamento já atende à criação de conta, novo vínculo e troca de e-mail. Faltam notificações de domínio, outros fluxos e a interface administrativa de consulta/reenvio.
 4. Implementar Services puros e Actions transacionais para cálculos, formalização, correções, cancelamentos e associações dos cadastros pendentes.
 5. Preparar validação e geração DOCX, notificações e Jobs idempotentes, com testes de concorrência, falhas e efeitos após commit.
 

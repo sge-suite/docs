@@ -40,7 +40,7 @@ source_refs:
 ### D-005 — Configurações pessoais por tipo de vínculo
 
 - **Status:** definido.
-- **Decisão:** qualquer usuário pode alterar a própria senha e e-mail de login; o nome não é editável. O discente pode editar RG, data de nascimento e endereço atual no contexto discente; o supervisor pode editar cargo, qualificação, formação e experiência no contexto de supervisor. O telefone é compartilhado pelo perfil da conta. A autorização por tipo de vínculo será implementada nos futuros formulários.
+- **Decisão:** qualquer usuário pode alterar a própria senha e o e-mail de login; o nome não é editável. A troca de e-mail exige senha atual, duas entradas coincidentes do novo endereço, vínculo ativo e aviso para os e-mails antigo e novo. Essa parte já está implementada na aba Segurança; a edição de RG, data de nascimento, endereço, telefone e dados profissionais continua pendente e deve respeitar o contexto do vínculo.
 - **Motivo:** separa dados da conta de dados necessários ao estágio e restringe a edição aos usuários que realmente precisam desses campos.
 
 ### D-006 — Canvas espacial para diagramas Mermaid

@@ -11,7 +11,7 @@ source_refs:
 diagram: mensageria-fluxo
 ---
 > [!abstract] Decisão de planejamento
-> A persistência das Migrations 05–07 está implementada: notificações internas, mensagens preparadas e tentativas de entrega. A geração automática, o transporte SMTP, o reenvio e as telas continuam planejados.
+> A persistência das Migrations 05–07 e o backend de envio em fila estão implementados. O convite foi validado por SMTP no Mailpit. Os fluxos de domínio que solicitam mensagens e as telas de consulta/reenvio continuam pendentes.
 
 ## Objetivo e limites
 
@@ -48,9 +48,9 @@ Guarda apenas o conteúdo renderizado de notificações operacionais: `notificat
 
 ### `email_delivery_attempts`
 
-Cada linha representa uma tentativa de transporte. `recipient_email` registra o destinatário efetivo; `purpose` distingue notificação de convite inicial. `email_message_id` é obrigatório para notificação e nulo para convite. `requested_by_affiliation_id` registra o vínculo que solicitou o envio humano; a conta é obtida por `affiliations.user_id`. Para envio automático, o campo é nulo. A tentativa mantém número, estado `queued`, `sent` ou `failed`, provedor, identificador do provedor, marcos temporais e motivo técnico sanitizado de falha.
+Cada linha representa uma tentativa de transporte. `recipient_email` registra o destinatário efetivo; `purpose` distingue notificação, convite inicial e aviso de alteração de e-mail da conta. `email_message_id` é obrigatório para notificação e nulo nos outros casos. `delivery_key` é uma chave UUID estável do envio; ela permite idempotência e até três tentativas com números únicos. `requested_by_affiliation_id` registra o vínculo que solicitou o envio humano; a conta é obtida por `affiliations.user_id`. Para envio automático, o campo é nulo. A tentativa mantém número, estado `queued`, `sent` ou `failed`, provedor, identificador do provedor, marcos temporais e motivo técnico sanitizado de falha.
 
-O Model bloqueia exclusão e mudança de uma tentativa finalizada. A reserva segura de número, o transporte e o reenvio ainda serão implementados na Fase 04. Mensagens e tentativas não usam `LogsActivity`: são o histórico técnico de entrega. O acesso ao banco deve impedir alterações diretas que contornem essas regras.
+O Model bloqueia exclusão e mudança de uma tentativa finalizada. `RequestEmailDelivery` reserva a tentativa e despacha `SendEmailDelivery` depois do commit; o Job envia com o mailer nativo e registra o resultado. O reprocessamento explícito usa a mesma Action. Mensagens e tentativas não usam `LogsActivity`: são o histórico técnico de entrega. O acesso ao banco deve impedir alterações diretas que contornem essas regras.
 
 ## Regras por finalidade
 
@@ -58,13 +58,14 @@ O Model bloqueia exclusão e mudança de uma tentativa finalizada. A reserva seg
 | --- | --- | --- |
 | Recuperação de senha | Nenhuma linha em `email_messages` ou `email_delivery_attempts`. | Token, URL, destinatário e corpo não são registrados nessas tabelas. |
 | Convite inicial de conta | Uma `email_delivery_attempt`, com `email_message_id` nulo. | Guarda destinatário, finalidade, solicitante e resultado; não guarda corpo. |
+| Alteração de e-mail da conta | Uma tentativa por endereço avisado, com `email_message_id` nulo. | Guarda destinatário, finalidade, solicitante e resultado; não guarda corpo. A tela de alteração ainda precisa chamar esse fluxo. |
 | Notificação operacional | `notifications`, `email_messages` e tentativas. | Guarda assunto e conteúdo renderizado na mensagem; destinatário e transporte na tentativa. |
 | Resumo interno do Setor | Apenas `notifications`. | Conteúdo interno pertinente ao vínculo. |
 
 > [!warning] Segredos não entram no histórico
 > Senhas, tokens, URLs assinadas e credenciais SMTP não devem ser persistidos em mensagens, tentativas, notificações ou Activity Log.
 
-O futuro convite inicial poderá levar à tela de recuperação de senha com o e-mail preenchido. A pessoa então solicita o link de redefinição. Essa navegação ainda não foi implementada.
+O convite inicial leva à tela de recuperação de senha com o e-mail preenchido. A pessoa então solicita o link de redefinição. Essa notificação de recuperação é enfileirada pelo Fortify com payload cifrado, pois a fila técnica precisa transportar temporariamente o token; ela não cria histórico nas tabelas de e-mail da aplicação.
 
 ## Fluxos planejados
 

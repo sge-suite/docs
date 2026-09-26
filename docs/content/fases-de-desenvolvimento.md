@@ -17,7 +17,7 @@ Esta lista registra a sequência e o estado atuais. A fundação de dados está 
 - [x] [01 — Fundação de dados](doc:fase-01-fundacao-de-dados) — migrations, Models, factories e cobertura de banco concluídos.
 - **02 — Conta e contexto (em andamento):** contexto ativo, seleção e bootstrap do primeiro Administrador do Sistema implementados; cadastro pela interface, convite e configurações pessoais seguem pendentes.
 - [x] **03 — Activity Log (concluída):** cobertura Eloquent das entidades de negócio, autoria por vínculo ativo e proteção de dados sensíveis implementadas e validadas pela suíte completa via Sail.
-- **Próxima fase a iniciar: [04 — Integração de e-mail](doc:fase-04-integracao-de-email)** — implementar preparação, transporte, tentativas e reprocessamento.
+- **[04 — Integração de e-mail](doc:fase-04-integracao-de-email) (em andamento):** backend de reserva, envio em fila, transporte e reprocessamento implementado; integração nos fluxos de domínio e telas administrativas pendente.
 
 - [ ] [05 — Administração](doc:fase-05-administracao) — implementar backend e interface seguindo a hierarquia de perfis, do Administrador do Sistema para baixo.
 - [ ] [06 — Documentos](doc:fase-06-documentos) — fechar validação, geração e assinatura com serviços de backend reutilizáveis.

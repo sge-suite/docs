@@ -10,7 +10,7 @@ related: e-mails-notificacoes-e-entregas, migration-06-email-messages, enum-emai
 source_refs: https://github.com/sge-suite/sge/blob/master/app/Enums/EmailMessagePurpose.php, https://github.com/sge-suite/sge/blob/master/tests/Unit/Enums/EmailMessagePurposeTest.php
 ---
 > [!success] Estado
-> A classe, o cast em `EmailMessage`, a migration e os testes existem. O fluxo de geração e envio ainda está planejado.
+> A classe, o cast em `EmailMessage`, a migration, os testes e o backend de envio em fila existem.
 
 ## Contrato implementado
 
@@ -20,8 +20,9 @@ Classifica a finalidade da mensagem de notificação ou da tentativa de envio. N
 | ------------------- | -------------------- | ----------------------- |
 | `Notification`      | `notification`       | Notificação operacional |
 | `NewAffiliation`    | `new_affiliation`    | Novo vínculo            |
+| `AccountEmailChanged` | `account_email_changed` | Alteração de e-mail da conta |
 
-`NewAffiliation` identifica a tentativa do convite inicial destinada a `users.email`, sem `email_message`. `Notification` identifica uma mensagem operacional com conteúdo e suas tentativas. Recuperação de senha não usa esse enum porque não é registrada nessas tabelas.
+`NewAffiliation` identifica a tentativa do convite inicial destinada a `users.email`, sem `email_message`. `AccountEmailChanged` identifica o aviso ao endereço antigo ou novo, também sem conteúdo persistido. `Notification` identifica uma mensagem operacional com conteúdo e suas tentativas. Recuperação de senha não usa esse enum porque não é registrada nessas tabelas.
 
 ## Decisões de segurança
 
@@ -36,7 +37,7 @@ O fluxo de recuperação de senha não inclui confirmação adicional de endere�
 - [x] Criar `App\Enums\EmailMessagePurpose` como enum string.
 - [x] Implementar `label()`, `options()` e `values()`.
 - [x] Adicionar cast em `EmailMessage`.
-- [x] Persistir `Notification` em [email_messages](doc:migration-06-email-messages) e ambas as finalidades nas tentativas.
+- [x] Persistir `Notification` em [email_messages](doc:migration-06-email-messages) e as três finalidades nas tentativas.
 - [x] Criar testes para cases, conversão e opções.
 - [ ] Verificar que nenhum segredo aparece no conteúdo, logs ou Activity Log.
 

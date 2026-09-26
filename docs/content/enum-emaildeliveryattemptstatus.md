@@ -10,7 +10,7 @@ related: migration-07-email-delivery-attempts, e-mails-notificacoes-e-entregas, 
 source_refs: https://github.com/sge-suite/sge/blob/master/app/Enums/EmailDeliveryAttemptStatus.php, https://github.com/sge-suite/sge/blob/master/tests/Unit/Enums/EmailDeliveryAttemptStatusTest.php
 ---
 > [!success] Estado
-> A classe, o cast em `EmailDeliveryAttempt`, a migration e os testes existem. Jobs de envio continuam planejados. O estado da tentativa não é o estado de leitura da notificação.
+> A classe, o cast em `EmailDeliveryAttempt`, a migration, o Job de envio e os testes existem. O estado da tentativa não é o estado de leitura da notificação.
 
 ## Contrato proposto
 
@@ -18,7 +18,7 @@ source_refs: https://github.com/sge-suite/sge/blob/master/app/Enums/EmailDeliver
 | --------- | ---------------- | -------------------------------------------------- |
 | `Queued`  | `queued`         | Tentativa criada e aguardando Job.                 |
 | `Sent`    | `sent`           | SMTP/provedor aceitou a mensagem.                  |
-| `Failed`  | `failed`         | Transporte recusou ou o Job esgotou as tentativas. |
+| `Failed`  | `failed`         | Transporte falhou ou o Job não conseguiu concluir. |
 
 O fluxo é direto: `queued` passa para `sent` quando o SMTP/provedor aceita a mensagem, ou para `failed` quando ela falha. `notifications.read_at` continua sendo a fonte da leitura interna. Não usar `sending`, `read` ou `delivered` sem decisão explícita.
 
@@ -29,8 +29,8 @@ O fluxo é direto: `queued` passa para `sent` quando o SMTP/provedor aceita a me
 - [x] Adicionar cast em `EmailDeliveryAttempt`.
 - [x] Persistir os valores do enum em [email_delivery_attempts](doc:migration-07-email-delivery-attempts).
 - [x] Testar cases, valores, rótulos e opções.
-- [ ] Testar as transições `queued → sent` e `queued → failed`, reprocessamento e criação de nova linha no reenvio.
-- [ ] Garantir que `sent` só seja salvo após aceitação do SMTP.
+- [x] Testar as transições `queued → sent` e `queued → failed`, reprocessamento e criação de nova linha no reenvio.
+- [x] Salvar `sent` somente quando o transporte aceita o envio.
 
 ## Relacionamentos
 

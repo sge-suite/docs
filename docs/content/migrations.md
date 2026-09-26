@@ -84,7 +84,7 @@ A tabela segue a ordem dos nomes dos arquivos em `database/migrations`. Os núme
 
 ## Prontidão para implementação
 
-- As Migrations 05–07 estão implementadas. `notifications` usa a base nativa do Laravel 13 com ID UUID e `data` em `jsonb`; as duas tabelas de e-mail usam IDs `bigint` autoincrementais, FKs históricas, Models, casts e testes PostgreSQL. O fluxo de envio permanece planejado.
+- As Migrations 05–07 estão implementadas. `notifications` usa a base nativa do Laravel 13 com ID UUID e `data` em `jsonb`; as duas tabelas de e-mail usam IDs `bigint` autoincrementais, FKs históricas, Models, casts e testes PostgreSQL. O backend de envio e atualização das tentativas usa Actions e Jobs Eloquent enfileirados; a conexão com os eventos de domínio permanece pendente.
 - As Migrations 09 e 10 estão implementadas. A 09 usa `primary_coordinator_affiliation_id` e `secondary_coordinator_affiliation_id`, ambas nullable para cadastro inicial sem coordenadores; o Model valida tipo, atividade e campus na atribuição. A 10 vincula cada discente a um curso do mesmo campus e preserva o histórico com `ON DELETE RESTRICT`.
 - A Migration 12 usa `name` para o nome completo da concedente/unidade, permite documentos compartilhados entre unidades e deixa índices secundários e telas de cadastro para etapas futuras.
 - A Migration 12A implementa pedidos de cadastro de supervisor com CPF e estados validados no Model, dados profissionais, associação ao vínculo resultante e bloqueio da exclusão pelo Model. O Model participa do Activity Log Eloquent, que identifica a conta e o vínculo ativo como autoria; o fluxo transacional de aprovação e sua Policy permanecem pendentes.

@@ -11,7 +11,7 @@ source_refs: https://github.com/sge-suite/sge/blob/master/app/Support/ActiveAffi
 ---
 Referências: [modelo de acesso](doc:modelo-de-dados-acesso), [E-mails, notificações e entregas](doc:e-mails-notificacoes-e-entregas) e [fluxo de login](doc:fluxos-principais#1-acesso-e-vinculo).
 
-O contexto de vínculo ativo, a proteção do painel, a tela de seleção e o comando de bootstrap do primeiro Administrador do Sistema estão implementados. Os testes do comando e a suíte completa passaram via Sail: 561 testes passaram e 2 foram ignorados, de 563.
+O contexto de vínculo ativo, a proteção do painel, a tela de seleção e o comando de bootstrap do primeiro Administrador do Sistema estão implementados. Os testes do comando e a suíte completa passaram via Sail: 569 testes passaram e 3 foram ignorados, de 572.
 
 ## Login e recuperação de senha
 

@@ -78,7 +78,7 @@ Este mapa acompanha o código real no repositório Laravel irmão, em `../sge`. 
 - [ ] Cobrir `AppServiceProvider` e `FortifyServiceProvider` por comportamento observável.
 - [ ] Completar testes de autorização dos catálogos e fluxos de estágio; a caixa de notificações já cobre propriedade da conta e vínculo ativo.
 
-Os 17 cenários de `admin:create` estão incluídos na suíte completa, executada via Sail: 561 testes passaram e 2 foram ignorados, de 563.
+Os 17 cenários de `admin:create` estão incluídos na suíte completa, executada via Sail: 569 testes passaram e 3 foram ignorados, de 572.
 
 ## Comandos
 

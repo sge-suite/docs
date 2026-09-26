@@ -43,4 +43,4 @@ Deduplicação durável de eventos repetíveis não deve alterar a tabela nativa
 
 ## Próxima etapa
 
-[`email_messages`](doc:migration-06-email-messages) e [`email_delivery_attempts`](doc:migration-07-email-delivery-attempts) já implementam a persistência relacionada. A recuperação de senha do Fortify não cria registros nessas tabelas. A integração futura concentra-se nas notificações operacionais e no convite inicial, conforme [E-mails, notificações e entregas](doc:e-mails-notificacoes-e-entregas).
+[`email_messages`](doc:migration-06-email-messages) e [`email_delivery_attempts`](doc:migration-07-email-delivery-attempts) implementam a persistência relacionada; `RequestEmailDelivery` e `SendEmailDelivery` implementam reserva e transporte em fila. A recuperação de senha do Fortify também usa fila, sem criar registros nessas tabelas. A ligação aos eventos de domínio ainda será feita conforme [E-mails, notificações e entregas](doc:e-mails-notificacoes-e-entregas).

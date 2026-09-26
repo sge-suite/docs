@@ -23,8 +23,8 @@ Para a sequência de execução atual, incluindo a próxima fase transversal de 
 - [Fase 00 — Preparação](doc:fase-00-preparacao) — **completed** — Checklist do ambiente, qualidade e fluxo de trabalho do projeto novo.
 - [Fase 01 — Fundação de dados](doc:fase-01-fundacao-de-dados) — **completed** — Migrations, Models, factories e testes PostgreSQL da base de dados.
 - [Fase 02 — Conta e contexto](doc:fase-02-conta-e-contexto) — **in-progress** — Contexto ativo e bootstrap do primeiro administrador implementados; cadastro pela interface, convite e configurações pessoais pendentes.
-- [Fase 03 — Activity Log](doc:fase-03-activity-log) — **completed** — Cobertura Eloquent, autoria por vínculo e suíte completa validadas; 561 testes passaram e 2 foram ignorados.
-- [Fase 04 — Integração de e-mail](doc:fase-04-integracao-de-email) — **planned** — Backend comum para preparação, transporte, tentativas e reprocessamento de e-mails.
+- [Fase 03 — Activity Log](doc:fase-03-activity-log) — **completed** — Cobertura Eloquent, autoria por vínculo e suíte completa validadas; 569 testes passaram e 3 foram ignorados.
+- [Fase 04 — Integração de e-mail](doc:fase-04-integracao-de-email) — **in-progress** — Backend comum de envio em fila e reprocessamento implementado; ligação aos fluxos de domínio pendente.
 - [Fase 05 — Administração hierárquica](doc:fase-05-administracao) — **planned** — Backend e interfaces administrativas em ordem de escopo, do global ao local.
 - [Fase 06 — Documentos](doc:fase-06-documentos) — **planned** — Checklist de templates DOCX, versões, geração e acompanhamento de assinatura.
 - [Fase 07 — Abertura do estágio](doc:fase-07-abertura-do-estagio) — **planned** — Checklist de criação da solicitação, envio, análise e formalização inicial do estágio.

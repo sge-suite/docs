@@ -14,8 +14,8 @@ source_refs:
 
 | Vínculo                  | Escopo principal                       | Pode iniciar/editar                                                         | Pode analisar/aprovar                                     | Limites importantes                                                                     |
 | ------------------------ | -------------------------------------- | --------------------------------------------------------------------------- | --------------------------------------------------------- | --------------------------------------------------------------------------------------- |
-| Administrador do Sistema | Global                                 | Campi e vínculos administrativos previstos em Policy.                       | Administração global prevista em Policy.                  | Não representa automaticamente operação acadêmica do campus.                            |
-| Administrador do Campus  | Próprio campus                         | Dados cadastrais do campus, usuários, vínculos, cursos e tipos autorizados. | Administração do próprio escopo.                          | Não cria outros campi, não altera sua ativação e não cadastra Administrador do Sistema. |
+| Administrador do Sistema | Global                                 | Todos os campos dos campi e vínculos administrativos previstos em Policy.   | Administração global prevista em Policy.                  | Desativação exige senha atual; não representa operação acadêmica do campus.              |
+| Administrador do Campus  | Próprio campus                         | Telefone, representante e seguro; demais operações locais autorizadas.       | Administração do próprio escopo.                          | Não cria campi, não altera campos institucionais ou ativação, nem cadastra Admin. Sistema. |
 | Setor de Estágio         | Campus ou escopo atribuído             | Templates, concedentes, solicitações pendentes e registros operacionais.    | Estágios, documentos, avaliações, pendências e liberação. | Aprova/devolve avaliação sem editar a resposta do supervisor.                           |
 | Coordenador              | Curso do vínculo                       | Consultas e atestado de orientação previsto.                                | Ações acadêmicas explicitamente atribuídas ao curso.      | Não recebe automaticamente a análise operacional do Setor de Estágio.                   |
 | Orientador               | Próprios orientandos                   | Consulta e lançamento das notas sob sua responsabilidade.                   | Avaliação acadêmica que lhe for atribuída.                | Não opera estágios fora dos próprios orientandos.                                       |
@@ -27,6 +27,7 @@ source_refs:
 
 - Toda ação valida usuário autenticado, vínculo ativo, `AffiliationType`, campus/curso e estado do registro.
 - Vínculo desativado preserva consulta histórica autorizada, mas não permite iniciar ou alterar fluxos.
+- Campus desativado preserva consulta e vínculos, mas congela as alterações em seus recursos; configurações pessoais continuam disponíveis.
 - Nenhuma Policy ultrapassa o escopo de campus ou curso do vínculo.
 - A mesma pessoa pode atuar por mais de um vínculo; a sessão escolhe apenas um contexto por vez.
 - Não há permissões/roles editáveis pelo banco ou interface. Exceções exigem mudança explícita de enum, Policy, teste e documentação.

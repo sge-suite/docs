@@ -18,6 +18,8 @@ O horário de referência será o `APP_TIMEZONE` institucional, configurado como
 > [!important] Ações imediatas e reconciliação
 > Criar, alterar ou remover uma pausa chama a mesma Action de sincronização imediatamente. O schedule diário é a rede de segurança para datas que viram sem interação humana e para recuperar uma execução eventualmente interrompida.
 
+Todo processamento associado a campus deve ignorar campi desativados na seleção e conferir o estado novamente dentro da transação antes de gravar. Para evitar corrida com a desativação, bloquear primeiro o campus e depois o estágio. Durante o período inativo, schedules não mudam estados nem criam notificações ou e-mails para esses processos. Reativar não dispara um replay; a próxima execução regular segue os critérios temporais normais, sem reenviar lembretes cujo prazo já passou.
+
 ## Comandos iniciais
 
 | Comando | Horário | Seleção e efeito | Não faz |
@@ -79,7 +81,8 @@ Cada destinatário recebe no máximo uma notificação por fato temporal. A Acti
 - garantir que `Completed` nunca seja produzido pelo command e que a previsão só seja recalculada pelos gatilhos de domínio;
 - testar lembrete exatamente a sete dias, nova previsão após mudança autorizada e ausência de aviso fora do limiar;
 - testar resumo único interno por campus/destinatário, sem `email_message` para o Setor;
-- testar despacho de e-mail do discente somente após commit, destinatário sem canal de e-mail e a idempotência da fonte de despacho; e
+- testar despacho de e-mail do discente somente após commit, destinatário sem canal de e-mail e a idempotência da fonte de despacho;
+- testar que um campus desativado é ignorado antes da gravação e revalidado dentro do lock, sem status, notificação ou e-mail; e
 - executar em ambiente com cache compartilhado e validar `onOneServer`, `withoutOverlapping` e os alertas operacionais.
 
 ## Relações

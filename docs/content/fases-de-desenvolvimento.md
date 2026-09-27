@@ -19,7 +19,7 @@ Esta lista registra a sequência e o estado atuais. A fundação de dados está 
 - **03 — Activity Log (em andamento):** auditoria Eloquent e autoria por vínculo implementadas. Falta alinhar a auditoria de `UserPersonalData` com o contrato de registrar os campos cadastrais.
 - **[04 — Integração de e-mail](doc:fase-04-integracao-de-email) (em andamento):** backend de reserva, envio em fila, transporte e reprocessamento implementado; integração nos fluxos de domínio e telas administrativas pendente.
 
-- [ ] [05 — Administração](doc:fase-05-administracao) — implementar backend e interface seguindo a hierarquia de perfis, do Administrador do Sistema para baixo.
+- [ ] [05 — Administração](doc:fase-05-administracao) — backend de campi concluído; implementar a interface Livewire e as demais operações administrativas seguindo a hierarquia de perfis.
 - [ ] [06 — Documentos](doc:fase-06-documentos) — fechar validação, geração e assinatura com serviços de backend reutilizáveis.
 - [ ] [07 — Abertura do estágio](doc:fase-07-abertura-do-estagio) — completar Actions e regras transacionais antes e junto do formulário.
 - [ ] [08 — Estágio em andamento](doc:fase-08-estagio-em-andamento) — concluir cálculos, transições, notificações e schedules antes das telas correspondentes.

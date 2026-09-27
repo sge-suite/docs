@@ -35,11 +35,13 @@ A cidade é obrigatória e selecionada no [catálogo local](doc:migration-01a-ci
 
 O schema atual contém FKs nos cadastros proprietários, mas ainda não impõe essa exclusividade entre todas as tabelas. Os futuros fluxos de integração devem respeitar a regra ao criar e trocar endereços; uma garantia no banco exige desenho próprio antes de ser declarada implementada.
 
+Na gestão de campi, a edição atualiza a mesma linha de endereço e preserva seu ID. Antes da mudança, o controller verifica referências em campi, dados pessoais, concedentes e estágios; se encontrar outro proprietário ou uso histórico, rejeita a operação. A verificação é de aplicação, pois o schema não impõe exclusividade entre as FKs.
+
 ## Model, validação e auditoria
 
 `Address` declara os campos cadastrais com `#[Fillable]`, usa `HasFactory` e possui casts de `city_id` para inteiro e dos campos textuais para string. `Address::city()` é `BelongsTo`; `City::addresses()` é `HasMany`. As relações com modelos ainda inexistentes não foram adicionadas.
 
-`AddressValidationRules` centraliza as regras aplicadas no evento `saving` do model: cidade existente, logradouro, número e bairro obrigatórios, todos com os limites do schema. O número é textual, sem restringir os valores ao formato numérico. Não há Form Request porque ainda não existe endpoint de cadastro.
+`AddressValidationRules` centraliza as regras aplicadas no evento `saving` do model: cidade existente, logradouro, número e bairro obrigatórios, todos com os limites do schema. O número é textual, sem restringir os valores ao formato numérico. A rota de campus valida o endereço aninhado em um Form Request e cria ou atualiza `Address` via Eloquent. Ainda não há endpoint genérico para gerenciar endereços.
 
 O CEP omitido, nulo ou vazio é persistido como `null`. Valores informados não passam por validação de CEP, normalização por helper ou remoção de máscara; `varchar(255)` preserva o valor sem preenchimento de espaços. A validação de oito dígitos e o tratamento de máscaras serão definidos em uma etapa futura.
 
@@ -51,7 +53,7 @@ O Activity Log registra os campos cadastrais, somente quando há mudanças, sem 
 
 Uma origem não persistida gera `InvalidArgumentException`; se a linha já foi removida, a releitura gera `ModelNotFoundException`. A criação da cópia também passa pelas regras do model e pelo Activity Log.
 
-O bloqueio seletivo de edição e exclusão de endereços históricos será implementado junto às futuras FKs de formalização. Esta base disponibiliza a cópia, mas ainda não identifica quais linhas foram utilizadas por um estágio. Não há integração com `internships`, `user_personal_data`, campi ou concedentes nesta etapa.
+O fluxo de campus impede editar seu endereço quando uma referência de outro proprietário ou estágio aponta para a mesma linha. Não há bloqueio genérico de edição/exclusão de endereços históricos para os demais cadastros; essa proteção será implementada junto às futuras FKs e operações de formalização. A cópia existe, mas os outros fluxos ainda precisam integrar seu uso.
 
 Na formalização futura, `internships.workplace_address_id` deverá apontar para uma cópia do endereço da concedente nesta mesma tabela. `internships.student_address_id` poderá apontar para a cópia do endereço do discente quando necessário. Essas linhas deverão ser preservadas sem alterações retroativas; a mudança do cadastro atual poderá criar outra linha e trocar sua FK.
 
@@ -63,7 +65,7 @@ A cidade deverá continuar sendo resolvida exclusivamente no catálogo local: pr
 
 ## Testes
 
-`tests/Feature/AddressesTest.php` cobre tipos e limites PostgreSQL, nulabilidade, índices, FK `RESTRICT`, migrate e rollback, factories, casts, relacionamentos, campos obrigatórios, número textual, CEP opcional sem validação de formato, cópia histórica e Activity Log. Como `user_personal_data` referencia `addresses`, o teste de rollback reverte em conjunto as migrations aplicadas a partir de `addresses`, testa a remoção da tabela e reaplica o conjunto. Os testes usam `Http::fake()` e `preventStrayRequests()` para impedir acesso à rede.
+`tests/Feature/AddressesTest.php` cobre tipos e limites PostgreSQL, nulabilidade, índices, FK `RESTRICT`, migrate e rollback, factories, casts, relacionamentos, campos obrigatórios, número textual, CEP opcional sem validação de formato, cópia histórica e Activity Log. `tests/Feature/CampusManagementTest.php` verifica edição no mesmo endereço, bloqueio quando ele também estiver ligado a outro cadastro ou estágio e rollback dos registros e atividades. Como `user_personal_data` referencia `addresses`, o teste de rollback reverte em conjunto as migrations aplicadas a partir de `addresses`, testa a remoção da tabela e reaplica o conjunto. Os testes usam `Http::fake()` e `preventStrayRequests()` para impedir acesso à rede.
 
 ```bash
 ./vendor/bin/sail artisan test --compact tests/Feature/AddressesTest.php tests/Feature/CitiesTest.php tests/Unit/DatabaseDriverGuardTest.php

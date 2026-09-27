@@ -19,6 +19,7 @@ Esta é a referência operacional para implementar as telas, Gates, Policies e t
 - Cada pessoa autentica uma única conta e seleciona um `affiliations` ativo para operar. Trocar de vínculo troca o contexto; não soma acessos.
 - A caixa operacional consulta somente as notificações do vínculo ativo selecionado. `AffiliationPolicy::viewNotifications` exige vínculo ativo e pertencente à conta autenticada; notificações de outro vínculo não atravessam a relação polimórfica, mesmo para a mesma conta. Notificações de conta continuam em `User`.
 - Toda leitura e alteração verifica `AffiliationType`, campus, curso quando aplicável, posse ou relação com o registro e o status atual. Um vínculo desativado não inicia nem altera fluxos.
+- Um campus desativado mantém vínculos e histórico, mas congela as alterações em seus recursos; configurações pessoais da conta continuam disponíveis e a pessoa pode trocar para outro vínculo.
 - Gates e Policies nativos do Laravel são a única camada de autorização. Não existem papéis, permissões ou exceções editáveis por interface.
 - O Activity Log registra alterações relevantes. Discente e supervisor não o consultam; os demais o consultam somente quando a Policy do processo autorizar.
 - Notificação interna e e-mail são canais diferentes. Quem possui conta recebe ambos quando for destinatário elegível; o Setor de Estágio recebe seu resumo operacional somente dentro do sistema.
@@ -45,7 +46,8 @@ Mantém a estrutura institucional global. Seu vínculo pode não possuir campus 
 
 ### Ações permitidas
 
-- criar, editar, ativar e desativar campi;
+- consultar todos os campi e criar, editar, ativar, desativar e reativar campi;
+- editar todos os campos cadastrais de um campus ativo; informar a senha atual em cada desativação;
 - criar e administrar vínculos de Administrador do Sistema e Administrador do Campus, respeitando a separação entre escopo global e de campus;
 - iniciar o subfluxo de conta existente ou nova para esses vínculos e disparar o aviso de disponibilização do vínculo;
 - consultar os dados administrativos indispensáveis para essas operações.
@@ -59,11 +61,11 @@ Mantém a estrutura institucional global. Seu vínculo pode não possuir campus 
 
 ### Notificações e auditoria
 
-Recebe apenas avisos administrativos que venham a ser definidos para a estrutura institucional. A criação, ativação, desativação e alteração de campus ou vínculo registra autoria e vínculo no Activity Log.
+Recebe apenas avisos administrativos que venham a ser definidos para a estrutura institucional. A criação, edição, desativação e reativação do campus registram autoria e vínculo ativo no Activity Log, com valores anteriores/novos. A senha solicitada na desativação não é registrada. Campus desativado só pode ser reativado; a reativação não modifica vínculos ou processos nem dispara processamento atrasado.
 
 ### Controles a implementar
 
-`CampusPolicy` e `AffiliationPolicy` cobrem as operações globais. `Gate::before` pode reconhecer este vínculo somente para essas ações globais e nunca dispensar a validação de vínculo ativo. Os testes devem rejeitar administrador de campus, vínculo desativado e tentativa de operar estágio sem outro vínculo autorizado.
+`CampusPolicy` cobre as operações de campus e exige o vínculo ativo selecionado. O backend usa `CampusController`, Form Requests e gravações Eloquent em transação; não há `Gate::before` global. As demais operações de administração permanecem pendentes.
 
 ## Administrador do Campus
 
@@ -73,7 +75,7 @@ Mantém cadastros e estrutura do próprio campus. Sua visibilidade é limitada a
 
 ### Ações permitidas
 
-- editar nome, CNPJ, endereço, telefone, e-mail e representante do próprio campus;
+- consultar os dados do próprio campus e editar telefone, representante legal e dados do seguro enquanto o campus estiver ativo;
 - criar e administrar contas e vínculos dentro do campus, inclusive por meio do fluxo de reutilização de conta existente;
 - criar e editar cursos, atribuir os dois coordenadores previstos e administrar tipos de estágio do próprio campus;
 - ativar ou desativar vínculos do próprio escopo, sem apagar histórico;
@@ -81,7 +83,8 @@ Mantém cadastros e estrutura do próprio campus. Sua visibilidade é limitada a
 
 ### Limites e proibições
 
-- não cria outro campus, não altera seu ciclo de ativação e não acessa registros de campus alheio;
+- não cria outro campus, não altera seu nome, CNPJ, endereço, e-mail ou ciclo de ativação e não acessa registros de campus alheio;
+- enquanto o campus estiver desativado, não altera dados cadastrais, vínculos ou outros recursos ligados a ele;
 - não cria nem administra Administrador do Sistema;
 - não assume análise de solicitações, documentos, liberação, avaliações ou notas sem também possuir e selecionar o vínculo correspondente;
 - não modifica dados pessoais do discente fora do fluxo cadastral autorizado nem contorna snapshots históricos.
@@ -92,7 +95,7 @@ Ao adicionar vínculo a uma conta, o destinatário recebe o aviso previsto para 
 
 ### Controles a implementar
 
-`CampusPolicy`, `AffiliationPolicy`, `CoursePolicy` e `InternshipTypePolicy` exigem o mesmo campus. Testes devem cobrir campus alheio, criação de Administrador do Sistema, vínculo desativado, duplicidade de pessoa e tentativa de operar recursos de estágio.
+`CampusPolicy` já cobre consulta e campos editáveis do campus. As Policies de vínculo, curso e tipo de estágio continuam pendentes. Testes devem cobrir campus alheio, vínculo desativado, duplicidade de pessoa e tentativa de operar recursos de estágio.
 
 ## Setor de Estágio
 

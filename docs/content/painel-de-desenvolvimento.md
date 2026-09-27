@@ -25,7 +25,7 @@ Para a sequência e o andamento atuais, consulte [Fases de desenvolvimento](doc:
 - [Fase 02 — Conta e contexto](doc:fase-02-conta-e-contexto) — **in-progress** — Contexto, `admin:create`, troca própria de senha/e-mail e avisos de conta/vínculo implementados; cadastro pela interface e outras edições pessoais pendentes.
 - [Fase 03 — Activity Log](doc:fase-03-activity-log) — **in-progress** — Eventos Eloquent e autoria implementados; auditoria dos demais campos de `UserPersonalData` precisa ser alinhada ao contrato.
 - [Fase 04 — Integração de e-mail](doc:fase-04-integracao-de-email) — **in-progress** — Pipeline em fila e três fluxos de conta integrados; notificações operacionais de domínio e administração de entregas pendentes.
-- [Fase 05 — Administração hierárquica](doc:fase-05-administracao) — **planned** — Backend e interfaces administrativas em ordem de escopo, do global ao local.
+- [Fase 05 — Administração hierárquica](doc:fase-05-administracao) — **in-progress** — Gestão de campi pelo backend concluída; telas Livewire e demais operações administrativas pendentes.
 - [Fase 06 — Documentos](doc:fase-06-documentos) — **planned** — Checklist de templates DOCX, versões, geração e acompanhamento de assinatura.
 - [Fase 07 — Abertura do estágio](doc:fase-07-abertura-do-estagio) — **planned** — Checklist de criação da solicitação, envio, análise e formalização inicial do estágio.
 - [Fase 08 — Estágio em andamento](doc:fase-08-estagio-em-andamento) — **planned** — Checklist de pausas, substituições, aditivos, cancelamento e histórico do estágio.

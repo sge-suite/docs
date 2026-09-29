@@ -83,11 +83,11 @@ source_refs:
 - **Decisão:** dados de supervisor ou parte concedente ainda não cadastrados serão salvos em estruturas próprias de solicitação, com origem, análise, decisão, motivo e associação ao cadastro resultante. Notificações apenas avisam o Setor de Estágio e apontam para a solicitação.
 - **Motivo:** uma notificação não preserva adequadamente os dados, o histórico de análise e a decisão do cadastro.
 
-### D-012 — Identificação flexível de partes concedentes
+### D-012 — Identificação e escopo de partes concedentes
 
-- **Status:** definido.
-- **Decisão:** `granting_parties` usará `document_type` (`CPF` ou `CNPJ`) e `document_number` normalizado. O CPF pode ser único; o CNPJ não será necessariamente único, pois unidades distintas podem compartilhá-lo e serão diferenciadas pelos demais dados cadastrais.
-- **Motivo:** representa corretamente redes e unidades que usam o mesmo CNPJ sem impedir o fluxo de cadastro.
+- **Status:** definido; ajuste de schema pendente.
+- **Decisão:** `granting_parties` usa `document_type` (`CPF` ou `CNPJ`) e `document_number` normalizado, mas cada cadastro pertence a um campus por FK. Os cadastros são locais ao campus, inclusive para dados de conselho, credenciamento, contatos e endereço. O mesmo CPF ou CNPJ pode aparecer em mais de um cadastro e não terá unicidade global nem por campus. O CPF de uma concedente não é chave para associar ou mesclar uma conta em `users`. As solicitações de concedente também devem preservar o campus de origem, e sua aprovação deve resultar em uma concedente daquele campus.
+- **Motivo:** algumas empresas exigem o CNPJ da matriz nas filiais e escolas estaduais podem compartilhar o CNPJ; pessoas físicas e seus dados de credenciamento também precisam permanecer no escopo institucional local.
 - **Referências:** [Migration 12 — granting_parties](doc:migration-12-granting-parties) e [Glossário](doc:glossario).
 
 ### D-013 — Controle de acesso por vínculos e remoção das tabelas de permissão

@@ -77,7 +77,7 @@ O botão **Consultar CNPJ**, nos formulários de cadastro e edição, usa `Brasi
 
 - [ ] Implementar autorização e Actions de gestão dos cadastros e análises antes de criar as telas operacionais.
 - [ ] Administrar templates DOCX e versões.
-- [ ] Administrar concedentes e solicitações pendentes.
+- [ ] Administrar concedentes e solicitações pendentes no escopo do campus; cadastros e aprovações devem preservar essa associação mesmo quando CPF/CNPJ se repetirem.
 - [ ] Administrar a importação do calendário nacional/estadual e o cadastro manual de feriados municipais.
 - [ ] Analisar estágios enviados.
 - [ ] Analisar solicitações de supervisor/concedente.

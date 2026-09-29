@@ -7,10 +7,10 @@ status: planned
 visibility: public
 tags: sge/estagio, sge/cadastro, sge/pendencias
 related: migration-12a-supervisor-registration-requests, migration-12b-granting-party-registration-requests, backlog-e-decisoes, migration-12-granting-parties, migration-19-internship-requests
-source_refs:
+source_refs: https://github.com/sge-suite/sge/blob/master/database/migrations/2026_09_23_162229_create_supervisor_registration_requests_table.php, https://github.com/sge-suite/sge/blob/master/database/migrations/2026_09_23_190320_create_granting_party_registration_requests_table.php, https://github.com/sge-suite/sge/blob/master/database/migrations/2026_09_24_152252_create_internship_requests_table.php, https://github.com/sge-suite/sge/blob/master/app/Models/SupervisorRegistrationRequest.php, https://github.com/sge-suite/sge/blob/master/app/Models/GrantingPartyRegistrationRequest.php, https://github.com/sge-suite/sge/blob/master/app/Models/InternshipRequest.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/SupervisorRegistrationRequestTest.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/GrantingPartyRegistrationRequestTest.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/InternshipRequestTest.php
 ---
 > [!info] Implementação
-> As Migrations 12A (`supervisor_registration_requests`) e 12B (`granting_party_registration_requests`) estão implementadas. Os fluxos de envio, análise e aprovação continuam planejados. A solicitação de estágio mantém as FKs para os pedidos pendentes; não há FK inversa redundante.
+> As Migrations 12A (`supervisor_registration_requests`) e 12B (`granting_party_registration_requests`) estão implementadas. Os fluxos de envio, análise e aprovação continuam planejados. A decisão aprovada é que a concedente resultante e o pedido pendente pertençam ao campus de origem, sem transferência do cadastro para outro campus; o schema atual ainda não persiste esse escopo. A alteração das migrations e a validação de campus na aprovação continuam pendentes.
 
 ## Regras comuns
 
@@ -55,7 +55,7 @@ A Migration 12A guarda o CPF informado pelo discente em coluna própria, validad
 | `credentialing_process_number` | nullable. |
 | `granting_party_id` | FK nullable para o cadastro criado ou selecionado; obrigatório quando `status = approved`. |
 
-Na aprovação, o Setor cria ou seleciona `granting_parties`. Uma concedente nova recebe uma linha própria em `addresses`, mesmo que outro cadastro tenha endereço idêntico; o pedido preserva o endereço proposto em suas colunas. CNPJ repetido não impede uma unidade distinta. A solicitação pendente mantém o envio original, a decisão e o vínculo resultante, enquanto a tabela de concedentes guarda somente o cadastro atual.
+Na aprovação, o Setor cria ou seleciona uma `granting_parties` do mesmo campus de origem do pedido. Uma concedente nova recebe uma linha própria em `addresses`, mesmo que outro cadastro tenha endereço idêntico; o pedido preserva o endereço proposto em suas colunas. O CNPJ da matriz pode aparecer em registros distintos para filiais ou escolas, e CPF/CNPJ não devem provocar compartilhamento automático entre campi. A solicitação pendente mantém o envio original, a decisão e o vínculo resultante, enquanto a tabela de concedentes guarda somente o cadastro atual. O pedido precisa conservar ou resolver o campus de origem durante análise; a forma exata de persistir esse escopo fica para a alteração de schema.
 
 ## Integridade e interface
 

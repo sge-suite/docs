@@ -21,8 +21,8 @@ source_refs:
 | `course_id` | FK obrigatória fora de `Draft`; o curso deve estar disponível no contexto do vínculo. |
 | `internship_type_id` | FK obrigatória fora de `Draft`; o tipo deve estar ativo e pertencer ao curso selecionado. |
 | `advisor_affiliation_id` | FK nullable enquanto o Setor ainda não atribuiu orientador; obrigatória no aceite. |
-| `granting_party_id` | FK nullable para a concedente já validada. |
-| `granting_party_registration_request_id` | FK nullable para a solicitação pendente de cadastro; é alternativa a `granting_party_id`, nunca texto livre solto. |
+| `granting_party_id` | FK nullable para concedente validada do campus do vínculo discente. |
+| `granting_party_registration_request_id` | FK nullable para solicitação pendente do mesmo campus; é alternativa a `granting_party_id`, nunca texto livre solto. |
 | `supervisor_affiliation_id` | FK nullable para o supervisor já cadastrado. |
 | `supervisor_registration_request_id` | FK nullable para a solicitação pendente de cadastro; é alternativa a `supervisor_affiliation_id`. |
 | `student_year_semester` | string nullable em `Draft`; período/semestre declarado pelo discente e congelado no snapshot no aceite. |
@@ -65,7 +65,7 @@ As sete chaves sempre existem quando o formulário é enviado; cada valor é int
 
 ### Caminhos condicionais de cadastro
 
-- Concedente: exatamente uma de `granting_party_id` ou `granting_party_registration_request_id` deve ser informada no envio. A segunda aponta para um registro próprio, com documento, endereço, representante, contatos, área, conselho e processo, aguardando análise do Setor.
+- Concedente: exatamente uma de `granting_party_id` ou `granting_party_registration_request_id` deve ser informada no envio. A concedente ou solicitação deve pertencer ao campus do vínculo discente, conferido no servidor. A segunda aponta para um registro próprio, com documento, endereço, representante, contatos, área, conselho e processo, aguardando análise do Setor. CPF/CNPJ iguais em outro cadastro não autorizam reutilizá-lo entre campi.
 - Supervisor: exatamente uma de `supervisor_affiliation_id` ou `supervisor_registration_request_id` deve ser informada no envio. A segunda preserva nome, CPF, telefone, e-mail, cargo, qualificação, formação e experiência propostos pelo discente até que o Setor crie/associe o vínculo de supervisor. O supervisor completa ou confirma seus dados profissionais atuais em `user_personal_data` no futuro fluxo do formulário.
 - Capacidade civil: o rádio oferece `adult`, `minor` e `emancipated_minor`. `adult` só é válido para quem tiver 18 anos completos na data do envio. `minor` exige os quatro campos de responsável legal. `emancipated_minor` dispensará responsável legal e exigirá ao menos uma [evidência](doc:migration-19a-emancipation-evidences) enviada; o aceite final exigirá evidência aprovada pelo Setor. A Migration 19A já implementa no Model a exigência de anexo no envio e de evidência aprovada no aceite; a análise manual e a autorização ficam para o fluxo. Se a devolução apontar comprovante inválido, o discente cria novo envio ou troca para `minor` e informa o responsável.
 - Remuneração: `is_remunerated = true` exige `grant_value`; se for `false`, ambos os valores monetários ficam nulos, salvo decisão posterior que admita auxílio sem bolsa.

@@ -26,7 +26,7 @@ diagram: modelo-nucleo-identidade
 | `affiliations` | função institucional, campus e e-mail contextual; a Migration 10 adiciona `course_id` obrigatório para vínculos de discente |
 | `campuses` e `courses` | escopo acadêmico e administrativo |
 | `internship_types` | regras de carga, notas e exceções aplicáveis ao curso |
-| `granting_parties` | cadastro atual da concedente |
+| `granting_parties` | cadastro atual da concedente, vinculado a um campus; CPF/CNPJ podem se repetir e os dados locais não são compartilhados |
 
 Uma pessoa possui uma conta e quantos vínculos forem necessários. O vínculo ativo, e não a conta isolada, define o contexto usado por Gates e Policies.
 

@@ -1,16 +1,16 @@
 ---
 id: migration-12-granting-parties
 title: Migration 12 — granting_parties
-description: Contrato das partes concedentes reutilizáveis e seu endereço atual.
+description: Cadastro de partes concedentes por campus, com dados cadastrais e credenciamento.
 type: migration-reference
-status: implemented
+status: in-progress
 visibility: public
 tags: sge/migrations, sge/concedente, sge/banco-de-dados
 related: migration-01-addresses, enum-partydocumenttype
 source_refs: https://github.com/sge-suite/sge/blob/master/database/migrations/2026_09_23_152827_create_granting_parties_table.php, https://github.com/sge-suite/sge/blob/master/app/Models/GrantingParty.php, https://github.com/sge-suite/sge/blob/master/database/factories/GrantingPartyFactory.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/GrantingPartyTest.php
 ---
-> [!success] Estado
-> Base backend implementada: migration, model, factory, validação PHP, endereço obrigatório, exclusão lógica e testes PostgreSQL. Cadastro em telas e fluxos de estágio permanece para etapas futuras.
+> [!warning] Estado
+> A migration, o model, a factory, as validações e os testes atuais estão implementados. O schema atual ainda não tem `campus_id` e mantém os cadastros globais. A decisão de produto agora é vincular cada concedente a um campus; a alteração da migration, o escopo de acesso e a aprovação das solicitações ainda estão pendentes.
 
 ## Contrato
 
@@ -33,9 +33,9 @@ source_refs: https://github.com/sge-suite/sge/blob/master/database/migrations/20
 | `updated_at` | `timestamp(0)` | sim | — | Timestamp nativo do Laravel, atualizado pelo Eloquent. |
 | `deleted_at` | `timestamp(0)` | sim | — | Exclusão lógica sem apagar histórico. |
 
-Não exigir unicidade global de CNPJ: unidades distintas podem compartilhar o documento. O nome completo da unidade e o endereço diferenciam os registros. Para ser selecionada na solicitação de estágio, a parte concedente precisa estar cadastrada; não é exigido convênio ou termo prévio como regra de validação. Quando houver, o número do processo de credenciamento preenche o campo correspondente do documento. O estágio guardará FK e snapshot.
+Cada linha de `granting_parties` pertencerá a um campus por meio de `campus_id` (FK obrigatória, ainda pendente na migration). Esse escopo não será alterado na edição comum; para usar a mesma organização ou pessoa em outro campus, será criado outro cadastro local. Os cadastros serão separados por campus, mesmo quando uma empresa exigir o CNPJ da matriz para uma filial ou várias escolas estaduais compartilharem o mesmo CNPJ. O CPF também poderá aparecer em cadastros de campi diferentes; dados de conselho, credenciamento, contatos e endereço ficam no cadastro local e não são compartilhados automaticamente. Não criar unicidade global nem por campus para `document_number`; CPF/CNPJ identificam o documento informado, mas não distinguem necessariamente a unidade operacional. O CPF da parte concedente é independente de `users.cpf` e não deve mesclar contas de usuário. Para ser selecionada na solicitação de estágio, a concedente precisa estar cadastrada para o campus do estágio. Quando houver, o número do processo de credenciamento preenche o campo correspondente do documento. O estágio guardará FK e snapshot.
 
-Nesta implementação, `name` contém o nome completo da concedente ou unidade. Não há coluna própria de unidade. A migration não cria índices secundários nem compostos; a definição de índices de busca fica para uma etapa posterior. `document_type` usa o cast de `PartyDocumentType` e `document_number` é normalizado e validado no evento `saving` com os casts existentes `CpfCast` e `CnpjCast`, de acordo com o tipo. `PhoneCast` aceita telefone brasileiro fixo ou celular com DDD, com máscara ou somente dígitos; valida e armazena apenas dígitos, convertendo telefone vazio em `null`. O model também valida os limites dos campos opcionais e registra alterações cadastrais no Activity Log.
+No schema atual, `name` contém o nome completo da concedente ou unidade e ainda não há coluna própria de unidade ou `campus_id`. A alteração futura adicionará o escopo do campus sem tratar CPF/CNPJ como chave de compartilhamento. A migration atual não cria índices secundários nem compostos; a definição de índices de busca fica para uma etapa posterior. `document_type` usa o cast de `PartyDocumentType` e `document_number` é normalizado e validado no evento `saving` com os casts existentes `CpfCast` e `CnpjCast`, de acordo com o tipo. `PhoneCast` aceita telefone brasileiro fixo ou celular com DDD, com máscara ou somente dígitos; valida e armazena apenas dígitos, convertendo telefone vazio em `null`. O model também valida os limites dos campos opcionais e registra alterações cadastrais no Activity Log.
 
 As colunas textuais usam `$table->string()` sem comprimento explícito (`varchar(255)` no PostgreSQL). Os limites de domínio, incluindo os tamanhos de CPF e CNPJ, são aplicados em PHP, sem constraints `CHECK` no banco. Endereço, representante e área de atuação são obrigatórios para a concedente. O CEP continua opcional na tabela de endereços.
 
@@ -45,6 +45,8 @@ Os campos de endereço continuam em `addresses`, e não são repetidos nesta tab
 
 - [x] Usar `name` para o nome completo da concedente/unidade nesta implementação.
 - [x] Criar migration e cast de `PartyDocumentType` no Model.
+- [ ] Adicionar FK obrigatória `campus_id` e aplicar escopo por campus nas consultas, Policies e fluxos de estágio.
+- [ ] Preservar `document_number` sem unicidade global ou por campus.
 - [ ] Definir índices de busca em etapa posterior, sem impor unicidade indevida.
 - [x] Criar factory para CPF, CNPJ e unidades distintas.
 - [x] Validar documento e normalização.

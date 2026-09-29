@@ -23,9 +23,9 @@ Para a sequência e o andamento atuais, consulte [Fases de desenvolvimento](doc:
 - [Fase 00 — Preparação](doc:fase-00-preparacao) — **completed** — Checklist do ambiente, qualidade e fluxo de trabalho do projeto novo.
 - [Fase 01 — Fundação de dados](doc:fase-01-fundacao-de-dados) — **completed** — Migrations, Models, factories e testes PostgreSQL da base de dados.
 - [Fase 02 — Conta e contexto](doc:fase-02-conta-e-contexto) — **in-progress** — Contexto, `admin:create`, troca própria de senha/e-mail e avisos de conta/vínculo implementados; cadastro pela interface e outras edições pessoais pendentes.
-- [Fase 03 — Activity Log](doc:fase-03-activity-log) — **in-progress** — Eventos Eloquent e autoria implementados; auditoria dos demais campos de `UserPersonalData` precisa ser alinhada ao contrato.
+- [Fase 03 — Activity Log](doc:fase-03-activity-log) — **completed** — Eventos Eloquent, autoria por vínculo e auditoria dos campos pessoais e profissionais implementados.
 - [Fase 04 — Integração de e-mail](doc:fase-04-integracao-de-email) — **in-progress** — Pipeline em fila e três fluxos de conta integrados; notificações operacionais de domínio e administração de entregas pendentes.
-- [Fase 05 — Administração hierárquica](doc:fase-05-administracao) — **in-progress** — Gestão de campi pelo backend concluída; telas Livewire e demais operações administrativas pendentes.
+- [Fase 05 — Administração hierárquica](doc:fase-05-administracao) — **in-progress** — Gestão de campi com backend e telas Livewire para o Administrador do Sistema concluída; interface local e demais operações administrativas pendentes.
 - [Fase 06 — Documentos](doc:fase-06-documentos) — **planned** — Checklist de templates DOCX, versões, geração e acompanhamento de assinatura.
 - [Fase 07 — Abertura do estágio](doc:fase-07-abertura-do-estagio) — **planned** — Checklist de criação da solicitação, envio, análise e formalização inicial do estágio.
 - [Fase 08 — Estágio em andamento](doc:fase-08-estagio-em-andamento) — **planned** — Checklist de pausas, substituições, aditivos, cancelamento e histórico do estágio.
@@ -111,7 +111,7 @@ Sequência física dos arquivos em `database/migrations`; os números permanecem
 - [Helper — Funções globais](doc:helper-funcoes-globais) — **implemented** — Funções globais carregadas pelo Composer que delegam a helpers de domínio.
 - [Helper — NumberToWordsHelper](doc:helper-numbertowordshelper) — **implemented** — Conversão determinística de números e valores em reais para texto por extenso.
 - [Helpers](doc:helpers) — **in-progress** — Índice dos helpers de formatação, normalização e apresentação do SGE.
-- [Model — User](doc:model-user) — **in-progress** — Conta autenticável, autoria no Activity Log, recuperação de senha enfileirada e relações; falta ampliar a auditoria dos campos de `UserPersonalData`.
+- [Model — User](doc:model-user) — **in-progress** — Conta autenticável, autoria no Activity Log, recuperação de senha enfileirada e relações; cadastro e edição de dados pessoais pela interface seguem pendentes.
 - [Provider — AppServiceProvider](doc:provider-appserviceprovider) — **implemented** — Auditoria, integridade de `activity_log`, proteção Eloquent, locale, timezone e moeda.
 - [Provider — FortifyServiceProvider](doc:provider-fortifyserviceprovider) — **implemented** — Configuração atual de Actions, telas e rate limiting de autenticação do Fortify.
 - [Providers](doc:providers) — **in-progress** — Índice dos Service Providers que configuram autenticação, locale, moeda e comportamento Eloquent.

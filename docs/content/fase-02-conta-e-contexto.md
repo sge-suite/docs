@@ -58,4 +58,4 @@ O contexto de vínculo ativo, a proteção do painel, a seleção e troca de ví
 
 ## Fase seguinte na sequência
 
-O contexto e as configurações de acesso implementados dão suporte às próximas fases. A criação de contas pela interface e a edição de dados pessoais continuam em aberto; veja também as pendências registradas em [Fase 03 — Activity Log](doc:fase-03-activity-log).
+O contexto e as configurações de acesso implementados dão suporte às próximas fases. A criação de contas pela interface e a edição de dados pessoais continuam em aberto.

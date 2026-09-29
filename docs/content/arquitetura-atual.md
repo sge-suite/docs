@@ -21,7 +21,7 @@ Use esta página para saber o que já existe e o que ainda está sendo planejado
 A implementação atual utiliza:
 
 - Laravel 13.
-- PHP 8.3 ou superior.
+- PHP `^8.3 (o ambiente de desenvolvimento atual usa PHP 8.5).
 - Livewire 4 e Flux UI.
 - Tailwind CSS e Vite.
 - PostgreSQL.
@@ -32,9 +32,8 @@ A implementação atual utiliza:
 
 ## Dependências do domínio
 
-- `phpoffice/phpword` como dependência direta para inspeção e geração de DOCX;
-- `brick/math` é usado pela implementação atual de escrita monetária por extenso; a declaração como dependência direta ainda precisa ser revisada no projeto;
-- extensões PHP `zip`, `xml`, `dom`, `mbstring` e `intl` na imagem de produção;
+- O `composer.json` atual não declara PhpOffice/PhpWord, usado apenas quando a geração DOCX for implementada;
+- o helper de valores por extenso importa Brick Math, mas o pacote não está declarado diretamente no `composer.json`.
 
 ## Organização do código
 
@@ -45,11 +44,12 @@ A implementação atual utiliza:
 | Área                    | Situação    | Evidência                                                                            |
 | ----------------------- | ----------- | ------------------------------------------------------------------------------------ |
 | Autenticação            | ✅          | Fortify, páginas Livewire e rotas protegidas                                         |
-| Usuários                | ✅          | `app/Models/User.php` e migration `users`                                            |
-| Autorização             | Parcial     | Gates/Policies nativos, `AffiliationType` e vínculo ativo; faltam autorizações dos fluxos operacionais |
-| Auditoria               | ✅          | tabela `activity_log`                                                                |
-| Infraestrutura de mídia | ✅          | tabela `media`/Spatie Medialibrary; templates DOCX e versionamento seguem planejados |
+| Usuários                | Parcial     | Model, autenticação, configurações de conta e provisionamento por `admin:create`; não há telas de administração de usuários                                            |
+| Autorização             | Parcial     | Contexto de vínculo ativo e autorização de gestão global de campi; faltam autorizações das jornadas operacionais e interfaces locais |
+| Auditoria               | ✅          | Spatie Activitylog, autoria pelo vínculo ativo e campos pessoais/profissionais auditados                  |
+| Infraestrutura de mídia | Parcial     | Spatie Medialibrary disponível; Models e schema de templates/versões existem, mas upload e geração DOCX seguem pendentes |
 | Estágios                | Parcial     | Models, migrations, validações e auditoria existem; faltam Actions, Policies completas e jornadas da aplicação |
+| Administração de campi   | Parcial     | Páginas Livewire para Administrador do Sistema, controller e Scout/Meilisearch; interface local ainda pendente |
 | Relatórios              | Planejado   | Devem consumir o domínio e respeitar o escopo do vínculo ativo                       |
 
 ## Regras de arquitetura

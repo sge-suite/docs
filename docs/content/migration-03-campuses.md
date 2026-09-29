@@ -7,7 +7,7 @@ status: implemented
 visibility: public
 tags: sge/migrations, sge/banco-de-dados, sge/campus
 related: migration-01-addresses
-source_refs:
+source_refs: https://github.com/sge-suite/sge/blob/master/database/migrations/2026_09_21_132408_create_campuses_table.php, https://github.com/sge-suite/sge/blob/master/app/Models/Campus.php, https://github.com/sge-suite/sge/blob/master/app/Http/Controllers/CampusController.php, https://github.com/sge-suite/sge/blob/master/config/scout.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/CampusTest.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/CampusManagementTest.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/CampusInterfaceTest.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/CampusSearchTest.php
 ---
 > [!success] Estado
 > Implementada com dependência obrigatória de [`addresses`](doc:migration-01-addresses). O representante legal é cadastrado por nome e cargo, sem depender de usuário ou vínculo institucional.
@@ -18,14 +18,14 @@ source_refs:
 | ------------------------------------- | -------------------------------------------- |
 | `id`                                  | bigint, chave primária.                      |
 | `name`                                | nome institucional completo, obrigatório.    |
-| `cnpj`                                | `char(14)`, nullable, normalizado e sem formatação. |
-| `phone`                              | `varchar` padrão do Laravel, nullable e normalizado. |
-| `email`                              | `varchar` padrão do Laravel, nullable.       |
+| `cnpj`                                | `char(14)`, obrigatório, normalizado, sem formatação e sem unicidade. |
+| `phone`                              | `varchar` padrão do Laravel, obrigatório e normalizado. |
+| `email`                              | `varchar` padrão do Laravel, obrigatório.       |
 | `address_id`                          | FK obrigatória para endereço atual.          |
-| `legal_representative_name`           | `varchar(255)`, nullable no cadastro inicial; nome exibido no documento. |
-| `legal_representative_position`       | `varchar(255)`, nullable no cadastro inicial; cargo exibido no documento. |
-| `insurance_company_name`             | `varchar(255)`, nullable no cadastro inicial; obrigatório se o template citar o seguro. |
-| `insurance_policy_number`            | `varchar` padrão do Laravel, nullable no cadastro inicial; obrigatório se o template citar o seguro. |
+| `legal_representative_name`           | `varchar(255)`, obrigatório no cadastro; nome exibido no documento. |
+| `legal_representative_position`       | `varchar(255)`, obrigatório no cadastro; cargo exibido no documento. |
+| `insurance_company_name`             | `varchar(255)`, obrigatório no cadastro. |
+| `insurance_policy_number`            | `varchar` padrão do Laravel, obrigatório no cadastro. |
 | `deactivated_at`                      | `timestamp(0)` nullable e indexado; desativa o campus e bloqueia alterações em seus recursos. |
 | timestamps / `deleted_at`             | `timestamp(0)` para auditoria e exclusão lógica. |
 
@@ -35,13 +35,15 @@ Não criar `code`. O campus é delimitado pelo vínculo ativo e o ciclo de ativa
 
 `Campus` usa `SoftDeletes`, registra alterações cadastrais no Activity Log e expõe o escopo `active()` para registros sem `deactivated_at`. O Model oferece `deactivate()`, `reactivate()` e `assertWritable()`; campus desativado só pode ser reativado, sem outras mudanças cadastrais. O endereço atual é obrigatório (`belongsTo`/`hasMany`) e sua exclusão é `RESTRICT`, inclusive enquanto o campus estiver apenas excluído logicamente. O CNPJ é normalizado para 14 dígitos e validado com `laravellegends/pt-br-validator`; o telefone reutiliza `PhoneCast`, aceitando telefone fixo ou celular com DDD e persistindo somente os dígitos.
 
-`CampusController` implementa as rotas web de criação, edição, desativação e reativação por Eloquent, sem views nesta etapa. `CampusPolicy` limita a consulta ao Administrador do Sistema e ao Administrador do Campus do próprio registro. O Administrador do Campus pode alterar apenas telefone, representante e seguro; o Administrador do Sistema pode alterar todos os campos cadastrais. A desativação exige a senha atual em cada solicitação, preserva vínculos e estados dos processos, e registra os valores anteriores/novos com autoria do vínculo ativo. A senha não é gravada no log.
+`CampusController` implementa as rotas web de criação, edição, desativação e reativação por Eloquent. Páginas Livewire com Flux oferecem listagem, cadastro, detalhes e edição exclusivamente ao Administrador do Sistema, enviando as gravações a esse controller. `CampusPolicy` mantém a consulta de backend para o Administrador do Campus do próprio registro; `viewAdministration` restringe a interface global ao vínculo ativo de Administrador do Sistema. O Administrador do Campus pode alterar apenas telefone, representante e seguro pelo backend; o Administrador do Sistema pode alterar todos os campos cadastrais. A desativação exige a senha atual em cada solicitação, preserva vínculos e estados dos processos, e registra os valores anteriores/novos com autoria do vínculo ativo. A senha não é gravada no log.
 
-Campus inativo permanece consultável para leitura autorizada, mas nenhum recurso ligado a ele pode ser alterado. As telas, gestão de outros recursos e integração dessa guarda a futuros Jobs e schedules permanecem pendentes. A reativação não altera vínculos nem dispara processamento atrasado.
+Campus inativo permanece consultável para leitura autorizada e sua tela global exibe somente os dados e a opção de reativar. A guarda de escrita está aplicada às operações de campus; sua integração aos demais recursos, futuros Jobs e schedules permanece obrigatória e pendente junto desses fluxos. A interface local do Administrador do Campus também permanece pendente. A reativação não altera vínculos nem dispara processamento atrasado.
 
-`CampusFactory` cobre o representante legal, o cadastro inicial sem seguro, o estado `withInsurance()` e o estado `deactivated()`. A configuração de seguro exigida por um template permanece para o futuro serviço de geração documental.
+Os campos cadastrais acima são obrigatórios no Model, nos Form Requests e na migration original. Somente o CEP do endereço é opcional. Atualizações parciais continuam permitidas, mas não podem limpar esses campos. `CampusFactory` já fornece representante e seguro completos; mantém os estados `withInsurance()` e `deactivated()`.
 
-`tests/Feature/CampusTest.php`, `tests/Feature/CampusManagementTest.php` e `tests/Unit/CnpjCastTest.php` cobrem schema PostgreSQL, índices, FK `RESTRICT`, nulabilidade, casts, validações, relações, consulta por vínculo, permissões, endereço, desativação com senha, reativação, Activity Log, transações e preservação dos vínculos.
+`Campus` usa Scout com Meilisearch para busca tolerante a erros pelo nome. O índice contém apenas ID, nome e `deactivated_at`; a situação é filtrada no próprio mecanismo de busca. A sincronização usa fila após o commit, evitando publicar registros descartados. O índice é auxiliar: a persistência, a autorização e a auditoria continuam no PostgreSQL. Pode haver um intervalo entre a gravação e a atualização da busca.
+
+`CampusTest`, `CampusManagementTest`, `CampusInterfaceTest`, `CampusSearchTest` e `CnpjCastTest` cobrem schema PostgreSQL, índices, FK `RESTRICT`, obrigatoriedade, casts, validações, relações, consulta por vínculo, permissões, endereço, desativação com senha, reativação, Activity Log, transações, preservação dos vínculos e integração real de busca.
 
 ## Checklist
 
@@ -49,14 +51,15 @@ Campus inativo permanece consultável para leitura autorizada, mas nenhum recurs
 - [x] Criar Model `Campus`, factory e SoftDeletes.
 - [x] Normalizar e validar CNPJ e telefone.
 - [x] Manter nome e cargo do representante legal no próprio campus, sem vínculo institucional.
-- [ ] Exigir a configuração de seguro quando o template documental a citar.
+- [x] Exigir CNPJ, contatos, representante e seguro já no cadastro do campus.
 - [x] Implementar escopo de campus ativo, desativação, reativação, bloqueio de edição enquanto inativo e autorização administrativa.
 - [x] Exigir confirmação da senha atual em cada desativação.
 - [x] Preservar vínculos e estados de processos ao desativar.
-- [ ] Criar as views Livewire da gestão administrativa.
+- [x] Criar as views Livewire da gestão administrativa para o Administrador do Sistema.
+- [ ] Criar a interface local do Administrador do Campus.
 - [ ] Integrar a guarda de campus ativo aos futuros fluxos de escrita, Jobs e schedules dos recursos vinculados.
 - [x] Registrar alterações cadastrais no Activity Log.
-- [x] Testar campus ativo, desativado, endereço obrigatório, representante e seguro opcional.
+- [x] Testar campus ativo, desativado, endereço, representante e seguro obrigatórios, CEP opcional e CNPJ repetido.
 - [x] Testar migrate/rollback e reaplicação da migration.
 
 ## Dependências

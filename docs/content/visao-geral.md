@@ -11,7 +11,7 @@ source_refs:
 diagram: visao-geral-processo
 ---
 > [!info] Estado da página
-> Esta é a visão funcional definida para o SGE. O processo descrito é o comportamento-alvo; a implementação ainda está em andamento conforme o [planejamento](doc:planejamento).
+> Esta página descreve o comportamento-alvo do SGE; nem todas as jornadas estão disponíveis. Hoje há autenticação, contexto de vínculo, configurações de conta e gestão global de campi. Consulte o [planejamento](doc:planejamento) e as [fases de desenvolvimento](doc:fases-de-desenvolvimento) para distinguir funcionalidades disponíveis das próximas entregas.
 
 ## Em uma frase
 

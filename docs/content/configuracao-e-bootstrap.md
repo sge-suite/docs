@@ -90,11 +90,10 @@ O Fortify registra as rotas de autenticação. As views atuais ficam em `resourc
 - `app/helpers.php` carregado como arquivo global;
 - scripts `lint:check`, `types:check`, `test`, `dev` e `setup`.
 
-Dependências de domínio ainda não adicionadas ao projeto novo:
+Dependências de domínio:
 
-- `phpoffice/phpword` para [geração DOCX](doc:geracao-de-documentos-docx-e-variaveis);
-- `brick/math` como dependência direta, pois [Helper — NumberToWordsHelper](doc:helper-numbertowordshelper) importa suas classes;
-- extensões PHP `zip`, `xml`, `dom`, `mbstring` e `intl` na imagem/CI.
+- `phpoffice/phpword` ainda não está no `composer.json`; será necessário para [geração DOCX](doc:geracao-de-documentos-docx-e-variaveis);
+- [Helper — NumberToWordsHelper](doc:helper-numbertowordshelper) importa classes de `brick/math`, mas o pacote está ausente das dependências diretas do `composer.json`.
 
 ## Checklist
 

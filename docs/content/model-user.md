@@ -25,7 +25,7 @@ Model autenticável do Laravel. Usa `HasFactory`, `LogsActivity` e `Notifiable`,
 
 `LogsActivity` registra alterações dos campos fillable, exceto `password`. A mudança de senha gera `password_changed` sem valor anterior, senha nova ou hash. `sendPasswordResetNotification()` usa `QueuedPasswordReset`, enfileirada após o commit e criptografada; recuperação não cria linhas em `email_messages` ou `email_delivery_attempts`.
 
-Há uma lacuna em `UserPersonalData`: o Model relacionado registra somente `emancipation_verified_at`, e não os demais campos cadastrais, apesar da decisão do projeto de incluir campos de negócio na auditoria.
+`UserPersonalData` registra seus atributos fillable (`user_id`, dados pessoais/profissionais e `address_id`) e também `emancipation_verified_at`, que não é fillable porque representa estado controlado pela aplicação. Esse campo é incluído explicitamente no Activity Log com valores anteriores e novos. `id`, `created_at` e `updated_at` ficam fora do registro. A cobertura é verificada por `DatabaseAuditTest`.
 
 ## Delimitação de responsabilidade
 
@@ -42,7 +42,7 @@ Há uma lacuna em `UserPersonalData`: o Model relacionado registra somente `eman
 - [x] Testar conta sem dados pessoais completos.
 - [x] Testar conta com múltiplos vínculos em PostgreSQL.
 - [x] Testar recuperação enfileirada sem persistir token ou corpo nas tabelas próprias de e-mail.
-- [ ] Registrar no Activity Log os campos cadastrais alterados de `UserPersonalData`, conforme decisão do projeto.
+- [x] Registrar no Activity Log os campos pessoais e profissionais alterados de `UserPersonalData`, com valores anteriores/novos e autoria do vínculo ativo.
 
 ## Relacionamentos
 

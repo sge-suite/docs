@@ -6,6 +6,6 @@
     "dev": "aurelius dev --site docs"
   },
   "devDependencies": {
-    "@avw/aurelius": "git+https://github.com/ArthurWillers/Aurelius.git#v0.4.19"
+    "@avw/aurelius": "git+https://github.com/ArthurWillers/Aurelius.git#v0.5.1"
   }
 }

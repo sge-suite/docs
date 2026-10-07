@@ -11,7 +11,7 @@ source_refs:
 diagram: visao-geral-processo
 ---
 > [!info] Estado da página
-> Esta página descreve o comportamento-alvo do SGE; nem todas as jornadas estão disponíveis. Hoje há autenticação, contexto de vínculo, configurações de conta e gestão global de campi. Consulte o [planejamento](doc:planejamento) e as [fases de desenvolvimento](doc:fases-de-desenvolvimento) para distinguir funcionalidades disponíveis das próximas entregas.
+> Esta página descreve o comportamento-alvo do SGE; nem todas as jornadas estão disponíveis. Hoje há autenticação, contexto e configurações de conta, gestão global de campi, administração de contas e vínculos administrativos e painel global do Administrador do Sistema. As jornadas completas de estágio seguem em desenvolvimento. Consulte o [planejamento](doc:planejamento) e as [fases de desenvolvimento](doc:fases-de-desenvolvimento) para distinguir funcionalidades disponíveis das próximas entregas.
 
 ## Em uma frase
 

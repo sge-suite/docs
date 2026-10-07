@@ -30,7 +30,7 @@ O sistema trabalha com uma conta por pessoa e, quando aplicável, com um **vínc
 | **Definido** | A regra foi aprovada para o produto, mas sua implementação completa ainda está pendente. |
 | **Planejado** | O trabalho ainda não começou ou depende de decisão anterior. |
 
-No estado atual, login, recuperação de senha, dashboard, seleção e troca de vínculo, configurações de senha/e-mail e o comando `admin:create` estão disponíveis. O Administrador do Sistema também tem páginas para listar, cadastrar, consultar, editar, desativar e reativar campi; a busca textual de campi usa Meilisearch pelo nome, e a consulta de cidade usa nome/código IBGE filtrados por UF. O sistema ainda não oferece administração de usuários pela interface nem as jornadas completas de solicitação, documentação, execução, avaliação e conclusão. O Activity Log registra os campos pessoais e profissionais configurados em `UserPersonalData`; consulte [Fase 03 — Activity Log](doc:fase-03-activity-log).
+No estado atual, login, recuperação de senha, dashboard, seleção e troca de vínculo, configurações próprias de senha/e-mail e o comando `admin:create` estão disponíveis. O Administrador do Sistema também tem páginas para gerir campi e contas/vínculos administrativos, além de um painel global com totais de usuários, vínculos e campi e gráficos textuais por status de estágios, documentos e solicitações. A administração de contas permite editar nome, CPF e e-mail de login, administrar os vínculos administrativos e encerrá-los com os avisos e proteções previstos. A listagem de Usuários mostra contas com vínculo administrativo; o contador do painel considera todas as linhas da tabela `users`. As jornadas completas de solicitação, documentação, execução, avaliação e conclusão ainda não estão disponíveis. O Activity Log registra as alterações auditadas; consulte [Fase 03 — Activity Log](doc:fase-03-activity-log).
 
 ## 3. Quem participa
 
@@ -117,7 +117,7 @@ O supervisor preenche a avaliação quando ela for liberada e o orientador regis
 | Área | Estado | Próximo resultado esperado |
 | --- | --- | --- |
 | Preparação do projeto | **Concluída** | Manter ambiente, qualidade e fluxo de revisão. |
-| Conta e autenticação | **Implementada parcialmente** | Contexto, `admin:create`, alteração de senha/e-mail e avisos de conta/vínculo existem; cadastro pela interface e edição de outros dados pessoais ainda faltam. |
+| Conta e autenticação | **Implementada parcialmente** | Contexto, `admin:create`, administração de contas/vínculos administrativos, alteração própria de senha/e-mail e avisos existem; edição própria do perfil pessoal ainda falta. |
 | Fundação técnica | **Implementada parcialmente** | Models e migrations de domínio existem; completar autorizações, Actions transacionais e integração das jornadas. |
 | E-mails e documentos | **Implementada parcialmente** | Pipeline em fila e avisos de conta, vínculo e e-mail estão integrados; notificações operacionais de domínio, telas administrativas, geração e assinatura ainda faltam. |
 | Domínio de estágios | **Base de dados implementada; fluxos pendentes** | Entidades e estados existem no backend; implementar jornadas, decisões e interfaces. |
@@ -128,7 +128,7 @@ A sequência é: 00 — preparação; 01 — fundação de dados; 02 — conta e
 
 O projeto atual usa Laravel 13, PHP `^8.3` (ambiente atual: PHP 8.5), Livewire 4, Flux UI, Tailwind CSS, Vite, PostgreSQL, Laravel Fortify, Spatie Activitylog, Spatie Medialibrary, Laravel Scout e Meilisearch. A aplicação já possui autenticação, rotas protegidas, configurações de perfil e segurança, filas, cache, auditoria e infraestrutura de mídia.
 
-A base de Models e migrations do domínio de estágio já existe, assim como Policies básicas para vínculo e consulta de atividades. Há transporte de e-mail em fila integrado à conta e telas globais de campi. Ainda faltam administração de usuários e outras operações administrativas, autorizações e Actions para várias jornadas, geração documental e comandos agendados do domínio. O projeto já tem comandos Artisan de bootstrap e importação; `routes/console.php` ainda não agenda tarefas de domínio.
+A base de Models e migrations do domínio de estágio já existe, assim como Policies para campi e para a administração de contas/vínculos administrativos. Há transporte de e-mail em fila, telas globais de campi e usuários e painel global do Administrador do Sistema. Ainda faltam a interface local, outros cadastros administrativos, autorizações e Actions para várias jornadas, geração documental e comandos agendados do domínio. O projeto já tem comandos Artisan de bootstrap e importação; `routes/console.php` ainda não agenda tarefas de domínio.
 
 ## 9. Onde aprofundar
 

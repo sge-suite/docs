@@ -7,39 +7,56 @@ status: in-progress
 visibility: public
 tags: sge/desenvolvimento, sge/autorizacao, sge/checklist
 related: pessoas-e-responsabilidades, matriz-de-autorizacao, perfis-e-responsabilidades-por-vinculo, fase-06-documentos
-source_refs: https://github.com/sge-suite/sge/blob/master/routes/web.php, https://github.com/sge-suite/sge/blob/master/app/Http/Controllers/CampusController.php, https://github.com/sge-suite/sge/blob/master/app/Policies/CampusPolicy.php, https://github.com/sge-suite/sge/blob/master/app/Models/Campus.php, https://github.com/sge-suite/sge/blob/master/config/scout.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/CampusInterfaceTest.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/CampusSearchTest.php
+source_refs: https://github.com/sge-suite/sge/blob/master/routes/web.php, https://github.com/sge-suite/sge/blob/master/app/Http/Controllers/CampusController.php, https://github.com/sge-suite/sge/blob/master/app/Http/Controllers/UserController.php, https://github.com/sge-suite/sge/blob/master/app/Http/Controllers/AdministrativeAffiliationController.php, https://github.com/sge-suite/sge/blob/master/app/Actions/CreateAdministrativeAffiliation.php, https://github.com/sge-suite/sge/blob/master/app/Actions/ManageAdministrativeUser.php, https://github.com/sge-suite/sge/blob/master/app/Actions/UpdateAdministrativeAffiliation.php, https://github.com/sge-suite/sge/blob/master/app/Actions/AdministrativeAffiliationTransaction.php, https://github.com/sge-suite/sge/blob/master/app/Actions/GetAdministrativeDashboardMetrics.php, https://github.com/sge-suite/sge/blob/master/app/Policies/CampusPolicy.php, https://github.com/sge-suite/sge/blob/master/app/Policies/UserPolicy.php, https://github.com/sge-suite/sge/blob/master/app/Policies/AffiliationPolicy.php, https://github.com/sge-suite/sge/blob/master/resources/views/pages/dashboard/partials/system-administrator.blade.php, https://github.com/sge-suite/sge/blob/master/resources/views/components/users/%E2%9A%A1form-fields.blade.php, https://github.com/sge-suite/sge/blob/master/resources/views/emails/affiliation-created.blade.php, https://github.com/sge-suite/sge/blob/master/resources/views/emails/account-email-changed.blade.php, https://github.com/sge-suite/sge/blob/master/config/scout.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/CampusInterfaceTest.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/CampusSearchTest.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/UserManagementTest.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/UserInterfaceTest.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/UserSearchTest.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/AdministrativeUserChangesTest.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/DashboardTest.php, https://github.com/sge-suite/sge/blob/master/tests/Unit/AdministrativeAffiliationConcurrencyTest.php
 ---
 Base: [papéis por vínculo](doc:pessoas-e-responsabilidades), [Matriz de autorização](doc:matriz-de-autorizacao) e [Perfis e responsabilidades por vínculo](doc:perfis-e-responsabilidades-por-vinculo).
 
-A estrutura de perfis e o contexto de vínculo existem. O provisionamento inicial ou a inclusão de Administrador do Sistema já pode ser feita com `admin:create`. A gestão de campi dispõe de backend em `CampusController`, com `CampusPolicy`, Form Requests, Eloquent e testes, e de páginas Livewire com Flux para o Administrador do Sistema. Os formulários enviam as gravações ao controller existente; busca, filtros, paginação e escolha de cidade por UF usam Livewire. A interface do Administrador do Campus e as demais operações administrativas continuam pendentes.
+A estrutura de perfis e o contexto de vínculo existem. O provisionamento inicial ou a inclusão de Administrador do Sistema também pode ser feito por `admin:create`. A gestão global de campi tem backend, Policies, Form Requests, testes e páginas Livewire com Flux. O Administrador do Sistema também dispõe de telas para administrar contas e vínculos administrativos. A interface local do Administrador do Campus, cursos, tipos de estágio e operações das jornadas de estágio continuam pendentes.
 
 ## Policies e escopo
 
 - [x] Disponibilizar o contexto único do vínculo ativo para Policies e Actions por `ActiveAffiliationContext`; completar os resolvedores de escopo por recurso junto de cada fluxo.
 - [x] Criar `CampusPolicy` para consulta e gestão de campi, usando somente o vínculo ativo selecionado.
-- [ ] Criar Policies para pessoa, vínculo, curso, tipo, concedente, estágio e documento.
-- [ ] Validar usuário, vínculo ativo, `AffiliationType`, campus/curso, posse e estado do registro em toda ação.
-- [ ] Registrar `Gate::before` exclusivamente para acesso global do Administrador do Sistema e testar que o vínculo ativo continua obrigatório.
-- [x] Criar testes positivos e negativos para as operações de campus.
+- [x] Criar `UserPolicy` e ampliar `AffiliationPolicy` para contas e vínculos administrativos, exigindo o Administrador do Sistema ativo selecionado.
+- [ ] Criar Policies para cursos, tipos, concedentes, estágios e documentos.
+- [x] Revalidar vínculo selecionado, perfil e proteções administrativas dentro das transações de gestão de usuários e vínculos.
+- [x] Manter as permissões de notificações em `AffiliationPolicy`; não há bypass global por `Gate::before`.
+- [x] Criar testes positivos e negativos para operações de campus e administração de usuários/vínculos.
 - [ ] Criar testes positivos e negativos dos demais recursos por função.
 - [ ] Cobrir para cada `AffiliationType` as ações, limites, destinatários de notificação e consultas descritos em [Perfis e responsabilidades por vínculo](doc:perfis-e-responsabilidades-por-vinculo).
-- [ ] Impedir que Administrador do Campus cadastre Administrador do Sistema.
+- [x] Restringir a gestão de usuários ao Administrador do Sistema, impedindo que o Administrador do Campus cadastre Administradores do Sistema.
 - [ ] Permitir ao Setor de Estágio cadastrar usuários permitidos, exceto administradores.
 - [ ] Aplicar as mesmas regras para edição e criação.
 
 ## Administrador do Sistema
 
-- [ ] Definir e testar as operações globais permitidas antes de criar suas telas.
+- [x] Definir e testar as operações globais permitidas antes de criar suas telas.
 - [x] Implementar o backend de cadastro, edição, desativação e reativação de campi por `CampusController`, usando `Campus::create()`, `$campus->update()` e métodos de ciclo de vida do Model.
 - [x] Exigir a senha atual em cada desativação; bloquear alterações no campus inativo e manter os vínculos existentes.
 - [x] Criar as telas Livewire de listagem, cadastro, detalhes e edição de campi para o Administrador do Sistema.
 - [x] Disponibilizar busca textual tolerante a erros por nome, filtro de situação, paginação e seleção de cidade por UF. CNPJ não faz parte dos atributos pesquisáveis do índice atual.
 - [x] Confirmar desativação em modal com senha atual; confirmar reativação sem senha adicional.
 - [x] Restringir rotas, navegação e requisições Livewire ao vínculo ativo de Administrador do Sistema.
-- [ ] Administrar Administradores do Sistema e do Campus conforme permissão.
-- [ ] Reutilizar o subfluxo de conta/adicionar vínculo.
-- [x] O comando `admin:create` avisa os e-mails da conta e do vínculo quando adiciona um vínculo existente, deduplicando endereços; na conta nova, cria primeiro vínculo e envia convite apenas ao e-mail compartilhado.
-- [ ] Integrar o mesmo comportamento às futuras telas administrativas de criação de conta e vínculo.
+- [x] Administrar contas e vínculos de Administrador do Sistema e Administrador do Campus pela interface, com políticas e validação de escopo.
+- [x] Reutilizar a criação transacional de conta/vínculo compartilhada com `admin:create`.
+- [x] Enviar convites e avisos de novo vínculo pela interface, informando a função adicionada e deduplicando os endereços da conta e do vínculo.
+- [x] Permitir editar nome, CPF e e-mail de login da conta; a mudança de e-mail envia os avisos aos endereços anterior e novo, como na alteração própria em Segurança.
+- [x] Separar edição da conta da edição do vínculo; no vínculo, permitir somente e-mail e registro institucional, mantendo pessoa, tipo e campus fixos.
+- [x] Desativar, reativar ou excluir vínculo e excluir conta quando não houver registros associados; as operações de encerramento enviam aviso e preservam as proteções de último Administrador do Sistema.
+
+### Telas de contas e vínculos administrativos
+
+As rotas `users.*` são exclusivas do Administrador do Sistema com vínculo ativo selecionado. A listagem tem uma linha por conta com pelo menos um vínculo administrativo, inclusive desativado; busca nomes pelo Scout/Meilisearch e consulta CPF ou e-mail de login completos por igualdade, com 15 resultados por página. O painel administrativo, em contraste, conta todas as linhas de `users`.
+
+O cadastro começa por consulta explícita do CPF. Para conta nova, um único e-mail é salvo na conta e no primeiro vínculo; é gerada uma senha aleatória desconhecida e enviado convite para definir senha. Para conta existente, nome, CPF e login são preservados e o campo único de e-mail vale para o novo vínculo. O aviso de novo vínculo identifica tipo, campus e registro institucional; se a conta já tiver outro registro, o formulário permite copiá-lo e ajustá-lo. Administrador do Campus exige campus ativo; Administrador do Sistema não recebe campus nem curso. Não se escolhe automaticamente o tipo de vínculo.
+
+A edição da conta permite corrigir nome, CPF e endereço de login. A troca do login invalida tokens de redefinição pendentes e envia avisos aos endereços anterior e novo, seguindo o fluxo de Segurança. A edição do vínculo fica separada e limita-se ao e-mail e ao registro institucional; usuário, tipo e campus não mudam. Para mudar função ou campus, cadastra-se outro vínculo e encerra-se o anterior.
+
+Uma pessoa não pode ter dois vínculos administrativos ativos com o mesmo tipo e campus. A duplicidade é verificada também ao reativar; vínculos históricos e duplicidades antigas não são apagados automaticamente. Vínculos de campus inativo ficam somente para leitura. Desativação de vínculo exige confirmação e senha atual, envia aviso aos e-mails da conta e do vínculo e não pode atingir o vínculo selecionado nem o último Administrador do Sistema ativo. Reativação exige confirmação, sem senha adicional, e obedece à regra de duplicidade. A exclusão de vínculo ou conta exige senha e só é permitida quando não há registros associados; também envia aviso. As alterações são transacionais, auditadas pelo vínculo administrador e não registram senhas.
+
+### Painel administrativo
+
+O dashboard detalhado é exibido somente quando o vínculo ativo selecionado é Administrador do Sistema e considera dados de todo o sistema: total de contas da tabela `users`, vínculos e campi (com totais ativos), vínculos por tipo, estágios por situação, documentos por situação e solicitações enviadas ou em análise. Os status de estágio e documento aparecem mesmo com valor zero. Outros perfis recebem o painel padrão.
 
 ## Administrador do Campus
 

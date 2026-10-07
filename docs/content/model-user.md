@@ -1,7 +1,7 @@
 ---
 id: model-user
 title: Model — User
-description: Conta autenticável, relações, notificações de senha e autoria no Activity Log.
+description: Conta autenticável, relações, notificações de senha, autoria no Activity Log e identificação administrável.
 type: technical-reference
 status: in-progress
 visibility: public
@@ -29,7 +29,7 @@ Model autenticável do Laravel. Usa `HasFactory`, `LogsActivity` e `Notifiable`,
 
 ## Delimitação de responsabilidade
 
-`users` mantém autenticação e CPF. [`user_personal_data`](doc:migration-02-user-personal-data) guarda dados pessoais atuais e campos profissionais opcionais do supervisor em um perfil compartilhado pela conta. Cadastro e login não exigem esse perfil; o supervisor preencherá ou confirmará seus dados profissionais no futuro formulário, com edição autorizada pelo tipo de vínculo.
+`users` mantém autenticação, CPF e e-mail de login. O Administrador do Sistema pode editar nome, CPF e e-mail pela interface administrativa; a alteração do endereço de login envia avisos ao endereço anterior e ao novo. [`user_personal_data`](doc:migration-02-user-personal-data) guarda dados pessoais atuais e campos profissionais opcionais do supervisor em um perfil compartilhado pela conta. Cadastro e login não exigem esse perfil; o supervisor preencherá ou confirmará seus dados profissionais no futuro formulário, com edição autorizada pelo tipo de vínculo.
 
 ## Checklist
 
@@ -41,6 +41,7 @@ Model autenticável do Laravel. Usa `HasFactory`, `LogsActivity` e `Notifiable`,
 - [x] Manter CPF em `$fillable`, docblock e casts de `User`.
 - [x] Testar conta sem dados pessoais completos.
 - [x] Testar conta com múltiplos vínculos em PostgreSQL.
+- [x] Permitir a administração de nome, CPF e e-mail de login por `UserController`, preservando as notificações de troca de e-mail e a auditoria sem senha.
 - [x] Testar recuperação enfileirada sem persistir token ou corpo nas tabelas próprias de e-mail.
 - [x] Registrar no Activity Log os campos pessoais e profissionais alterados de `UserPersonalData`, com valores anteriores/novos e autoria do vínculo ativo.
 

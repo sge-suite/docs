@@ -7,7 +7,7 @@ status: defined
 visibility: public
 tags: sge/autorizacao, sge/affiliations, sge/policies
 related: matriz-de-autorizacao, pessoas-e-responsabilidades, fase-05-administracao
-source_refs:
+source_refs: https://github.com/sge-suite/sge/blob/master/app/Policies/UserPolicy.php, https://github.com/sge-suite/sge/blob/master/app/Policies/AffiliationPolicy.php, https://github.com/sge-suite/sge/blob/master/app/Actions/ManageAdministrativeUser.php, https://github.com/sge-suite/sge/blob/master/app/Actions/UpdateAdministrativeAffiliation.php, https://github.com/sge-suite/sge/blob/master/app/Actions/GetAdministrativeDashboardMetrics.php, https://github.com/sge-suite/sge/blob/master/app/Http/Controllers/UserController.php, https://github.com/sge-suite/sge/blob/master/app/Http/Controllers/AdministrativeAffiliationController.php
 ---
 Esta é a referência operacional para implementar as telas, Gates, Policies e testes de acesso. Ela detalha a [matriz resumida](doc:matriz-de-autorizacao); não cria permissões configuráveis em banco. Para a explicação pública, sem termos de implementação, use [Pessoas e responsabilidades](doc:pessoas-e-responsabilidades).
 
@@ -61,11 +61,11 @@ Mantém a estrutura institucional global. Seu vínculo pode não possuir campus 
 
 ### Notificações e auditoria
 
-Recebe apenas avisos administrativos que venham a ser definidos para a estrutura institucional. A criação, edição, desativação e reativação do campus registram autoria e vínculo ativo no Activity Log, com valores anteriores/novos. A senha solicitada na desativação não é registrada. Campus desativado só pode ser reativado; a reativação não modifica vínculos ou processos nem dispara processamento atrasado.
+A criação, edição, desativação e reativação de contas e vínculos administrativos envia os avisos previstos aos e-mails da conta e do vínculo, com destinatários deduplicados quando necessário. Mudanças de conta, vínculo e campus registram autoria do vínculo ativo no Activity Log; senhas não são registradas. Campus desativado só pode ser reativado, sem alterar vínculos ou processos.
 
 ### Controles a implementar
 
-`CampusPolicy` cobre as operações de campus e exige o vínculo ativo selecionado. O backend usa `CampusController`, Form Requests e gravações Eloquent em transação; não há `Gate::before` global. As demais operações de administração permanecem pendentes.
+`CampusPolicy` cobre as operações de campus e exige o vínculo ativo selecionado. `UserPolicy` e `AffiliationPolicy` autorizam a administração de contas e vínculos administrativos pelo Administrador do Sistema, também sem `Gate::before` global. As gravações usam controllers, Form Requests e Actions transacionais; a interface e as Policies de cursos, tipos e fluxos operacionais continuam pendentes.
 
 ## Administrador do Campus
 
@@ -161,7 +161,7 @@ Não possui aviso operacional recorrente definido. A emissão do atestado e even
 
 ### Finalidade e escopo
 
-Acompanha apenas os discentes para os quais é orientador no estágio. O escopo nasce da relação registrada no estágio, não de todos os estudantes do curso.
+Acompanha apenas os discentes para os quais é orientador no estágio. O escopo nasce da relação registrada no estágio, não de todos os discentes do curso.
 
 ### Ações permitidas
 

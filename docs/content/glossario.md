@@ -12,7 +12,7 @@ source_refs:
 | Termo | Significado |
 | --- | --- |
 | Estágio | Processo acadêmico e administrativo acompanhado pelo SGE, da solicitação à conclusão. |
-| Discente | Pessoa que utiliza o sistema como estudante. |
+| Discente | Pessoa que utiliza o sistema para solicitar ou acompanhar um estágio. |
 | Parte concedente | Pessoa física ou jurídica que oferece o estágio. |
 | Setor de Estágio | Setor que analisa a solicitação, acompanha a formalização e trata as etapas administrativas. |
 | Supervisor | Pessoa responsável pelo acompanhamento do discente no local de estágio. |

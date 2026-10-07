@@ -10,7 +10,7 @@ related: migration-04-affiliations, migrations, modelo-de-dados-acesso, perfis-e
 source_refs: https://github.com/sge-suite/sge/blob/master/app/Enums/AffiliationType.php, https://github.com/sge-suite/sge/blob/master/tests/Unit/Enums/AffiliationTypeTest.php
 ---
 > [!success] Estado
-> Implementado em `app/Enums/AffiliationType.php` e usado como cast e validação PHP de `Affiliation`. A integração com Policies permanece futura.
+> Implementado em `app/Enums/AffiliationType.php` e usado como cast e validação PHP de `Affiliation`. Policies já cobrem campi e administração de contas/vínculos administrativos; as regras dos demais perfis e jornadas continuam sendo implementadas por fase.
 
 ## Contrato
 
@@ -23,7 +23,7 @@ Classifica o papel funcional de uma pessoa dentro de um vínculo. Não represent
 | `InternshipOffice`    | `internship_office`    | Setor de Estágios        |
 | `Coordinator`         | `coordinator`          | Coordenador de Curso     |
 | `Advisor`             | `advisor`              | Orientador               |
-| `Student`             | `student`              | Estudante                |
+| `Student`             | `student`              | Discente                  |
 | `Supervisor`          | `supervisor`           | Supervisor               |
 | `TeachingDirection`   | `teaching_direction`   | Direção de Ensino        |
 
@@ -36,7 +36,8 @@ O representante legal e seu cargo são campos textuais de `Campus`, não são um
 - [x] Adicionar cast do enum no Model `Affiliation`.
 - [x] Usar o enum no cast e na validação de [`affiliations`](doc:migration-04-affiliations).
 - [x] Cobrir todos os cases, rótulos e opções com testes unitários.
-- [ ] Validar as regras de escopo de cada tipo nas Policies.
+- [x] Aplicar as Policies ao Administrador do Sistema para gestão global e gestão de contas/vínculos administrativos.
+- [ ] Completar e testar as regras de escopo dos demais tipos nas Policies.
 - [x] Confirmar que este enum, vínculo ativo, escopo e estado são a única fonte de autorização; as tabelas de permissões foram removidas.
 
 ## Relacionamentos

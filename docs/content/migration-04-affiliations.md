@@ -46,7 +46,7 @@ Esta migration inicial não contém `course_id` nem `deleted_at`. A ausência de
 - preservação de vínculos existentes quando o campus é posteriormente desativado;
 - matrícula obrigatória para tipos diferentes de supervisor, proibida para supervisor e única somente para discente.
 
-Uma pessoa pode ter vários vínculos, inclusive do mesmo tipo e campus. O campus é um atributo do vínculo e não muda por seleção de contexto.
+Uma pessoa pode ter vários vínculos, inclusive de tipos ou campi distintos. Na gestão administrativa, a criação e a reativação bloqueiam outro vínculo ativo da mesma pessoa, tipo e campus; a regra é aplicada na transação, sem limpar duplicidades históricas. O campus é um atributo do vínculo e não muda por seleção de contexto.
 
 O scope `active()` filtra `deactivated_at IS NULL`. `orderByLastUsedAt()` ordena por `last_used_at DESC NULLS LAST` e desempata por `id ASC`, evitando a ordenação padrão de nulos do PostgreSQL.
 

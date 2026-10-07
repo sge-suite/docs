@@ -16,9 +16,9 @@ Esta área reúne a execução técnica, as decisões de negócio e os contratos
 | Área | Status | Leitura correta |
 | --- | --- | --- |
 | Preparação do projeto | **Concluída** | Ambiente, qualidade e fluxo de trabalho inicial validados. |
-| Conta e autenticação | **Implementada parcialmente** | Login, recuperação, contexto ativo e configurações de senha/e-mail estão disponíveis; `admin:create` cria conta e primeiro vínculo ou adiciona vínculo a CPF existente, e enfileira os avisos correspondentes. Cadastro pela interface e edição de outros dados pessoais seguem pendentes. |
+| Conta e autenticação | **Implementada parcialmente** | Login, recuperação, contexto ativo, configurações próprias de senha/e-mail e `admin:create` estão disponíveis. O Administrador do Sistema também cadastra contas e vínculos administrativos e edita nome, CPF e login; edição própria de perfil pessoal segue pendente. |
 | Componentes técnicos básicos | **Implementados parcialmente** | Helpers, casts, enums, contexto de vínculo, Activity Log e Policies básicas têm código; autorização e ações dos fluxos de estágio ainda precisam ser integradas. |
-| E-mail e documentos | **Implementada parcialmente** | Envio em fila, templates Markdown e avisos de conta/vínculo/troca de e-mail estão integrados. Notificações de domínio, telas administrativas, geração e assinatura documental permanecem pendentes. |
+| E-mail e documentos | **Implementada parcialmente** | Envio em fila, templates Markdown e avisos de conta/vínculo/troca de e-mail estão integrados. Notificações de domínio, consulta e reenvio administrativo de entregas, geração e assinatura documental permanecem pendentes. |
 | Domínio de estágios | **Base de dados implementada; fluxos pendentes** | Models e migrations cobrem solicitações, formalização, execução e avaliações; as jornadas completas, autorizações e interfaces ainda não estão disponíveis. |
 
 Os status individuais ficam nas páginas vinculadas e no [painel de desenvolvimento](doc:painel-de-desenvolvimento). Em páginas de código, **Implementado** significa que o artefato existe; a própria página deve informar se ainda faltam integração, autorização, migration ou testes.

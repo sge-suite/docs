@@ -11,7 +11,7 @@ source_refs: https://github.com/sge-suite/sge/blob/master/app/Support/ActiveAffi
 ---
 Referências: [modelo de acesso](doc:modelo-de-dados-acesso), [E-mails, notificações e entregas](doc:e-mails-notificacoes-e-entregas) e [fluxo de login](doc:fluxos-principais#1-acesso-e-vinculo).
 
-O contexto de vínculo ativo, a proteção do painel, a seleção e troca de vínculo, `admin:create` e as configurações próprias de senha e e-mail da conta estão implementados. O cadastro de contas pela interface e a edição de outros dados pessoais continuam pendentes.
+O contexto de vínculo ativo, a proteção do painel, a seleção e troca de vínculo, `admin:create` e as configurações próprias de senha e e-mail estão implementados. O Administrador do Sistema também pode cadastrar contas e vínculos administrativos pela interface, na [Fase 05](doc:fase-05-administracao). A edição de perfil pessoal fora da administração de contas segue pendente.
 
 ## Login e recuperação de senha
 
@@ -29,7 +29,7 @@ O contexto de vínculo ativo, a proteção do painel, a seleção e troca de ví
 - [x] Solicitar primeiro o CPF com 11 dígitos sem pontuação. Se a conta não existir, pedir nome, e-mail e registro institucional; o mesmo e-mail é salvo na conta e no primeiro vínculo. Se a conta já existir para o CPF, conservar seus dados e pedir somente o e-mail do novo vínculo e o registro institucional. O vínculo de Administrador do Sistema não recebe campus nem curso. O comando nunca pede senha: gera uma senha aleatória desconhecida e enfileira um convite para a pessoa solicitar o link de definição de senha.
 - [x] Validar campos, CPF de 11 dígitos e e-mail antes de gravar. Para uma conta nova, exigir e-mail ainda não usado e compartilhá-lo com o primeiro vínculo. Ao adicionar vínculo a uma conta existente, preservar os dados da conta e enfileirar aviso para `users.email` e `affiliations.email`; se os endereços forem iguais, enviar apenas um aviso. O aviso leva ao login. As gravações são transacionais; o Activity Log identifica o ator como `terminal` e exclui senha/hash.
 - [x] Não exigir confirmação ou código de verificação de e-mail para o bootstrap inicial.
-- [ ] Implementar a criação de contas e vínculos pelo fluxo da aplicação.
+- [x] Implementar a criação de contas e vínculos administrativos pela interface do Administrador do Sistema; consultar o CPF antes do envio, preservar a conta existente e reutilizar a Action transacional do `admin:create`. Ver [Fase 05](doc:fase-05-administracao).
 - [x] No `admin:create`, registrar somente as tentativas de envio, sem salvar o corpo. O convite confirma a criação da conta e informa o primeiro vínculo; seu link abre a recuperação com o e-mail preenchido para solicitar a definição da senha. O aviso de vínculo novo informa a criação e leva ao login.
 
 `CreateAdminCommandTest` cobre conta nova e CPF existente, e-mails da conta e do vínculo, validações, criação mesmo com outro administrador ativo, confirmação, execução não interativa, autoria `terminal` e rollback. `ProfileUpdateTest` verifica a exibição do e-mail da conta e o encaminhamento para Segurança. `SecurityTest` cobre a troca do e-mail, senha atual, confirmação do novo endereço, unicidade, preservação do e-mail do vínculo, autoria e reserva dos dois avisos. Os testes substituem a fila e não enviam e-mails para SMTP/Mailpit.
@@ -52,10 +52,10 @@ O contexto de vínculo ativo, a proteção do painel, a seleção e troca de ví
 
 - [x] Exibir o e-mail da conta sem edição em Perfil, com link para Segurança. Em Segurança, exigir confirmação de senha para acessar a página e pedir a senha atual e duas entradas iguais do novo e-mail no formulário de troca. Validar formato e unicidade, normalizar o endereço e exigir vínculo ativo da própria conta. A atualização de `users.email` e a reserva de dois avisos na fila ocorrem na mesma transação: um para o endereço anterior e outro para o novo. O novo e-mail passa a ser usado no login e na recuperação de senha; `affiliations.email` permanece igual. O fluxo não exige confirmação pelo novo endereço antes da troca.
 - [x] Impedir alteração do nome na configuração atual.
-- [ ] Manter o CPF imutável após criação da conta.
+- [x] Permitir ao Administrador do Sistema corrigir o CPF na edição administrativa da conta, validando formato e unicidade; a pessoa não o altera na configuração própria.
 - [ ] Permitir ao discente alterar RG, nascimento e endereço atual.
 - [ ] Impedir edição de dados pessoais por outro vínculo.
 
 ## Fase seguinte na sequência
 
-O contexto e as configurações de acesso implementados dão suporte às próximas fases. A criação de contas pela interface e a edição de dados pessoais continuam em aberto.
+O contexto e as configurações de acesso implementados dão suporte às próximas fases. A gestão administrativa de contas e vínculos está disponível; seguem em aberto as edições pessoais próprias e as jornadas de domínio.

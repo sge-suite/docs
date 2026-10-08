@@ -7,7 +7,7 @@ status: defined
 visibility: public
 tags: sge/autorizacao, sge/affiliations, sge/policies
 related: matriz-de-autorizacao, pessoas-e-responsabilidades, fase-05-administracao
-source_refs: https://github.com/sge-suite/sge/blob/master/app/Policies/UserPolicy.php, https://github.com/sge-suite/sge/blob/master/app/Policies/AffiliationPolicy.php, https://github.com/sge-suite/sge/blob/master/app/Actions/ManageAdministrativeUser.php, https://github.com/sge-suite/sge/blob/master/app/Actions/UpdateAdministrativeAffiliation.php, https://github.com/sge-suite/sge/blob/master/app/Actions/GetAdministrativeDashboardMetrics.php, https://github.com/sge-suite/sge/blob/master/app/Http/Controllers/UserController.php, https://github.com/sge-suite/sge/blob/master/app/Http/Controllers/AdministrativeAffiliationController.php
+source_refs: https://github.com/sge-suite/sge/blob/master/app/Policies/UserPolicy.php, https://github.com/sge-suite/sge/blob/master/app/Policies/AffiliationPolicy.php, https://github.com/sge-suite/sge/blob/master/app/Policies/ActivityPolicy.php, https://github.com/sge-suite/sge/blob/master/app/Policies/EmailDeliveryAttemptPolicy.php, https://github.com/sge-suite/sge/blob/master/app/Support/AdministrativeActivityScope.php, https://github.com/sge-suite/sge/blob/master/app/Support/AdministrativeEmailLogScope.php, https://github.com/sge-suite/sge/blob/master/app/Support/EmailLogAccess.php, https://github.com/sge-suite/sge/blob/master/app/Actions/ManageAdministrativeUser.php, https://github.com/sge-suite/sge/blob/master/app/Actions/UpdateAdministrativeAffiliation.php, https://github.com/sge-suite/sge/blob/master/app/Actions/GetAdministrativeDashboardMetrics.php, https://github.com/sge-suite/sge/blob/master/app/Http/Controllers/UserController.php, https://github.com/sge-suite/sge/blob/master/app/Http/Controllers/AdministrativeAffiliationController.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/AuditInterfaceTest.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/EmailLogInterfaceTest.php
 ---
 Esta é a referência operacional para implementar as telas, Gates, Policies e testes de acesso. Ela detalha a [matriz resumida](doc:matriz-de-autorizacao); não cria permissões configuráveis em banco. Para a explicação pública, sem termos de implementação, use [Pessoas e responsabilidades](doc:pessoas-e-responsabilidades).
 
@@ -22,6 +22,7 @@ Esta é a referência operacional para implementar as telas, Gates, Policies e t
 - Um campus desativado mantém vínculos e histórico, mas congela as alterações em seus recursos; configurações pessoais da conta continuam disponíveis e a pessoa pode trocar para outro vínculo.
 - Gates e Policies nativos do Laravel são a única camada de autorização. Não existem papéis, permissões ou exceções editáveis por interface.
 - O Activity Log registra alterações relevantes. Discente e supervisor não o consultam; os demais o consultam somente quando a Policy do processo autorizar.
+- No estado atual, a tela de auditoria e o histórico de e-mails estão disponíveis somente ao Administrador do Sistema com vínculo ativo selecionado; os escopos dos demais perfis continuam para decisão futura.
 - Notificação interna e e-mail são canais diferentes. Quem possui conta recebe ambos quando for destinatário elegível; o Setor de Estágio recebe seu resumo operacional somente dentro do sistema.
 - Informações privadas, inclusive prova de emancipação, nunca entram em e-mail, documento gerado ou Activity Log detalhado. O acesso depende de necessidade funcional explícita.
 
@@ -50,6 +51,8 @@ Mantém a estrutura institucional global. Seu vínculo pode não possuir campus 
 - editar todos os campos cadastrais de um campus ativo; informar a senha atual em cada desativação;
 - criar e administrar vínculos de Administrador do Sistema e Administrador do Campus, respeitando a separação entre escopo global e de campus;
 - iniciar o subfluxo de conta existente ou nova para esses vínculos e disparar o aviso de disponibilização do vínculo;
+- consultar auditoria de campi, contas com vínculos administrativos e vínculos de Administrador do Sistema/Administrador do Campus;
+- consultar envios relacionados a essas contas e vínculos, inclusive quando o destinatário do e-mail for externo;
 - consultar os dados administrativos indispensáveis para essas operações.
 
 ### Limites e proibições
@@ -61,7 +64,7 @@ Mantém a estrutura institucional global. Seu vínculo pode não possuir campus 
 
 ### Notificações e auditoria
 
-A criação, edição, desativação e reativação de contas e vínculos administrativos envia os avisos previstos aos e-mails da conta e do vínculo, com destinatários deduplicados quando necessário. Mudanças de conta, vínculo e campus registram autoria do vínculo ativo no Activity Log; senhas não são registradas. Campus desativado só pode ser reativado, sem alterar vínculos ou processos.
+A criação, edição, desativação e reativação de contas e vínculos administrativos envia os avisos previstos aos e-mails da conta e do vínculo, com destinatários deduplicados quando necessário. Mudanças de conta, vínculo e campus registram autoria do vínculo ativo no Activity Log; senhas não são registradas. O Administrador do Sistema consulta campi, contas com vínculos administrativos e vínculos dos tipos Administrador do Sistema e Administrador do Campus na tela de auditoria. A tela de e-mails usa o contexto do registro afetado, não apenas o endereço destinatário, e mostra conteúdo salvo e tentativas. Ambas exigem o vínculo ativo selecionado e excluem atividades operacionais de estágios, documentos, concedentes e demais registros fora do escopo. Campus desativado só pode ser reativado, sem alterar vínculos ou processos.
 
 ### Controles a implementar
 

@@ -124,7 +124,7 @@ Sequência física dos arquivos em `database/migrations`; os números permanecem
 
 ## Integrações
 
-- [E-mails, notificações e entregas](doc:e-mails-notificacoes-e-entregas) — **in-progress** — Pipeline de e-mail em fila integrado à conta; notificações de domínio e telas administrativas pendentes.
+- [E-mails, notificações e entregas](doc:e-mails-notificacoes-e-entregas) — **in-progress** — Pipeline de e-mail em fila e consulta de mensagens administrativas implementados; notificações de domínio, outros escopos de consulta e retenção pendentes.
 - [Geração de documentos DOCX e variáveis](doc:geracao-de-documentos-docx-e-variaveis) — **defined** — Arquitetura da geração DOCX, validação de templates e catálogo canônico de variáveis.
 
 ## Decisões

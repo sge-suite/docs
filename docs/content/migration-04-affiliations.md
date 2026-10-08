@@ -7,7 +7,7 @@ status: implemented
 visibility: public
 tags: sge/migrations, sge/banco-de-dados, sge/autorizacao
 related: migration-03-campuses, migration-10-course-id-em-affiliations, enum-affiliationtype, migration-09-courses, modelo-de-dados-acesso, fase-02-conta-e-contexto
-source_refs: https://github.com/sge-suite/sge/blob/master/database/migrations/2026_09_22_105745_create_affiliations_table.php, https://github.com/sge-suite/sge/blob/master/app/Models/Affiliation.php, https://github.com/sge-suite/sge/blob/master/app/Concerns/AffiliationValidationRules.php, https://github.com/sge-suite/sge/blob/master/database/factories/AffiliationFactory.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/AffiliationTest.php
+source_refs: https://github.com/sge-suite/sge/blob/master/database/migrations/2026_09_22_105745_create_affiliations_table.php, https://github.com/sge-suite/sge/blob/master/app/Models/Affiliation.php, https://github.com/sge-suite/sge/blob/master/app/Concerns/AffiliationValidationRules.php, https://github.com/sge-suite/sge/blob/master/database/factories/AffiliationFactory.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/AffiliationTest.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/AuditInterfaceTest.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/EmailLogInterfaceTest.php
 ---
 > [!success] Estado
 > Migration, Model, validação, factory, relações e Activity Log estão implementados. A migration depende de `users` e [`campuses`](doc:migration-03-campuses). O contrato foi verificado no PostgreSQL por Sail. A resolução do vínculo após o login, a sessão, a tela de seleção e a troca pelo menu do perfil estão implementadas na [Fase 02](doc:fase-02-conta-e-contexto).
@@ -61,6 +61,8 @@ O campo não é auditado pelo Activity Log e não representa login, logout ou tr
 `AffiliationFactory` fornece os estados `global()`, `onCampus()`, `server()`, `student()`, `supervisor()`, `deactivated()` e `recentlyUsed()`. Após a Migration 10, `student()` também cria ou recebe um curso do mesmo campus.
 
 O Spatie Activity Log registra criação e alterações relevantes nos dados fillable, incluindo tipo, campus, matrícula, e-mail e desativação/reativação. `last_used_at` não é fillable nem auditado; uma alteração isolada não cria atividade.
+
+Na consulta administrativa, o Administrador do Sistema pode ver atividades de vínculos dos tipos Administrador do Sistema e Administrador do Campus, além dos vínculos administrativos associados às contas elegíveis. A seleção ou troca de vínculo atualiza apenas a memória operacional de `last_used_at` e não é registrada como atividade. O histórico de e-mails mantém um snapshot separado do contexto afetado em `email_delivery_attempts.scope_context`; esse campo não guarda a seleção de vínculo.
 
 ## Testes verificados
 

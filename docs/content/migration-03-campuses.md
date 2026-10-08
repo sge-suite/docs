@@ -7,7 +7,7 @@ status: implemented
 visibility: public
 tags: sge/migrations, sge/banco-de-dados, sge/campus
 related: migration-01-addresses
-source_refs: https://github.com/sge-suite/sge/blob/master/database/migrations/2026_09_21_132408_create_campuses_table.php, https://github.com/sge-suite/sge/blob/master/app/Models/Campus.php, https://github.com/sge-suite/sge/blob/master/app/Http/Controllers/CampusController.php, https://github.com/sge-suite/sge/blob/master/config/scout.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/CampusTest.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/CampusManagementTest.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/CampusInterfaceTest.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/CampusSearchTest.php
+source_refs: https://github.com/sge-suite/sge/blob/master/database/migrations/2026_09_21_132408_create_campuses_table.php, https://github.com/sge-suite/sge/blob/master/app/Models/Campus.php, https://github.com/sge-suite/sge/blob/master/app/Http/Controllers/CampusController.php, https://github.com/sge-suite/sge/blob/master/app/Policies/ActivityPolicy.php, https://github.com/sge-suite/sge/blob/master/app/Support/AdministrativeActivityScope.php, https://github.com/sge-suite/sge/blob/master/config/scout.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/CampusTest.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/CampusManagementTest.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/CampusInterfaceTest.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/CampusSearchTest.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/AuditInterfaceTest.php
 ---
 > [!success] Estado
 > Implementada com dependência obrigatória de [`addresses`](doc:migration-01-addresses). O representante legal é cadastrado por nome e cargo, sem depender de usuário ou vínculo institucional.
@@ -44,6 +44,8 @@ Os campos cadastrais acima são obrigatórios no Model, nos Form Requests e na m
 `Campus` usa Scout com Meilisearch para busca tolerante a erros pelo nome. O índice contém apenas ID, nome e `deactivated_at`; a situação é filtrada no próprio mecanismo de busca. A sincronização usa fila após o commit, evitando publicar registros descartados. O índice é auxiliar: a persistência, a autorização e a auditoria continuam no PostgreSQL. Pode haver um intervalo entre a gravação e a atualização da busca.
 
 `CampusTest`, `CampusManagementTest`, `CampusInterfaceTest`, `CampusSearchTest` e `CnpjCastTest` cobrem schema PostgreSQL, índices, FK `RESTRICT`, obrigatoriedade, casts, validações, relações, consulta por vínculo, permissões, endereço, desativação com senha, reativação, Activity Log, transações, preservação dos vínculos e integração real de busca.
+
+O histórico de alterações do campus aparece na consulta de auditoria do Administrador do Sistema. O acesso exige seu vínculo ativo e selecionado e segue a Policy; a consulta não inclui atividades de estágios, documentos, concedentes ou vínculos sem perfil administrativo.
 
 ## Checklist
 

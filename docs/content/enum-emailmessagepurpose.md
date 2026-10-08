@@ -16,14 +16,15 @@ source_refs: https://github.com/sge-suite/sge/blob/master/app/Enums/EmailMessage
 
 Classifica a finalidade da mensagem de notificação ou da tentativa de envio. Não substitui `notifications.type`, que identifica o tipo específico do aviso operacional.
 
-| Case                | Valor persistido     | Rótulo                  |
-| ------------------- | -------------------- | ----------------------- |
-| `Notification`      | `notification`       | Notificação operacional |
-| `AccountCreated`    | `account_created`    | Conta criada            |
-| `NewAffiliation`    | `new_affiliation`    | Novo vínculo            |
-| `AccountEmailChanged` | `account_email_changed` | Alteração de e-mail da conta |
+| Case                    | Valor persistido       | Rótulo                         |
+| ----------------------- | ---------------------- | ------------------------------ |
+| `Notification`          | `notification`         | Notificação operacional        |
+| `AccountCreated`        | `account_created`      | Conta criada                   |
+| `NewAffiliation`        | `new_affiliation`      | Novo vínculo                   |
+| `AccountEmailChanged`   | `account_email_changed` | Alteração de e-mail da conta   |
+| `AdministrativeChange`  | `administrative_change` | Alteração administrativa       |
 
-`AccountCreated` identifica o convite enviado ao criar uma conta e seu primeiro vínculo, sem `email_message`; o template informa o vínculo e aponta para a solicitação de definição da senha. `NewAffiliation` identifica os avisos enviados ao e-mail da conta e ao e-mail do novo vínculo, sem `email_message`, com link para login. `AccountEmailChanged` identifica o aviso ao endereço antigo ou novo, com conteúdo persistido em `email_messages`. `Notification` identifica uma mensagem operacional com conteúdo e suas tentativas. Recuperação de senha não usa esse enum porque não é registrada nessas tabelas.
+As finalidades `AccountCreated`, `NewAffiliation`, `AccountEmailChanged` e `AdministrativeChange` representam mensagens administrativas com conteúdo renderizado persistido em `email_messages` e tentativas associadas. `AccountCreated` leva à solicitação de definição da senha sem guardar token ou URL assinada; `NewAffiliation` leva ao login. Registros antigos de conta criada ou novo vínculo podem não ter `email_message`. `AdministrativeChange` cobre avisos ligados a desativação/exclusão de vínculo ou exclusão de conta. `Notification` identifica conteúdo operacional associado a uma notificação interna. Recuperação de senha não usa esse enum porque não é registrada nessas tabelas.
 
 ## Decisões de segurança
 
@@ -38,9 +39,9 @@ O fluxo de recuperação de senha não inclui confirmação adicional de endere�
 - [x] Criar `App\Enums\EmailMessagePurpose` como enum string.
 - [x] Implementar `label()`, `options()` e `values()`.
 - [x] Adicionar cast em `EmailMessage`.
-- [x] Persistir `Notification` e `AccountEmailChanged` em [email_messages](doc:migration-06-email-messages); `AccountCreated` e `NewAffiliation` registram somente tentativas.
+- [x] Persistir o conteúdo de novas mensagens das cinco finalidades em [email_messages](doc:migration-06-email-messages), exceto recuperação de senha, que fica fora dessas tabelas.
 - [x] Criar testes para cases, conversão e opções.
-- [ ] Verificar que nenhum segredo aparece no conteúdo, logs ou Activity Log.
+- [x] Testar que senhas, tokens de recuperação, identificadores internos de entrega e exceções brutas não sejam persistidos ou exibidos no histórico administrativo.
 
 ## Relacionamentos
 

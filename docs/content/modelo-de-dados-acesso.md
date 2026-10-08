@@ -31,7 +31,7 @@ A função e o escopo pertencem a `affiliations.type`, convertido para o enum `A
 
 A caixa operacional usa `Affiliation::notifications()` após a Policy validar que o vínculo selecionado está ativo e pertence à conta autenticada. O par polimórfico mantém separadas as caixas de vínculos diferentes da mesma conta. `User` mantém `Notifiable`, mas recuperação de senha, convite inicial e aviso de novo vínculo são enviados por e-mail e não criam linhas na tabela `notifications`.
 
-`email_messages` armazena o conteúdo imutável de notificações operacionais, vinculadas a `notification_id`, e o HTML/texto completo dos avisos de alteração de e-mail da conta, sem cast criptografado. `email_delivery_attempts` guarda o destinatário e o histórico do transporte; `requested_by_affiliation_id` identifica o vínculo que pediu o envio, e a conta pode ser obtida por `affiliations.user_id`. Envio automático usa vínculo nulo. Conta criada e novo vínculo geram somente tentativas, com `email_message_id` nulo; recuperação de senha não cria registros nessas tabelas. A futura consulta administrativa deverá respeitar o escopo de cada vínculo.
+`email_messages` armazena conteúdo imutável de notificações operacionais e de mensagens administrativas, incluindo conta criada, novo vínculo, alteração de e-mail e alterações administrativas. `email_delivery_attempts` guarda o destinatário, a autoria solicitante, o contexto do registro afetado e o histórico do transporte. `requested_by_affiliation_id` identifica quem pediu o envio; `scope_context` preserva o registro relacionado para definir o escopo mesmo se ele for removido. São papéis distintos: o destinatário pode ser uma pessoa sem conta e não determina o escopo. A consulta atual está disponível somente ao Administrador do Sistema ativo e selecionado, para mensagens relacionadas a contas e vínculos administrativos. Recuperação de senha não cria registros nessas tabelas; registros antigos podem não ter conteúdo persistido.
 
 > [!warning] Fonte única de autorização
 > `AffiliationType`, vínculo ativo, escopo e estado do registro são os únicos insumos de autorização. Gates e Policies codificam essas regras institucionais de modo determinístico; não há regra de acesso editável em banco.
@@ -42,7 +42,7 @@ A caixa operacional usa `Affiliation::notifications()` após a Policy validar qu
 ## Convenção de implementação
 
 - um middleware resolve e valida o vínculo ativo da sessão, incluindo `deactivated_at`;
-- `Gate::before` concede somente o acesso global explicitamente definido para `SystemAdministrator`, sem ignorar o vínculo ativo;
+- Não há `Gate::before` global: Policies revalidam o vínculo ativo e selecionado e aplicam o escopo de cada recurso;
 - Policies recebem o usuário e resolvem o vínculo ativo por serviço/contexto, verificando `AffiliationType`, campus, curso, posse do registro e estado do fluxo;
 - Blade e Livewire usam a API padrão (`@can`, `$user->can()`, `$this->authorize()` e middleware `can:`), nunca comparações espalhadas de string;
 - testes cobrem cada decisão da matriz com vínculo correto, tipo errado, campus errado, vínculo desativado e estado inválido.

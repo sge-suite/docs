@@ -7,7 +7,7 @@ status: in-progress
 visibility: public
 tags: sge/models, sge/autenticacao, sge/dados-pessoais
 related: cast-cpfcast, migration-02-user-personal-data, migration-04-affiliations, concern-profilevalidationrules
-source_refs: https://github.com/sge-suite/sge/blob/master/app/Models/User.php, https://github.com/sge-suite/sge/blob/master/app/Notifications/QueuedPasswordReset.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/Auth/PasswordResetTest.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/DatabaseAuditTest.php
+source_refs: https://github.com/sge-suite/sge/blob/master/app/Models/User.php, https://github.com/sge-suite/sge/blob/master/app/Notifications/QueuedPasswordReset.php, https://github.com/sge-suite/sge/blob/master/app/Support/AdministrativeActivityScope.php, https://github.com/sge-suite/sge/blob/master/app/Support/AdministrativeEmailLogScope.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/Auth/PasswordResetTest.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/DatabaseAuditTest.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/AuditInterfaceTest.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/EmailLogInterfaceTest.php
 ---
 ## Responsabilidade atual
 
@@ -24,6 +24,8 @@ Model autenticável do Laravel. Usa `HasFactory`, `LogsActivity` e `Notifiable`,
 ## Auditoria e e-mail
 
 `LogsActivity` registra alterações dos campos fillable, exceto `password`. A mudança de senha gera `password_changed` sem valor anterior, senha nova ou hash. `sendPasswordResetNotification()` usa `QueuedPasswordReset`, enfileirada após o commit e criptografada; recuperação não cria linhas em `email_messages` ou `email_delivery_attempts`.
+
+A consulta administrativa do Activity Log inclui uma conta somente quando ela possui vínculos administrativos, e mostra atividades elegíveis da própria conta e dos vínculos relacionados. O histórico de e-mails usa o snapshot do registro afetado em `scope_context`; não infere autorização pelo e-mail do destinatário nem pelo último vínculo selecionado. Ambas as telas exigem o vínculo ativo e selecionado de Administrador do Sistema.
 
 `UserPersonalData` registra seus atributos fillable (`user_id`, dados pessoais/profissionais e `address_id`) e também `emancipation_verified_at`, que não é fillable porque representa estado controlado pela aplicação. Esse campo é incluído explicitamente no Activity Log com valores anteriores e novos. `id`, `created_at` e `updated_at` ficam fora do registro. A cobertura é verificada por `DatabaseAuditTest`.
 

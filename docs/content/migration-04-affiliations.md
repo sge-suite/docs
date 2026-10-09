@@ -32,8 +32,8 @@ Esta migration inicial não contém `course_id` nem `deleted_at`. A ausência de
 
 - A exclusão física de um usuário ou campus referenciado é restringida. A exclusão lógica de `Campus` não remove nem altera a FK.
 - A migration cria somente a chave primária e as FKs; índices secundários ficam para quando as consultas reais indicarem necessidade.
-- As regras de tipo, campus obrigatório, matrícula e unicidade de matrícula discente são validadas pelo model em PHP. O cast de `AffiliationType` converte os valores para o enum e rejeita valores desconhecidos ao acessar o atributo.
-- Matrículas de servidores podem se repetir entre funções. Não há unicidade global de e-mail, matrícula de servidor ou combinação usuário/tipo/campus.
+- As regras de tipo, campus obrigatório, matrícula, titularidade do registro institucional e unicidade de matrícula discente são validadas pelo model em PHP. O cast de `AffiliationType` converte os valores para o enum e rejeita valores desconhecidos ao acessar o atributo.
+- Matrículas de servidores podem se repetir entre funções ou campi somente para a mesma pessoa. Um registro institucional não pode pertencer a usuários diferentes, inclusive quando o vínculo existente estiver desativado. Não há unicidade global de e-mail ou da combinação usuário/tipo/campus.
 
 ## Model, relações e validação
 
@@ -44,7 +44,8 @@ Esta migration inicial não contém `course_id` nem `deleted_at`. A ausência de
 - enum válido, usuário existente, e-mail obrigatório válido e datas opcionais válidas;
 - campus obrigatório por tipo, campus existente e campus ativo/não excluído ao criar, trocar campus ou reativar;
 - preservação de vínculos existentes quando o campus é posteriormente desativado;
-- matrícula obrigatória para tipos diferentes de supervisor, proibida para supervisor e única somente para discente.
+- matrícula obrigatória para tipos diferentes de supervisor, proibida para supervisor e única entre vínculos discentes;
+- registro institucional sem espaços nas extremidades e pertencente à mesma pessoa em todos os vínculos que o utilizam, verificado na criação, na alteração da matrícula ou do titular e na reativação. Duplicidades antigas não são corrigidas automaticamente e não impedem a desativação de vínculos.
 
 Uma pessoa pode ter vários vínculos, inclusive de tipos ou campi distintos. Na gestão administrativa, a criação e a reativação bloqueiam outro vínculo ativo da mesma pessoa, tipo e campus; a regra é aplicada na transação, sem limpar duplicidades históricas. O campus é um atributo do vínculo e não muda por seleção de contexto.
 

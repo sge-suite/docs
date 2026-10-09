@@ -65,8 +65,8 @@ O dashboard detalhado é exibido somente quando o vínculo ativo selecionado é 
 ## Administrador do Campus
 
 - [x] Limitar e testar a gestão local ao campus do vínculo ativo selecionado.
-- [x] Permitir ao Administrador do Campus editar telefone, representante legal e dados do seguro do próprio campus; não permitir alterar nome, CNPJ, endereço, e-mail ou ciclo de ativação.
-- [ ] Criar a tela Livewire de edição permitida do campus.
+- [x] Permitir ao Administrador do Campus editar nome, CNPJ, endereço, telefone, representante legal e dados do seguro do próprio campus; manter o ciclo de ativação restrito ao Administrador do Sistema.
+- [x] Criar a tela Livewire de edição permitida do campus em “Meu campus”, com o endereço compartilhado pelo componente Blade `address.form-fields`.
 - [x] Impedir acesso a campus alheio, criação de campus e alteração do ciclo de ativação pelo Administrador do Campus.
 - [ ] Administrar usuários e vínculos dentro do escopo.
 - [ ] Criar/editar cursos, dois coordenadores e tipos de estágio.
@@ -82,7 +82,7 @@ O dashboard detalhado é exibido somente quando o vínculo ativo selecionado é 
 - Busca e situação ficam na URL; os resultados são paginados em grupos de 15. Consultas carregam endereço e cidade antecipadamente e não alteram dados ou geram atividades.
 - Busca textual de campi usa Scout/Meilisearch pelo nome, com tolerância a erros. CNPJ não faz parte do índice pesquisável atual; a consulta por CNPJ formatado retorna vazio. Listagem sem texto e filtros estruturados podem usar Eloquent. Buscas textuais futuras sobre registros devem seguir Scout/Meilisearch e aplicar o escopo autorizado no índice; `query()` não substitui filtros do mecanismo. A filtragem local do select de UF opera apenas sobre as 27 opções fixas do enum.
 - Cadastro e edição usam formulários HTTP com CSRF, erros por campo, preservação dos dados preenchidos e indicação de envio. As gravações continuam nas transações do `CampusController`, com a validação e a auditoria existentes.
-- Operações do Administrador do Sistema retornam aos detalhes do campus com mensagem de resultado. A atualização local pelo backend do Administrador do Campus continua retornando ao painel, pois sua interface está pendente.
+- Operações do Administrador do Sistema retornam aos detalhes do campus com mensagem de resultado. A atualização local pelo backend do Administrador do Campus retorna à tela “Meu campus”.
 - Campus desativado mostra a data e o aviso de somente leitura, sem edição. O modal de desativação reabre após erro de senha e não preserva a senha informada. As identidades dos campi nos componentes são bloqueadas contra alteração pelo cliente; a permissão é revalidada a cada requisição Livewire.
 - `CampusInterfaceTest` cobre renderização, acesso por perfil e vínculo, filtros, paginação, cidade por UF, erros de formulário, modal, congelamento e revalidação de permissão.
 

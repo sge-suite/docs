@@ -78,7 +78,7 @@ Mantém cadastros e estrutura do próprio campus. Sua visibilidade é limitada a
 
 ### Ações permitidas
 
-- consultar os dados do próprio campus e editar telefone, representante legal e dados do seguro enquanto o campus estiver ativo;
+- consultar os dados do próprio campus e editar nome, CNPJ, endereço, telefone, representante legal e dados do seguro enquanto o campus estiver ativo;
 - criar e administrar contas e vínculos dentro do campus, inclusive por meio do fluxo de reutilização de conta existente;
 - criar e editar cursos, atribuir os dois coordenadores previstos e administrar tipos de estágio do próprio campus;
 - ativar ou desativar vínculos do próprio escopo, sem apagar histórico;
@@ -86,7 +86,7 @@ Mantém cadastros e estrutura do próprio campus. Sua visibilidade é limitada a
 
 ### Limites e proibições
 
-- não cria outro campus, não altera seu nome, CNPJ, endereço, e-mail ou ciclo de ativação e não acessa registros de campus alheio;
+- não cria outro campus, não altera seu ciclo de ativação e não acessa registros de campus alheio;
 - enquanto o campus estiver desativado, não altera dados cadastrais, vínculos ou outros recursos ligados a ele;
 - não cria nem administra Administrador do Sistema;
 - não assume análise de solicitações, documentos, liberação, avaliações ou notas sem também possuir e selecionar o vínculo correspondente;

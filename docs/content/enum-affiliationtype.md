@@ -10,7 +10,7 @@ related: migration-04-affiliations, migrations, modelo-de-dados-acesso, perfis-e
 source_refs: https://github.com/sge-suite/sge/blob/master/app/Enums/AffiliationType.php, https://github.com/sge-suite/sge/blob/master/tests/Unit/Enums/AffiliationTypeTest.php
 ---
 > [!success] Estado
-> Implementado em `app/Enums/AffiliationType.php` e usado como cast e validação PHP de `Affiliation`. Policies já cobrem campi e administração de contas/vínculos administrativos; as regras dos demais perfis e jornadas continuam sendo implementadas por fase.
+> Implementado em `app/Enums/AffiliationType.php` e usado na validação PHP e pelo `AffiliationTypeCast` de `Affiliation`. Policies já cobrem campi e administração de contas/vínculos administrativos; as regras dos demais perfis e jornadas continuam sendo implementadas por fase.
 
 ## Contrato
 
@@ -19,7 +19,6 @@ Classifica o papel funcional de uma pessoa dentro de um vínculo. Não represent
 | Case                  | Valor persistido       | Rótulo                   |
 | --------------------- | ---------------------- | ------------------------ |
 | `SystemAdministrator` | `system_administrator` | Administrador do Sistema |
-| `CampusAdministrator` | `campus_administrator` | Administrador do Campus  |
 | `InternshipOffice`    | `internship_office`    | Setor de Estágios        |
 | `Coordinator`         | `coordinator`          | Coordenador de Curso     |
 | `Advisor`             | `advisor`              | Orientador               |
@@ -28,6 +27,10 @@ Classifica o papel funcional de uma pessoa dentro de um vínculo. Não represent
 | `TeachingDirection`   | `teaching_direction`   | Direção de Ensino        |
 
 O representante legal e seu cargo são campos textuais de `Campus`, não são um vínculo nem um case de `AffiliationType`. Não criar `LegalRepresentative`.
+
+## Compatibilidade sem alteração de migrations
+
+Conforme a [D-024](doc:backlog-e-decisoes#d-024-administracao-local-concentrada-no-setor-de-estagio), o perfil Administrador do Campus foi removido do enum e dos formulários. Novos vínculos locais administrativos usam `InternshipOffice`. O cast lê o valor legado `campus_administrator` como Setor de Estágio, preservando IDs, referências, estado e valor persistido. A seleção de contexto não converte dados nem gera atividade. Consultas administrativas e proteção contra vínculos ativos duplicados reconhecem ambos os valores; snapshots históricos de auditoria e e-mails são preservados.
 
 ## Checklist de implementação
 

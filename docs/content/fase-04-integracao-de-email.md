@@ -48,7 +48,7 @@ Workers de fila mantêm o código carregado em memória. Após alterar templates
 
 - [x] Disponibilizar índice com filtros de finalidade e estado, e detalhes com conteúdo armazenado e todas as tentativas.
 - [x] Revalidar por Policy, em cada requisição, que o vínculo ativo selecionado é Administrador do Sistema; não há bypass de autorização.
-- [x] Filtrar por `scope_context` do registro: contas e vínculos dos tipos Administrador do Sistema e Administrador do Campus. O destinatário pode ser uma pessoa sem conta; não determina o escopo.
+- [x] Filtrar por `scope_context` do registro: contas e vínculos dos tipos Administrador do Sistema e Setor de Estágio. O destinatário pode ser uma pessoa sem conta; não determina o escopo.
 - [x] Excluir notificações operacionais, recuperação de senha e mensagens sem contexto administrativo verificável.
 - [x] Renderizar HTML em iframe sandboxed com scripts e recursos externos bloqueados; usar texto escapado como fallback e mostrar tentativas sem expor chaves, tokens ou exceções brutas.
 - [ ] Definir autorizações e limites de consulta para outros tipos de vínculo.

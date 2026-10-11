@@ -44,12 +44,12 @@ A implementação atual utiliza:
 | Área                    | Situação    | Evidência                                                                            |
 | ----------------------- | ----------- | ------------------------------------------------------------------------------------ |
 | Autenticação            | ✅          | Fortify, páginas Livewire e rotas protegidas                                         |
-| Usuários                | Parcial     | Administração de contas e vínculos de Administrador do Sistema/Campus pela interface; busca, políticas e ciclo de vida implementados. A listagem mostra contas com vínculos administrativos; fluxos de domínio e perfil pessoal seguem parciais. |
+| Usuários                | Parcial     | Administração de contas e vínculos de Administrador do Sistema e Setor de Estágio pela interface; busca, políticas e ciclo de vida implementados. A listagem mostra contas com vínculos administrativos; fluxos de domínio e perfil pessoal seguem parciais. |
 | Autorização             | Parcial     | `UserPolicy`, `AffiliationPolicy` e `CampusPolicy` exigem o vínculo ativo selecionado nos escopos administrativos implementados; políticas e interfaces das jornadas de estágio ainda faltam. |
 | Auditoria               | ✅          | Spatie Activitylog, autoria pelo vínculo ativo e campos pessoais/profissionais auditados                  |
 | Infraestrutura de mídia | Parcial     | Spatie Medialibrary disponível; Models e schema de templates/versões existem, mas upload e geração DOCX seguem pendentes |
 | Estágios                | Parcial     | Models, migrations, validações e auditoria existem; faltam Actions, Policies completas e jornadas da aplicação |
-| Administração de campi   | Parcial     | Páginas Livewire para Administrador do Sistema e backend para operações locais permitidas ao Administrador do Campus; a interface local continua pendente. |
+| Administração de campi   | Parcial     | Páginas Livewire para Administrador do Sistema e tela Meu campus para consulta e edição local pelo Setor de Estágio, com campus inativo somente para leitura. |
 | Relatórios              | Planejado   | Devem consumir o domínio e respeitar o escopo do vínculo ativo                       |
 
 ## Regras de arquitetura

@@ -10,7 +10,7 @@ related: enum-affiliationtype, enum-brazilianstate, enum-holidayscope, enum-emai
 source_refs:
 ---
 > [!abstract] Critério
-> Um enum só deve existir quando o conjunto for pequeno, estável e parte da regra de negócio. Se o valor for configurável pelo Administrador do Campus ou crescer sem mudança de código, use tabela ou JSONB.
+> Um enum só deve existir quando o conjunto for pequeno, estável e parte da regra de negócio. Se o valor for configurável pelo Setor de Estágio ou crescer sem mudança de código, use tabela ou JSONB.
 
 ## Painel
 

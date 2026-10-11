@@ -11,20 +11,22 @@ source_refs: https://github.com/sge-suite/sge/blob/master/routes/web.php, https:
 ---
 Base: [papéis por vínculo](doc:pessoas-e-responsabilidades), [Matriz de autorização](doc:matriz-de-autorizacao) e [Perfis e responsabilidades por vínculo](doc:perfis-e-responsabilidades-por-vinculo).
 
-A estrutura de perfis e o contexto de vínculo existem. O provisionamento inicial ou a inclusão de Administrador do Sistema também pode ser feito por `admin:create`. A gestão global de campi tem backend, Policies, Form Requests, testes e páginas Livewire com Flux. O Administrador do Sistema também dispõe de telas para administrar contas e vínculos administrativos, consultar a auditoria administrativa e ver o histórico de e-mails associados a essas contas e vínculos. A interface local do Administrador do Campus, cursos, tipos de estágio e operações das jornadas de estágio continuam pendentes.
+A estrutura de perfis e o contexto de vínculo existem. O provisionamento inicial ou a inclusão de Administrador do Sistema também pode ser feito por `admin:create`. A gestão global de campi tem backend, Policies, Form Requests, testes e páginas Livewire com Flux. O Administrador do Sistema também dispõe de telas para administrar contas e vínculos administrativos, consultar a auditoria administrativa e ver o histórico de e-mails associados a essas contas e vínculos. A tela Meu campus e a gestão completa de cursos estão implementadas para o Setor de Estágio. Tipos de estágio, gestão local de pessoas/vínculos e operações das jornadas de estágio continuam pendentes.
 
 ## Policies e escopo
 
 - [x] Disponibilizar o contexto único do vínculo ativo para Policies e Actions por `ActiveAffiliationContext`; completar os resolvedores de escopo por recurso junto de cada fluxo.
 - [x] Criar `CampusPolicy` para consulta e gestão de campi, usando somente o vínculo ativo selecionado.
 - [x] Criar `UserPolicy` e ampliar `AffiliationPolicy` para contas e vínculos administrativos, exigindo o Administrador do Sistema ativo selecionado.
-- [ ] Criar Policies para cursos, tipos, concedentes, estágios e documentos.
+- [x] Criar CoursePolicy e testar o escopo do Setor de Estágio.
+- [ ] Criar Policies para tipos, concedentes, estágios e documentos.
 - [x] Revalidar vínculo selecionado, perfil e proteções administrativas dentro das transações de gestão de usuários e vínculos.
 - [x] Manter as permissões de notificações em `AffiliationPolicy`; não há bypass global por `Gate::before`.
 - [x] Criar testes positivos e negativos para operações de campus e administração de usuários/vínculos.
+- [x] Testar gestão de cursos e Meu campus pelo Setor de Estágio.
 - [ ] Criar testes positivos e negativos dos demais recursos por função.
 - [ ] Cobrir para cada `AffiliationType` as ações, limites, destinatários de notificação e consultas descritos em [Perfis e responsabilidades por vínculo](doc:perfis-e-responsabilidades-por-vinculo).
-- [x] Restringir a gestão de usuários ao Administrador do Sistema, impedindo que o Administrador do Campus cadastre Administradores do Sistema.
+- [x] Restringir a gestão de usuários ao Administrador do Sistema, impedindo que o Setor de Estágio cadastre Administradores do Sistema.
 - [ ] Permitir ao Setor de Estágio cadastrar usuários permitidos, exceto administradores.
 - [ ] Aplicar as mesmas regras para edição e criação.
 
@@ -39,7 +41,7 @@ A estrutura de perfis e o contexto de vínculo existem. O provisionamento inicia
 - [x] Restringir rotas, navegação e requisições Livewire ao vínculo ativo de Administrador do Sistema.
 - [x] Disponibilizar índice e detalhes de auditoria para alterações de campi, contas e vínculos administrativos, autorizados por Policy e pelo vínculo ativo selecionado.
 - [x] Disponibilizar histórico de e-mails ligados a contas e vínculos administrativos, com conteúdo armazenado e tentativas de envio.
-- [x] Administrar contas e vínculos de Administrador do Sistema e Administrador do Campus pela interface, com políticas e validação de escopo.
+- [x] Administrar contas e vínculos de Administrador do Sistema e Setor de Estágio pela interface, com políticas e validação de escopo.
 - [x] Reutilizar a criação transacional de conta/vínculo compartilhada com `admin:create`.
 - [x] Enviar convites e avisos de novo vínculo pela interface, informando a função adicionada e deduplicando os endereços da conta e do vínculo.
 - [x] Permitir editar nome, CPF e e-mail de login da conta; a mudança de e-mail envia os avisos aos endereços anterior e novo, como na alteração própria em Segurança.
@@ -50,7 +52,7 @@ A estrutura de perfis e o contexto de vínculo existem. O provisionamento inicia
 
 As rotas `users.*` são exclusivas do Administrador do Sistema com vínculo ativo selecionado. A listagem tem uma linha por conta com pelo menos um vínculo administrativo, inclusive desativado; busca nomes pelo Scout/Meilisearch e consulta CPF ou e-mail de login completos por igualdade, com 15 resultados por página. O painel administrativo, em contraste, conta todas as linhas de `users`.
 
-O cadastro começa por consulta explícita do CPF. Para conta nova, um único e-mail é salvo na conta e no primeiro vínculo; é gerada uma senha aleatória desconhecida e enviado convite para definir senha. Para conta existente, nome, CPF e login são preservados e o campo único de e-mail vale para o novo vínculo. O aviso de novo vínculo identifica tipo, campus e registro institucional; se a conta já tiver outro registro, o formulário permite copiá-lo e ajustá-lo. Administrador do Campus exige campus ativo; Administrador do Sistema não recebe campus nem curso. Não se escolhe automaticamente o tipo de vínculo.
+O cadastro começa por consulta explícita do CPF. Para conta nova, um único e-mail é salvo na conta e no primeiro vínculo; é gerada uma senha aleatória desconhecida e enviado convite para definir senha. Para conta existente, nome, CPF e login são preservados e o campo único de e-mail vale para o novo vínculo. O aviso de novo vínculo identifica tipo, campus e registro institucional; se a conta já tiver outro registro, o formulário permite copiá-lo e ajustá-lo. Setor de Estágio exige campus ativo; Administrador do Sistema não recebe campus nem curso. Não se escolhe automaticamente o tipo de vínculo.
 
 A edição da conta permite corrigir nome, CPF e endereço de login. A troca do login invalida tokens de redefinição pendentes e envia avisos aos endereços anterior e novo, seguindo o fluxo de Segurança. A edição do vínculo fica separada e limita-se ao e-mail e ao registro institucional; usuário, tipo e campus não mudam. Para mudar função ou campus, cadastra-se outro vínculo e encerra-se o anterior.
 
@@ -58,21 +60,22 @@ A matrícula / registro institucional só pode ser reutilizada em vínculos da m
 
 Uma pessoa não pode ter dois vínculos administrativos ativos com o mesmo tipo e campus. A duplicidade é verificada também ao reativar; vínculos históricos e duplicidades antigas não são apagados automaticamente. Vínculos de campus inativo ficam somente para leitura. Desativação de vínculo exige confirmação e senha atual, envia aviso aos e-mails da conta e do vínculo e não pode atingir o vínculo selecionado nem o último Administrador do Sistema ativo. Reativação exige confirmação, sem senha adicional, e obedece à regra de duplicidade. A exclusão de vínculo ou conta exige senha e só é permitida quando não há registros associados; também envia aviso. As alterações são transacionais, auditadas pelo vínculo administrador e não registram senhas.
 
-As rotas `audit.*` e `email-logs.*` exigem o vínculo ativo e selecionado de Administrador do Sistema. Auditoria inclui campi, contas com vínculos administrativos e vínculos de Administrador do Sistema ou do Campus. O histórico de e-mails filtra pelas finalidades administrativas e pelo `scope_context` do registro afetado; não infere escopo a partir do destinatário ou do solicitante. Contatos externos podem aparecer quando o envio está ligado a conta ou vínculo dentro do escopo. A tela de e-mails mostra conteúdo persistido e tentativas, mas não oferece reenvio. Notificações operacionais, estágios, documentos, concedentes e outros vínculos ficam fora dessas consultas.
+As rotas `audit.*` e `email-logs.*` exigem o vínculo ativo e selecionado de Administrador do Sistema. Auditoria inclui campi, contas com vínculos administrativos e vínculos de Administrador do Sistema ou Setor de Estágio. O histórico de e-mails filtra pelas finalidades administrativas e pelo `scope_context` do registro afetado; não infere escopo a partir do destinatário ou do solicitante. Contatos externos podem aparecer quando o envio está ligado a conta ou vínculo dentro do escopo. A tela de e-mails mostra conteúdo persistido e tentativas, mas não oferece reenvio. Notificações operacionais, estágios, documentos, concedentes e outros vínculos ficam fora dessas consultas.
 
 ### Painel administrativo
 
 O dashboard detalhado é exibido somente quando o vínculo ativo selecionado é Administrador do Sistema e considera dados de todo o sistema: total de contas da tabela `users`, vínculos e campi (com totais ativos), vínculos por tipo, estágios por situação, documentos por situação e solicitações enviadas ou em análise. Os status de estágio e documento aparecem mesmo com valor zero. Outros perfis recebem o painel padrão.
 
-## Administrador do Campus
+## Setor de Estágio
 
 - [x] Limitar e testar a gestão local ao campus do vínculo ativo selecionado.
-- [x] Permitir ao Administrador do Campus editar nome, CNPJ, endereço, telefone, representante legal e dados do seguro do próprio campus; manter o ciclo de ativação restrito ao Administrador do Sistema.
+- [x] Permitir ao Setor de Estágio editar nome, CNPJ, endereço, telefone, representante legal e dados do seguro do próprio campus; manter o ciclo de ativação restrito ao Administrador do Sistema.
 - [x] Criar a tela Livewire de edição permitida do campus em “Meu campus”, com o endereço compartilhado pelo componente Blade `address.form-fields`.
-- [x] Impedir acesso a campus alheio, criação de campus e alteração do ciclo de ativação pelo Administrador do Campus.
+- [x] Impedir acesso a campus alheio, criação de campus e alteração do ciclo de ativação pelo Setor de Estágio.
 - [ ] Administrar usuários e vínculos dentro do escopo.
-- [ ] Criar/editar cursos, dois coordenadores e tipos de estágio.
-- [ ] Impedir acesso a outro campus.
+- [x] Implementar gestão completa de cursos, com coordenadores opcionais, desativação e exclusão com senha, reativação e consulta restrita ao campus.
+- [ ] Implementar gestão de tipos de estágio.
+- [x] Impedir acesso a outro campus nas telas Meu campus e Cursos.
 
 ## Interface de campi
 
@@ -84,7 +87,7 @@ O dashboard detalhado é exibido somente quando o vínculo ativo selecionado é 
 - Busca e situação ficam na URL; os resultados são paginados em grupos de 15. Consultas carregam endereço e cidade antecipadamente e não alteram dados ou geram atividades.
 - Busca textual de campi usa Scout/Meilisearch pelo nome, com tolerância a erros. CNPJ não faz parte do índice pesquisável atual; a consulta por CNPJ formatado retorna vazio. Listagem sem texto e filtros estruturados podem usar Eloquent. Buscas textuais futuras sobre registros devem seguir Scout/Meilisearch e aplicar o escopo autorizado no índice; `query()` não substitui filtros do mecanismo. A filtragem local do select de UF opera apenas sobre as 27 opções fixas do enum.
 - Cadastro e edição usam formulários HTTP com CSRF, erros por campo, preservação dos dados preenchidos e indicação de envio. As gravações continuam nas transações do `CampusController`, com a validação e a auditoria existentes.
-- Operações do Administrador do Sistema retornam aos detalhes do campus com mensagem de resultado. A atualização local pelo backend do Administrador do Campus retorna à tela “Meu campus”.
+- Operações do Administrador do Sistema retornam aos detalhes do campus com mensagem de resultado. A atualização local pelo backend do Setor de Estágio retorna à tela “Meu campus”.
 - Campus desativado mostra a data e o aviso de somente leitura, sem edição. O modal de desativação reabre após erro de senha e não preserva a senha informada. As identidades dos campi nos componentes são bloqueadas contra alteração pelo cliente; a permissão é revalidada a cada requisição Livewire.
 - `CampusInterfaceTest` cobre renderização, acesso por perfil e vínculo, filtros, paginação, cidade por UF, erros de formulário, modal, congelamento e revalidação de permissão.
 

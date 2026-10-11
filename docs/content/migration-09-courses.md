@@ -10,7 +10,7 @@ related: migration-03-campuses, migration-04-affiliations, migration-10-course-i
 source_refs: https://github.com/sge-suite/sge/blob/master/database/migrations/2026_09_22_163548_create_courses_table.php, https://github.com/sge-suite/sge/blob/master/app/Models/Course.php, https://github.com/sge-suite/sge/blob/master/database/factories/CourseFactory.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/CourseTest.php
 ---
 > [!success] Estado
-> Migration, Model, factory, relações, validação e testes PostgreSQL implementados. O cadastro e a edição pela interface permanecem na Fase 05.
+> Migration, Model, factory, relações, validação e testes PostgreSQL implementados. A interface Livewire com Flux e a CoursePolicy estão implementadas na Fase 05 para o Setor de Estágio.
 
 ## Contrato
 
@@ -27,6 +27,12 @@ source_refs: https://github.com/sge-suite/sge/blob/master/database/migrations/20
 O curso pode ser criado sem coordenadores, conforme a decisão para cadastro inicial. Quando atribuídos, os dois vínculos devem ser distintos, ativos, do tipo `Coordinator` e do mesmo campus do curso. `Course` valida isso no momento da atribuição, preservando referências históricas se um coordenador for desativado depois. O campus deve estar ativo ao criar, trocar de campus ou reativar o curso. Não há `CHECK` de domínio nem tabela intermediária de coordenação.
 
 O ciclo do catálogo usa `deactivated_at`, sem `SoftDeletes`; FKs impedem exclusão física de campus ou coordenador referenciado. Esta migration não cria índices secundários explícitos; a escolha ficará para uma etapa posterior, com base nas consultas reais. Nomes iguais no mesmo campus não recebem restrição de unicidade nesta migration porque o contrato não distingue modalidades ou ofertas homônimas; eventual regra de catálogo precisará de decisão própria.
+
+## Gestão e autorização
+
+O vínculo ativo e selecionado de Setor de Estágio autoriza listagem, cadastro, detalhes, edição, desativação, reativação e exclusão de cursos sem referências. O campus vem exclusivamente desse vínculo, sem seletor de campus. A autorização é revalidada nas requisições HTTP e ações Livewire; manipular IDs não permite acessar cursos ou coordenadores de outro campus. O Administrador do Sistema precisa selecionar um vínculo de Setor de Estágio para operar cursos.
+
+Nome é obrigatório e os dois coordenadores são opcionais; a ausência de vínculos elegíveis não impede cadastrar. Os seletores usam o componente customizado do projeto. Desativação e exclusão exigem senha atual e confirmação; reativação exige confirmação. Campus desativado permite somente consulta autorizada. Referências históricas e vínculos discentes por curso impedem exclusão física, sem introduzir unicidade de nome. O Activity Log registra autoria pelo vínculo ativo e não registra senhas.
 
 ## Checklist
 

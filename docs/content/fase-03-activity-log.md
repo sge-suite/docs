@@ -34,7 +34,7 @@ CPF, CNPJ, e-mail, endereços e os demais campos de negócio configurados nos Mo
 
 ## Consulta administrativa
 
-A tela **Auditoria** tem índice e detalhes e exige, em cada requisição, o vínculo ativo selecionado de Administrador do Sistema. O escopo inclui alterações em campi, contas com vínculo administrativo e vínculos dos tipos Administrador do Sistema e Administrador do Campus. Não inclui estágios, documentos, concedentes ou registros e vínculos fora desse escopo. A Policy aplica o mesmo escopo ao índice e ao detalhe; não há bypass global. A seleção do vínculo não é registrada como atividade.
+A tela **Auditoria** tem índice e detalhes e exige, em cada requisição, o vínculo ativo selecionado de Administrador do Sistema. O escopo inclui alterações em campi, contas com vínculo administrativo e vínculos dos tipos Administrador do Sistema e Setor de Estágio. Não inclui estágios, documentos, concedentes ou registros e vínculos fora desse escopo. A Policy aplica o mesmo escopo ao índice e ao detalhe; não há bypass global. A seleção do vínculo não é registrada como atividade.
 
 O índice identifica registro, ação, autoria e data. O detalhe apresenta apenas os valores efetivamente registrados, sem inferir alterações ausentes; em criações, não exibe valor anterior. O histórico relacionado aparece ao final das telas de detalhes de campi e contas; na conta, agrupa também os registros dos vínculos administrativos atuais ou excluídos. Senhas, hashes, tokens e outros segredos não são exibidos.
 

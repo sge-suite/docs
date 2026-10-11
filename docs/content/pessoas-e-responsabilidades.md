@@ -22,11 +22,10 @@ O SGE não dá a mesma tela e as mesmas ações para todas as pessoas. Cada pess
 | Pessoa ou setor | Papel principal | Exemplo do que faz |
 | --- | --- | --- |
 | Discente | Inicia e acompanha o próprio processo. | Preenche a solicitação, responde correções e acompanha o estágio. |
-| Setor de Estágio | Analisa e conduz a parte administrativa. | Confere dados, documentos e assinaturas; libera ou devolve o processo. |
+| Setor de Estágio | Administra o próprio campus e conduz os processos de estágio. | Mantém dados do campus e cursos; confere documentos e assinaturas; libera ou devolve o processo. |
 | Supervisor | Acompanha o discente no local de estágio. | Preenche a avaliação quando o sistema a disponibiliza. |
 | Orientador | Acompanha a parte acadêmica. | Registra as notas de relatório e apresentação. |
 | Coordenador de curso | Consulta o acompanhamento do curso. | Consulta estágios do curso e emite o atestado de orientação previsto. |
-| Administrador do Campus | Mantém os cadastros do próprio campus. | Cuida de cursos, vínculos e dados administrativos locais. |
 | Administrador do Sistema | Mantém a estrutura institucional geral. | Cria e administra campi e vínculos administrativos globais. |
 | Direção de Ensino | Consulta informações institucionais quando autorizada. | O conjunto de relatórios ainda será definido pela instituição. |
 
@@ -66,7 +65,7 @@ Ele não assume automaticamente as tarefas do Setor de Estágio, nem lança as n
 
 ## Administração
 
-O Administrador do Campus cuida apenas do seu campus: seus dados administrativos, cursos, tipos de estágio, pessoas e vínculos locais. Ele não cria outro campus nem administra o sistema inteiro.
+Além dos processos de estágio, o Setor de Estágio cuida dos cadastros do próprio campus: seus dados administrativos, cursos, tipos de estágio, pessoas e vínculos locais. Ele não cria outro campus nem administra o sistema inteiro.
 
 O Administrador do Sistema cuida da estrutura geral, como campi e vínculos administrativos globais. Isso não lhe dá automaticamente a tarefa de analisar estágios ou documentos: para agir em outra função, precisa ter e selecionar o vínculo correspondente.
 

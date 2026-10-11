@@ -38,7 +38,7 @@ A restrição única (`delivery_key`, `attempt_number`) cobre também convites, 
 
 ## Consulta administrativa
 
-A tela de e-mails está restrita pela `EmailDeliveryAttemptPolicy` ao vínculo ativo selecionado de Administrador do Sistema. A consulta aceita somente as quatro finalidades administrativas e tentativas cujo `scope_context.affiliation_types` inclua Administrador do Sistema ou Administrador do Campus. Não usa endereço de destinatário nem `requested_by_affiliation_id` como substitutos do contexto do registro. Notificações operacionais e tentativas antigas sem contexto verificável ficam fora. O índice reúne cada envio pela tentativa mais recente; os detalhes mostram todas as tentativas. Não há ação de reenvio.
+A tela de e-mails está restrita pela `EmailDeliveryAttemptPolicy` ao vínculo ativo selecionado de Administrador do Sistema. A consulta aceita somente as quatro finalidades administrativas e tentativas cujo `scope_context.affiliation_types` inclua Administrador do Sistema ou Setor de Estágio. Não usa endereço de destinatário nem `requested_by_affiliation_id` como substitutos do contexto do registro. Notificações operacionais e tentativas antigas sem contexto verificável ficam fora. O índice reúne cada envio pela tentativa mais recente; os detalhes mostram todas as tentativas. Não há ação de reenvio.
 
 ## Limites e testes
 

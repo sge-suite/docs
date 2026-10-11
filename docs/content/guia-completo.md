@@ -37,11 +37,10 @@ No estado atual, login, recuperação de senha, dashboard, seleção e troca de 
 | Pessoa ou setor | Responsabilidade principal | Limite importante |
 | --- | --- | --- |
 | Discente | Inicia a solicitação, responde correções e acompanha o próprio estágio. | Não aprova a própria solicitação nem confirma assinaturas. |
-| Setor de Estágio | Analisa processos, formaliza, confere assinaturas, libera o estágio e trata pendências. | Não reescreve respostas do discente ou do supervisor. |
+| Setor de Estágio | Mantém dados e cursos do próprio campus; analisa processos, formaliza, confere assinaturas, libera o estágio e trata pendências. | Não administra outros campi nem reescreve respostas do discente ou do supervisor. |
 | Supervisor | Acompanha o discente no local de estágio e preenche a avaliação quando liberada. | Não aprova a própria avaliação nem lança notas acadêmicas. |
 | Orientador | Acompanha a dimensão acadêmica e registra as notas sob sua responsabilidade. | Não substitui o supervisor na avaliação nem conduz a formalização. |
 | Coordenador de curso | Consulta o acompanhamento do curso e emite o atestado de orientação previsto. | Não herda as tarefas operacionais do Setor de Estágio. |
-| Administrador do Campus | Mantém cadastros e dados administrativos do próprio campus. | Não administra outros campi. |
 | Administrador do Sistema | Mantém a estrutura institucional geral. | Não passa a operar estágios por ter esse vínculo. |
 | Direção de Ensino | Consulta informações institucionais quando autorizada. | O escopo de relatórios ainda depende de definição institucional. |
 

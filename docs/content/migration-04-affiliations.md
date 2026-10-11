@@ -63,7 +63,7 @@ O campo não é auditado pelo Activity Log e não representa login, logout ou tr
 
 O Spatie Activity Log registra criação e alterações relevantes nos dados fillable, incluindo tipo, campus, matrícula, e-mail e desativação/reativação. `last_used_at` não é fillable nem auditado; uma alteração isolada não cria atividade.
 
-Na consulta administrativa, o Administrador do Sistema pode ver atividades de vínculos dos tipos Administrador do Sistema e Administrador do Campus, além dos vínculos administrativos associados às contas elegíveis. A seleção ou troca de vínculo atualiza apenas a memória operacional de `last_used_at` e não é registrada como atividade. O histórico de e-mails mantém um snapshot separado do contexto afetado em `email_delivery_attempts.scope_context`; esse campo não guarda a seleção de vínculo.
+Na consulta administrativa, o Administrador do Sistema pode ver atividades de vínculos dos tipos Administrador do Sistema e Setor de Estágio, além dos vínculos administrativos associados às contas elegíveis. A seleção ou troca de vínculo atualiza apenas a memória operacional de `last_used_at` e não é registrada como atividade. O histórico de e-mails mantém um snapshot separado do contexto afetado em `email_delivery_attempts.scope_context`; esse campo não guarda a seleção de vínculo.
 
 ## Testes verificados
 

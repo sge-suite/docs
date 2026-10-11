@@ -32,7 +32,7 @@ Não guardar senhas, tokens, URLs assinadas, códigos de verificação, credenci
 
 ## Consulta e autorização
 
-A tela de auditoria usa Policy e revalida o vínculo ativo selecionado a cada requisição. No estado atual, somente o Administrador do Sistema pode consultá-la. O escopo inclui alterações em campi, contas com vínculos administrativos e vínculos de Administrador do Sistema ou Administrador do Campus. Estágios, documentos, concedentes e outros vínculos ficam fora. O histórico de e-mails usa tabelas próprias e autorização separada.
+A tela de auditoria usa Policy e revalida o vínculo ativo selecionado a cada requisição. No estado atual, somente o Administrador do Sistema pode consultá-la. O escopo inclui alterações em campi, contas com vínculos administrativos e vínculos de Administrador do Sistema ou Setor de Estágio. Estágios, documentos, concedentes e outros vínculos ficam fora. O histórico de e-mails usa tabelas próprias e autorização separada.
 
 ## Rollback atual
 

@@ -15,7 +15,7 @@ source_refs:
 | Vínculo                  | Escopo principal                       | Pode iniciar/editar                                                         | Pode analisar/aprovar                                     | Limites importantes                                                                     |
 | ------------------------ | -------------------------------------- | --------------------------------------------------------------------------- | --------------------------------------------------------- | --------------------------------------------------------------------------------------- |
 | Administrador do Sistema | Global                                 | Todos os campos dos campi e vínculos administrativos previstos em Policy; consulta auditoria e e-mails administrativos. | Administração global prevista em Policy.                  | Histórico exige vínculo ativo selecionado e permanece limitado a campi, contas e vínculos administrativos; não representa operação acadêmica do campus.              |
-| Setor de Estágio | Próprio campus | Dados do próprio campus, cursos e gestão local de usuários/vínculos; dados de acesso de contas locais e dados profissionais opcionais de supervisor; auditoria e e-mails de cadastro e alterações dentro do escopo local; demais fluxos previstos em Policy. | Estágios, documentos, avaliações, pendências e liberação. | Não cria campi nem altera seu ciclo de ativação; não gerencia vínculos de Administrador do Sistema, contas externas ou dados de acesso de outros administradores; não consulta logs administrativos gerais. Aprova/devolve avaliação sem editar a resposta. |
+| Setor de Estágio | Próprio campus | Dados do próprio campus, cursos, tipos de estágio e gestão local de usuários/vínculos; dados de acesso de contas locais e dados profissionais opcionais de supervisor; auditoria e e-mails de cadastro e alterações dentro do escopo local; demais fluxos previstos em Policy. | Estágios, documentos, avaliações, pendências e liberação. | Não cria campi nem altera seu ciclo de ativação; não gerencia vínculos de Administrador do Sistema, contas externas ou dados de acesso de outros administradores; não consulta logs administrativos gerais. Aprova/devolve avaliação sem editar a resposta. |
 | Coordenador              | Cursos que referenciam o vínculo       | Consultas e atestado de orientação previsto.                                | Ações acadêmicas explicitamente atribuídas ao curso.      | Não recebe automaticamente a análise operacional do Setor de Estágio.                   |
 | Orientador               | Próprios orientandos                   | Consulta e lançamento das notas sob sua responsabilidade.                   | Avaliação acadêmica que lhe for atribuída.                | Não opera estágios fora dos próprios orientandos.                                       |
 | Discente                 | Próprio vínculo e processos permitidos | Perfil permitido, rascunho e correções do próprio estágio.                  | Não aprova registros.                                     | Não altera CPF, dados alheios ou registros já congelados.                               |
@@ -39,6 +39,13 @@ source_refs:
 - [Fase de administração](doc:fase-05-administracao)
 - [Trilhas funcionais por vínculo](doc:pessoas-e-responsabilidades)
 - [Decisão sobre avaliação](doc:backlog-e-decisoes#d-009-ciclo-e-validade-da-avaliacao-do-supervisor)
+
+## Gestão de tipos de estágio
+
+- Somente o vínculo ativo selecionado de Setor de Estágio lista, consulta, cadastra, edita, desativa, reativa e exclui tipos do próprio campus, derivado pelo curso; o vínculo global de Administrador do Sistema não concede acesso a esse catálogo.
+- Cadastro e troca de curso exigem curso ativo local. Edição permite manter o curso atual desativado; reativação exige curso ativo. Campus desativado permite somente leitura.
+- Desativação e exclusão exigem senha atual e confirmação; reativação exige confirmação. A exclusão física só é permitida sem estágios ou solicitações vinculados. Mudanças do catálogo preservam snapshots de estágios formalizados.
+- Policies, requisições HTTP, componentes Livewire e Action revalidam o escopo; campus, situação e snapshots não são campos livres do formulário.
 
 ## Gestão de usuários e vínculos
 

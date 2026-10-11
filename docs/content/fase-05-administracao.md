@@ -11,7 +11,7 @@ source_refs: https://github.com/sge-suite/sge/blob/master/routes/web.php, https:
 ---
 Base: [papéis por vínculo](doc:pessoas-e-responsabilidades), [Matriz de autorização](doc:matriz-de-autorizacao) e [Perfis e responsabilidades por vínculo](doc:perfis-e-responsabilidades-por-vinculo).
 
-A estrutura de perfis e o contexto de vínculo existem. O provisionamento inicial ou a inclusão de Administrador do Sistema também pode ser feito por `admin:create`. A gestão global de campi tem backend, Policies, Form Requests, testes e páginas Livewire com Flux. O Administrador do Sistema também dispõe de telas para administrar contas e vínculos administrativos, consultar a auditoria administrativa e ver o histórico de e-mails associados a essas contas e vínculos. A tela Meu campus e a gestão completa de cursos estão implementadas para o Setor de Estágio. A gestão local de usuários e vínculos e as consultas de auditoria e e-mails compartilham as telas administrativas com autorização pelo campus do vínculo ativo selecionado. Tipos de estágio e operações das jornadas de estágio continuam pendentes.
+A estrutura de perfis e o contexto de vínculo existem. O provisionamento inicial ou a inclusão de Administrador do Sistema também pode ser feito por `admin:create`. A gestão global de campi tem backend, Policies, Form Requests, testes e páginas Livewire com Flux. O Administrador do Sistema também dispõe de telas para administrar contas e vínculos administrativos, consultar a auditoria administrativa e ver o histórico de e-mails associados a essas contas e vínculos. A tela Meu campus e a gestão completa de cursos estão implementadas para o Setor de Estágio. A gestão local de usuários e vínculos e as consultas de auditoria e e-mails compartilham as telas administrativas com autorização pelo campus do vínculo ativo selecionado. A gestão de tipos de estágio também está implementada; operações das jornadas de estágio continuam pendentes.
 
 ## Policies e escopo
 
@@ -19,7 +19,8 @@ A estrutura de perfis e o contexto de vínculo existem. O provisionamento inicia
 - [x] Criar `CampusPolicy` para consulta e gestão de campi, usando somente o vínculo ativo selecionado.
 - [x] Criar `UserPolicy` e ampliar `AffiliationPolicy` para contas e vínculos administrativos, exigindo o vínculo ativo selecionado e distinguindo administração global de gestão local.
 - [x] Criar CoursePolicy e testar o escopo do Setor de Estágio.
-- [ ] Criar Policies para tipos, concedentes, estágios e documentos.
+- [x] Criar InternshipTypePolicy e testar o campus derivado do curso.
+- [ ] Criar Policies para concedentes, estágios e documentos.
 - [x] Revalidar vínculo selecionado, perfil e proteções administrativas dentro das transações de gestão de usuários e vínculos.
 - [x] Manter as permissões de notificações em `AffiliationPolicy`; não há bypass global por `Gate::before`.
 - [x] Criar testes positivos e negativos para operações de campus e administração de usuários/vínculos.
@@ -80,8 +81,8 @@ O dashboard detalhado é exibido somente quando o vínculo ativo selecionado é 
 - [x] Compartilhar as telas de auditoria e e-mails e o grupo Logs, com escopo do campus e reautorização em cada requisição.
 - [x] Exibir nomes ou descrições atuais das referências nos campos alterados da auditoria, preservando IDs e limites de acesso.
 - [x] Implementar gestão completa de cursos, com coordenadores opcionais, desativação e exclusão com senha, reativação e consulta restrita ao campus.
-- [ ] Implementar gestão de tipos de estágio.
-- [x] Impedir acesso a outro campus nas telas Meu campus e Cursos.
+- [x] Implementar listagem, cadastro, consulta, edição, desativação, reativação e exclusão de tipos de estágio sem referências, com regras compartilhadas com o Model.
+- [x] Impedir acesso a outro campus nas telas Meu campus, Cursos e Tipos de estágio.
 
 ### Gestão local de usuários e vínculos
 
@@ -94,6 +95,18 @@ Desativação e exclusão de vínculos de outras pessoas usam os mesmos modais e
 `CampusUserRegistrationTest`, `CampusUserInterfaceTest`, `CampusUserChangesTest`, `OwnCampusAffiliationTest`, `CampusAffiliationLifecycleTest` e `CampusAffiliationEditingTest` cobrem os formulários compartilhados, regras de cada tipo, perfil opcional, autorização por campus, proteção de administradores, senha, referências, auditoria, avisos, rollback e revalidação após troca de contexto.
 
 `CampusLogInterfaceTest` cobre as consultas locais de auditoria e e-mails, histórico após exclusão, mensagens protegidas, finalidades e contextos permitidos, navegação compartilhada e revalidação do campus. `AuditReferencePresentationTest` cobre valores anteriores/novos, referências indisponíveis, identificação atual, escape de nomes e consultas agrupadas por tipo de referência.
+
+### Gestão de tipos de estágio
+
+As rotas `internship-types.*` disponibilizam listagem, cadastro, detalhes, edição, desativação, reativação e exclusão ao vínculo ativo e selecionado de Setor de Estágio. A listagem é paginada em grupos de 15 e permite filtrar ativos e desativados. A Policy deriva o campus pela associação ao curso; a sessão fornece o campus autorizado. Formulários não recebem campus ou escopo livres e rejeitam campos não permitidos, incluindo situação, regras JSON e snapshots. IDs de outro campus são recusados tanto nas páginas e requisições HTTP quanto nas Actions e requisições Livewire. Administrador do Sistema precisa selecionar um vínculo de Setor de Estágio para operar o catálogo.
+
+O cadastro e a troca de curso oferecem somente cursos ativos do campus selecionado. Na edição, o curso atual desativado pode ser mantido e aparece identificado como associação atual; outros cursos desativados não ficam disponíveis. O backend revalida essa elegibilidade no salvamento. Tipos desativados podem ser corrigidos enquanto o campus estiver ativo. Campus desativado permite apenas consulta.
+
+Os formulários reutilizam as validações de [Tipos de estágio](doc:migration-11-internship-types): carga horária inteira positiva; três pesos inteiros positivos somando exatamente 10; conceitos não negativos com até uma casa decimal, estritamente decrescentes e limitados pelo peso do supervisor. Ótimo é derivado desse peso, sem campo persistido próprio. Os limites diário e semanal começam em 6 e 30, não podem ser reduzidos e têm tetos de 24 por dia e 40 por semana; o limite diário não pode superar o semanal. O teto de 40 horas semanais depende da exceção prevista no projeto pedagógico pela Lei nº 11.788/2008. A margem começa em 7 e aceita inteiro não negativo. Insatisfatório começa em zero e permanece configurável. Nos conceitos decimais, digitar ou colar vírgula converte o separador para ponto, sem arredondar; o backend também aceita vírgula e mantém a restrição de até uma casa decimal.
+
+Desativação e exclusão exigem confirmação e senha atual; reativação exige confirmação e curso ativo. A exclusão física é permitida somente quando não há estágio nem solicitação vinculados ao tipo, com a Policy e a Action revalidando a condição. Transições repetidas são recusadas. As gravações são transacionais, bloqueiam e revalidam vínculo, campus, tipo e cursos envolvidos, e registram autoria pelo vínculo ativo no Activity Log sem guardar senhas. Trocar curso ou alterar configuração e situação não modifica snapshots, notas ou datas dos estágios já formalizados.
+
+`InternshipTypeManagementTest` e `InternshipTypeInterfaceTest` cobrem operações permitidas, validações, escopo e isolamento, curso desativado, transições, exclusão somente sem referências, senha, autoria, preservação de snapshots, navegação, filtros, paginação, seleção de cursos, identidade bloqueada e revogação de acesso após troca de vínculo ou desativação de campus/vínculo. As regras do Model continuam cobertas por `InternshipTypeTest`.
 
 ## Interface de campi
 

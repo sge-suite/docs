@@ -21,6 +21,10 @@ source_refs:
 
 Uma nota derivada deve linkar para a fonte principal em vez de repetir o contrato inteiro.
 
+## Limite de detalhe de interface
+
+Documente comportamentos de tela quando alterarem regras do domínio, autorização, dados ou uma operação necessária ao usuário. Omita ajustes de apresentação, como alinhamento, espaçamento, cores, ícones e transições visuais. Notas de migration descrevem schema, persistência, relações e regras do dado; não registram acabamento de formulários. Detalhes de implementação visual pertencem ao código e aos testes correspondentes.
+
 ## Estados das notas
 
 | Status | Uso |

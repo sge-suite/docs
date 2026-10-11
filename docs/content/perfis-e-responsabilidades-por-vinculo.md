@@ -22,7 +22,7 @@ Esta é a referência operacional para implementar as telas, Gates, Policies e t
 - Um campus desativado mantém vínculos e histórico, mas congela as alterações em seus recursos; configurações pessoais da conta continuam disponíveis e a pessoa pode trocar para outro vínculo.
 - Gates e Policies nativos do Laravel são a única camada de autorização. Não existem papéis, permissões ou exceções editáveis por interface.
 - O Activity Log registra alterações relevantes. Discente e supervisor não o consultam; os demais o consultam somente quando a Policy do processo autorizar.
-- No estado atual, a tela de auditoria e o histórico de e-mails estão disponíveis somente ao Administrador do Sistema com vínculo ativo selecionado; os escopos dos demais perfis continuam para decisão futura.
+- A tela de auditoria e o histórico de e-mails são compartilhados por Administrador do Sistema e Setor de Estágio com vínculo ativo selecionado. O Setor consulta somente o histórico dos recursos locais já gerenciados por suas Policies: campus, cursos, contas e vínculos permitidos, além dos e-mails de cadastro e alterações ligados ao campus. Os demais perfis e fluxos operacionais não recebem acesso automaticamente.
 - Notificação interna e e-mail são canais diferentes. Quem possui conta recebe ambos quando for destinatário elegível; o Setor de Estágio recebe seu resumo operacional somente dentro do sistema.
 - Informações privadas, inclusive prova de emancipação, nunca entram em e-mail, documento gerado ou Activity Log detalhado. O acesso depende de necessidade funcional explícita.
 
@@ -84,6 +84,7 @@ Cadastro de conta, novo vínculo, troca de e-mail de login, desativação e excl
 - editar matrícula e e-mail dos vínculos locais, incluindo os próprios, e dados profissionais opcionais de supervisor, que não possui matrícula;
 - editar nome, CPF e e-mail de login de contas locais, incluindo a própria; contas de outros Administradores do Sistema ficam protegidas;
 - desativar vínculos de outras pessoas com senha atual e confirmação e excluí-los fisicamente somente sem referências, preservando conta, perfil e auditoria;
+- consultar auditoria de campus, cursos, contas e vínculos locais autorizados, inclusive histórico de cursos e vínculos excluídos, e conteúdo e tentativas dos e-mails de cadastro e alterações vinculados ao campus;
 - assumir a gestão local de tipos de estágio quando seus fluxos e Policies forem implementados;
 - analisar solicitação enviada, aceitar, recusar ou devolver com motivo e seções autorizadas para correção;
 - analisar solicitações pendentes de cadastro de supervisor e parte concedente, criando ou associando o cadastro resultante;
@@ -108,7 +109,7 @@ Cadastro de conta, novo vínculo, troca de e-mail de login, desativação e excl
 
 ### Notificações e auditoria
 
-Recebe no sistema um resumo diário agrupado por campus e destinatário, sem e-mail operacional fragmentado. Suas decisões e mudanças registram vínculo responsável, motivo e efeitos no Activity Log. Avisos enviados a interessados de assinatura mantêm categorias e quantidade, nunca endereços de e-mail no log.
+Recebe no sistema um resumo diário agrupado por campus e destinatário, sem e-mail operacional fragmentado. Suas decisões e mudanças registram vínculo responsável, motivo e efeitos no Activity Log. As telas de Logs aplicam o campus do vínculo ativo a cada requisição, inclusive ao trocar de contexto ou acessar diretamente um evento. Autor e destinatário não concedem acesso a registros externos. Dados de acesso de outros administradores são protegidos; a própria conta pode consultar seus avisos de troca de e-mail mesmo quando também possui vínculo global. Avisos enviados a interessados de assinatura mantêm categorias e quantidade, nunca endereços de e-mail no log.
 
 ### Controles a implementar
 

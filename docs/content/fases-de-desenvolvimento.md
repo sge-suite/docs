@@ -9,7 +9,7 @@ tags: sge/desenvolvimento, sge/checklist
 related: fase-00-preparacao, fase-04-integracao-de-email, fase-01-fundacao-de-dados, fase-02-conta-e-contexto, fase-05-administracao, fase-06-documentos, fase-07-abertura-do-estagio, fase-08-estagio-em-andamento, fase-09-avaliacao-e-conclusao, fase-03-activity-log, componentes-tecnicos, enums, migrations
 source_refs:
 ---
-Esta lista registra a sequência e o estado atuais. A fundação de dados está concluída. Contexto de vínculo, criação administrativa por terminal e interface, configurações de senha/e-mail, auditoria Eloquent, gestão global de campi, contas e vínculos administrativos e painel global do Administrador do Sistema estão implementados; fluxos operacionais de estágio e edições pessoais próprias seguem pendentes.
+Esta lista registra a sequência e o estado atuais. A fundação de dados está concluída. Contexto de vínculo, criação administrativa por terminal e interface, configurações de senha/e-mail, auditoria Eloquent, gestão global de campi, contas e vínculos administrativos e painel global do Administrador do Sistema estão implementados. O Setor de Estágio dispõe de Meu campus, cursos, gestão local de usuários/vínculos e consultas locais de auditoria/e-mails; fluxos operacionais de estágio e edições pessoais próprias seguem pendentes.
 
 ## Ordem atual
 
@@ -17,9 +17,9 @@ Esta lista registra a sequência e o estado atuais. A fundação de dados está 
 - [x] [01 — Fundação de dados](doc:fase-01-fundacao-de-dados) — migrations, Models, factories e cobertura de banco concluídos.
 - **02 — Conta e contexto (em andamento):** contexto ativo, seleção/troca, `admin:create`, gestão de contas/vínculos administrativos, alteração própria de senha/e-mail e avisos correspondentes implementados; edição de perfil pessoal próprio permanece pendente.
 - **[03 — Activity Log](doc:fase-03-activity-log) (concluída):** auditoria Eloquent, autoria por vínculo, registro dos campos pessoais e profissionais de `UserPersonalData` e consulta administrativa com escopo limitado implementados.
-- **[04 — Integração de e-mail](doc:fase-04-integracao-de-email) (em andamento):** backend de reserva, envio em fila, conteúdo renderizado das mensagens administrativas e consulta de e-mails para o Administrador do Sistema implementados; integração das notificações operacionais de domínio, outros escopos e retenção continuam pendentes.
+- **[04 — Integração de e-mail](doc:fase-04-integracao-de-email) (em andamento):** backend de reserva, envio em fila, conteúdo renderizado das mensagens administrativas e consulta de e-mails compartilhada por Administrador do Sistema e Setor de Estágio, com escopos distintos, implementados; integração das notificações operacionais de domínio, outros escopos e retenção continuam pendentes.
 
-- [ ] [05 — Administração](doc:fase-05-administracao) — gestão global de campi, contas/vínculos administrativos e painel do Administrador do Sistema concluídos; implementar interface local, cursos, tipos de estágio e demais operações administrativas.
+- [ ] [05 — Administração](doc:fase-05-administracao) — gestão global de campi, contas/vínculos administrativos e painel do Administrador do Sistema concluídos; Meu campus, cursos, usuários/vínculos locais e consultas locais de Logs implementados para o Setor de Estágio; tipos de estágio e demais operações administrativas pendentes.
 - [ ] [06 — Documentos](doc:fase-06-documentos) — fechar validação, geração e assinatura com serviços de backend reutilizáveis.
 - [ ] [07 — Abertura do estágio](doc:fase-07-abertura-do-estagio) — completar Actions e regras transacionais antes e junto do formulário.
 - [ ] [08 — Estágio em andamento](doc:fase-08-estagio-em-andamento) — concluir cálculos, transições, notificações e schedules antes das telas correspondentes.
@@ -29,7 +29,7 @@ Esta lista registra a sequência e o estado atuais. A fundação de dados está 
 
 1. **Implementado:** resolver e validar o vínculo ativo, selecionar ou restaurar o contexto, disponibilizá-lo a Policies/Actions e registrar a autoria nas alterações Eloquent.
 2. **Concluído:** cobertura dos Models de negócio no Activity Log com autoria pelo vínculo, valores anteriores/novos, exclusão de segredos e validação pela suíte completa.
-3. **Em andamento:** o backend de e-mail com filas, idempotência e reprocessamento atende criação de conta, vínculos administrativos, alterações administrativas e troca de e-mail. A consulta administrativa de envios está disponível ao Administrador do Sistema. Faltam notificações de domínio, escopos para outros vínculos e política de retenção.
+3. **Em andamento:** o backend de e-mail com filas, idempotência e reprocessamento atende criação de conta, vínculos administrativos, alterações administrativas e troca de e-mail. A consulta de envios é compartilhada por Administrador do Sistema e Setor de Estágio, limitada ao escopo de cada vínculo ativo selecionado. Faltam notificações de domínio, escopos para outros vínculos e política de retenção.
 4. Implementar Services puros e Actions transacionais para cálculos, formalização, correções, cancelamentos e associações dos cadastros pendentes.
 5. Preparar validação e geração DOCX, notificações e Jobs idempotentes, com testes de concorrência, falhas e efeitos após commit.
 

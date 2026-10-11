@@ -7,7 +7,7 @@ status: in-progress
 visibility: public
 tags: sge/desenvolvimento, sge/email, sge/checklist
 related: enums, e-mails-notificacoes-e-entregas, enum-emailmessagepurpose, enum-emaildeliveryattemptstatus, migration-05-notifications, migration-06-email-messages, migration-07-email-delivery-attempts, fase-03-activity-log
-source_refs: https://github.com/sge-suite/sge/blob/master/app/Actions/RequestEmailDelivery.php, https://github.com/sge-suite/sge/blob/master/app/Jobs/SendEmailDelivery.php, https://github.com/sge-suite/sge/blob/master/app/Mail/DeliveryMail.php, https://github.com/sge-suite/sge/blob/master/app/Policies/EmailDeliveryAttemptPolicy.php, https://github.com/sge-suite/sge/blob/master/app/Support/AdministrativeEmailLogScope.php, https://github.com/sge-suite/sge/blob/master/app/Support/EmailLogAccess.php, https://github.com/sge-suite/sge/blob/master/resources/views/pages/email-logs/%E2%9A%A1index.blade.php, https://github.com/sge-suite/sge/blob/master/resources/views/pages/email-logs/%E2%9A%A1show.blade.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/EmailDeliveryFlowTest.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/EmailLogInterfaceTest.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/Settings/SecurityTest.php
+source_refs: https://github.com/sge-suite/sge/blob/master/app/Actions/RequestEmailDelivery.php, https://github.com/sge-suite/sge/blob/master/app/Jobs/SendEmailDelivery.php, https://github.com/sge-suite/sge/blob/master/app/Mail/DeliveryMail.php, https://github.com/sge-suite/sge/blob/master/app/Policies/EmailDeliveryAttemptPolicy.php, https://github.com/sge-suite/sge/blob/master/app/Support/AdministrativeEmailLogScope.php, https://github.com/sge-suite/sge/blob/master/app/Support/EmailLogAccess.php, https://github.com/sge-suite/sge/blob/master/resources/views/pages/email-logs/%E2%9A%A1index.blade.php, https://github.com/sge-suite/sge/blob/master/resources/views/pages/email-logs/%E2%9A%A1show.blade.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/EmailDeliveryFlowTest.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/EmailLogInterfaceTest.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/Settings/SecurityTest.php, https://github.com/sge-suite/sge/blob/master/app/Support/CampusEmailLogScope.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/CampusLogInterfaceTest.php
 ---
 As tabelas `notifications`, `email_messages` e `email_delivery_attempts`, seus enums, Models, validações e telas de consulta administrativa existem. `RequestEmailDelivery` grava snapshots e reserva tentativas, depois despacha `SendEmailDelivery` após o commit. Os fluxos administrativos de criação de conta, criação ou encerramento de vínculo, exclusão de conta e alteração do e-mail registram o conteúdo renderizado. A troca de e-mail da conta gera avisos aos endereços anterior e novo. Templates Markdown do Laravel produzem HTML e texto. Quando existe um vínculo solicitante, o conteúdo registra seu nome e tipo e mantém a assinatura no snapshot; envios automáticos assinam em nome do sistema. A recuperação de senha usa a Notification enfileirada do Fortify e não cria linhas nas tabelas próprias de entrega. O transporte vem de `config/mail.php`.
 
@@ -44,15 +44,19 @@ Workers de fila mantêm o código carregado em memória. Após alterar templates
 - [ ] Definir destinatários e canais para novo vínculo, documento disponível, correções, avaliações e eventos do estágio.
 - [ ] Manter o resumo do Setor de Estágio como notificação agrupada interna quando o contrato assim determinar.
 
-## Histórico de e-mails para o Administrador do Sistema
+## Histórico de e-mails por escopo
 
 - [x] Disponibilizar índice com filtros de finalidade e estado, e detalhes com conteúdo armazenado e todas as tentativas.
-- [x] Revalidar por Policy, em cada requisição, que o vínculo ativo selecionado é Administrador do Sistema; não há bypass de autorização.
-- [x] Filtrar por `scope_context` do registro: contas e vínculos dos tipos Administrador do Sistema e Setor de Estágio. O destinatário pode ser uma pessoa sem conta; não determina o escopo.
+- [x] Compartilhar as telas e o grupo Logs com Administrador do Sistema e Setor de Estágio, revalidando o vínculo ativo selecionado e seu escopo em cada requisição; não há bypass de autorização.
+- [x] Filtrar por `scope_context` do registro: na visão global, contas e vínculos dos tipos Administrador do Sistema e Setor de Estágio; na visão local, cadastro e alterações de contas e vínculos ligados ao campus selecionado, sem vínculos de Administrador do Sistema. O destinatário e o solicitante não determinam o escopo.
+- [x] Proteger mensagens de vínculos globais na visão do Setor; permitir o aviso de alteração do próprio e-mail de login mesmo quando a conta também possui vínculo global.
+- [x] Preservar a consulta das tentativas após exclusão do vínculo e em campus desativado, usando o contexto persistido do registro afetado.
 - [x] Excluir notificações operacionais, recuperação de senha e mensagens sem contexto administrativo verificável.
 - [x] Renderizar HTML em iframe sandboxed com scripts e recursos externos bloqueados; usar texto escapado como fallback e mostrar tentativas sem expor chaves, tokens ou exceções brutas.
 - [ ] Definir autorizações e limites de consulta para outros tipos de vínculo.
 - [ ] Definir uma interface autorizada para solicitar reenvio. O detalhe atual não oferece ação de reenvio.
+
+`EmailLogInterfaceTest` e `CampusLogInterfaceTest` cobrem escopo por registro afetado, finalidades permitidas, contexto ausente ou inválido, tentativas, revalidação após troca de vínculo e proteção contra acesso a outro campus. Os demais fluxos operacionais continuam fora da consulta; seus limites dependem das respectivas Policies.
 
 ## Critério de saída
 

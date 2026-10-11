@@ -7,7 +7,7 @@ status: implemented
 visibility: public
 tags: sge/migrations, sge/auditoria, sge/banco-de-dados
 related: fase-03-activity-log, perfis-e-responsabilidades-por-vinculo
-source_refs: https://github.com/sge-suite/sge/blob/master/database/migrations/2026_08_06_201115_create_activity_log_table.php, https://github.com/sge-suite/sge/blob/master/app/Http/Middleware/SetAuditActor.php, https://github.com/sge-suite/sge/blob/master/app/Support/ActivityAccess.php, https://github.com/sge-suite/sge/blob/master/app/Support/AdministrativeActivityScope.php, https://github.com/sge-suite/sge/blob/master/app/Policies/ActivityPolicy.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/AuditInterfaceTest.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/DatabaseAuditTest.php
+source_refs: https://github.com/sge-suite/sge/blob/master/database/migrations/2026_08_06_201115_create_activity_log_table.php, https://github.com/sge-suite/sge/blob/master/app/Http/Middleware/SetAuditActor.php, https://github.com/sge-suite/sge/blob/master/app/Support/ActivityAccess.php, https://github.com/sge-suite/sge/blob/master/app/Support/AdministrativeActivityScope.php, https://github.com/sge-suite/sge/blob/master/app/Policies/ActivityPolicy.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/AuditInterfaceTest.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/DatabaseAuditTest.php, https://github.com/sge-suite/sge/blob/master/app/Support/CampusActivityScope.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/CampusLogInterfaceTest.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/AuditReferencePresentationTest.php
 ---
 > [!success] Estado
 > Implementada no arquivo `2026_08_06_201115_create_activity_log_table.php` e usada pelo pacote Spatie Activity Log.
@@ -32,7 +32,7 @@ Não guardar senhas, tokens, URLs assinadas, códigos de verificação, credenci
 
 ## Consulta e autorização
 
-A tela de auditoria usa Policy e revalida o vínculo ativo selecionado a cada requisição. No estado atual, somente o Administrador do Sistema pode consultá-la. O escopo inclui alterações em campi, contas com vínculos administrativos e vínculos de Administrador do Sistema ou Setor de Estágio. Estágios, documentos, concedentes e outros vínculos ficam fora. O histórico de e-mails usa tabelas próprias e autorização separada.
+A tela de auditoria usa Policy e revalida o vínculo ativo selecionado a cada requisição. Administrador do Sistema e Setor de Estágio compartilham as telas com escopos distintos: o Administrador consulta campi, contas com vínculos administrativos e vínculos administrativos; o Setor consulta seu campus, cursos, contas e vínculos locais autorizados, sem vínculos de Administrador do Sistema nem dados de acesso de outros administradores. A própria conta mantém a exceção da gestão de usuários. Cursos e vínculos excluídos usam os campos registrados na auditoria para determinar o escopo. Referências nos campos alterados mostram identificação atual e ID quando disponíveis e autorizados. Estágios, documentos, concedentes e demais fluxos operacionais ficam fora da consulta atual. O histórico de e-mails usa tabelas próprias e autorização separada. Detalhes em [Fase 03](doc:fase-03-activity-log) e [Fase 05](doc:fase-05-administracao).
 
 ## Rollback atual
 

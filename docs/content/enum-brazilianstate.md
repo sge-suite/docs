@@ -46,7 +46,7 @@ O model `City` persiste `state` como sigla e o expõe como `BrazilianState` por 
 | `Sergipe` | `SE` | Sergipe |
 | `Tocantins` | `TO` | Tocantins |
 
-Para o cálculo do estágio, a UF e a cidade do endereço histórico do local de trabalho definem os feriados estaduais e municipais aplicáveis. O catálogo de cidades é local e carregado pelo `CitySeeder`; a BrasilAPI/IBGE pode ser usada para gerar ou revisar o arquivo de carga. A consulta opcional de CEP no formulário fica para uma etapa futura e deverá resolver a cidade no catálogo local, preservando sua identidade IBGE. O calendário importado é persistido em [`holidays`](doc:migration-22-holidays).
+Para o cálculo do estágio, a UF e a cidade do endereço histórico do local de trabalho definem os feriados estaduais e municipais aplicáveis. O catálogo de cidades é local e carregado pelo `CitySeeder`; a BrasilAPI/IBGE pode ser usada para gerar ou revisar o arquivo de carga. A consulta opcional de CEP nos formulários de campus resolve a cidade por nome normalizado e UF no catálogo local, preservando sua identidade IBGE; ausência ou ambiguidade exige seleção manual. O calendário importado é persistido em [`holidays`](doc:migration-22-holidays).
 
 ## Checklist
 

@@ -39,7 +39,7 @@ Não criar `code`. O campus é delimitado pelo vínculo ativo e o ciclo de ativa
 
 Campus inativo permanece consultável para leitura autorizada e sua tela global exibe somente os dados e a opção de reativar. A guarda de escrita está aplicada às operações de campus; sua integração aos demais recursos, futuros Jobs e schedules permanece obrigatória e pendente junto desses fluxos. A interface local do Setor de Estágio permite somente consulta quando o campus está desativado. A reativação não altera vínculos nem dispara processamento atrasado.
 
-Os campos cadastrais acima são obrigatórios no Model, nos Form Requests e na migration original. Somente o CEP do endereço é opcional. Atualizações parciais continuam permitidas, mas não podem limpar esses campos. `CampusFactory` já fornece representante e seguro completos; mantém os estados `withInsurance()` e `deactivated()`.
+Os campos cadastrais acima são obrigatórios no Model, nos Form Requests e na migration original. O CEP do endereço também é obrigatório, validado com `FormatoCep` do PT-BR Validator e armazenado somente com oito dígitos. Se uma atualização enviar endereço, deve incluir CEP; atualizações de outros dados podem omitir o endereço. Atualizações parciais continuam permitidas, mas não podem limpar esses campos. `CampusFactory` já fornece representante e seguro completos; mantém os estados `withInsurance()` e `deactivated()`.
 
 `Campus` usa Scout com Meilisearch para busca tolerante a erros pelo nome. O índice contém apenas ID, nome e `deactivated_at`; a situação é filtrada no próprio mecanismo de busca. A sincronização usa fila após o commit, evitando publicar registros descartados. O índice é auxiliar: a persistência, a autorização e a auditoria continuam no PostgreSQL. Pode haver um intervalo entre a gravação e a atualização da busca.
 
@@ -61,7 +61,7 @@ O histórico de alterações do campus aparece na consulta de auditoria do Admin
 - [x] Criar a interface local Meu campus para o Setor de Estágio.
 - [ ] Integrar a guarda de campus ativo aos futuros fluxos de escrita, Jobs e schedules dos recursos vinculados.
 - [x] Registrar alterações cadastrais no Activity Log.
-- [x] Testar campus ativo, desativado, endereço, representante e seguro obrigatórios, CEP opcional e CNPJ repetido.
+- [x] Testar campus ativo, desativado, endereço, representante e seguro obrigatórios, CEP obrigatório sem máscara e CNPJ repetido.
 - [x] Testar migrate/rollback e reaplicação da migration.
 
 ## Dependências

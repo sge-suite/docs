@@ -17,7 +17,7 @@ Concerns devem conter regras coesas e reutilizáveis, sem conhecer uma tela espe
 - [`ProfileValidationRules`](doc:concern-profilevalidationrules) — nome e e-mail de perfil.
 - [`CityValidationRules`](doc:migration-01a-cities) — código IBGE, nome e UF, aplicado ao model `City`, ao `CitySeeder` e à coleta do catálogo.
 - [`HolidayValidationRules`](doc:migration-22-holidays) — data, nome, escopo, UF e cidade, aplicado ao model `Holiday` e à importação da BrasilAPI.
-- [`AddressValidationRules`](doc:migration-01-addresses) — cidade existente e campos textuais obrigatórios de endereço, aplicada ao salvar `Address`; sem validação de CEP nesta etapa.
+- [`AddressValidationRules`](doc:migration-01-addresses) — cidade existente e campos textuais obrigatórios de endereço, aplicada ao salvar `Address`; CEP obrigatório validado com `FormatoCep` do PT-BR Validator.
 
 ## Checklist comum
 

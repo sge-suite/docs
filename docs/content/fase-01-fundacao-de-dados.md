@@ -29,7 +29,7 @@ source_refs:
 - [x] Criar e testar as classes dos enums estáveis; a integração com Models, migrations e fluxos continua nas etapas específicas.
 - [x] Concluir [`cities`](doc:migration-01a-cities), executar `php artisan cities:fetch` quando necessário e carregar o catálogo com `CitySeeder` sem rede.
 - [x] Implementar a base backend de [`addresses`](doc:migration-01-addresses), incluindo cópia histórica.
-- [ ] Implementar consulta de CEP no futuro fluxo de cadastro; endereço segue o contrato atual sem validação de formato do CEP.
+- [x] Implementar consulta de CEP nos formulários de campus, com revisão antes de aplicar, validação obrigatória com PT-BR Validator e persistência de oito dígitos sem máscara.
 - [x] Concluir [`user_personal_data`](doc:migration-02-user-personal-data).
 - [x] Concluir [`campuses`](doc:migration-03-campuses).
 - [x] Concluir [`affiliations`](doc:migration-04-affiliations).
@@ -45,7 +45,7 @@ source_refs:
 - [x] Preservar linhas de endereço usadas historicamente; alterações criam nova linha quando necessário.
 - [x] Garantir CPF único e normalizado na conta.
 - [ ] Impedir alteração do CPF em futuros fluxos de configuração da conta; pertence à [Fase 02](doc:fase-02-conta-e-contexto).
-- [x] Normalizar CPF, CNPJ, UF e e-mails pelos casts e validações aplicáveis; CEP não tem validação de formato.
+- [x] Normalizar CPF, CNPJ, UF e e-mails pelos casts e validações aplicáveis; CEP usa obrigatoriamente `FormatoCep` do PT-BR Validator e é persistido somente com oito dígitos.
 - [x] Permitir múltiplos vínculos por pessoa sem trocar campus dentro do vínculo.
 - [x] Exigir curso em vínculo discente e respeitar escopo do campus.
 - [x] Congelar regras do tipo de estágio por FK e snapshot no estágio.

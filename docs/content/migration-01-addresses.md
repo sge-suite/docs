@@ -10,7 +10,7 @@ related: migration-01a-cities, actions, concerns, testes-existentes, dominio-e-m
 source_refs: https://github.com/sge-suite/sge/blob/master/database/migrations/2026_09_16_153327_create_addresses_table.php, https://github.com/sge-suite/sge/blob/master/app/Models/Address.php, https://github.com/sge-suite/sge/blob/master/app/Concerns/AddressValidationRules.php, https://github.com/sge-suite/sge/blob/master/app/Actions/CopyAddress.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/AddressesTest.php
 ---
 > [!success] Estado
-> Base backend implementada: migration, model, factories, relacionamentos, validação dos campos obrigatórios, Activity Log e cópia histórica. Consulta e validação de CEP, telas e integrações com os cadastros e a formalização continuam pendentes.
+> Base backend implementada: migration, model, factories, relacionamentos, validação dos campos obrigatórios, Activity Log e cópia histórica. CEP obrigatório com PT-BR Validator e consulta com revisão estão implementados nos formulários de campus. Integrações restantes e a formalização continuam pendentes.
 
 ## Contrato implementado
 
@@ -21,11 +21,11 @@ source_refs: https://github.com/sge-suite/sge/blob/master/database/migrations/20
 | `street` | `varchar(255)` | não | — | Rua ou logradouro obrigatório. |
 | `number` | `varchar(255)` | não | — | Número textual obrigatório; aceita `123 A`, `0` e `s/n`. |
 | `neighborhood` | `varchar(255)` | não | — | Bairro obrigatório. |
-| `zip_code` | `varchar(255)` | sim | — | Valor opcional; sem validação de formato ou limpeza de dígitos nesta etapa. |
+| `zip_code` | `varchar(255)` | não | — | Obrigatório; validado com PT-BR Validator e persistido somente com oito dígitos, preservando zeros à esquerda. |
 | `created_at` | `timestamp(0)` | sim | — | Timestamp nativo do Laravel; preenchido pelo Eloquent no timezone institucional. |
 | `updated_at` | `timestamp(0)` | sim | — | Timestamp nativo do Laravel; atualizado pelo Eloquent. |
 
-A migration usa `$table->timestamps()`, com a nulabilidade padrão do Laravel. O Eloquent converte esses campos automaticamente em datas, sem casts explícitos no model. Inserções diretas que não passem pelo Eloquent podem deixar os timestamps nulos. O `down()` remove a tabela.
+A migration usa `$table->timestamps()`, com a nulabilidade padrão do Laravel. O Eloquent converte esses campos automaticamente em datas, sem casts explícitos no model. Inserções diretas que não passem pelo Eloquent podem deixar os timestamps nulos. O `down()` remove a tabela. A obrigatoriedade de CEP foi incluída na migration original, sem nova migration; bancos já migrados não recebem essa mudança de schema automaticamente.
 
 A cidade é obrigatória e selecionada no [catálogo local](doc:migration-01a-cities), criado antes desta tabela. Não há `complement`, UF duplicada, tabela de snapshots, `copied_from_address_id` ou campos de autoria. A tabela não usa `SoftDeletes` nem Scout/Searchable.
 
@@ -43,7 +43,7 @@ Na gestão de campi, a edição atualiza a mesma linha de endereço e preserva s
 
 `AddressValidationRules` centraliza as regras aplicadas no evento `saving` do model: cidade existente, logradouro, número e bairro obrigatórios, todos com os limites do schema. O número é textual, sem restringir os valores ao formato numérico. A rota de campus valida o endereço aninhado em um Form Request e cria ou atualiza `Address` via Eloquent. Ainda não há endpoint genérico para gerenciar endereços.
 
-O CEP omitido, nulo ou vazio é persistido como `null`. Valores informados não passam por validação de CEP, normalização por helper ou remoção de máscara; `varchar(255)` preserva o valor sem preenchimento de espaços. A validação de oito dígitos e o tratamento de máscaras serão definidos em uma etapa futura.
+O CEP é obrigatório no Model e nos Form Requests de campus. A validação usa obrigatoriamente `LaravelLegends\PtBrValidator\Rules\FormatoCep`. São aceitos oito dígitos ou as máscaras `00000-000` e `00.000-000`; `BrazilianAddressHelper::cepForValidation()` formata somente entradas compostas exatamente por oito dígitos antes da validação. Entradas inválidas não são limpas para se tornarem válidas. Após validar, o evento `saving` remove a máscara com `DigitsHelper::only()` e persiste oito dígitos em coluna textual, preservando zeros à esquerda. Essa regra cobre factories, cópias históricas e endereços preenchidos pela BrasilAPI. A exibição utiliza `BrazilianAddressHelper::formatCep()`.
 
 O Activity Log registra os campos cadastrais, somente quando há mudanças, sem registros vazios. A autoria vem do próprio mecanismo de auditoria. `AddressFactory` usa `CityFactory` para criar fixtures independentes de rede e da carga completa do catálogo.
 
@@ -57,18 +57,20 @@ O fluxo de campus impede editar seu endereço quando uma referência de outro pr
 
 Na formalização futura, `internships.workplace_address_id` deverá apontar para uma cópia do endereço da concedente nesta mesma tabela. `internships.student_address_id` poderá apontar para a cópia do endereço do discente quando necessário. Essas linhas deverão ser preservadas sem alterações retroativas; a mudança do cadastro atual poderá criar outra linha e trocar sua FK.
 
-## Consulta de CEP futura
+## Consulta de CEP implementada
 
-A consulta à BrasilAPI está fora da base atual. Quando implementada, sua resposta servirá apenas como sugestão de preenchimento e não impedirá a edição manual em caso de CEP geral, ausência ou indisponibilidade.
+O botão **Buscar CEP** nos formulários de campus chama `BrasilApiCepLookup`, que valida com PT-BR Validator antes de consultar `https://brasilapi.com.br/api/cep/v1/{cep}` somente com dígitos. A configuração de URL é compartilhada com a consulta de CNPJ; conexão e resposta têm limites de 3 e 10 segundos. Carregamento e erros aparecem junto ao CEP. Falhas HTTP, CEP não encontrado, conexão indisponível ou resposta inválida preservam os dados e permitem preenchimento manual. Salvar não depende de consultar com sucesso.
 
-A cidade deverá continuar sendo resolvida exclusivamente no catálogo local: primeiro pelo código IBGE quando disponível; caso contrário, pelo nome normalizado e pela UF. Ausência ou ambiguidade exigirá seleção manual. A integração não poderá criar cidades a partir da resposta externa.
+A resposta abre um modal Flux com valores atuais e propostos; cancelar preserva o formulário. Após confirmação, logradouro e bairro retornados substituem os campos preenchidos, valores vazios não apagam os atuais e o número é mantido. A cidade é resolvida exclusivamente por nome normalizado e UF no catálogo local, ignorando diferenças de maiúsculas e acentos. Somente uma correspondência inequívoca pode ser selecionada; ausência ou ambiguidade limpa a seleção e exige escolha manual. A integração não cria cidades. Os dados permanecem editáveis e só são persistidos pelo envio normal do formulário. A proposta fica protegida por `#[Locked]`, não pode ser aplicada se o CEP mudar e as permissões e o estado do campus são revalidados em cada requisição.
 
 ## Testes
 
-`tests/Feature/AddressesTest.php` cobre tipos e limites PostgreSQL, nulabilidade, índices, FK `RESTRICT`, migrate e rollback, factories, casts, relacionamentos, campos obrigatórios, número textual, CEP opcional sem validação de formato, cópia histórica e Activity Log. `tests/Feature/CampusManagementTest.php` verifica edição no mesmo endereço, bloqueio quando ele também estiver ligado a outro cadastro ou estágio e rollback dos registros e atividades. Como `user_personal_data` referencia `addresses`, o teste de rollback reverte em conjunto as migrations aplicadas a partir de `addresses`, testa a remoção da tabela e reaplica o conjunto. Os testes usam `Http::fake()` e `preventStrayRequests()` para impedir acesso à rede.
+`BrasilApiCepLookupTest` cobre consulta com HTTP simulado, entradas inválidas sem requisição, respostas e falhas da API, revisão, cancelamento, aplicação, preservação do número e campos vazios, cidades ausentes ou ambíguas, mudança posterior do CEP, proposta bloqueada e reautorização.
+
+`tests/Feature/AddressesTest.php` cobre tipos e limites PostgreSQL, nulabilidade, índices, FK `RESTRICT`, migrate e rollback, factories, casts, relacionamentos, campos obrigatórios, número textual, CEP obrigatório, PT-BR Validator, formatos aceitos e persistência sem máscara com zeros à esquerda, cópia histórica e Activity Log. `tests/Feature/CampusManagementTest.php` verifica edição no mesmo endereço, bloqueio quando ele também estiver ligado a outro cadastro ou estágio e rollback dos registros e atividades. Como `user_personal_data` referencia `addresses`, o teste de rollback reverte em conjunto as migrations aplicadas a partir de `addresses`, testa a remoção da tabela e reaplica o conjunto. Os testes usam `Http::fake()` e `preventStrayRequests()` para impedir acesso à rede.
 
 ```bash
-./vendor/bin/sail artisan test --compact tests/Feature/AddressesTest.php tests/Feature/CitiesTest.php tests/Unit/DatabaseDriverGuardTest.php
+./vendor/bin/sail artisan test --compact tests/Feature/AddressesTest.php tests/Feature/BrasilApiCepLookupTest.php tests/Feature/CitiesTest.php tests/Unit/DatabaseDriverGuardTest.php
 ./vendor/bin/sail exec laravel.test vendor/bin/pint --dirty --format agent
 ```
 
@@ -76,7 +78,7 @@ Os testes cobrem o schema PostgreSQL, endereços, cidades e a guarda global de m
 
 ## Checklist
 
-- [x] Definir cidade por FK para catálogo IBGE e CEP opcional.
+- [x] Definir cidade por FK para catálogo IBGE e CEP obrigatório.
 - [x] Confirmar campos obrigatórios e usar o limite padrão de 255 caracteres para os campos textuais.
 - [x] Criar migration reversível `create_addresses_table` com índice em `city_id` e FK `RESTRICT`.
 - [x] Criar `Address`, `AddressFactory`, `CityFactory` e relacionamentos existentes.
@@ -86,8 +88,8 @@ Os testes cobrem o schema PostgreSQL, endereços, cidades e a guarda global de m
 - [x] Implementar e testar a cópia histórica na própria tabela.
 - [x] Testar schema, migrate, rollback e persistência em PostgreSQL.
 - [x] Atualizar [Domínio e modelo de dados](doc:dominio-e-modelo-de-dados).
-- [ ] Definir validação e normalização de CEP no futuro fluxo de cadastro.
-- [ ] Implementar a consulta opcional de CEP e resolução da cidade no catálogo local.
+- [x] Validar CEP obrigatoriamente com PT-BR Validator e armazenar somente oito dígitos.
+- [x] Implementar consulta opcional de CEP nos formulários de campus, com revisão e resolução da cidade no catálogo local.
 - [ ] Criar telas e endpoints de cadastro nas etapas correspondentes.
 - [ ] Integrar cópias e impedir alteração/exclusão de linhas históricas ao implementar a formalização.
 

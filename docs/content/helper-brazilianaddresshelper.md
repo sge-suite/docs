@@ -11,7 +11,9 @@ source_refs: https://github.com/sge-suite/sge/blob/master/app/Helpers/BrazilianA
 ---
 ## Responsabilidade
 
-`formatCep()` converte oito dígitos para o formato `00000-000`. Entrada vazia retorna `-`; um valor que não possua oito dígitos retorna como foi informado. O helper apenas apresenta o CEP e não consulta serviços externos.
+`formatCep()` converte oito dígitos para o formato `00000-000`. Entrada vazia retorna `-`; um valor que não possua oito dígitos retorna como foi informado. O helper não consulta serviços externos.
+
+`cepForValidation()` prepara a entrada para `FormatoCep` do PT-BR Validator: somente strings compostas exatamente por oito dígitos recebem máscara; os demais valores permanecem intactos para a validação rejeitar formatos inválidos. O método é usado pelos Models, Form Requests e consulta de CEP. A remoção da máscara para persistência acontece somente depois da validação, com `DigitsHelper::only()`.
 
 ## Checklist
 

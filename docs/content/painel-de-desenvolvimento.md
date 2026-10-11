@@ -63,7 +63,7 @@ Sequência física dos arquivos em `database/migrations`; os números permanecem
 - [Migration base 05 — media](doc:migration-base-05-media) — **implemented** — Estado atual do armazenamento de mídia polimórfica do Spatie Media Library.
 - [Migration 01A — cities](doc:migration-01a-cities) — **implemented** — Catálogo local de cidades identificado pelo código IBGE, carregado pelo `CitySeeder` antes dos endereços.
 - [Migration 22 — holidays](doc:migration-22-holidays) — **implemented** — Base persistida de feriados nacional, estadual e municipal, com importação BrasilAPI para nacionais e estaduais.
-- [Migration 01 — addresses](doc:migration-01-addresses) — **implemented** — Base backend com cidade local, validação dos campos obrigatórios, Activity Log e cópia histórica; consulta e validação de CEP continuam pendentes.
+- [Migration 01 — addresses](doc:migration-01-addresses) — **implemented** — Base backend com cidade local, validação dos campos obrigatórios, Activity Log e cópia histórica; CEP obrigatório validado com PT-BR Validator, armazenado sem máscara e consultado na BrasilAPI com revisão nos formulários de campus.
 - [Migration 02 — user_personal_data](doc:migration-02-user-personal-data) — **implemented** — Dados pessoais e profissionais opcionais por usuário; CPF permanece na conta.
 - [Migration 03 — campuses](doc:migration-03-campuses) — **implemented** — Tabela de campi; representante legal e cargo permanecem textuais no próprio campus.
 - [Migration 04 — affiliations](doc:migration-04-affiliations) — **implemented** — Schema, Model, validação, factory, relações e Activity Log; contexto de sessão e seleção de vínculo estão implementados na Fase 02.

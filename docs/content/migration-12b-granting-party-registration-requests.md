@@ -18,7 +18,7 @@ source_refs: https://github.com/sge-suite/sge/blob/master/database/migrations/20
 | `campus_id` | bigint obrigatório, FK para `campuses.id` com `RESTRICT` e índice; escopo imutável após criação. |
 | `document_type` / `document_number` | tipo CPF/CNPJ e número validado pelo cast correspondente, normalizado sem pontuação; nulos em `Draft`, obrigatórios nos demais estados. |
 | `name` | nome ou razão social, obrigatório fora de `Draft`. |
-| `street`, `number`, `neighborhood`, `city`, `uf`, `zip_code` | endereço proposto em colunas próprias; obrigatórios fora de `Draft`. UF usa `BrazilianState`; CEP guarda oito dígitos. |
+| `street`, `number`, `neighborhood`, `city`, `uf`, `zip_code` | endereço proposto em colunas próprias; obrigatórios fora de `Draft`. UF usa `BrazilianState`; CEP é validado obrigatoriamente com `FormatoCep` do PT-BR Validator e guarda somente oito dígitos em coluna textual, preservando zeros à esquerda. |
 | `representative_name` / `representative_role` | representante e cargo, obrigatórios fora de `Draft`. |
 | `phone` / `email` | opcionais; telefone validado e normalizado por `PhoneCast`, e-mail validado. |
 | `field_of_activity` | obrigatório fora de `Draft`. |
@@ -32,3 +32,5 @@ source_refs: https://github.com/sge-suite/sge/blob/master/database/migrations/20
 A tabela registra a proposta enviada e sua decisão; `granting_parties` e `addresses` guardam o cadastro atual. Não há `submitted_by_affiliation_id`, `reviewed_by_affiliation_id` nem `submission_snapshot`. O Model participa do Activity Log Eloquent e registra atores e alterações; as Actions e Policies da análise ainda estão pendentes. A exclusão física pelo Model é bloqueada; não há `deleted_at`. Há índice secundário em `campus_id`, sem unicidade de documento ou constraints `CHECK`. O Model valida o campus e impede sua alteração após a criação.
 
 A aprovação selecionará ou criará `granting_parties` em transação, sempre no campus preservado pelo pedido, e associará a concedente resultante ao pedido; o Model já rejeita concedente resultante de outro campus. CPF/CNPJ repetidos em outros campi não tornam o cadastro compartilhável. Ao criar uma concedente, criará também uma nova linha de `addresses` exclusiva dela; não reutilizará o endereço de outro cadastro, mesmo que seja idêntico. O pedido mantém o endereço proposto em colunas próprias para aceitar rascunhos incompletos e preservar o que foi enviado. CNPJ repetido não impede unidades distintas. A solicitação de estágio só poderá ser aceita após substituir a referência pendente pela concedente aprovada.
+
+O CEP pode ficar vazio em `Draft`, mas, quando informado, deve passar pela mesma validação de formato aplicada fora do rascunho. Aceita oito dígitos e as máscaras `00000-000` e `00.000-000`; caracteres arbitrários não são removidos antes de validar. A máscara é removida somente após validação bem-sucedida.

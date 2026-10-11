@@ -76,3 +76,9 @@ Na consulta administrativa, o Administrador do Sistema pode ver atividades de v�
 - [`courses`](doc:migration-09-courses)
 - [`course_id` em affiliations](doc:migration-10-course-id-em-affiliations)
 - [Modelo de acesso](doc:modelo-de-dados-acesso)
+
+## Gestão pelo Setor de Estágio
+
+As telas compartilhadas de Usuários permitem cadastrar, consultar e editar vínculos de todos os tipos exceto Administrador do Sistema no campus ativo selecionado. O cadastro associa curso somente ao discente e nunca solicita matrícula de supervisor. Nome, CPF e login de contas existentes permanecem; dados profissionais opcionais de supervisor ficam no perfil compartilhado. A edição do vínculo mantém tipo, campus e curso; matrícula discente permanece única e matrícula de servidor preserva titularidade.
+
+Setor e Administrador não podem desativar nem excluir vínculos da própria conta. Desativação e exclusão de outros vínculos autorizados exigem senha atual e confirmação. A exclusão é física, sem SoftDeletes, e só ocorre sem referências de cursos, solicitações, estágios, avaliações, templates, envios, notificações ou anexos. O perfil pessoal pertence à conta e permanece. Registros do Activity Log não impedem a exclusão e conservam os IDs e alterações históricos mesmo sem o vínculo existente.

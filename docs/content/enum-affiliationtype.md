@@ -28,6 +28,8 @@ Classifica o papel funcional de uma pessoa dentro de um vínculo. Não represent
 
 O representante legal e seu cargo são campos textuais de `Campus`, não são um vínculo nem um case de `AffiliationType`. Não criar `LegalRepresentative`.
 
+O Setor de Estágio pode cadastrar e editar vínculos de todos os cases exceto `SystemAdministrator`, sempre no campus ativo selecionado. Só `Student` recebe curso no vínculo; `Supervisor` não solicita nem persiste matrícula e aceita dados profissionais opcionais no perfil compartilhado da conta. A edição preserva tipo, campus e curso; o escopo completo está na [Fase 05](doc:fase-05-administracao).
+
 ## Compatibilidade sem alteração de migrations
 
 Conforme a [D-024](doc:backlog-e-decisoes#d-024-administracao-local-concentrada-no-setor-de-estagio), o perfil Administrador do Campus foi removido do enum e dos formulários. Novos vínculos locais administrativos usam `InternshipOffice`. O cast lê o valor legado `campus_administrator` como Setor de Estágio, preservando IDs, referências, estado e valor persistido. A seleção de contexto não converte dados nem gera atividade. Consultas administrativas e proteção contra vínculos ativos duplicados reconhecem ambos os valores; snapshots históricos de auditoria e e-mails são preservados.

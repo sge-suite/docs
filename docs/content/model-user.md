@@ -31,7 +31,7 @@ A consulta administrativa do Activity Log inclui uma conta somente quando ela po
 
 ## Delimitação de responsabilidade
 
-`users` mantém autenticação, CPF e e-mail de login. O Administrador do Sistema pode editar nome, CPF e e-mail pela interface administrativa; a alteração do endereço de login envia avisos ao endereço anterior e ao novo. [`user_personal_data`](doc:migration-02-user-personal-data) guarda dados pessoais atuais e campos profissionais opcionais do supervisor em um perfil compartilhado pela conta. Cadastro e login não exigem esse perfil; o supervisor preencherá ou confirmará seus dados profissionais no futuro formulário, com edição autorizada pelo tipo de vínculo.
+`users` mantém autenticação, CPF e e-mail de login. O Administrador do Sistema e o Setor de Estágio autorizado podem editar nome, CPF e e-mail pela área Usuários; o Setor fica limitado às contas do campus, não altera dados de acesso de outros administradores e pode editar a própria conta mesmo quando também possui vínculo de Administrador do Sistema; a alteração do endereço de login envia avisos ao endereço anterior e ao novo. [`user_personal_data`](doc:migration-02-user-personal-data) guarda dados pessoais atuais e campos profissionais opcionais do supervisor em um perfil compartilhado pela conta. Cadastro e login não exigem esse perfil. O Setor pode informar e editar os dados profissionais opcionais ao cadastrar ou editar um vínculo de supervisor, sem matrícula. O futuro formulário do supervisor poderá preencher ou confirmar esses dados com autorização própria. Excluir um vínculo não exclui a conta nem esse perfil.
 
 ## Checklist
 

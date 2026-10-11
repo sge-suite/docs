@@ -63,11 +63,11 @@ Mantém a estrutura institucional global. Seu vínculo pode não possuir campus 
 
 ### Notificações e auditoria
 
-A criação, edição, desativação e reativação de contas e vínculos administrativos envia os avisos previstos aos e-mails da conta e do vínculo, com destinatários deduplicados quando necessário. Mudanças de conta, vínculo e campus registram autoria do vínculo ativo no Activity Log; senhas não são registradas. O Administrador do Sistema consulta campi, contas com vínculos administrativos e vínculos dos tipos Administrador do Sistema e Setor de Estágio na tela de auditoria. A tela de e-mails usa o contexto do registro afetado, não apenas o endereço destinatário, e mostra conteúdo salvo e tentativas. Ambas exigem o vínculo ativo selecionado e excluem atividades operacionais de estágios, documentos, concedentes e demais registros fora do escopo. Campus desativado só pode ser reativado, sem alterar vínculos ou processos.
+Cadastro de conta, novo vínculo, troca de e-mail de login, desativação e exclusão enviam os avisos previstos, com destinatários deduplicados. Edição de matrícula, e-mail do vínculo ou campos profissionais não envia convite; reativação de vínculo exige confirmação e não envia novo convite. Mudanças de conta, vínculo e campus registram autoria do vínculo ativo no Activity Log; senhas não são registradas. O Administrador do Sistema consulta campi, contas com vínculos administrativos e vínculos dos tipos Administrador do Sistema e Setor de Estágio na tela de auditoria. A tela de e-mails usa o contexto do registro afetado, não apenas o endereço destinatário, e mostra conteúdo salvo e tentativas. Ambas exigem o vínculo ativo selecionado e excluem atividades operacionais de estágios, documentos, concedentes e demais registros fora do escopo. Campus desativado só pode ser reativado, sem alterar vínculos ou processos.
 
 ### Controles a implementar
 
-`CampusPolicy` cobre as operações de campus e exige o vínculo ativo selecionado. `UserPolicy` e `AffiliationPolicy` autorizam a administração de contas e vínculos administrativos pelo Administrador do Sistema, também sem `Gate::before` global. As gravações usam controllers, Form Requests e Actions transacionais; a interface e a CoursePolicy estão implementadas para o Setor de Estágio; tipos e fluxos operacionais continuam pendentes.
+`CampusPolicy` cobre as operações de campus e exige o vínculo ativo selecionado. `UserPolicy` e `AffiliationPolicy` autorizam a administração global pelo Administrador do Sistema e a gestão local pelo Setor de Estágio, sem `Gate::before` global. Ambos são impedidos de desativar ou excluir vínculos da própria conta; as operações de encerramento sempre exigem senha e confirmação. As gravações usam controllers, Form Requests e Actions transacionais; a interface e a CoursePolicy estão implementadas para o Setor de Estágio; tipos e fluxos operacionais continuam pendentes.
 
 ## Setor de Estágio
 
@@ -79,7 +79,12 @@ A criação, edição, desativação e reativação de contas e vínculos admini
 
 - consultar e editar nome, CNPJ, endereço, telefone, representante legal e seguro do próprio campus ativo pela tela Meu campus;
 - listar, cadastrar, consultar, editar, desativar, reativar e excluir cursos sem referências do próprio campus; coordenadores são opcionais, ativos, distintos, do tipo Coordenador e do mesmo campus;
-- assumir a gestão local de tipos de estágio, pessoas e vínculos permitidos quando seus fluxos e Policies forem implementados; o cadastro de vínculos de Setor de Estágio continua disponível ao Administrador do Sistema;
+- listar e consultar contas e vínculos do próprio campus pela área Usuários; identificar contas externas ou sem vínculo apenas por CPF no cadastro;
+- cadastrar vínculos de qualquer tipo exceto Administrador do Sistema no campus ativo, preservando os dados de contas existentes;
+- editar matrícula e e-mail dos vínculos locais, incluindo os próprios, e dados profissionais opcionais de supervisor, que não possui matrícula;
+- editar nome, CPF e e-mail de login de contas locais, incluindo a própria; contas de outros Administradores do Sistema ficam protegidas;
+- desativar vínculos de outras pessoas com senha atual e confirmação e excluí-los fisicamente somente sem referências, preservando conta, perfil e auditoria;
+- assumir a gestão local de tipos de estágio quando seus fluxos e Policies forem implementados;
 - analisar solicitação enviada, aceitar, recusar ou devolver com motivo e seções autorizadas para correção;
 - analisar solicitações pendentes de cadastro de supervisor e parte concedente, criando ou associando o cadastro resultante;
 - criar e manter partes concedentes autorizadas, templates DOCX e versões de template;
@@ -92,7 +97,8 @@ A criação, edição, desativação e reativação de contas e vínculos admini
 
 ### Limites e proibições
 
-- não cria campi nem altera seu ciclo de ativação ou exclusão; não administra o sistema ou cria Administradores do Sistema;
+- não cria campi nem altera seu ciclo de ativação ou exclusão; não cria, edita, desativa ou exclui vínculos de Administrador do Sistema;
+- não desativa nem exclui vínculos da própria conta, não exclui contas e não reativa vínculos pela gestão local; tipo, campus e curso não são alterados pela edição de vínculo;
 - não acessa outro campus nem as consultas gerais de auditoria e e-mails administrativos; o vínculo desativado não autoriza acesso, e o campus desativado permite somente consulta autorizada;
 - não edita a resposta enviada pelo discente: devolve e indica as seções que podem ser corrigidas;
 - não edita conteúdo de avaliação do supervisor: somente aprova ou devolve;
@@ -106,7 +112,7 @@ Recebe no sistema um resumo diário agrupado por campus e destinatário, sem e-m
 
 ### Controles a implementar
 
-`CampusPolicy` e `CoursePolicy` já autorizam a gestão local implementada. As demais permissões dependem dos fluxos correspondentes: `InternshipRequestPolicy`, `RegistrationRequestPolicy`, `GrantingPartyPolicy`, `TemplatePolicy`, `GeneratedDocumentPolicy`, `InternshipPolicy`, `InternshipPausePolicy`, `InternshipCancellationRequestPolicy` e `SupervisorEvaluationPolicy` restringem o escopo ao campus e às transições válidas. Testar, no mínimo, edição indevida de resposta, liberação sem assinatura confirmada, aprovação de avaliação com carga pendente e tentativa de alterar jornada sem aditivo.
+`CampusPolicy`, `CoursePolicy`, `UserPolicy` e `AffiliationPolicy` já autorizam a gestão local implementada. As demais permissões dependem dos fluxos correspondentes: `InternshipRequestPolicy`, `RegistrationRequestPolicy`, `GrantingPartyPolicy`, `TemplatePolicy`, `GeneratedDocumentPolicy`, `InternshipPolicy`, `InternshipPausePolicy`, `InternshipCancellationRequestPolicy` e `SupervisorEvaluationPolicy` restringem o escopo ao campus e às transições válidas. Testar, no mínimo, edição indevida de resposta, liberação sem assinatura confirmada, aprovação de avaliação com carga pendente e tentativa de alterar jornada sem aditivo.
 
 ## Coordenador de Curso
 

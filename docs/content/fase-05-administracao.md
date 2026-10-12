@@ -75,7 +75,7 @@ O dashboard detalhado é exibido somente quando o vínculo ativo selecionado é 
 
 - [x] Limitar e testar a gestão local ao campus do vínculo ativo selecionado.
 - [x] Permitir ao Setor de Estágio editar nome, CNPJ, endereço, telefone, representante legal e dados do seguro do próprio campus; manter o ciclo de ativação restrito ao Administrador do Sistema.
-- [x] Criar a tela Livewire de edição permitida do campus em “Meu campus”, com o endereço compartilhado pelo componente Blade `address.form-fields`.
+- [x] Exibir dados e histórico do campus em “Meu campus” e oferecer edição em uma tela separada, com o endereço compartilhado pelo componente Blade `address.form-fields`.
 - [x] Impedir acesso a campus alheio, criação de campus e alteração do ciclo de ativação pelo Setor de Estágio.
 - [x] Listar, cadastrar, consultar e editar contas e vínculos no campus selecionado; desativar ou excluir vínculos de outras pessoas com senha e confirmação.
 - [x] Compartilhar as telas de auditoria e e-mails e o grupo Logs, com escopo do campus e reautorização em cada requisição.
@@ -113,8 +113,8 @@ Desativação e exclusão exigem confirmação e senha atual; reativação exige
 - Rotas GET: `campuses.index`, `campuses.create`, `campuses.show` e `campuses.edit`, protegidas por autenticação, contexto de vínculo e a permissão `viewAdministration`.
 - Cadastro e edição compartilham campos. O backend valida os dados e grava em transação; as consultas de CNPJ e CEP apenas propõem dados, e a persistência ocorre no envio normal. CEP é obrigatório, validado por PT-BR Validator e armazenado com oito dígitos.
 - O select compartilhado permite busca e seleção entre opções autorizadas; não aceita valores livres. UF usa `BrazilianState` e cidades vêm do catálogo local. A mudança da UF limpa a cidade, e UF não é persistida como dado do campus.
-- Busca e situação podem ser filtradas e ficam na URL; resultados são paginados em grupos de 15. Consultas carregam endereço e cidade sem alterar dados ou gerar atividades.
-- A busca textual de campi usa Scout/Meilisearch pelo nome. CNPJ não faz parte do índice atual. Listagem sem texto e filtros estruturados podem usar Eloquent; buscas textuais devem aplicar o escopo autorizado no índice.
+- Busca, UF e situação podem ser combinadas e ficam na URL; resultados são paginados em grupos de 15. Consultas carregam endereço e cidade sem alterar dados ou gerar atividades.
+- Sem filtro de UF, a busca textual tolerante a erros de campi usa Scout/Meilisearch pelo nome. Com UF selecionada, a busca por trecho do nome combina com esse filtro em Eloquent. CNPJ não faz parte do índice atual.
 - Campus desativado permite somente consulta. A identidade do campus nos componentes não pode ser alterada pelo cliente; a permissão é revalidada em cada requisição Livewire. A senha usada na desativação não é persistida.
 - `CampusInterfaceTest` cobre acesso, filtros, paginação, formulários, consulta de cidade, desativação e revalidação da permissão.
 
@@ -147,7 +147,7 @@ O botão **Buscar CEP**, no endereço compartilhado pelo cadastro e edição de 
 
 ## Gestão direta de partes concedentes
 
-A gestão direta está implementada para o vínculo ativo selecionado de Setor de Estágio, restrita ao próprio campus, pelas rotas `granting-parties.*`. A área possui listagem, cadastro, detalhes e edição com Livewire/Flux. A lista busca nome ou CPF/CNPJ completo, filtra ativos e desativados e pagina 15 registros. Os formulários ajustam o campo e a validação conforme CPF ou CNPJ. Para CNPJ, reutilizam a consulta BrasilAPI com revisão de razão social/nome fantasia, telefone, e-mail, atividade econômica principal (CNAE) e endereço antes de aplicar. E-mail inválido e dados ausentes preservam o preenchimento manual. O formulário dispõe os dados cadastrais à esquerda e o endereço à direita em telas amplas; nome e área de atuação ocupam a largura da coluna cadastral, e o credenciamento fica em seção opcional própria. Também reutilizam o endereço e a consulta de CEP com revisão; consulta e aplicação não gravam dados. A busca e o filtro de situação compartilham a mesma linha.
+A gestão direta está implementada para o vínculo ativo selecionado de Setor de Estágio, restrita ao próprio campus, pelas rotas `granting-parties.*`. A área possui listagem, cadastro, detalhes e edição com Livewire/Flux. A lista busca nome ou CPF/CNPJ completo, filtra por UF, cidade e situação e pagina 15 registros. A busca por cidade funciona com todas as UFs ou após restringir uma UF, e identifica cada resultado por cidade e sigla da UF. Os filtros podem ser limpos em conjunto. Os formulários ajustam o campo e a validação conforme CPF ou CNPJ. Para CNPJ, reutilizam a consulta BrasilAPI com revisão de razão social/nome fantasia, telefone, e-mail, atividade econômica principal (CNAE) e endereço antes de aplicar. E-mail inválido e dados ausentes preservam o preenchimento manual. O formulário dispõe os dados cadastrais à esquerda e o endereço à direita em telas amplas; nome e área de atuação ocupam a largura da coluna cadastral, e o credenciamento fica em seção opcional própria. Também reutilizam o endereço e a consulta de CEP com revisão; consulta e aplicação não gravam dados.
 
 `GrantingPartyPolicy`, Form Requests e `ManageGrantingParty` revalidam autorização e escopo. O campus não é um campo livre. Desativação e exclusão exigem senha atual; reativação exige confirmação. Concedentes desativadas podem ser corrigidas enquanto o campus estiver ativo. Campus desativado permite somente leitura. A exclusão é física e exige ausência de estágios e de solicitações vinculadas. O endereço é removido fisicamente na mesma transação; outras referências ativas ou históricas preservam a linha. O endereço atual é substituído por uma nova linha quando muda, preservando o anterior. As gravações registram o vínculo responsável no Activity Log.
 
@@ -158,6 +158,20 @@ A remoção de endereços é compartilhada por Campus, Concedente, dados pessoai
 ## Histórico de auditoria nas telas de detalhes
 
 Além do índice compartilhado **Auditoria**, o histórico relacionado aparece nos detalhes dos recursos autorizados ao perfil: campus para Administrador do Sistema; Meu campus, cursos, tipos de estágio e partes concedentes para Setor de Estágio; contas e vínculos locais conforme o escopo de cada perfil. A lista de uma concedente ou campus inclui também eventos do respectivo endereço e identifica o cadastro proprietário, mesmo após substituição ou exclusão do endereço. O Setor não consulta outro campus; o Administrador não ganha acesso a cadastros locais de cursos, tipos ou concedentes por meio da auditoria.
+
+## Filtros dos índices administrativos
+
+Os filtros de cada índice podem ser combinados e, quando ativos, o botão **Limpar filtros** restaura os valores padrão e retorna à primeira página.
+
+| Índice | Busca e filtros |
+| --- | --- |
+| Campi | Nome, UF e situação. |
+| Usuários | Nome, CPF completo ou e-mail de login completo; perfil e situação do vínculo. Perfil e situação são avaliados no mesmo vínculo visível ao usuário. |
+| Cursos | Nome e situação. |
+| Tipos de estágio | Nome, curso e situação. |
+| Partes concedentes | Nome ou CPF/CNPJ completo, UF, cidade e situação. A cidade pode ser pesquisada mesmo com todas as UFs selecionadas; os resultados mostram cidade e UF. |
+
+Nos seletores pesquisáveis, as setas percorrem os resultados, Enter seleciona e Tab permite avançar pelos itens encontrados.
 
 ## Paginação das telas administrativas
 

@@ -10,7 +10,7 @@ related: migration-01-addresses, enum-partydocumenttype
 source_refs: https://github.com/sge-suite/sge/blob/master/database/migrations/2026_09_23_152827_create_granting_parties_table.php, https://github.com/sge-suite/sge/blob/master/app/Models/GrantingParty.php, https://github.com/sge-suite/sge/blob/master/database/factories/GrantingPartyFactory.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/GrantingPartyTest.php
 ---
 > [!info] Estado
-> O cadastro e seu escopo por campus estão implementados na migration, no Model, na factory, nas validações e nos testes PostgreSQL. Os fluxos de interface, autorização e aprovação de solicitações continuam planejados.
+> O cadastro e seu escopo por campus estão implementados na migration, no Model, na factory, nas validações e nos testes PostgreSQL. A gestão direta, sua autorização e as telas estão implementadas. A aprovação de solicitações continua planejada.
 
 ## Contrato
 
@@ -30,9 +30,9 @@ source_refs: https://github.com/sge-suite/sge/blob/master/database/migrations/20
 | `professional_council` | `varchar(255)` | sim | — | Conselho profissional, quando aplicável. |
 | `council_registration_number` | `varchar(255)` | sim | — | Registro no conselho, quando aplicável. |
 | `credentialing_process_number` | `varchar(255)` | sim | — | Processo de credenciamento, quando aplicável. |
+| `deactivated_at` | `timestamp(0)` | sim | — | Indisponibilidade para novas associações, independente de exclusão física. |
 | `created_at` | `timestamp(0)` | sim | — | Timestamp nativo do Laravel, preenchido pelo Eloquent. |
 | `updated_at` | `timestamp(0)` | sim | — | Timestamp nativo do Laravel, atualizado pelo Eloquent. |
-| `deleted_at` | `timestamp(0)` | sim | — | Exclusão lógica sem apagar histórico. |
 
 Cada linha de `granting_parties` pertence a um campus por meio de `campus_id` (FK obrigatória com exclusão restrita e índice). Esse escopo não será alterado na edição comum; para usar a mesma organização ou pessoa em outro campus, será criado outro cadastro local. Os cadastros serão separados por campus, mesmo quando uma empresa exigir o CNPJ da matriz para uma filial ou várias escolas estaduais compartilharem o mesmo CNPJ. O CPF também poderá aparecer em cadastros de campi diferentes; dados de conselho, credenciamento, contatos e endereço ficam no cadastro local e não são compartilhados automaticamente. Não criar unicidade global nem por campus para `document_number`; CPF/CNPJ identificam o documento informado, mas não distinguem necessariamente a unidade operacional. O CPF da parte concedente é independente de `users.cpf` e não deve mesclar contas de usuário. Para ser selecionada na solicitação de estágio, a concedente precisa estar cadastrada para o campus do estágio. Quando houver, o número do processo de credenciamento preenche o campo correspondente do documento. O estágio guardará FK e snapshot.
 
@@ -41,6 +41,12 @@ Cada linha de `granting_parties` pertence a um campus por meio de `campus_id` (F
 As colunas textuais usam `$table->string()` sem comprimento explícito (`varchar(255)` no PostgreSQL). Os limites de domínio, incluindo os tamanhos de CPF e CNPJ, são aplicados em PHP, sem constraints `CHECK` no banco. Endereço, representante e área de atuação são obrigatórios para a concedente. O CEP é obrigatório na tabela de endereços, validado com PT-BR Validator no Model e armazenado como oito dígitos em coluna textual, sem máscara.
 
 Os campos de endereço continuam em `addresses`, e não são repetidos nesta tabela. A FK usa `RESTRICT`. Ao atualizar o endereço atual, a aplicação cria uma nova linha exclusiva da concedente e troca `address_id`; não seleciona uma linha já pertencente a outro cadastro, mesmo que os valores sejam iguais. A remoção física da linha anterior só é elegível depois que nenhuma relação a referenciar. Ao criar um estágio, o sistema copia o endereço apontado por `address_id` para uma nova linha de `addresses`; o estágio guarda essa nova FK em `workplace_address_id`. Telefone, representante, conselho e processo continuam sendo dados atuais da concedente e entram no snapshot do estágio somente no aceite.
+
+## Disponibilidade e integridade
+
+`deactivated_at` nulo identifica cadastro ativo. Novas associações de solicitação ou estágio exigem concedente ativa e não excluída; referências existentes podem ser mantidas depois da desativação. Alterações cadastrais preservam snapshots e endereços históricos. A exclusão física é bloqueada quando houver estágios, solicitações de estágio ou solicitações de cadastro relacionadas, em qualquer estado. O endereço próprio é removido fisicamente junto com a concedente quando não houver outra referência, na mesma transação; a auditoria é preservada. Referências de outro cadastro ou estágio preservam o endereço disponível. Não há exclusão lógica nem restauração. A migration original foi ajustada antes da implantação em produção, sem migration adicional.
+
+A coluna foi incorporada à migration original antes da implantação em produção. Bancos locais já migrados não recebem a coluna apenas executando `migrate`; a sincronização desses ambientes exige tratamento separado, sem pressupor descarte de dados.
 
 ## Checklist
 

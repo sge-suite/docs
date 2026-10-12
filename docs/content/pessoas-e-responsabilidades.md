@@ -65,6 +65,8 @@ Ele não assume automaticamente as tarefas do Setor de Estágio, nem lança as n
 
 ## Administração
 
+O Setor também cadastra e atualiza partes concedentes do próprio campus. Pode desativá-las para impedir novas associações, preservando estágios existentes, e reativá-las quando necessário. Só pode excluir um cadastro sem processos vinculados. Unidades diferentes podem utilizar o mesmo CPF ou CNPJ, e esse cadastro não cria uma conta para a concedente.
+
 Além dos processos de estágio, o Setor de Estágio cuida dos cadastros do próprio campus: seus dados administrativos, cursos, tipos de estágio, pessoas e vínculos locais. Ele não cria outro campus nem administra o sistema inteiro.
 
 O Administrador do Sistema cuida da estrutura geral, como campi e vínculos administrativos globais. Isso não lhe dá automaticamente a tarefa de analisar estágios ou documentos: para agir em outra função, precisa ter e selecionar o vínculo correspondente.

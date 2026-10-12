@@ -84,7 +84,7 @@ Cadastro de conta, novo vínculo, troca de e-mail de login, desativação e excl
 - editar matrícula e e-mail dos vínculos locais, incluindo os próprios, e dados profissionais opcionais de supervisor, que não possui matrícula;
 - editar nome, CPF e e-mail de login de contas locais, incluindo a própria; contas de outros Administradores do Sistema ficam protegidas;
 - desativar vínculos de outras pessoas com senha atual e confirmação e excluí-los fisicamente somente sem referências, preservando conta, perfil e auditoria;
-- consultar auditoria de campus, cursos, contas e vínculos locais autorizados, inclusive histórico de cursos e vínculos excluídos, e conteúdo e tentativas dos e-mails de cadastro e alterações vinculados ao campus;
+- consultar auditoria de campus, cursos, tipos de estágio, concedentes, endereços dos cadastros, contas e vínculos locais autorizados, inclusive histórico de cursos e vínculos excluídos, e conteúdo e tentativas dos e-mails de cadastro e alterações vinculados ao campus;
 - listar, consultar, cadastrar, editar, desativar e reativar tipos de estágio dos cursos do próprio campus; excluir tipos somente sem solicitações ou estágios vinculados; cadastro e troca de curso exigem curso ativo, e edição pode preservar a associação atual desativada; reativação exige curso ativo;
 - analisar solicitação enviada, aceitar, recusar ou devolver com motivo e seções autorizadas para correção;
 - analisar solicitações pendentes de cadastro de supervisor e parte concedente, criando ou associando o cadastro resultante;
@@ -274,3 +274,7 @@ Cada ação deve ter testes positivos e negativos: vínculo correto, tipo errado
 - confirmar se o Coordenador terá alguma ação acadêmica além de consulta por curso e emissão de atestado de orientação;
 - confirmar quais dados e relatórios poderão ser visualizados por cada vínculo sem relação direta com o estágio;
 - definir a política de auditoria para consultas sensíveis, caso ela exija registros além do Activity Log de alterações.
+
+## Gestão direta de partes concedentes
+
+Somente o vínculo ativo selecionado de Setor de Estágio lista, consulta, cadastra, edita, desativa, reativa e exclui concedentes do próprio campus. Administrador do Sistema e outros perfis não herdam acesso a esse catálogo. Campus desativado permite somente consulta; vínculo desativado não autoriza acesso. Desativação e exclusão exigem senha atual e confirmação, e reativação exige confirmação. Exclusão física acompanhada do endereço próprio exige ausência de estágios, solicitações de estágio e solicitações de cadastro vinculados. Edição pode manter concedente desativada, sem alterar campus ou situação. Novas associações exigem cadastro ativo, preservando as existentes e seus snapshots. `GrantingPartyPolicy` protege rotas, ações transacionais e requisições Livewire. A concedente não recebe conta nem permissão de autoaprovação.

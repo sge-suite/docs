@@ -28,7 +28,7 @@ source_refs:
 - Vínculo desativado preserva consulta histórica autorizada, mas não permite iniciar ou alterar fluxos.
 - Campus desativado preserva consulta e vínculos, mas congela as alterações em seus recursos; configurações pessoais continuam disponíveis.
 - Nenhuma Policy ultrapassa o escopo de campus ou curso do vínculo.
-- Auditoria e e-mails compartilham telas entre Administrador do Sistema e Setor de Estágio. O Setor consulta somente campus, cursos, contas e vínculos locais autorizados e e-mails de cadastro e alterações com contexto persistido do campus; não herda consultas globais nem acesso ao histórico de fluxos ainda sem Policy.
+- Auditoria e e-mails compartilham telas entre Administrador do Sistema e Setor de Estágio. O Setor consulta somente campus, cursos, tipos de estágio, concedentes, endereços dos cadastros, contas e vínculos locais autorizados e e-mails de cadastro e alterações com contexto persistido do campus; não herda consultas globais nem acesso ao histórico de fluxos ainda sem Policy.
 - A mesma pessoa pode atuar por mais de um vínculo; a sessão escolhe apenas um contexto por vez.
 - Não há permissões/roles editáveis pelo banco ou interface. Exceções exigem mudança explícita de enum, Policy, teste e documentação.
 
@@ -55,3 +55,7 @@ source_refs:
 - O Setor pode editar os próprios dados de acesso mesmo quando possui também um vínculo de Administrador do Sistema; a exceção não permite editar contas de outros administradores.
 - Desativação e exclusão exigem senha atual e confirmação para ambos os perfis administrativos. Nenhum deles pode desativar ou excluir vínculos da própria conta. O Setor só opera vínculos locais de outras pessoas; a exclusão exige ausência de referências.
 - Dados pessoais da conta e auditoria são preservados na exclusão do vínculo. Exclusão de conta e reativação de vínculo continuam exclusivas do Administrador do Sistema.
+
+## Gestão direta de partes concedentes
+
+Somente o vínculo ativo selecionado de Setor de Estágio lista, consulta, cadastra, edita, desativa, reativa e exclui concedentes do próprio campus. Administrador do Sistema e outros perfis não herdam acesso a esse catálogo. Campus desativado permite somente consulta; vínculo desativado não autoriza acesso. Desativação e exclusão exigem senha atual e confirmação, e reativação exige confirmação. Exclusão física acompanhada do endereço próprio exige ausência de estágios, solicitações de estágio e solicitações de cadastro vinculados. Edição pode manter concedente desativada, sem alterar campus ou situação. Novas associações exigem cadastro ativo, preservando as existentes e seus snapshots. `GrantingPartyPolicy` protege rotas, ações transacionais e requisições Livewire. A concedente não recebe conta nem permissão de autoaprovação.

@@ -27,7 +27,7 @@ source_refs: https://github.com/sge-suite/sge/blob/master/database/migrations/20
 
 A migration usa `$table->timestamps()`, com a nulabilidade padrão do Laravel. O Eloquent converte esses campos automaticamente em datas, sem casts explícitos no model. Inserções diretas que não passem pelo Eloquent podem deixar os timestamps nulos. O `down()` remove a tabela. A obrigatoriedade de CEP foi incluída na migration original, sem nova migration; bancos já migrados não recebem essa mudança de schema automaticamente.
 
-A cidade é obrigatória e selecionada no [catálogo local](doc:migration-01a-cities), criado antes desta tabela. Não há `complement`, UF duplicada, tabela de snapshots, `copied_from_address_id` ou campos de autoria. A tabela não usa `SoftDeletes` nem Scout/Searchable.
+A cidade é obrigatória e selecionada no [catálogo local](doc:migration-01a-cities), criado antes desta tabela. Não há `complement`, UF duplicada, tabela de snapshots, `copied_from_address_id` ou campos de autoria. A tabela não usa `SoftDeletes` nem Scout/Searchable; o endereço é removido fisicamente quando seu proprietário é excluído e não há outras referências.
 
 ## Propriedade dos endereços
 
@@ -37,6 +37,8 @@ O schema atual contém FKs nos cadastros proprietários, mas ainda não impõe e
 
 Na gestão de campi, a edição atualiza a mesma linha de endereço e preserva seu ID. Antes da mudança, o controller verifica referências em campi, dados pessoais, concedentes e estágios; se encontrar outro proprietário ou uso histórico, rejeita a operação. A verificação é de aplicação, pois o schema não impõe exclusividade entre as FKs.
 
+A exclusão Eloquent de Campus, Parte Concedente, dados pessoais e Estágio usa `HasOwnedAddresses` para remover fisicamente os endereços associados na mesma transação. Não há exclusão lógica ou restauração nesses cadastros. Referências de outro cadastro ou de estágio histórico preservam a linha; FKs `RESTRICT` impedem excluir diretamente um endereço ainda associado. Novas associações rejeitam IDs de endereços já removidos. SQL direto e cascatas exclusivas do banco não executam esses eventos.
+
 ## Model, validação e auditoria
 
 `Address` declara os campos cadastrais com `#[Fillable]`, usa `HasFactory` e possui casts de `city_id` para inteiro e dos campos textuais para string. `Address::city()` é `BelongsTo`; `City::addresses()` é `HasMany`. As relações com modelos ainda inexistentes não foram adicionadas.
@@ -45,7 +47,7 @@ Na gestão de campi, a edição atualiza a mesma linha de endereço e preserva s
 
 O CEP é obrigatório no Model e nos Form Requests de campus. A validação usa obrigatoriamente `LaravelLegends\PtBrValidator\Rules\FormatoCep`. São aceitos oito dígitos ou as máscaras `00000-000` e `00.000-000`; `BrazilianAddressHelper::cepForValidation()` formata somente entradas compostas exatamente por oito dígitos antes da validação. Entradas inválidas não são limpas para se tornarem válidas. Após validar, o evento `saving` remove a máscara com `DigitsHelper::only()` e persiste oito dígitos em coluna textual, preservando zeros à esquerda. Essa regra cobre factories, cópias históricas e endereços preenchidos pela BrasilAPI. A exibição utiliza `BrazilianAddressHelper::formatCep()`.
 
-O Activity Log registra os campos cadastrais, somente quando há mudanças, sem registros vazios. A autoria vem do próprio mecanismo de auditoria. `AddressFactory` usa `CityFactory` para criar fixtures independentes de rede e da carga completa do catálogo.
+O Activity Log registra a identificação do cadastro proprietário em `properties.address_context` quando disponível; eventos anteriores podem recuperar a associação pelo histórico imutável do cadastro. O Activity Log registra os campos cadastrais, somente quando há mudanças, sem registros vazios. A autoria vem do próprio mecanismo de auditoria. `AddressFactory` usa `CityFactory` para criar fixtures independentes de rede e da carga completa do catálogo.
 
 ## Cópia histórica implementada
 
@@ -99,3 +101,5 @@ Os testes cobrem o schema PostgreSQL, endereços, cidades e a guarda global de m
 - [campuses](doc:migration-03-campuses)
 - [granting_parties](doc:migration-12-granting-parties)
 - [internships](doc:migration-15-internships)
+
+`AddressLifecycleTest` cobre exclusão física acompanhando o proprietário, cancelamento da exclusão, endereços compartilhados, preservação de referências históricas, rejeição de associações excluídas e rollback de cadastro, endereço e auditoria.

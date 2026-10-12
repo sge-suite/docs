@@ -27,13 +27,13 @@ source_refs: https://github.com/sge-suite/sge/blob/master/database/migrations/20
 | `insurance_company_name`             | `varchar(255)`, obrigatório no cadastro. |
 | `insurance_policy_number`            | `varchar` padrão do Laravel, obrigatório no cadastro. |
 | `deactivated_at`                      | `timestamp(0)` nullable e indexado; desativa o campus e bloqueia alterações em seus recursos. |
-| timestamps / `deleted_at`             | `timestamp(0)` para auditoria e exclusão lógica. |
+| timestamps                            | `timestamp(0)` para criação e atualização; não há `deleted_at`. |
 
 Não criar `code`. O campus é delimitado pelo vínculo ativo e o ciclo de ativação pertence ao Administrador do Sistema. Representante legal e cargo são dados cadastrais do campus, não referências a usuário ou `affiliations`. A geração congela nomes, cargos, seguro e endereço no snapshot documental; alterar o campus não reescreve documento anterior.
 
 ## Implementação atual
 
-`Campus` usa `SoftDeletes`, registra alterações cadastrais no Activity Log e expõe o escopo `active()` para registros sem `deactivated_at`. O Model oferece `deactivate()`, `reactivate()` e `assertWritable()`; campus desativado só pode ser reativado, sem outras mudanças cadastrais. O endereço atual é obrigatório (`belongsTo`/`hasMany`) e sua exclusão é `RESTRICT`, inclusive enquanto o campus estiver apenas excluído logicamente. O CNPJ é normalizado para 14 dígitos e validado com `laravellegends/pt-br-validator`; o telefone reutiliza `PhoneCast`, aceitando telefone fixo ou celular com DDD e persistindo somente os dígitos.
+`Campus` usa exclusão física, registra alterações cadastrais no Activity Log e expõe o escopo `active()` para registros sem `deactivated_at`. O Model oferece `deactivate()`, `reactivate()` e `assertWritable()`; campus desativado só pode ser reativado, sem outras mudanças cadastrais. O endereço atual é obrigatório (`belongsTo`/`hasMany`) e sua exclusão é `RESTRICT` enquanto houver uma referência. Excluir o campus também exclui fisicamente seu endereço próprio na mesma transação, com preservação da auditoria e de endereços compartilhados ou históricos. O CNPJ é normalizado para 14 dígitos e validado com `laravellegends/pt-br-validator`; o telefone reutiliza `PhoneCast`, aceitando telefone fixo ou celular com DDD e persistindo somente os dígitos.
 
 `CampusController` implementa as rotas web de criação, edição, desativação e reativação por Eloquent. Páginas Livewire com Flux oferecem listagem, cadastro, detalhes e edição exclusivamente ao Administrador do Sistema, enviando as gravações a esse controller. `CampusPolicy` mantém a consulta de backend para o Setor de Estágio do próprio registro; `viewAdministration` restringe a interface global ao vínculo ativo de Administrador do Sistema. A página Meu campus permite ao Setor de Estágio editar nome, CNPJ, endereço, telefone, representante e seguro do próprio campus, conforme o vínculo ativo e selecionado. O formulário de endereço é compartilhado pelas telas de cadastro e edição. A desativação exige a senha atual em cada solicitação, preserva vínculos e estados dos processos, e registra os valores anteriores/novos com autoria do vínculo ativo. A senha não é gravada no log.
 
@@ -50,7 +50,7 @@ O histórico de alterações do campus aparece na consulta de auditoria comparti
 ## Checklist
 
 - [x] Criar migration `create_campuses_table` sem FK circular prematura.
-- [x] Criar Model `Campus`, factory e SoftDeletes.
+- [x] Criar Model `Campus`, factory e exclusão física acompanhada do endereço.
 - [x] Normalizar e validar CNPJ e telefone.
 - [x] Manter nome e cargo do representante legal no próprio campus, sem vínculo institucional.
 - [x] Exigir CNPJ, contatos, representante e seguro já no cadastro do campus.

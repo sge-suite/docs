@@ -53,8 +53,8 @@ source_refs:
 - O Setor pode cadastrar e editar todos os tipos de vínculo exceto Administrador do Sistema. Tipo, campus e curso são preservados na edição. Supervisor não possui matrícula; seus dados profissionais são opcionais e compartilhados pela conta.
 - A consulta explícita de CPF no cadastro pode identificar conta de outro campus ou sem vínculo para acrescentar vínculo local. Listagem, detalhes, opções de matrícula e edição não expõem vínculos externos.
 - O Setor pode editar os próprios dados de acesso mesmo quando possui também um vínculo de Administrador do Sistema; a exceção não permite editar contas de outros administradores.
-- Desativação e exclusão exigem senha atual e confirmação para ambos os perfis administrativos. Nenhum deles pode desativar ou excluir vínculos da própria conta. O Setor só opera vínculos locais de outras pessoas; a exclusão exige ausência de referências.
-- Dados pessoais da conta e auditoria são preservados na exclusão do vínculo. Exclusão de conta e reativação de vínculo continuam exclusivas do Administrador do Sistema.
+- Desativação e exclusão exigem senha atual e confirmação para ambos os perfis administrativos. O vínculo selecionado na sessão não pode ser desativado nem excluído; vínculos não selecionados da própria conta seguem as mesmas permissões, escopo e regras aplicáveis aos demais vínculos. A exclusão exige ausência de referências.
+- Dados pessoais da conta e auditoria são preservados na exclusão do vínculo. Exclusão de conta e reativação de vínculos de outras pessoas continuam exclusivas do Administrador do Sistema; o Setor pode reativar um vínculo local próprio, respeitando confirmação, escopo e duplicidade.
 
 ## Gestão direta de partes concedentes
 

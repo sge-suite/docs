@@ -184,4 +184,10 @@ source_refs:
 - **Compatibilidade:** coluna adicionada à migration original, antes da implantação em produção; ambientes locais já migrados precisam de sincronização separada, sem descarte automático de dados.
 - **Limites:** pedidos de cadastro, aprovação, rejeição, complementação, portal da concedente permanecem fora desta entrega. Logs incluem concedentes, tipos de estágio e endereços dos cadastros locais autorizados, com identificação histórica do proprietário. Desativação/exclusão exigem senha atual; campus inativo permite leitura.
 
+### D-026 — Gestão de vínculos próprios fora do contexto selecionado
+
+- **Status:** implementado.
+- **Decisão:** a pessoa pode gerir seus próprios vínculos dentro das permissões e do escopo normal, inclusive desativar e excluir quando não houver referências. O vínculo selecionado na sessão permanece protegido contra desativação e exclusão para não invalidar o contexto em uso. O Setor pode reativar vínculo local próprio, com confirmação e verificação de duplicidade; reativação de vínculos de outras pessoas segue exclusiva do Administrador do Sistema.
+- **Limites:** senha atual e confirmação continuam exigidas para desativar ou excluir; último Administrador do Sistema ativo, referências de negócio, campus e tipo fora do escopo continuam protegidos. A edição não altera tipo, campus ou curso.
+
 - **Decisão:** Endereço, Campus e Concedente usam exclusão física. A exclusão Eloquent de qualquer proprietário atual de endereço remove a linha associada somente sem outras referências, preservando auditoria e histórico de terceiros. As migrations originais de Campus e Concedente foram ajustadas antes da produção; não há migration adicional de SoftDeletes para endereços.

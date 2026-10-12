@@ -20,7 +20,7 @@ A estrutura de perfis e o contexto de vínculo existem. O provisionamento inicia
 - [x] Criar `UserPolicy` e ampliar `AffiliationPolicy` para contas e vínculos administrativos, exigindo o vínculo ativo selecionado e distinguindo administração global de gestão local.
 - [x] Criar CoursePolicy e testar o escopo do Setor de Estágio.
 - [x] Criar InternshipTypePolicy e testar o campus derivado do curso.
-- [ ] Criar Policies para concedentes, estágios e documentos.
+- [x] Criar `GrantingPartyPolicy` e testar consulta e gestão local de concedentes; Policies de estágios e documentos continuam pendentes.
 - [x] Revalidar vínculo selecionado, perfil e proteções administrativas dentro das transações de gestão de usuários e vínculos.
 - [x] Manter as permissões de notificações em `AffiliationPolicy`; não há bypass global por `Gate::before`.
 - [x] Criar testes positivos e negativos para operações de campus e administração de usuários/vínculos.
@@ -63,7 +63,7 @@ Uma pessoa não pode ter dois vínculos administrativos ativos com o mesmo tipo 
 
 As rotas `audit.*` e `email-logs.*` e o grupo **Logs** da sidebar são compartilhados pelo Administrador do Sistema e pelo Setor de Estágio, sempre pelo vínculo ativo selecionado. O Administrador consulta campi, contas com vínculos administrativos e vínculos de Administrador do Sistema ou Setor de Estágio. O Setor consulta somente o próprio campus, seus cursos, contas com vínculos locais atuais e vínculos locais de qualquer tipo exceto Administrador do Sistema. Dados de acesso de outros administradores ficam protegidos; a própria conta mantém a exceção da gestão de usuários. O histórico de vínculos e cursos excluídos recupera campus e tipo dos registros de auditoria, inclusive quando uma alteração registrou somente os campos modificados. A autoria de uma ação não amplia o escopo.
 
-O histórico de e-mails filtra pelas finalidades de cadastro e alterações administrativas e pelo `scope_context` persistido do registro afetado; não infere escopo a partir do destinatário ou do solicitante. O Setor exige o campus local no contexto, protege mensagens de Administrador do Sistema e pode consultar o aviso de alteração do próprio e-mail de login mesmo quando também possui vínculo global. Contatos externos podem aparecer quando o envio está ligado a conta ou vínculo dentro do escopo. A tela mostra conteúdo persistido e tentativas, inclusive após exclusão do vínculo, mas não oferece reenvio. Campus desativado mantém a consulta histórica. Notificações operacionais, estágios, documentos e concedentes continuam fora dessas consultas enquanto seus fluxos e Policies não definirem acesso ao histórico.
+O histórico de e-mails filtra pelas finalidades de cadastro e alterações administrativas e pelo `scope_context` persistido do registro afetado; não infere escopo a partir do destinatário ou do solicitante. O Setor exige o campus local no contexto, protege mensagens de Administrador do Sistema e pode consultar o aviso de alteração do próprio e-mail de login mesmo quando também possui vínculo global. Contatos externos podem aparecer quando o envio está ligado a conta ou vínculo dentro do escopo. A tela mostra conteúdo persistido e tentativas, inclusive após exclusão do vínculo, mas não oferece reenvio. Campus desativado mantém a consulta histórica. Notificações operacionais, estágios e documentos continuam fora dessas consultas enquanto seus fluxos e Policies não definirem acesso ao histórico.
 
 Nos detalhes de auditoria, referências a campus, curso, usuário, coordenadores e endereço exibem o nome ou descrição atual junto do identificador, tanto no valor anterior quanto no novo. Os rótulos usam **Campus**, **Curso**, **Usuário**, **Coordenador titular**, **Coordenador substituto** e **Endereço**. A interface identifica esses nomes como atuais; não os apresenta como nomes históricos registrados na ação. Quando a referência não existe ou está fora do campus autorizado, mantém o identificador com **identificação indisponível**, sem revelar dados externos. Valores nulos e ausentes continuam distintos.
 
@@ -154,3 +154,31 @@ A gestão direta está implementada para o vínculo ativo selecionado de Setor d
 `GrantingPartyManagementTest` e `GrantingPartyInterfaceTest` cobrem operações, validação, isolamento, ciclo de vida, endereço, autoria e consulta de CEP. Fluxos de solicitações de cadastro, convites e e-mails continuam fora desta entrega. A auditoria inclui Partes Concedentes, Tipos de Estágio e endereços dos cadastros autorizados no campus selecionado, com filtros e detalhes de valores anteriores/novos. Eventos de endereço identificam o cadastro proprietário e preservam seu nome registrado, mesmo após renomear ou excluir. Endereços residenciais e registros fora do escopo não são expostos nessas consultas. `CatalogAuditTest` cobre os filtros, isolamento, troca de vínculo, referências e histórico após exclusão.
 
 A remoção de endereços é compartilhada por Campus, Concedente, dados pessoais e Estágio via `HasOwnedAddresses`: proprietário e endereço são excluídos por Eloquent na mesma transação, com rollback integral em caso de falha. Endereços utilizados por outros cadastros ou registros históricos permanecem disponíveis. Não há `SoftDeletes` em endereços, campi ou concedentes; os contratos das migrations originais refletem essa decisão.
+
+## Histórico de auditoria nas telas de detalhes
+
+Além do índice compartilhado **Auditoria**, o histórico relacionado aparece nos detalhes dos recursos autorizados ao perfil: campus para Administrador do Sistema; Meu campus, cursos, tipos de estágio e partes concedentes para Setor de Estágio; contas e vínculos locais conforme o escopo de cada perfil. A lista de uma concedente ou campus inclui também eventos do respectivo endereço e identifica o cadastro proprietário, mesmo após substituição ou exclusão do endereço. O Setor não consulta outro campus; o Administrador não ganha acesso a cadastros locais de cursos, tipos ou concedentes por meio da auditoria.
+
+## Paginação das telas administrativas
+
+Todas as listas paginadas abaixo usam o padrão comum de **15 registros por página**, centralizado em `PageSize::PER_PAGE`. Os índices mantêm o escopo de autorização da própria tela. Nas páginas de detalhe, cada lista possui paginação independente.
+
+| Tela | Lista paginada | Itens por página | Escopo principal |
+| --- | --- | ---: | --- |
+| Campi — índice | Campi | 15 | Administrador do Sistema |
+| Usuários — índice | Contas visíveis | 15 | Administrador do Sistema ou Setor de Estágio, no escopo do vínculo ativo |
+| Cursos — índice | Cursos | 15 | Setor de Estágio, campus selecionado |
+| Tipos de estágio — índice | Tipos de estágio | 15 | Setor de Estágio, campus do curso |
+| Partes concedentes — índice | Partes concedentes | 15 | Setor de Estágio, campus selecionado |
+| Auditoria — índice | Atividades autorizadas | 15 | Administrador do Sistema ou Setor de Estágio, segundo a Policy |
+| E-mails — índice | Mensagens e entregas administrativas | 15 | Administrador do Sistema ou Setor de Estágio, segundo o registro afetado |
+| Campus — detalhes | Histórico de atividades do campus | 15 | Administrador do Sistema |
+| Meu campus — detalhes | Histórico de atividades do campus | 15 | Setor de Estágio, campus selecionado |
+| Usuário — detalhes | Histórico da conta e vínculos | 15 | Administrador do Sistema ou Setor de Estágio, segundo o escopo autorizado |
+| Usuário — detalhes | Vínculos da conta | 15 | Apenas vínculos que o perfil pode consultar |
+| Curso — detalhes | Histórico do curso | 15 | Setor de Estágio, campus selecionado |
+| Tipo de estágio — detalhes | Histórico do tipo | 15 | Setor de Estágio, campus do curso |
+| Parte concedente — detalhes | Histórico da concedente e de seu endereço | 15 | Setor de Estágio, campus selecionado |
+| E-mail — detalhes | Tentativas de entrega | 15 | Segundo a Policy da mensagem |
+
+Esse padrão reúne **15 listas paginadas**, todas com 15 itens por página: sete índices, seis históricos em detalhes, a lista de vínculos na tela de usuário e as tentativas na tela de e-mail. Os testes de interface verificam os limites e a navegação sem depender da estrutura HTML ou de classes visuais.

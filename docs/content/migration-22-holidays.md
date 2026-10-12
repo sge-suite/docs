@@ -7,7 +7,7 @@ status: implemented
 visibility: public
 tags: sge/migrations, sge/calendario, sge/calculos
 related: enum-holidayscope, enum-brazilianstate, migration-01a-cities, migration-15-internships, migration-22-internship-calendar-overrides
-source_refs: https://github.com/sge-suite/sge/blob/master/app/Models/Holiday.php, https://github.com/sge-suite/sge/blob/master/app/Concerns/HolidayValidationRules.php, https://github.com/sge-suite/sge/blob/master/app/Console/Commands/ImportHolidays.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/HolidaysTest.php
+source_refs: https://github.com/sge-suite/sge/blob/master/app/Models/Holiday.php, https://github.com/sge-suite/sge/blob/master/app/Concerns/HolidayValidationRules.php, https://github.com/sge-suite/sge/blob/master/app/Console/Commands/ImportHolidays.php
 ---
 > [!success] Estado
 > Implementada como base de backend. Registra somente feriados oficiais reutilizáveis; recessos, folgas, pontes e fechamentos específicos entram como pausas do estágio. A consulta de cidades não depende da API e os feriados importados são persistidos antes de qualquer cálculo.
@@ -54,5 +54,5 @@ O estágio usa o endereço histórico do local de trabalho para obter a cidade e
 - [x] Criar Model `Holiday` com `SoftDeletes`, cast de `scope` e `state_code`.
 - [x] Criar importação nacional/estadual idempotente com retry, sem sobrescrever registros.
 - [ ] Criar cadastro manual de datas municipais pelo Administrador do Sistema.
-- [x] Testar schema, combinações de escopo/localização, unicidade, soft delete, filtro por UF e importação.
-- [x] Testar campos inválidos no model e na importação sem alterar registros existentes.
+- [ ] Testar schema, combinações de escopo/localização, unicidade, soft delete, filtro por UF e importação.
+- [ ] Testar campos inválidos no model e na importação sem alterar registros existentes.

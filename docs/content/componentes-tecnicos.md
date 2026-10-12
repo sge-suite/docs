@@ -24,13 +24,13 @@ Esta nota é o inventário do código transversal do projeto novo. Cada componen
 | Providers              | 🟡 Em uso | [Providers](doc:providers)                |
 | Schedules              | 🟡 Planejado | [Schedules](doc:schedules)              |
 | Seeders                | 🟢 Implementado | [Migration 01A — cities](doc:migration-01a-cities) |
-| Testes                 | 🟡 Em uso | [Testes existentes](doc:testes-existentes)        |
+| Testes                 | ⚪ Suspensos até a preparação para produção | [Testes automatizados](doc:testes-existentes) |
 | Bootstrap/configuração | 🟡 Em uso | [Configuração e bootstrap](doc:configuracao-e-bootstrap) |
 
 ## Regra de manutenção
 
 - [ ] Toda classe nova deve ter uma nota se representar decisão transversal ou contrato reutilizado.
-- [ ] Toda alteração em cast/helper/concern deve atualizar sua nota e o teste correspondente.
+- [ ] Toda alteração em cast/helper/concern deve atualizar sua nota; testes automatizados serão retomados na preparação para produção.
 - [ ] Toda função pública deve registrar entrada, saída, fallback e exceções.
 - [ ] Não duplicar regra de normalização ou formatação em Livewire, Blade, Model e helper.
 - [ ] Preferir serviços/Actions para efeitos colaterais; manter helpers puros quando possível.

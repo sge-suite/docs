@@ -7,10 +7,10 @@ status: implemented
 visibility: public
 tags: sge/migrations, sge/cadastro
 related: migration-02-user-personal-data, migration-04-affiliations, migration-12-granting-parties, enum-registrationrequeststatus, migration-19-internship-requests
-source_refs: https://github.com/sge-suite/sge/blob/master/database/migrations/2026_09_23_162229_create_supervisor_registration_requests_table.php, https://github.com/sge-suite/sge/blob/master/app/Models/SupervisorRegistrationRequest.php, https://github.com/sge-suite/sge/blob/master/database/factories/SupervisorRegistrationRequestFactory.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/SupervisorRegistrationRequestTest.php
+source_refs: https://github.com/sge-suite/sge/blob/master/database/migrations/2026_09_23_162229_create_supervisor_registration_requests_table.php, https://github.com/sge-suite/sge/blob/master/app/Models/SupervisorRegistrationRequest.php, https://github.com/sge-suite/sge/blob/master/database/factories/SupervisorRegistrationRequestFactory.php
 ---
 > [!success] Estado
-> Migration, Model, factory, relação com o vínculo resultante, casts, validação e testes PostgreSQL implementados. O fluxo transacional de aprovação e a Migration 12B permanecem fora desta etapa.
+> Migration, Model, factory, relação com o vínculo resultante, casts e validação implementados. O fluxo transacional de aprovação e a Migration 12B permanecem fora desta etapa. Não há testes automatizados no repositório atualmente; a validação fica para a preparação para produção.
 
 ## Finalidade
 
@@ -46,6 +46,6 @@ A identidade da conta fica em `users`, que possui CPF único, nome e e-mail. O p
 
 A tabela não duplica os campos de negócio em JSONB. O Activity Log registra os campos configurados no Model e a autoria disponível no contexto; respostas de consultas externas não são persistidas nesta tabela.
 
-## Testes verificados
+## Validação antes da produção
 
-`tests/Feature/SupervisorRegistrationRequestTest.php` cobre tipos do schema PostgreSQL, a FK resultante e exclusões, casts e relação, estados `Draft` e não-`Draft`, obrigatoriedade e validação dos campos, CPF normalizado, motivos de decisão, associação de supervisor em `Approved` e rollback/reaplicação da migration. Os testes afetados são executados por Sail.
+Na preparação para produção, validar estados, relações e integridade transacional conforme [Testes automatizados](doc:testes-existentes).

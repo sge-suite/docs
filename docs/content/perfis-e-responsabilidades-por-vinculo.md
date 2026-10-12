@@ -7,7 +7,7 @@ status: defined
 visibility: public
 tags: sge/autorizacao, sge/affiliations, sge/policies
 related: matriz-de-autorizacao, pessoas-e-responsabilidades, fase-05-administracao
-source_refs: https://github.com/sge-suite/sge/blob/master/app/Policies/UserPolicy.php, https://github.com/sge-suite/sge/blob/master/app/Policies/AffiliationPolicy.php, https://github.com/sge-suite/sge/blob/master/app/Policies/ActivityPolicy.php, https://github.com/sge-suite/sge/blob/master/app/Policies/EmailDeliveryAttemptPolicy.php, https://github.com/sge-suite/sge/blob/master/app/Support/AdministrativeActivityScope.php, https://github.com/sge-suite/sge/blob/master/app/Support/AdministrativeEmailLogScope.php, https://github.com/sge-suite/sge/blob/master/app/Support/EmailLogAccess.php, https://github.com/sge-suite/sge/blob/master/app/Actions/ManageAdministrativeUser.php, https://github.com/sge-suite/sge/blob/master/app/Actions/UpdateAdministrativeAffiliation.php, https://github.com/sge-suite/sge/blob/master/app/Actions/GetAdministrativeDashboardMetrics.php, https://github.com/sge-suite/sge/blob/master/app/Http/Controllers/UserController.php, https://github.com/sge-suite/sge/blob/master/app/Http/Controllers/AdministrativeAffiliationController.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/AuditInterfaceTest.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/EmailLogInterfaceTest.php
+source_refs: https://github.com/sge-suite/sge/blob/master/app/Policies/UserPolicy.php, https://github.com/sge-suite/sge/blob/master/app/Policies/AffiliationPolicy.php, https://github.com/sge-suite/sge/blob/master/app/Policies/ActivityPolicy.php, https://github.com/sge-suite/sge/blob/master/app/Policies/EmailDeliveryAttemptPolicy.php, https://github.com/sge-suite/sge/blob/master/app/Support/AdministrativeActivityScope.php, https://github.com/sge-suite/sge/blob/master/app/Support/AdministrativeEmailLogScope.php, https://github.com/sge-suite/sge/blob/master/app/Support/EmailLogAccess.php, https://github.com/sge-suite/sge/blob/master/app/Actions/ManageAdministrativeUser.php, https://github.com/sge-suite/sge/blob/master/app/Actions/UpdateAdministrativeAffiliation.php, https://github.com/sge-suite/sge/blob/master/app/Actions/GetAdministrativeDashboardMetrics.php, https://github.com/sge-suite/sge/blob/master/app/Http/Controllers/UserController.php, https://github.com/sge-suite/sge/blob/master/app/Http/Controllers/AdministrativeAffiliationController.php
 ---
 Esta é a referência operacional para implementar as telas, Gates, Policies e testes de acesso. Ela detalha a [matriz resumida](doc:matriz-de-autorizacao); não cria permissões configuráveis em banco. Para a explicação pública, sem termos de implementação, use [Pessoas e responsabilidades](doc:pessoas-e-responsabilidades).
 
@@ -114,7 +114,6 @@ Recebe no sistema um resumo diário agrupado por campus e destinatário, sem e-m
 
 ### Controles a implementar
 
-`CampusPolicy`, `CoursePolicy`, `InternshipTypePolicy`, `UserPolicy` e `AffiliationPolicy` já autorizam a gestão local implementada. Tipos de estágio têm Form Requests e Action transacional com revalidação de curso, campus e vínculo; desativação e exclusão exigem senha atual e confirmação, reativação exige confirmação, exclusão exige ausência de solicitações e estágios vinculados, e o campus inativo permite somente leitura. `InternshipTypeManagementTest` e `InternshipTypeInterfaceTest` cobrem isolamento, operações, validação, situação, exclusão condicionada, troca de contexto e preservação de snapshots. As demais permissões dependem dos fluxos correspondentes: `InternshipRequestPolicy`, `RegistrationRequestPolicy`, `GrantingPartyPolicy`, `TemplatePolicy`, `GeneratedDocumentPolicy`, `InternshipPolicy`, `InternshipPausePolicy`, `InternshipCancellationRequestPolicy` e `SupervisorEvaluationPolicy` restringem o escopo ao campus e às transições válidas. Testar, no mínimo, edição indevida de resposta, liberação sem assinatura confirmada, aprovação de avaliação com carga pendente e tentativa de alterar jornada sem aditivo.
 
 ## Coordenador de Curso
 
@@ -253,9 +252,9 @@ Não há notificações operacionais definidas. Consultas a relatórios ou dados
 
 ### Controles a implementar
 
-Criar `TeachingDirectionReportPolicy` somente após confirmar relatórios, abrangência e necessidade de dados pessoais. Os testes atuais devem provar ausência de permissão de escrita e negar acesso a relatórios fora do escopo ainda não decidido.
+Criar `TeachingDirectionReportPolicy` somente após confirmar relatórios, abrangência e necessidade de dados pessoais. Na preparação para produção, validar ausência de permissão de escrita e negar acesso a relatórios fora do escopo ainda não decidido.
 
-## Mapa de implementação e testes
+## Mapa de implementação e validação antes da produção
 
 | Área protegida | Policy principal | Decisão obrigatória |
 | --- | --- | --- |
@@ -266,7 +265,7 @@ Criar `TeachingDirectionReportPolicy` somente após confirmar relatórios, abran
 | avaliação e notas | `SupervisorEvaluationPolicy`, `InternshipGradePolicy` | supervisor, Setor ou orientador correto; estado e relação válidos |
 | relatórios institucionais | Policy específica de relatório | somente quando o vínculo e o escopo tiverem sido definidos |
 
-Cada ação deve ter testes positivos e negativos: vínculo correto, tipo errado, campus/curso errado, relação inexistente, vínculo desativado e status inválido. A [Fase 05](doc:fase-05-administracao) implementa primeiro a base de contexto e as Policies administrativas; as fases de estágio, documentos e avaliação acrescentam as Policies de domínio acima.
+Antes da produção, validar cada ação em cenários positivos e negativos: vínculo correto, tipo errado, campus/curso errado, relação inexistente, vínculo desativado e status inválido. A [Fase 05](doc:fase-05-administracao) implementa primeiro a base de contexto e as Policies administrativas; as fases de estágio, documentos e avaliação acrescentam as Policies de domínio acima. Atualmente não há testes automatizados.
 
 ## Pendências institucionais que bloqueiam novas permissões
 

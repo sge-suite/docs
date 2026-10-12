@@ -41,6 +41,6 @@ O conjunto documental é detalhado em [Geração de documentos DOCX e variáveis
 - `NotifyProjectedInternshipEnd` — cria o único lembrete de sete dias para o discente e o resumo interno diário do Setor, de forma idempotente;
 - `NotifySignatureAvailability` — valida os interessados selecionados, cria os avisos internos/externos adequados e despacha e-mail após o commit.
 
-## Regra de teste
+## Validação automatizada
 
-Services puros recebem DTOs/objetos de valor e têm testes unitários sem banco quando possível. Actions têm testes de feature cobrindo transação, concorrência, autorização, Activity Log, notificações e rollback.
+O projeto está sem testes automatizados durante a implementação de funcionalidades. Na preparação para produção, priorizar regras puras dos Services e fluxos críticos das Actions: transação, concorrência, autorização, Activity Log, notificações e rollback. Ver [Testes automatizados](doc:testes-existentes).

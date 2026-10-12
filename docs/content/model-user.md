@@ -7,7 +7,7 @@ status: in-progress
 visibility: public
 tags: sge/models, sge/autenticacao, sge/dados-pessoais
 related: cast-cpfcast, migration-02-user-personal-data, migration-04-affiliations, concern-profilevalidationrules
-source_refs: https://github.com/sge-suite/sge/blob/master/app/Models/User.php, https://github.com/sge-suite/sge/blob/master/app/Notifications/QueuedPasswordReset.php, https://github.com/sge-suite/sge/blob/master/app/Support/AdministrativeActivityScope.php, https://github.com/sge-suite/sge/blob/master/app/Support/AdministrativeEmailLogScope.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/Auth/PasswordResetTest.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/DatabaseAuditTest.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/AuditInterfaceTest.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/EmailLogInterfaceTest.php, https://github.com/sge-suite/sge/blob/master/app/Support/CampusActivityScope.php, https://github.com/sge-suite/sge/blob/master/app/Support/CampusEmailLogScope.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/CampusLogInterfaceTest.php
+source_refs: https://github.com/sge-suite/sge/blob/master/app/Models/User.php, https://github.com/sge-suite/sge/blob/master/app/Notifications/QueuedPasswordReset.php, https://github.com/sge-suite/sge/blob/master/app/Support/AdministrativeActivityScope.php, https://github.com/sge-suite/sge/blob/master/app/Support/AdministrativeEmailLogScope.php, https://github.com/sge-suite/sge/blob/master/app/Support/CampusActivityScope.php, https://github.com/sge-suite/sge/blob/master/app/Support/CampusEmailLogScope.php
 ---
 ## Responsabilidade atual
 
@@ -27,7 +27,6 @@ Model autenticável do Laravel. Usa `HasFactory`, `LogsActivity` e `Notifiable`,
 
 A auditoria e o histórico de e-mails compartilham telas entre Administrador do Sistema e Setor de Estágio, exigindo o vínculo ativo selecionado em cada requisição. Na consulta global, o Administrador inclui contas com vínculos administrativos. O Setor consulta contas com vínculos atuais do próprio campus e seus vínculos locais, exceto Administrador do Sistema; atividades dos dados de acesso de outros administradores ficam protegidas, com exceção para a própria conta. O histórico de e-mails usa o snapshot do registro afetado em `scope_context`, preservado após exclusão de vínculo; não infere autorização pelo destinatário ou solicitante. O Setor consulta mensagens de cadastro e alterações ligadas ao campus e pode ver avisos de alteração do próprio e-mail mesmo quando também possui vínculo global. Detalhes em [Fase 05](doc:fase-05-administracao).
 
-`UserPersonalData` registra seus atributos fillable (`user_id`, dados pessoais/profissionais e `address_id`) e também `emancipation_verified_at`, que não é fillable porque representa estado controlado pela aplicação. Esse campo é incluído explicitamente no Activity Log com valores anteriores e novos. `id`, `created_at` e `updated_at` ficam fora do registro. A cobertura é verificada por `DatabaseAuditTest`.
 
 ## Delimitação de responsabilidade
 
@@ -41,10 +40,10 @@ A auditoria e o histórico de e-mails compartilham telas entre Administrador do 
 - [x] Aplicar `CpfCast` no estado atual.
 - [x] Criar relações com `Affiliation` e `UserPersonalData` e habilitar notificações nativas do Laravel. A conta não possui relação direta com `EmailMessage`; seu histórico é separado.
 - [x] Manter CPF em `$fillable`, docblock e casts de `User`.
-- [x] Testar conta sem dados pessoais completos.
-- [x] Testar conta com múltiplos vínculos em PostgreSQL.
+- [ ] Testar conta sem dados pessoais completos.
+- [ ] Testar conta com múltiplos vínculos em PostgreSQL.
 - [x] Permitir a administração de nome, CPF e e-mail de login por `UserController`, preservando as notificações de troca de e-mail e a auditoria sem senha.
-- [x] Testar recuperação enfileirada sem persistir token ou corpo nas tabelas próprias de e-mail.
+- [ ] Testar recuperação enfileirada sem persistir token ou corpo nas tabelas próprias de e-mail.
 - [x] Registrar no Activity Log os campos pessoais e profissionais alterados de `UserPersonalData`, com valores anteriores/novos e autoria do vínculo ativo.
 
 ## Relacionamentos

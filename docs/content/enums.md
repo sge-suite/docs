@@ -37,7 +37,7 @@ source_refs:
 
 ## Checklist do catálogo
 
-Neste índice, **Implementado** significa que a classe do enum e seus testes unitários já existem. O uso em Models, migrations, Policies e fluxos de domínio continua indicado no checklist individual.
+Neste índice, **Implementado** significa que a classe do enum existe. O uso em Models, migrations, Policies e fluxos de domínio continua indicado no checklist individual. Os testes automatizados foram removidos e serão retomados na preparação para produção.
 
 - [ ] Confirmar cada enum contra a regra de negócio aprovada.
 - [ ] Manter valores persistidos em inglês e `snake_case`.

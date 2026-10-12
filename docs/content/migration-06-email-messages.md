@@ -7,10 +7,10 @@ status: implemented
 visibility: public
 tags: sge/migrations, sge/email, sge/auditoria
 related: migration-05-notifications, enum-emailmessagepurpose, e-mails-notificacoes-e-entregas, migration-07-email-delivery-attempts
-source_refs: https://github.com/sge-suite/sge/blob/master/database/migrations/2026_09_22_160834_create_email_messages_table.php, https://github.com/sge-suite/sge/blob/master/app/Models/EmailMessage.php, https://github.com/sge-suite/sge/blob/master/database/factories/EmailMessageFactory.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/EmailMessageTest.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/EmailDeliveryFlowTest.php
+source_refs: https://github.com/sge-suite/sge/blob/master/database/migrations/2026_09_22_160834_create_email_messages_table.php, https://github.com/sge-suite/sge/blob/master/app/Models/EmailMessage.php, https://github.com/sge-suite/sge/blob/master/database/factories/EmailMessageFactory.php
 ---
 > [!success] Estado
-> Migration, Model, factory, testes e backend de envio em fila implementados.
+> Migration, Model, factory e backend de envio em fila implementados. Não há testes automatizados no repositório atualmente; a validação fica para a preparação para produção.
 
 ## Contrato
 
@@ -29,9 +29,8 @@ O Model permite as cinco finalidades. `Notification` pode estar vinculada a uma 
 
 O conteúdo é acessível ao Administrador do Sistema pela tela de e-mails somente quando a tentativa tem contexto administrativo verificável. A prévia é HTML sandboxed, com scripts e recursos externos bloqueados; o texto simples é escapado.
 
-## Limites e testes
+## Limites
 
-`EmailMessageTest` verifica o esquema, a finalidade, o conteúdo e a imutabilidade; `EmailDeliveryFlowTest` cobre a criação do aviso, idempotência e reenvio. SQL direto pode contornar as regras do Model; o acesso ao banco precisa ser restrito.
 
 ## Dependências
 

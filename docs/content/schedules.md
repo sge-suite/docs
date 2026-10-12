@@ -73,7 +73,7 @@ O resumo do Setor agrega, no mínimo, estágios iniciados, pausados ou retomados
 
 Cada destinatário recebe no máximo uma notificação por fato temporal. A Action usa uma chave estável que combina evento, estágio, data efetiva e destinatário. Quando houver e-mail, essa chave participa de `email_messages.idempotency_key`. Para o resumo somente interno, a implementação deve definir antes um registro operacional durável de despacho; a tabela nativa `notifications` não deve receber colunas próprias para essa finalidade.
 
-## Testes obrigatórios
+## Validação automatizada antes da produção
 
 - congelar a data institucional e testar início, pausa ativa, término de pausa e todos os estados que devem permanecer imutáveis;
 - executar cada comando duas vezes para provar idempotência de status, Activity Log, correção, notificação e e-mail;

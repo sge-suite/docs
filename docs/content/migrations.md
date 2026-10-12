@@ -11,7 +11,7 @@ source_refs:
 diagram: migrations-ordem
 ---
 > [!abstract] Regra
-> Cada migration deve ser pequena, revisável e testada em banco limpo. A nota individual registra o contrato; o arquivo PHP implementa o contrato.
+> Cada migration deve ser pequena e revisável. A validação automatizada em banco limpo fica para a preparação para produção e está descrita em [Testes automatizados](doc:testes-existentes). A nota individual registra o contrato; o arquivo PHP implementa o contrato.
 
 ## Estado da fundação atual
 
@@ -25,7 +25,7 @@ Estas migrations já existem no projeto novo e não devem ser recriadas. Cada um
 
 Não há migration de permissões: as tabelas anteriormente previstas foram removidas e a autorização usa Gates e Policies com os vínculos.
 
-Todas as migrations listadas abaixo estão implementadas. As sete últimas também tiveram aplicação, rollback e reaplicação verificados no PostgreSQL de testes. Os fluxos de geração documental, recálculo, análise e autorização ainda têm etapas pendentes descritas nas notas individuais.
+Todas as migrations listadas abaixo estão implementadas. O repositório está sem testes automatizados; aplicação, rollback e reaplicação em PostgreSQL devem ser revalidados na preparação para produção. Os fluxos de geração documental, recálculo, análise e autorização ainda têm etapas pendentes descritas nas notas individuais.
 
 > [!info] Fonte dos contratos
 > A implementação segue os contratos desta pasta e as decisões aprovadas no planejamento.
@@ -84,7 +84,7 @@ A tabela segue a ordem dos nomes dos arquivos em `database/migrations`. Os núme
 
 ## Prontidão para implementação
 
-- As Migrations 05–07 estão implementadas. `notifications` usa a base nativa do Laravel 13 com ID UUID e `data` em `jsonb`; as duas tabelas de e-mail usam IDs `bigint` autoincrementais, FKs históricas, Models, casts e testes PostgreSQL. Actions e Jobs enfileiram os fluxos administrativos de conta, vínculo e alteração de e-mail. A consulta de e-mails do Administrador do Sistema também está implementada, com escopo pelo registro afetado e conteúdo/tentativas. A integração de outras notificações de domínio, consultas para outros vínculos e retenção ainda estão pendentes.
+- As Migrations 05–07 estão implementadas. `notifications` usa a base nativa do Laravel 13 com ID UUID e `data` em `jsonb`; as duas tabelas de e-mail usam IDs `bigint` autoincrementais, FKs históricas, Models e casts. Actions e Jobs enfileiram os fluxos administrativos de conta, vínculo e alteração de e-mail. A consulta de e-mails do Administrador do Sistema também está implementada, com escopo pelo registro afetado e conteúdo/tentativas. A integração de outras notificações de domínio, consultas para outros vínculos e retenção ainda estão pendentes.
 - As Migrations 09 e 10 estão implementadas. A 09 usa `primary_coordinator_affiliation_id` e `secondary_coordinator_affiliation_id`, ambas nullable para cadastro inicial sem coordenadores; o Model valida tipo, atividade e campus na atribuição. A 10 vincula cada discente a um curso do mesmo campus e preserva o histórico com `ON DELETE RESTRICT`.
 - A Migration 12 usa `name` para o nome completo da concedente/unidade, permite documentos compartilhados entre unidades e deixa índices secundários e telas de cadastro para etapas futuras.
 - A Migration 12A implementa pedidos de cadastro de supervisor com CPF e estados validados no Model, dados profissionais, associação ao vínculo resultante e bloqueio da exclusão pelo Model. O Model participa do Activity Log Eloquent, que identifica a conta e o vínculo ativo como autoria; o fluxo transacional de aprovação e sua Policy permanecem pendentes.
@@ -94,11 +94,11 @@ A tabela segue a ordem dos nomes dos arquivos em `database/migrations`. Os núme
 - A Migration 15 implementa o estágio com FKs para vínculos, curso, tipo e concedente, snapshots históricos, jornada inicial e data projetada; o cálculo automático e a criação pelo aceite da solicitação ficam para o fluxo funcional.
 - A Migration 18 cria as avaliações do supervisor e as referências de liberação e avaliação vigente em `internships`, com validações do formulário no Model. Liberação, autorização, aprovação transacional e cálculo de nota permanecem no fluxo funcional.
 - A Migration 19 implementa a solicitação com FKs para curso, tipo, concedente, supervisor e estágio, jornada em JSONB, estados, validações condicionais no Model, Activity Log e data do aceite dos termos. Checkbox, cálculo da data projetada e aprovação transacional permanecem para o fluxo; a Migration 19A já exige evidência no caminho emancipado.
-- As Migrations 16, 17, 19A, 20, 21, 22A e 23 agora têm schema, Models, factories, relações e validações do registro. Geração/assinatura, upload/autorização, decisões, recálculo e concorrência transacional permanecem para os fluxos funcionais. Ainda faltam testes Pest específicos desses sete contratos.
+- As Migrations 16, 17, 19A, 20, 21, 22A e 23 agora têm schema, Models, factories, relações e validações do registro. Geração/assinatura, upload/autorização, decisões, recálculo e concorrência transacional permanecem para os fluxos funcionais. A validação automatizada de todos os contratos fica para a preparação para produção.
 
 ## Checklist comum
 
-Cada nota individual deve terminar com todos estes pontos marcados:
+Cada nota individual deve registrar estes pontos; validações automatizadas são retomadas na preparação para produção:
 
 - [ ] contrato revisado contra [Domínio e modelo de dados](doc:dominio-e-modelo-de-dados);
 - [ ] FKs, índices, nulabilidade e unicidade definidos;
@@ -108,7 +108,7 @@ Cada nota individual deve terminar com todos estes pontos marcados:
 - [ ] factory/seed mínima criada quando aplicável;
 - [ ] `migrate` executado em banco limpo;
 - [ ] `migrate:rollback` testado quando a reversão for segura;
-- [ ] testes de restrições e casos inválidos criados;
+- [ ] validação automatizada de restrições e casos inválidos realizada na preparação para produção;
 - [ ] [fase](doc:painel-de-desenvolvimento) e modelo de dados atualizados.
 
 ## Navegação

@@ -7,10 +7,10 @@ status: implemented
 visibility: public
 tags: sge/migrations, sge/cursos, sge/banco-de-dados
 related: migration-03-campuses, migration-04-affiliations, migration-10-course-id-em-affiliations, migration-11-internship-types
-source_refs: https://github.com/sge-suite/sge/blob/master/database/migrations/2026_09_22_163548_create_courses_table.php, https://github.com/sge-suite/sge/blob/master/app/Models/Course.php, https://github.com/sge-suite/sge/blob/master/database/factories/CourseFactory.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/CourseTest.php
+source_refs: https://github.com/sge-suite/sge/blob/master/database/migrations/2026_09_22_163548_create_courses_table.php, https://github.com/sge-suite/sge/blob/master/app/Models/Course.php, https://github.com/sge-suite/sge/blob/master/database/factories/CourseFactory.php
 ---
 > [!success] Estado
-> Migration, Model, factory, relações, validação e testes PostgreSQL implementados. A interface Livewire com Flux e a CoursePolicy estão implementadas na Fase 05 para o Setor de Estágio.
+> Migration, Model, factory, relações, validação, interface Livewire com Flux e CoursePolicy estão implementados para o Setor de Estágio. Não há testes automatizados no repositório atualmente; a validação fica para a preparação para produção.
 
 ## Contrato
 
@@ -41,8 +41,8 @@ Nome é obrigatório e os dois coordenadores são opcionais; a ausência de vín
 - [x] Permitir coordenadores nulos durante o cadastro inicial.
 - [x] Criar Model `Course`, relações e factory.
 - [x] Validar campus, tipo e escopo dos vínculos coordenadores no Model.
-- [x] Testar curso de campus ativo, coordenador de outro campus e vínculo desativado.
-- [x] Testar migrate/rollback na ordem completa.
+- [ ] Testar curso de campus ativo, coordenador de outro campus e vínculo desativado.
+- [ ] Testar migrate/rollback na ordem completa.
 
 ## Dependências
 

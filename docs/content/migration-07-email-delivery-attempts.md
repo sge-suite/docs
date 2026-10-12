@@ -7,10 +7,10 @@ status: implemented
 visibility: public
 tags: sge/migrations, sge/email, sge/auditoria
 related: migration-06-email-messages, enum-emaildeliveryattemptstatus
-source_refs: https://github.com/sge-suite/sge/blob/master/database/migrations/2026_09_22_160858_create_email_delivery_attempts_table.php, https://github.com/sge-suite/sge/blob/master/app/Models/EmailDeliveryAttempt.php, https://github.com/sge-suite/sge/blob/master/app/Policies/EmailDeliveryAttemptPolicy.php, https://github.com/sge-suite/sge/blob/master/app/Support/AdministrativeEmailLogScope.php, https://github.com/sge-suite/sge/blob/master/app/Support/EmailLogAccess.php, https://github.com/sge-suite/sge/blob/master/database/factories/EmailDeliveryAttemptFactory.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/EmailDeliveryAttemptTest.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/EmailLogInterfaceTest.php
+source_refs: https://github.com/sge-suite/sge/blob/master/database/migrations/2026_09_22_160858_create_email_delivery_attempts_table.php, https://github.com/sge-suite/sge/blob/master/app/Models/EmailDeliveryAttempt.php, https://github.com/sge-suite/sge/blob/master/app/Policies/EmailDeliveryAttemptPolicy.php, https://github.com/sge-suite/sge/blob/master/app/Support/AdministrativeEmailLogScope.php, https://github.com/sge-suite/sge/blob/master/app/Support/EmailLogAccess.php, https://github.com/sge-suite/sge/blob/master/database/factories/EmailDeliveryAttemptFactory.php
 ---
 > [!success] Estado
-> Migration, Model, factory, testes, backend em fila e histórico administrativo de consulta implementados. A tela de reenvio ainda não existe.
+> Migration, Model, factory, backend em fila e histórico administrativo de consulta implementados. Não há testes automatizados no repositório atualmente; a validação fica para a preparação para produção. A tela de reenvio ainda não existe.
 
 ## Contrato
 
@@ -40,6 +40,4 @@ A restrição única (`delivery_key`, `attempt_number`) cobre também convites, 
 
 A tela de e-mails está restrita pela `EmailDeliveryAttemptPolicy` ao vínculo ativo selecionado de Administrador do Sistema. A consulta aceita somente as quatro finalidades administrativas e tentativas cujo `scope_context.affiliation_types` inclua Administrador do Sistema ou Setor de Estágio. Não usa endereço de destinatário nem `requested_by_affiliation_id` como substitutos do contexto do registro. Notificações operacionais e tentativas antigas sem contexto verificável ficam fora. O índice reúne cada envio pela tentativa mais recente; os detalhes mostram todas as tentativas. Não há ação de reenvio.
 
-## Limites e testes
-
-`EmailDeliveryAttemptTest` verifica esquema, destinatário, autoria, transições e imutabilidade. SQL direto pode contornar as regras do Model; o acesso ao banco precisa ser restrito.
+## Limites

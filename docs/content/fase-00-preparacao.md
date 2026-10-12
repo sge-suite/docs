@@ -19,14 +19,13 @@ source_refs:
 - [x] Criar `.env`, gerar a chave e validar PostgreSQL.
 - [x] Executar `./vendor/bin/sail npm install` e validar o build do Vite.
 - [x] Confirmar Mailpit e Meilisearch.
-- [x] Executar `./vendor/bin/sail composer run test`.
-- [x] Confirmar lint, análise estática e testes antes de novas migrations.
+- [x] Executar a suíte que existia no ambiente antes de sua remoção.
 - [x] Definir branches, commits e revisão.
 
 ## Critério de saída
 
 - [x] O ambiente executa os comandos documentados.
-- [x] A suíte existente passa antes de iniciar o domínio novo.
+- [x] Configuração do ambiente validada antes do início do domínio novo.
 
 ## Próxima fase
 

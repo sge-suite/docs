@@ -14,7 +14,7 @@ Esta lista registra a sequência e o estado atuais. A fundação de dados está 
 ## Ordem atual
 
 - [x] [00 — Preparação](doc:fase-00-preparacao)
-- [x] [01 — Fundação de dados](doc:fase-01-fundacao-de-dados) — migrations, Models, factories e cobertura de banco concluídos.
+- [ ] [01 — Fundação de dados](doc:fase-01-fundacao-de-dados) — migrations, Models e factories concluídos; testes automatizados serão retomados antes da produção.
 - **02 — Conta e contexto (em andamento):** contexto ativo, seleção/troca, `admin:create`, gestão de contas/vínculos administrativos, alteração própria de senha/e-mail e avisos correspondentes implementados; edição de perfil pessoal próprio permanece pendente.
 - **[03 — Activity Log](doc:fase-03-activity-log) (concluída):** auditoria Eloquent, autoria por vínculo, registro dos campos pessoais e profissionais de `UserPersonalData` e consulta administrativa com escopo limitado implementados.
 - **[04 — Integração de e-mail](doc:fase-04-integracao-de-email) (em andamento):** backend de reserva, envio em fila, conteúdo renderizado das mensagens administrativas e consulta de e-mails compartilhada por Administrador do Sistema e Setor de Estágio, com escopos distintos, implementados; integração das notificações operacionais de domínio, outros escopos e retenção continuam pendentes.
@@ -28,10 +28,10 @@ Esta lista registra a sequência e o estado atuais. A fundação de dados está 
 ## Trabalho de backend antes das telas de domínio
 
 1. **Implementado:** resolver e validar o vínculo ativo, selecionar ou restaurar o contexto, disponibilizá-lo a Policies/Actions e registrar a autoria nas alterações Eloquent.
-2. **Concluído:** cobertura dos Models de negócio no Activity Log com autoria pelo vínculo, valores anteriores/novos, exclusão de segredos e validação pela suíte completa.
+2. **Concluído:** Models de negócio registram autoria pelo vínculo, valores anteriores/novos e exclusão de segredos no Activity Log. A suíte automatizada foi removida e será retomada na preparação para produção.
 3. **Em andamento:** o backend de e-mail com filas, idempotência e reprocessamento atende criação de conta, vínculos administrativos, alterações administrativas e troca de e-mail. A consulta de envios é compartilhada por Administrador do Sistema e Setor de Estágio, limitada ao escopo de cada vínculo ativo selecionado. Faltam notificações de domínio, escopos para outros vínculos e política de retenção.
 4. Implementar Services puros e Actions transacionais para cálculos, formalização, correções, cancelamentos e associações dos cadastros pendentes.
-5. Preparar validação e geração DOCX, notificações e Jobs idempotentes, com testes de concorrência, falhas e efeitos após commit.
+5. Preparar validação e geração DOCX, notificações e Jobs idempotentes. Seus testes de concorrência, falhas e efeitos após commit ficam para a preparação para produção.
 
 A seleção de vínculo já é a primeira interface compartilhada e estabelece o contexto para as próximas telas. Cada conjunto funcional seguirá com seu backend, começando pelos perfis administrativos mais amplos e avançando aos papéis de campus, estágio, curso e participantes.
 

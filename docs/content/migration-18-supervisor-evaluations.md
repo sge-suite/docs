@@ -10,7 +10,7 @@ related: enum-evaluationstatus, backlog-e-decisoes, fase-09-avaliacao-e-conclusa
 source_refs:
 ---
 > [!info] Estado
-> Schema, Model, factory e testes PostgreSQL implementados. O ciclo de rascunho, envio, devolução e aprovação é validado no Model; os fluxos de liberação, autorização e escolha transacional da avaliação vigente permanecem planejados. Os campos, critérios e regras condicionais do formulário fixo estão mapeados; pesos e valores dos conceitos pertencem ao tipo de estágio e são lidos do snapshot do estágio.
+> Schema, Model e factory implementados. O ciclo de rascunho, envio, devolução e aprovação tem validações no Model; os fluxos de liberação, autorização e escolha transacional da avaliação vigente permanecem planejados. Os campos, critérios e regras condicionais do formulário fixo estão mapeados; pesos e valores dos conceitos pertencem ao tipo de estágio e são lidos do snapshot do estágio. Não há testes automatizados no repositório atualmente; a validação fica para a preparação para produção.
 
 ## Escopo
 
@@ -106,5 +106,5 @@ Fora de `Draft`, `hours_requirement_met` é obrigatório. Quando for falso, `est
 - [ ] Implementar autosave Livewire em `Draft` e edição integral em `Returned` com auditoria de alterações.
 - [ ] Atualizar a avaliação vigente em transação após aprovação.
 - [ ] Testar autorização, devolução, aprovação, cálculo e pendências.
-- [x] Testar migrate/rollback da Migration 18 junto à Migration 15; a ordem completa depende das migrations ainda planejadas.
+- [ ] Testar migrate/rollback da Migration 18 junto à Migration 15; a ordem completa depende das migrations ainda planejadas.
 - [ ] Atualizar [fase de avaliação](doc:fase-09-avaliacao-e-conclusao).

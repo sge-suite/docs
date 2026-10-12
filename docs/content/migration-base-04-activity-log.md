@@ -7,7 +7,7 @@ status: implemented
 visibility: public
 tags: sge/migrations, sge/auditoria, sge/banco-de-dados
 related: fase-03-activity-log, perfis-e-responsabilidades-por-vinculo
-source_refs: https://github.com/sge-suite/sge/blob/master/database/migrations/2026_08_06_201115_create_activity_log_table.php, https://github.com/sge-suite/sge/blob/master/app/Http/Middleware/SetAuditActor.php, https://github.com/sge-suite/sge/blob/master/app/Support/ActivityAccess.php, https://github.com/sge-suite/sge/blob/master/app/Support/AdministrativeActivityScope.php, https://github.com/sge-suite/sge/blob/master/app/Policies/ActivityPolicy.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/AuditInterfaceTest.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/DatabaseAuditTest.php, https://github.com/sge-suite/sge/blob/master/app/Support/CampusActivityScope.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/CampusLogInterfaceTest.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/AuditReferencePresentationTest.php
+source_refs: https://github.com/sge-suite/sge/blob/master/database/migrations/2026_08_06_201115_create_activity_log_table.php, https://github.com/sge-suite/sge/blob/master/app/Http/Middleware/SetAuditActor.php, https://github.com/sge-suite/sge/blob/master/app/Support/ActivityAccess.php, https://github.com/sge-suite/sge/blob/master/app/Support/AdministrativeActivityScope.php, https://github.com/sge-suite/sge/blob/master/app/Policies/ActivityPolicy.php, https://github.com/sge-suite/sge/blob/master/app/Support/CampusActivityScope.php
 ---
 > [!success] Estado
 > Implementada no arquivo `2026_08_06_201115_create_activity_log_table.php` e usada pelo pacote Spatie Activity Log.
@@ -32,7 +32,7 @@ Não guardar senhas, tokens, URLs assinadas, códigos de verificação, credenci
 
 ## Consulta e autorização
 
-A tela de auditoria usa Policy e revalida o vínculo ativo selecionado a cada requisição. Administrador do Sistema e Setor de Estágio compartilham as telas com escopos distintos: o Administrador consulta campi, contas com vínculos administrativos e vínculos administrativos; o Setor consulta seu campus, cursos, contas e vínculos locais autorizados, sem vínculos de Administrador do Sistema nem dados de acesso de outros administradores. A própria conta mantém a exceção da gestão de usuários. Cursos e vínculos excluídos usam os campos registrados na auditoria para determinar o escopo. Referências nos campos alterados mostram identificação atual e ID quando disponíveis e autorizados. Estágios, documentos, concedentes e demais fluxos operacionais ficam fora da consulta atual. O histórico de e-mails usa tabelas próprias e autorização separada. Detalhes em [Fase 03](doc:fase-03-activity-log) e [Fase 05](doc:fase-05-administracao).
+A tela de auditoria usa Policy e revalida o vínculo ativo selecionado a cada requisição. Administrador do Sistema e Setor de Estágio compartilham as telas com escopos distintos: o Administrador consulta campi, contas com vínculos administrativos e vínculos administrativos; o Setor consulta seu campus, cursos, tipos de estágio, partes concedentes, contas e vínculos locais autorizados, sem vínculos de Administrador do Sistema nem dados de acesso de outros administradores. A própria conta mantém a exceção da gestão de usuários. Cursos e vínculos excluídos usam os campos registrados na auditoria para determinar o escopo. Referências nos campos alterados mostram identificação atual e ID quando disponíveis e autorizados. Estágios, documentos e demais fluxos operacionais ficam fora da consulta atual. O histórico de e-mails usa tabelas próprias e autorização separada. Detalhes em [Fase 03](doc:fase-03-activity-log) e [Fase 05](doc:fase-05-administracao).
 
 ## Rollback atual
 
@@ -46,6 +46,6 @@ O arquivo não define `down()`. Isso deve ser tratado como limitação/documenta
 - [x] Definir e implementar eventos Eloquent para entidades de negócio, incluindo campos cadastrais de e-mail; tabelas de entrega mantêm histórico técnico próprio.
 - [x] Implementar consulta do histórico administrativo com Policy e vínculo ativo selecionado.
 - [ ] Definir limites de consulta para os demais perfis e retenção institucional.
-- [x] Testar a exclusão de senhas, hashes, tokens e outros dados protegidos dos valores registrados.
+- [ ] Testar a exclusão de senhas, hashes, tokens e outros dados protegidos dos valores registrados.
 - [x] Relacionar ações humanas ao vínculo ativo; identificar `admin:create` como `terminal` e Jobs/seeders/comandos sem pessoa autenticada como `system`.
 - [ ] Completar registro de todos os campos de negócio de `UserPersonalData`; hoje somente `emancipation_verified_at` é incluído.

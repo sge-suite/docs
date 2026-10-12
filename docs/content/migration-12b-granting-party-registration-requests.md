@@ -7,10 +7,10 @@ status: implemented
 visibility: public
 tags: sge/migrations, sge/cadastro
 related: migration-12-granting-parties, enum-partydocumenttype, enum-registrationrequeststatus, cadastros-pendentes-de-supervisor-e-concedente
-source_refs: https://github.com/sge-suite/sge/blob/master/database/migrations/2026_09_23_190320_create_granting_party_registration_requests_table.php, https://github.com/sge-suite/sge/blob/master/app/Models/GrantingPartyRegistrationRequest.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/GrantingPartyRegistrationRequestTest.php
+source_refs: https://github.com/sge-suite/sge/blob/master/database/migrations/2026_09_23_190320_create_granting_party_registration_requests_table.php, https://github.com/sge-suite/sge/blob/master/app/Models/GrantingPartyRegistrationRequest.php
 ---
 > [!info] Estado
-> O pedido conserva o campus de origem com FK obrigatória para `campuses`, e a validação exige que a concedente resultante pertença ao mesmo campus. Migration, Model, factory, casts, validação e testes PostgreSQL estão implementados; o fluxo transacional de análise continua planejado.
+> O pedido conserva o campus de origem com FK obrigatória para `campuses`, e a validação exige que a concedente resultante pertença ao mesmo campus. Migration, Model, factory, casts e validação estão implementados; o fluxo transacional de análise continua planejado. Não há testes automatizados no repositório atualmente; a validação fica para a preparação para produção.
 
 | Campo | Regra |
 | --- | --- |

@@ -7,10 +7,10 @@ status: implemented
 visibility: public
 tags: sge/enums, sge/email
 related: migration-07-email-delivery-attempts, e-mails-notificacoes-e-entregas, enum-emailmessagepurpose
-source_refs: https://github.com/sge-suite/sge/blob/master/app/Enums/EmailDeliveryAttemptStatus.php, https://github.com/sge-suite/sge/blob/master/tests/Unit/Enums/EmailDeliveryAttemptStatusTest.php
+source_refs: https://github.com/sge-suite/sge/blob/master/app/Enums/EmailDeliveryAttemptStatus.php
 ---
 > [!success] Estado
-> A classe, o cast em `EmailDeliveryAttempt`, a migration, o Job de envio e os testes existem. O estado da tentativa não é o estado de leitura da notificação.
+> A classe, o cast em `EmailDeliveryAttempt`, a migration e o Job de envio existem. O estado da tentativa não é o estado de leitura da notificação. Não há testes automatizados no repositório atualmente; a validação fica para a preparação para produção.
 
 ## Contrato proposto
 
@@ -28,8 +28,8 @@ O fluxo é direto: `queued` passa para `sent` quando o SMTP/provedor aceita a me
 - [x] Implementar rótulos e opções da interface.
 - [x] Adicionar cast em `EmailDeliveryAttempt`.
 - [x] Persistir os valores do enum em [email_delivery_attempts](doc:migration-07-email-delivery-attempts).
-- [x] Testar cases, valores, rótulos e opções.
-- [x] Testar as transições `queued → sent` e `queued → failed`, reprocessamento e criação de nova linha no reenvio.
+- [ ] Testar cases, valores, rótulos e opções.
+- [ ] Testar as transições `queued → sent` e `queued → failed`, reprocessamento e criação de nova linha no reenvio.
 - [x] Salvar `sent` somente quando o transporte aceita o envio.
 
 ## Relacionamentos

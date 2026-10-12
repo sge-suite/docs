@@ -7,7 +7,7 @@ status: implemented
 visibility: public
 tags: sge/migrations, sge/notificacoes, sge/email
 related: migration-04-affiliations, migration-06-email-messages, e-mails-notificacoes-e-entregas
-source_refs: https://github.com/sge-suite/sge/blob/master/database/migrations/2026_09_22_124656_create_notifications_table.php, https://github.com/sge-suite/sge/blob/master/app/Models/Affiliation.php, https://github.com/sge-suite/sge/blob/master/app/Policies/AffiliationPolicy.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/NotificationsTest.php
+source_refs: https://github.com/sge-suite/sge/blob/master/database/migrations/2026_09_22_124656_create_notifications_table.php, https://github.com/sge-suite/sge/blob/master/app/Models/Affiliation.php, https://github.com/sge-suite/sge/blob/master/app/Policies/AffiliationPolicy.php
 ---
 > [!success] Estado
 > Implementada e verificada no PostgreSQL via Sail. A migration foi gerada pelo Laravel 13 e altera somente `data` para `jsonb`. Os destinatários polimórficos não criam FKs para `users` ou `affiliations`; a migration é executada depois da Migration 04 para que os dois tipos de destinatário estejam disponíveis no sistema.
@@ -37,9 +37,9 @@ Deduplicação durável de eventos repetíveis não deve alterar a tabela nativa
 - [ ] Criar Notifications de domínio com canal `database`, `toDatabase()` e `databaseType()` quando os respectivos fluxos forem implementados.
 - [x] Adicionar `Notifiable` a `Affiliation` e consultar a caixa operacional pelo vínculo ativo.
 - [ ] Garantir que `data` não contenha tokens, senhas, códigos ou URLs sensíveis.
-- [x] Testar criação e leitura/não leitura pelo Model nativo para `Affiliation` e `User`.
-- [x] Testar que uma notificação de vínculo não aparece em outro vínculo da mesma conta.
-- [x] Testar migrate/rollback da migration isolada.
+- [ ] Testar criação e leitura/não leitura pelo Model nativo para `Affiliation` e `User`.
+- [ ] Testar que uma notificação de vínculo não aparece em outro vínculo da mesma conta.
+- [ ] Testar migrate/rollback da migration isolada.
 
 ## Próxima etapa
 

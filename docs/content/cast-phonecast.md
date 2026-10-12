@@ -7,7 +7,7 @@ status: implemented
 visibility: public
 tags: sge/casts, sge/contato, sge/dados-pessoais
 related: migration-02-user-personal-data, casts, helper-digitshelper
-source_refs: https://github.com/sge-suite/sge/blob/master/app/Casts/PhoneCast.php, https://github.com/sge-suite/sge/blob/master/tests/Unit/PhoneCastTest.php
+source_refs: https://github.com/sge-suite/sge/blob/master/app/Casts/PhoneCast.php
 ---
 > [!success] Estado atual
 > Implementado em `app/Casts/PhoneCast.php` e usado por `UserPersonalData::$phone`, `Campus::$phone` e `GrantingParty::$phone`.
@@ -29,7 +29,6 @@ A coluna `user_personal_data.phone` é `varchar(255)`; o cast define o formato a
 
 ## Testes
 
-`tests/Unit/PhoneCastTest.php` cobre telefone fixo e celular com e sem máscara, persistência apenas dos dígitos, valor vazio e entradas inválidas.
 
 ## Relacionamentos
 

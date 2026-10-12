@@ -7,7 +7,7 @@ status: implemented
 visibility: public
 tags: sge/migrations, sge/banco-de-dados, sge/autorizacao
 related: migration-03-campuses, migration-10-course-id-em-affiliations, enum-affiliationtype, migration-09-courses, modelo-de-dados-acesso, fase-02-conta-e-contexto
-source_refs: https://github.com/sge-suite/sge/blob/master/database/migrations/2026_09_22_105745_create_affiliations_table.php, https://github.com/sge-suite/sge/blob/master/app/Models/Affiliation.php, https://github.com/sge-suite/sge/blob/master/app/Concerns/AffiliationValidationRules.php, https://github.com/sge-suite/sge/blob/master/database/factories/AffiliationFactory.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/AffiliationTest.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/AuditInterfaceTest.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/EmailLogInterfaceTest.php, https://github.com/sge-suite/sge/blob/master/app/Support/CampusActivityScope.php, https://github.com/sge-suite/sge/blob/master/app/Support/CampusEmailLogScope.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/CampusLogInterfaceTest.php
+source_refs: https://github.com/sge-suite/sge/blob/master/database/migrations/2026_09_22_105745_create_affiliations_table.php, https://github.com/sge-suite/sge/blob/master/app/Models/Affiliation.php, https://github.com/sge-suite/sge/blob/master/app/Concerns/AffiliationValidationRules.php, https://github.com/sge-suite/sge/blob/master/database/factories/AffiliationFactory.php, https://github.com/sge-suite/sge/blob/master/app/Support/CampusActivityScope.php, https://github.com/sge-suite/sge/blob/master/app/Support/CampusEmailLogScope.php
 ---
 > [!success] Estado
 > Migration, Model, validação, factory, relações e Activity Log estão implementados. A migration depende de `users` e [`campuses`](doc:migration-03-campuses). O contrato foi verificado no PostgreSQL por Sail. A resolução do vínculo após o login, a sessão, a tela de seleção e a troca pelo menu do perfil estão implementadas na [Fase 02](doc:fase-02-conta-e-contexto).
@@ -65,9 +65,10 @@ O Spatie Activity Log registra criação e alterações relevantes nos dados fil
 
 Na auditoria compartilhada, o Administrador do Sistema pode ver atividades de vínculos dos tipos Administrador do Sistema e Setor de Estágio. O Setor consulta vínculos locais de todos os tipos exceto Administrador do Sistema, conforme o campus do vínculo ativo selecionado. O histórico preserva o escopo de vínculos excluídos por meio dos campos registrados, inclusive quando uma atualização registrou somente campos modificados. Referências a usuário, campus e curso mostram identificação atual junto do ID quando disponíveis e autorizadas. A seleção ou troca de vínculo atualiza apenas a memória operacional de `last_used_at` e não é registrada como atividade. O histórico de e-mails mantém um snapshot separado do contexto afetado em `email_delivery_attempts.scope_context`; esse campo não guarda a seleção de vínculo nem depende da permanência do vínculo no banco.
 
-## Testes verificados
+## Validação antes da produção
 
-`tests/Feature/AffiliationTest.php` cobre schema, rollback/reaplicação em ordem de dependência, FKs, relações, validação PHP e cast enum, curso obrigatório para discente, factory, ativação, ordenação e Activity Log. As alterações das Migrations 09 e 10 foram verificadas no PostgreSQL por Sail junto com `tests/Feature/CourseTest.php`. A tela de seleção, sessão e middleware são cobertos separadamente por `ActiveAffiliationContextTest`, `DashboardTest` e os testes da Fase 02.
+Não há testes automatizados no repositório atualmente. Na preparação para produção, validar as regras de vínculo e escopo conforme [Testes automatizados](doc:testes-existentes).
+
 
 ## Dependências
 

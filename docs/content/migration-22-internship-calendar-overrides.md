@@ -33,4 +33,4 @@ Uma exceção não modifica `holidays` e não é um escopo territorial. O cálcu
 - [x] Criar Model, factory, relação, validações e Activity Log.
 - [ ] Criar Policy e autorização exclusiva do Setor de Estágio.
 - [ ] Recalcular a previsão após alteração autorizada.
-- [ ] Testar liberação de feriado, bloqueio de dia comum e datas duplicadas no fluxo de cálculo; as regras do registro e a unicidade já têm teste Pest.
+- [ ] Na preparação para produção, validar liberação de feriado, bloqueio de dia comum e datas duplicadas no fluxo de cálculo, além das regras do registro e da unicidade.

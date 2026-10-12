@@ -7,7 +7,7 @@ status: implemented
 visibility: public
 tags: sge/enums, sge/documentos
 related: migration-16-generated-documents, fluxos-principais
-source_refs: https://github.com/sge-suite/sge/blob/master/app/Enums/GeneratedDocumentStatus.php, https://github.com/sge-suite/sge/blob/master/tests/Unit/Enums/GeneratedDocumentStatusTest.php
+source_refs: https://github.com/sge-suite/sge/blob/master/app/Enums/GeneratedDocumentStatus.php
 ---
 > [!success] Estado
 > Implementado em `app/Enums/GeneratedDocumentStatus.php`. O cast em `GeneratedDocument` e a Migration 16 já existem; as guardas de transição do fluxo ainda estão pendentes.
@@ -33,7 +33,7 @@ Quando a data de início vencer antes da assinatura, o documento continua `Await
 
 - [x] Criar enum string e rótulos no código.
 - [x] Implementar `options()` e `values()`.
-- [x] Cobrir cases, valores, rótulos e opções com teste unitário.
+- [ ] Cobrir cases, valores, rótulos e opções com teste unitário.
 - [x] Adicionar cast em `GeneratedDocument`.
 - [x] Usar o valor inicial do enum na [migration de generated_documents](doc:migration-16-generated-documents).
 - [ ] Implementar guardas para transições e documentos já assinados.

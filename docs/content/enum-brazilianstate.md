@@ -7,10 +7,10 @@ status: implemented
 visibility: public
 tags: sge/enums, sge/cadastros, sge/calendario
 related: migration-01a-cities, migration-01-addresses, migration-03-campuses, migration-22-holidays, service-internshipenddatecalculator
-source_refs: https://github.com/sge-suite/sge/blob/master/app/Enums/BrazilianState.php, https://github.com/sge-suite/sge/blob/master/tests/Unit/Enums/BrazilianStateTest.php
+source_refs: https://github.com/sge-suite/sge/blob/master/app/Enums/BrazilianState.php
 ---
 > [!success] Estado
-> A classe e os testes unitários já existem em `app/Enums/BrazilianState.php`. O cast no model `City` já está implementado; `Address` obtém a UF pelo relacionamento com a cidade, sem coluna ou cast de UF próprios. As integrações com campi e o cálculo do calendário continuam planejadas.
+> A classe existe em `app/Enums/BrazilianState.php`. O cast no model `City` já está implementado; `Address` obtém a UF pelo relacionamento com a cidade, sem coluna ou cast de UF próprios. As integrações com campi e o cálculo do calendário continuam planejadas. Não há testes automatizados no repositório atualmente; a validação fica para a preparação para produção.
 
 Os valores persistidos são as siglas oficiais em maiúsculas. `label()` apresenta o nome da unidade federativa em português e `options()` serve diretamente aos campos de seleção.
 
@@ -51,7 +51,7 @@ Para o cálculo do estágio, a UF e a cidade do endereço histórico do local de
 ## Checklist
 
 - [x] Criar enum, rótulos, `values()` e `options()`.
-- [x] Cobrir cases, siglas, rótulos e opções com teste unitário.
+- [ ] Cobrir cases, siglas, rótulos e opções com teste unitário.
 - [x] Adicionar o cast de UF ao model `City`.
 - [x] Expor a UF de `Address` pelo relacionamento com `City`, sem duplicar coluna ou cast.
 - [ ] Integrar a UF ao cadastro de campus conforme seu contrato.

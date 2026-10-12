@@ -17,13 +17,13 @@ source_refs:
 | Estados e transições | [Ciclos de status](doc:ciclos-de-status) | enum e fluxo correspondentes |
 | Esquema, índices e FKs | notas de migration | diagramas conceituais |
 | Decisão aprovada | [Backlog e decisões](doc:backlog-e-decisoes) | notas de implementação relacionadas |
-| Estado do código existente | nota técnica com `source_refs` | código e testes apontados pela mesma lista |
+| Estado do código existente | nota técnica com `source_refs` | código apontado pela mesma lista; testes automatizados estão suspensos até a preparação para produção |
 
 Uma nota derivada deve linkar para a fonte principal em vez de repetir o contrato inteiro.
 
 ## Limite de detalhe de interface
 
-Documente comportamentos de tela quando alterarem regras do domínio, autorização, dados ou uma operação necessária ao usuário. Omita ajustes de apresentação, como alinhamento, espaçamento, cores, ícones e transições visuais. Notas de migration descrevem schema, persistência, relações e regras do dado; não registram acabamento de formulários. Detalhes de implementação visual pertencem ao código e aos testes correspondentes.
+Documente comportamentos de tela quando alterarem regras do domínio, autorização, dados ou uma operação necessária ao usuário. Omita ajustes de apresentação, como alinhamento, espaçamento, cores, ícones e transições visuais. Notas de migration descrevem schema, persistência, relações e regras do dado; não registram acabamento de formulários. Durante a implementação, detalhes visuais ficam no código; testes automatizados serão retomados na preparação para produção.
 
 ## Estados das notas
 
@@ -32,13 +32,13 @@ Documente comportamentos de tela quando alterarem regras do domínio, autorizaç
 | `planned` | Contrato ou trabalho ainda não iniciado. |
 | `defined` | Regra aprovada, mas ainda não implementada. |
 | `in-progress` | Conteúdo, implementação ou validação em curso. |
-| `implemented` | Artefato de código existe; os checklists devem indicar integrações ou testes restantes. |
+| `implemented` | Artefato de código existe; os checklists devem indicar integrações restantes e validações automatizadas previstas para a preparação para produção. |
 | `maintained` | Nota operacional ou histórica que continua válida e recebe revisões. |
 | `observed` | Fotografia do estado atual, sem prometer comportamento futuro. |
 | `completed` | Marco concluído e sem trabalho pendente próprio. |
 | `archived` | Material preservado apenas para consulta histórica. |
 
-Não marque uma fase como `completed` se seu checklist ainda tiver itens pendentes. Para uma nota de código, `implemented` pode coexistir com pendências de integração e testes, desde que o texto deixe isso explícito.
+Não marque uma fase como `completed` se seu checklist ainda tiver itens pendentes. Para uma nota de código, `implemented` pode coexistir com pendências de integração; testes automatizados são tratados na preparação para produção e seu adiamento deve ficar explícito.
 
 ## Frontmatter e referências de código
 
@@ -47,7 +47,7 @@ Toda nota Markdown deve possuir `id`, `title`, `description`, `type`, `status` e
 O repositório Laravel fica em um repositório público separado. Para manter as referências portáveis e verificáveis em qualquer checkout, use URLs estáveis do código:
 
 ```yaml
-source_refs: https://github.com/sge-suite/sge/blob/master/app/Enums/InternshipStatus.php, https://github.com/sge-suite/sge/blob/master/tests/Unit/Enums/InternshipStatusTest.php
+source_refs: https://github.com/sge-suite/sge/blob/master/app/Enums/InternshipStatus.php
 ```
 
 Nunca grave um caminho absoluto de máquina em `source_refs`. O comando `npm run check` valida a estrutura, os links e as referências disponíveis.
@@ -66,4 +66,4 @@ O Aurelius publica as notas em `content/` e os diagramas em `diagrams/`, gerando
 1. Atualize a fonte principal e as notas derivadas afetadas.
 2. Verifique links e frontmatter com `npm run check`.
 3. Execute `npm run build` quando a alteração afetar conteúdo publicado.
-4. Atualize o checklist da fase e a matriz de testes quando houver código novo.
+4. Atualize o checklist da fase quando houver código novo; mantenha os testes automatizados para a preparação para produção conforme [Testes automatizados](doc:testes-existentes).

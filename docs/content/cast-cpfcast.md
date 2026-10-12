@@ -7,7 +7,7 @@ status: implemented
 visibility: public
 tags: sge/casts, sge/dados-pessoais, sge/seguranca
 related: migration-02-user-personal-data, model-user, helpers
-source_refs: https://github.com/sge-suite/sge/blob/master/app/Casts/CpfCast.php, https://github.com/sge-suite/sge/blob/master/tests/Unit/CpfCastTest.php
+source_refs: https://github.com/sge-suite/sge/blob/master/app/Casts/CpfCast.php
 ---
 > [!success] Estado atual
 > Implementado em `app/Casts/CpfCast.php` e usado hoje em `User::$cpf`.
@@ -41,7 +41,6 @@ $user->save();
 - [x] Implementar `get()` e `set()`.
 - [x] Remover máscara antes da persistência.
 - [x] Rejeitar CPF inválido.
-- [x] Cobrir CPF mascarado, limpo e inválido em `tests/Unit/CpfCastTest.php`.
 - [ ] Definir comportamento para string composta apenas por espaços.
 - [x] Manter o cast em `User`, sem duplicar CPF no Model de dados pessoais.
 - [ ] Confirmar que CPF não é editável pela configuração do usuário.

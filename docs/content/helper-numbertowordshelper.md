@@ -7,7 +7,7 @@ status: implemented
 visibility: public
 tags: sge/helpers, sge/documentos, sge/formatacao
 related: helper-currencyhelper, migration-16-generated-documents
-source_refs: https://github.com/sge-suite/sge/blob/master/app/Helpers/NumberToWordsHelper.php, https://github.com/sge-suite/sge/blob/master/tests/Unit/Helpers/NumberToWordsHelperTest.php
+source_refs: https://github.com/sge-suite/sge/blob/master/app/Helpers/NumberToWordsHelper.php
 ---
 ## Responsabilidade
 
@@ -43,7 +43,7 @@ Centralizar a escrita em português de números usados nos documentos. A impleme
 - [x] Definir uso no §1º de remuneração.
 - [x] Implementar `cardinal()` e `brl()`.
 - [x] Expor `numberToWords()` e `brlToWords()` em `app/helpers.php` para leitura em Blade.
-- [x] Cobrir plurais, zeros, centavos e entradas inválidas com testes unitários.
+- [ ] Cobrir plurais, zeros, centavos e entradas inválidas com testes unitários.
 - [x] Confirmar disponibilidade da extensão `intl` no ambiente de desenvolvimento.
 - [ ] Confirmar disponibilidade da extensão `intl` na imagem/ambiente de produção.
 

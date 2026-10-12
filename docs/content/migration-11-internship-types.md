@@ -10,7 +10,7 @@ related: migration-09-courses, service-internshipenddatecalculator
 source_refs:
 ---
 > [!success] Estado
-> Migration, Model, factory, regras Laravel em PHP e testes PostgreSQL implementados após [`courses`](doc:migration-09-courses). A gestão pelo Setor de Estágio está implementada na [Fase 05](doc:fase-05-administracao); o snapshot pertence à Migration 15 e é preservado nas alterações do catálogo.
+> Migration, Model, factory e regras Laravel em PHP implementados após [`courses`](doc:migration-09-courses). A gestão pelo Setor de Estágio está implementada na [Fase 05](doc:fase-05-administracao); o snapshot pertence à Migration 15 e é preservado nas alterações do catálogo. Não há testes automatizados no repositório atualmente; a validação fica para a preparação para produção.
 
 ## Contrato
 
@@ -55,7 +55,7 @@ Os pesos e os valores dos conceitos são configurados no tipo de estágio, nunca
 - [x] Criar Model com casts e validação Laravel em PHP.
 - [x] Criar factory com regras completas.
 - [x] Implementar validação da carga horária obrigatória, dos pesos, conceitos e limites diário e semanal da jornada.
-- [x] Testar consulta de tipos por curso/campus e ciclo de desativação.
-- [x] Testar preservação do snapshot, datas e demais atributos após edição, troca de curso, desativação e reativação do tipo usado em estágio formalizado.
-- [x] Testar conceitos fora do peso, `excellent` derivado do peso do supervisor, valores repetidos, ordem inválida, limites de jornada fora dos intervalos definidos e margem negativa.
-- [x] Testar migrate/rollback das Migrations 15, 11, 10 e 09 na ordem das FKs.
+- [ ] Testar consulta de tipos por curso/campus e ciclo de desativação.
+- [ ] Testar preservação do snapshot, datas e demais atributos após edição, troca de curso, desativação e reativação do tipo usado em estágio formalizado.
+- [ ] Testar conceitos fora do peso, `excellent` derivado do peso do supervisor, valores repetidos, ordem inválida, limites de jornada fora dos intervalos definidos e margem negativa.
+- [ ] Testar migrate/rollback das Migrations 15, 11, 10 e 09 na ordem das FKs.

@@ -22,7 +22,7 @@ Concerns devem conter regras coesas e reutilizáveis, sem conhecer uma tela espe
 ## Checklist comum
 
 - [ ] Manter regras compartilhadas em um único lugar.
-- [x] Testar cada método do trait via a classe que o consome.
+- [ ] Testar cada método do trait via a classe que o consome.
 - [ ] Não colocar persistência, autorização ou efeitos colaterais no concern.
 - [ ] Atualizar a documentação quando um campo ou requisito mudar.
 

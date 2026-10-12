@@ -25,7 +25,7 @@ Não cria token, não envia e-mail e não registra conteúdo sensível; o fluxo 
 - [x] Registrar Action no `FortifyServiceProvider`.
 - [x] Reutilizar regras de senha.
 - [x] Persistir senha via cast `hashed` do `User`.
-- [x] Testar redefinição bem-sucedida e o evento `password_changed` sem senha/hash no Activity Log.
+- [ ] Testar redefinição bem-sucedida e o evento `password_changed` sem senha/hash no Activity Log.
 - [x] Manter tokens/URLs fora do Activity Log e das tabelas `email_messages` e `email_delivery_attempts`; a Notification de reset é enfileirada e criptografada.
 - [ ] Ampliar testes de token expirado/reutilizado e respostas para solicitação repetida.
 

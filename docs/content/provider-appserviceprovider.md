@@ -7,7 +7,7 @@ status: implemented
 visibility: public
 tags: sge/providers, sge/operacao, sge/formatacao
 related: helper-datehelper, helper-currencyhelper
-source_refs: https://github.com/sge-suite/sge/blob/master/app/Providers/AppServiceProvider.php, https://github.com/sge-suite/sge/blob/master/app/Support/AuditInfrastructureModel.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/DatabaseAuditTest.php
+source_refs: https://github.com/sge-suite/sge/blob/master/app/Providers/AppServiceProvider.php, https://github.com/sge-suite/sge/blob/master/app/Support/AuditInfrastructureModel.php
 ---
 ## Boot atual
 

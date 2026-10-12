@@ -7,7 +7,7 @@ status: implemented
 visibility: public
 tags: sge/migrations, sge/banco-de-dados, sge/dados-pessoais
 related: migration-01-addresses, migration-12a-supervisor-registration-requests, migration-19a-emancipation-evidences, backlog-e-decisoes, modelo-de-dados-acesso, cast-phonecast
-source_refs: https://github.com/sge-suite/sge/blob/master/database/migrations/2026_09_20_085446_create_user_personal_data_table.php, https://github.com/sge-suite/sge/blob/master/app/Models/UserPersonalData.php, https://github.com/sge-suite/sge/blob/master/app/Casts/PhoneCast.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/UserPersonalDataTest.php, https://github.com/sge-suite/sge/blob/master/tests/Unit/PhoneCastTest.php
+source_refs: https://github.com/sge-suite/sge/blob/master/database/migrations/2026_09_20_085446_create_user_personal_data_table.php, https://github.com/sge-suite/sge/blob/master/app/Models/UserPersonalData.php, https://github.com/sge-suite/sge/blob/master/app/Casts/PhoneCast.php
 ---
 > [!success] Estado
 > Implementada. Depende de `users` (migration base do Laravel) e [`addresses`](doc:migration-01-addresses).
@@ -43,8 +43,8 @@ A autorização de edição será por tipo de vínculo: dados de RG, nascimento 
 - [x] Criar Model `UserPersonalData` e relação um-para-um em `User`.
 - [x] Criar factory com pessoa completa e pessoa sem dados opcionais.
 - [x] Normalizar e validar telefone pelo [`PhoneCast`](doc:cast-phonecast); validar RG, datas e endereço antes de persistir.
-- [x] Criar testes de unicidade, perfil ausente, FKs, schema, migrate e rollback em PostgreSQL.
-- [x] Acrescentar campos profissionais opcionais do supervisor, compartilhados por usuário, com validação e testes.
+- [ ] Criar testes de unicidade, perfil ausente, FKs, schema, migrate e rollback em PostgreSQL.
+- [ ] Acrescentar campos profissionais opcionais do supervisor, compartilhados por usuário, com validação e testes.
 - [x] Manter CPF exclusivamente em `users`, sem alterar cadastro ou autenticação.
 - [ ] Exigir e autorizar os campos pertinentes nos futuros fluxos de discente e supervisor.
 

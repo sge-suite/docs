@@ -7,7 +7,7 @@ status: implemented
 visibility: public
 tags: sge/migrations, sge/banco-de-dados, sge/endereco
 related: migration-01a-cities, actions, concerns, testes-existentes, dominio-e-modelo-de-dados, migration-02-user-personal-data, migration-03-campuses, migration-12-granting-parties, migration-15-internships
-source_refs: https://github.com/sge-suite/sge/blob/master/database/migrations/2026_09_16_153327_create_addresses_table.php, https://github.com/sge-suite/sge/blob/master/app/Models/Address.php, https://github.com/sge-suite/sge/blob/master/app/Concerns/AddressValidationRules.php, https://github.com/sge-suite/sge/blob/master/app/Actions/CopyAddress.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/AddressesTest.php
+source_refs: https://github.com/sge-suite/sge/blob/master/database/migrations/2026_09_16_153327_create_addresses_table.php, https://github.com/sge-suite/sge/blob/master/app/Models/Address.php, https://github.com/sge-suite/sge/blob/master/app/Concerns/AddressValidationRules.php, https://github.com/sge-suite/sge/blob/master/app/Actions/CopyAddress.php
 ---
 > [!success] Estado
 > Base backend implementada: migration, model, factories, relacionamentos, validação dos campos obrigatórios, Activity Log e cópia histórica. CEP obrigatório com PT-BR Validator e consulta com revisão estão implementados nos formulários de campus. Integrações restantes e a formalização continuam pendentes.
@@ -65,18 +65,9 @@ O botão **Buscar CEP** nos formulários de campus chama `BrasilApiCepLookup`, q
 
 A resposta abre um modal Flux com valores atuais e propostos; cancelar preserva o formulário. Após confirmação, logradouro e bairro retornados substituem os campos preenchidos, valores vazios não apagam os atuais e o número é mantido. A cidade é resolvida exclusivamente por nome normalizado e UF no catálogo local, ignorando diferenças de maiúsculas e acentos. Somente uma correspondência inequívoca pode ser selecionada; ausência ou ambiguidade limpa a seleção e exige escolha manual. A integração não cria cidades. Os dados permanecem editáveis e só são persistidos pelo envio normal do formulário. A proposta fica protegida por `#[Locked]`, não pode ser aplicada se o CEP mudar e as permissões e o estado do campus são revalidados em cada requisição.
 
-## Testes
+## Validação antes da produção
 
-`BrasilApiCepLookupTest` cobre consulta com HTTP simulado, entradas inválidas sem requisição, respostas e falhas da API, revisão, cancelamento, aplicação, preservação do número e campos vazios, cidades ausentes ou ambíguas, mudança posterior do CEP, proposta bloqueada e reautorização.
-
-`tests/Feature/AddressesTest.php` cobre tipos e limites PostgreSQL, nulabilidade, índices, FK `RESTRICT`, migrate e rollback, factories, casts, relacionamentos, campos obrigatórios, número textual, CEP obrigatório, PT-BR Validator, formatos aceitos e persistência sem máscara com zeros à esquerda, cópia histórica e Activity Log. `tests/Feature/CampusManagementTest.php` verifica edição no mesmo endereço, bloqueio quando ele também estiver ligado a outro cadastro ou estágio e rollback dos registros e atividades. Como `user_personal_data` referencia `addresses`, o teste de rollback reverte em conjunto as migrations aplicadas a partir de `addresses`, testa a remoção da tabela e reaplica o conjunto. Os testes usam `Http::fake()` e `preventStrayRequests()` para impedir acesso à rede.
-
-```bash
-./vendor/bin/sail artisan test --compact tests/Feature/AddressesTest.php tests/Feature/BrasilApiCepLookupTest.php tests/Feature/CitiesTest.php tests/Unit/DatabaseDriverGuardTest.php
-./vendor/bin/sail exec laravel.test vendor/bin/pint --dirty --format agent
-```
-
-Os testes cobrem o schema PostgreSQL, endereços, cidades e a guarda global de migrations; o mapa atual está em [Testes existentes](doc:testes-existentes).
+Não há testes automatizados no repositório atualmente. Na preparação para produção, validar schema PostgreSQL, endereços, cidades e a guarda global de migrations conforme [Testes automatizados](doc:testes-existentes).
 
 ## Checklist
 
@@ -87,8 +78,8 @@ Os testes cobrem o schema PostgreSQL, endereços, cidades e a guarda global de m
 - [x] Validar cidade, logradouro, bairro e número textual, incluindo `s/n`.
 - [x] Usar timestamps nativos, sem casts explícitos de data.
 - [x] Registrar alterações cadastrais no Activity Log, sem campos de autoria.
-- [x] Implementar e testar a cópia histórica na própria tabela.
-- [x] Testar schema, migrate, rollback e persistência em PostgreSQL.
+- [ ] Implementar e testar a cópia histórica na própria tabela.
+- [ ] Testar schema, migrate, rollback e persistência em PostgreSQL.
 - [x] Atualizar [Domínio e modelo de dados](doc:dominio-e-modelo-de-dados).
 - [x] Validar CEP obrigatoriamente com PT-BR Validator e armazenar somente oito dígitos.
 - [x] Implementar consulta opcional de CEP nos formulários de campus, com revisão e resolução da cidade no catálogo local.
@@ -101,5 +92,3 @@ Os testes cobrem o schema PostgreSQL, endereços, cidades e a guarda global de m
 - [campuses](doc:migration-03-campuses)
 - [granting_parties](doc:migration-12-granting-parties)
 - [internships](doc:migration-15-internships)
-
-`AddressLifecycleTest` cobre exclusão física acompanhando o proprietário, cancelamento da exclusão, endereços compartilhados, preservação de referências históricas, rejeição de associações excluídas e rollback de cadastro, endereço e auditoria.

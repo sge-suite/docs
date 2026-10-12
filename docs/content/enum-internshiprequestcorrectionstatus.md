@@ -7,11 +7,11 @@ status: implemented
 visibility: public
 tags: sge/enums, sge/estagio, sge/pendencias
 related: migration-base-04-activity-log, migration-20-internship-request-corrections
-source_refs: https://github.com/sge-suite/sge/blob/master/app/Enums/InternshipRequestCorrectionStatus.php, https://github.com/sge-suite/sge/blob/master/tests/Unit/Enums/InternshipRequestCorrectionStatusTest.php
+source_refs: https://github.com/sge-suite/sge/blob/master/app/Enums/InternshipRequestCorrectionStatus.php
 diagram: enum-correction-status
 ---
 > [!success] Estado
-> A classe e os testes unitários já existem. O cast em `InternshipRequestCorrection` e a Migration 20 já existem; o fluxo de análise ainda está planejado. Este enum controla a pendência; não substitui o status da solicitação nem o [`activity_log`](doc:migration-base-04-activity-log).
+> A classe existe. O cast em `InternshipRequestCorrection` e a Migration 20 já existem; o fluxo de análise ainda está planejado. Este enum controla a pendência; não substitui o status da solicitação nem o [`activity_log`](doc:migration-base-04-activity-log). Não há testes automatizados no repositório atualmente; a validação fica para a preparação para produção.
 
 ## Contrato
 
@@ -34,5 +34,5 @@ Somente uma correção em `Open` pode existir por solicitação. Uma correção 
 - [ ] Adicionar cast em `InternshipRequestCorrection`.
 - [x] Usar o valor inicial do enum na [migration de internship_request_corrections](doc:migration-20-internship-request-corrections).
 - [ ] Garantir por constraint/validação que só exista uma pendência aberta por solicitação.
-- [x] Testar cases, valores, rótulos e opções.
+- [ ] Testar cases, valores, rótulos e opções.
 - [ ] Testar devolução, reenvio, nova devolução, aprovação e desistência no fluxo de domínio.

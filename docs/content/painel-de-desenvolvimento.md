@@ -14,14 +14,14 @@ source_refs:
 
 Este índice é uma fotografia editorial da documentação publicada. Os documentos vinculados continuam sendo a fonte de verdade; os status servem para navegação e acompanhamento, não substituem o contrato técnico.
 
-**Como interpretar os status:** `implemented` indica que o artefato já existe no código; a integração com o domínio, as migrations, as Policies e os testes específicos podem continuar pendentes. `defined` indica contrato aprovado ainda não implementado; `planned` indica trabalho ainda não iniciado.
+**Como interpretar os status:** `implemented` indica que o artefato já existe no código; a integração com o domínio, as migrations e as Policies podem continuar pendentes. Não há testes automatizados atualmente; serão retomados na preparação para produção conforme [Testes automatizados](doc:testes-existentes). `defined` indica contrato aprovado ainda não implementado; `planned` indica trabalho ainda não iniciado.
 
 ## Fases
 
 Para a sequência e o andamento atuais, consulte [Fases de desenvolvimento](doc:fases-de-desenvolvimento).
 
 - [Fase 00 — Preparação](doc:fase-00-preparacao) — **completed** — Checklist do ambiente, qualidade e fluxo de trabalho do projeto novo.
-- [Fase 01 — Fundação de dados](doc:fase-01-fundacao-de-dados) — **completed** — Migrations, Models, factories e testes PostgreSQL da base de dados.
+- [Fase 01 — Fundação de dados](doc:fase-01-fundacao-de-dados) — **completed** — Migrations, Models e factories da base de dados.
 - [Fase 02 — Conta e contexto](doc:fase-02-conta-e-contexto) — **in-progress** — Contexto, `admin:create`, administração de contas/vínculos administrativos, troca própria de senha/e-mail e avisos implementados; edição própria de perfil pessoal pendente.
 - [Fase 03 — Activity Log](doc:fase-03-activity-log) — **completed** — Eventos Eloquent, autoria por vínculo e auditoria dos campos pessoais e profissionais implementados.
 - [Fase 04 — Integração de e-mail](doc:fase-04-integracao-de-email) — **in-progress** — Pipeline em fila e três fluxos de conta integrados; notificações operacionais de domínio e administração de entregas pendentes.
@@ -79,7 +79,7 @@ Sequência física dos arquivos em `database/migrations`; os números permanecem
 - [Migration 13 — document_templates](doc:migration-13-document-templates) — **implemented** — Contrato do catálogo de templates DOCX do SGE.
 - [Migration 14 — template_versions](doc:migration-14-template-versions) — **in-progress** — Versões DOCX privadas, com preservação após uso; validação do upload e integração com geração ainda pendentes.
 - [Migration 15 — internships](doc:migration-15-internships) — **in-progress** — Contrato do processo de estágio, referências atuais e snapshots históricos.
-- [Migration 18 — supervisor_evaluations](doc:migration-18-supervisor-evaluations) — **implemented** — Schema, Model, factory e testes da avaliação do supervisor; fluxo funcional pendente.
+- [Migration 18 — supervisor_evaluations](doc:migration-18-supervisor-evaluations) — **implemented** — Schema, Model e factory da avaliação do supervisor; fluxo funcional pendente.
 - [Migration 19 — internship_requests](doc:migration-19-internship-requests) — **implemented** — Contrato da solicitação única de abertura de estágio preenchida pelo discente.
 - [Migration 16 — generated_documents](doc:migration-16-generated-documents) — **implemented** — Contrato dos documentos gerados ou registrados no estágio.
 - [Migration 17 — internship_pauses](doc:migration-17-internship-pauses) — **implemented** — Contrato das pausas de estágio e sua validação temporal.
@@ -120,7 +120,7 @@ Sequência física dos arquivos em `database/migrations`; os números permanecem
 - [Service — InternshipEndDateCalculator](doc:service-internshipenddatecalculator) — **planned** — Contrato técnico do cálculo reproduzível da previsão de término.
 - [Service — InternshipGradeCalculator](doc:service-internshipgradecalculator) — **planned** — Contrato técnico das notas de supervisor, relatório, apresentação e resultado consolidado.
 - [Services](doc:services) — **planned** — Índice dos serviços de domínio planejados para cálculos, documentos, snapshots e transições.
-- [Testes existentes](doc:testes-existentes) — **in-progress** — Mapa da cobertura de testes já presente no projeto novo e lacunas conhecidas.
+- [Testes automatizados](doc:testes-existentes) — **maintained** — A suíte foi removida durante a implementação; retomada planejada para a preparação para produção.
 
 ## Integrações
 

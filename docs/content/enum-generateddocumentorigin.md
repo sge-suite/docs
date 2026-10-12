@@ -7,7 +7,7 @@ status: implemented
 visibility: public
 tags: sge/enums, sge/documentos
 related: migration-16-generated-documents
-source_refs: https://github.com/sge-suite/sge/blob/master/app/Enums/GeneratedDocumentOrigin.php, https://github.com/sge-suite/sge/blob/master/tests/Unit/Enums/GeneratedDocumentOriginTest.php
+source_refs: https://github.com/sge-suite/sge/blob/master/app/Enums/GeneratedDocumentOrigin.php
 ---
 > [!success] Estado
 > Implementado em `app/Enums/GeneratedDocumentOrigin.php`. A Migration 16 e o cast em `GeneratedDocument` já usam este enum; geração e associação no fluxo ainda serão implementadas.
@@ -25,7 +25,7 @@ Para documentos de origem `granting_party`, `template_version_id` é nulo e não
 
 - [x] Criar enum string e rótulos no código.
 - [x] Implementar `options()` e `values()`.
-- [x] Cobrir cases, valores, rótulos e opções com teste unitário.
+- [ ] Cobrir cases, valores, rótulos e opções com teste unitário.
 - [ ] Adicionar cast em `GeneratedDocument`.
 - [x] Usar o enum na [migration de generated_documents](doc:migration-16-generated-documents).
 - [ ] Validar `template_version_id` nulo para `granting_party`.

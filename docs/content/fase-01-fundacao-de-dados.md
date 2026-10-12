@@ -22,11 +22,11 @@ source_refs:
 - [x] Decidir que não haverá migration de permissões; autorização será por vínculos, Gates e Policies.
 
 > [!info] Escopo concluído
-> A fundação de schema, Models, relações, factories e testes PostgreSQL das migrations implementadas está concluída. O contexto de vínculo da Fase 02 e a integração do Activity Log Eloquent da Fase 03 também já têm implementação. Fluxos de cadastro pela interface, Jobs de domínio e telas de estágio continuam nas fases próprias.
+> A fundação de schema, Models, relações e factories das migrations implementadas está concluída. O contexto de vínculo da Fase 02 e a integração do Activity Log Eloquent da Fase 03 também já têm implementação. O repositório atualmente não contém testes automatizados; a validação automatizada fica para a preparação da produção. Fluxos de cadastro pela interface, Jobs de domínio e telas de estágio continuam nas fases próprias.
 
 ## Dados cadastrais
 
-- [x] Criar e testar as classes dos enums estáveis; a integração com Models, migrations e fluxos continua nas etapas específicas.
+- [ ] Criar e testar as classes dos enums estáveis; a integração com Models, migrations e fluxos continua nas etapas específicas.
 - [x] Concluir [`cities`](doc:migration-01a-cities), executar `php artisan cities:fetch` quando necessário e carregar o catálogo com `CitySeeder` sem rede.
 - [x] Implementar a base backend de [`addresses`](doc:migration-01-addresses), incluindo cópia histórica.
 - [x] Implementar consulta de CEP nos formulários de campus, com revisão antes de aplicar, validação obrigatória com PT-BR Validator e persistência de oito dígitos sem máscara.
@@ -49,18 +49,18 @@ source_refs:
 - [x] Permitir múltiplos vínculos por pessoa sem trocar campus dentro do vínculo.
 - [x] Exigir curso em vínculo discente e respeitar escopo do campus.
 - [x] Congelar regras do tipo de estágio por FK e snapshot no estágio.
-- [x] Criar factories e testes para cenários completos, incompletos, ativos e desativados.
+- [ ] Criar factories e testes para cenários completos, incompletos, ativos e desativados.
 
 ## Componentes que sustentam a fundação
 
 - [x] Confirmar [casts](doc:casts) nos Models corretos.
 - [x] Usar [helpers](doc:helpers) somente para formatação/normalização, sem regra de autorização.
 - [x] Reutilizar [concerns](doc:concerns) para validações compartilhadas.
-- [x] Criar testes PostgreSQL para as migrations e Models; lacunas de autorização e fluxos estão mapeadas em [testes existentes](doc:testes-existentes).
+- [ ] Na preparação para produção, validar migrations e Models em PostgreSQL; critérios futuros estão em [Testes automatizados](doc:testes-existentes).
 
 ## Critério de saída
 
-- [x] As migrations implementadas passam na suíte PostgreSQL e seus Models, relações, casts, índices e validações têm testes.
+- [ ] Antes da produção, validar migrations implementadas, relações, casts, índices e regras críticas em PostgreSQL.
 
 ## Próxima fase
 

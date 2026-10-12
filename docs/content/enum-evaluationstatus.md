@@ -7,11 +7,11 @@ status: implemented
 visibility: public
 tags: sge/enums, sge/avaliacao
 related: migration-18-supervisor-evaluations, fase-09-avaliacao-e-conclusao, backlog-e-decisoes, fluxos-principais
-source_refs: https://github.com/sge-suite/sge/blob/master/app/Enums/EvaluationStatus.php, https://github.com/sge-suite/sge/blob/master/tests/Unit/Enums/EvaluationStatusTest.php
+source_refs: https://github.com/sge-suite/sge/blob/master/app/Enums/EvaluationStatus.php
 diagram: enum-evaluation-status
 ---
 > [!success] Estado
-> O enum, a migration, o Model e os testes de estados já existem. A liberação funcional e as Policies ainda estão planejadas. A validade para nota depende da carga horária.
+> O enum, a migration e o Model já existem. A liberação funcional e as Policies ainda estão planejadas. A validade para nota depende da carga horária. Não há testes automatizados no repositório atualmente; a validação fica para a preparação para produção.
 
 ## Contrato implementado
 
@@ -54,9 +54,9 @@ A liberação para preenchimento pertence ao estágio, não ao enum da resposta.
 - [x] Confirmar que a avaliação vigente será a aprovada mais recente, com aprovação condicionada à carga horária cumprida.
 - [x] Definir pesos e valores dos conceitos no snapshot do tipo de estágio.
 - [x] Mapear critérios, escala e regras condicionais do formulário fixo de avaliação.
-- [x] Criar o enum e seus testes unitários.
+- [ ] Criar o enum e seus testes unitários.
 - [x] Criar migration e campos de liberação/avaliação vigente.
-- [x] Adicionar cast, transições no Model e testes de histórico; autorização e seleção transacional da vigente continuam pendentes.
+- [ ] Adicionar cast, transições no Model e testes de histórico; autorização e seleção transacional da vigente continuam pendentes.
 - [x] Atualizar [migration de avaliação](doc:migration-18-supervisor-evaluations) e [fase de avaliação](doc:fase-09-avaliacao-e-conclusao).
 
 ## Relacionamentos

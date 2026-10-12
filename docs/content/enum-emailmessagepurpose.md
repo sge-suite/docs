@@ -7,10 +7,10 @@ status: implemented
 visibility: public
 tags: sge/enums, sge/email
 related: e-mails-notificacoes-e-entregas, migration-06-email-messages, enum-emaildeliveryattemptstatus
-source_refs: https://github.com/sge-suite/sge/blob/master/app/Enums/EmailMessagePurpose.php, https://github.com/sge-suite/sge/blob/master/tests/Unit/Enums/EmailMessagePurposeTest.php
+source_refs: https://github.com/sge-suite/sge/blob/master/app/Enums/EmailMessagePurpose.php
 ---
 > [!success] Estado
-> A classe, o cast em `EmailMessage`, a migration, os testes e o backend de envio em fila existem.
+> A classe, o cast em `EmailMessage`, a migration e o backend de envio em fila existem. Não há testes automatizados no repositório atualmente; a validação fica para a preparação para produção.
 
 ## Contrato implementado
 
@@ -40,8 +40,8 @@ O fluxo de recuperação de senha não inclui confirmação adicional de endere�
 - [x] Implementar `label()`, `options()` e `values()`.
 - [x] Adicionar cast em `EmailMessage`.
 - [x] Persistir o conteúdo de novas mensagens das cinco finalidades em [email_messages](doc:migration-06-email-messages), exceto recuperação de senha, que fica fora dessas tabelas.
-- [x] Criar testes para cases, conversão e opções.
-- [x] Testar que senhas, tokens de recuperação, identificadores internos de entrega e exceções brutas não sejam persistidos ou exibidos no histórico administrativo.
+- [ ] Criar testes para cases, conversão e opções.
+- [ ] Testar que senhas, tokens de recuperação, identificadores internos de entrega e exceções brutas não sejam persistidos ou exibidos no histórico administrativo.
 
 ## Relacionamentos
 

@@ -7,10 +7,10 @@ status: implemented
 visibility: public
 tags: sge/migrations, sge/autorizacao, sge/cursos
 related: migration-09-courses, enum-affiliationtype, migration-04-affiliations
-source_refs: https://github.com/sge-suite/sge/blob/master/database/migrations/2026_09_22_163558_add_course_id_to_affiliations_table.php, https://github.com/sge-suite/sge/blob/master/app/Models/Affiliation.php, https://github.com/sge-suite/sge/blob/master/app/Concerns/AffiliationValidationRules.php, https://github.com/sge-suite/sge/blob/master/database/factories/AffiliationFactory.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/CourseTest.php
+source_refs: https://github.com/sge-suite/sge/blob/master/database/migrations/2026_09_22_163558_add_course_id_to_affiliations_table.php, https://github.com/sge-suite/sge/blob/master/app/Models/Affiliation.php, https://github.com/sge-suite/sge/blob/master/app/Concerns/AffiliationValidationRules.php, https://github.com/sge-suite/sge/blob/master/database/factories/AffiliationFactory.php
 ---
 > [!success] Estado
-> Migration, validação no Model, factory, relações e testes PostgreSQL implementados após [`courses`](doc:migration-09-courses).
+> Migration, validação no Model, factory e relações implementados após [`courses`](doc:migration-09-courses). Não há testes automatizados no repositório atualmente; a validação fica para a preparação para produção.
 
 ## Contrato
 
@@ -23,9 +23,9 @@ source_refs: https://github.com/sge-suite/sge/blob/master/database/migrations/20
 - [x] Aplicar obrigatoriedade condicional e coerência de campus no Model, sem `CHECK` de domínio.
 - [x] Atualizar Model `Affiliation` e relação com `Course`.
 - [x] Atualizar factory com vínculo discente por curso.
-- [x] Testar discente sem curso, servidor com curso indevido e dois cursos para a mesma pessoa.
-- [x] Testar escopo: curso e vínculo devem pertencer ao mesmo campus.
-- [x] Testar migrate/rollback na ordem completa.
+- [ ] Testar discente sem curso, servidor com curso indevido e dois cursos para a mesma pessoa.
+- [ ] Testar escopo: curso e vínculo devem pertencer ao mesmo campus.
+- [ ] Testar migrate/rollback na ordem completa.
 
 ## Dependências
 

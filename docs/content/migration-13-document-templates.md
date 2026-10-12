@@ -7,10 +7,10 @@ status: implemented
 visibility: public
 tags: sge/migrations, sge/documentos
 related: geracao-de-documentos-docx-e-variaveis, migration-14-template-versions, enum-generateddocumenttype, fluxos-principais
-source_refs: https://github.com/sge-suite/sge/blob/master/database/migrations/2026_09_23_212413_create_document_templates_table.php, https://github.com/sge-suite/sge/blob/master/app/Models/DocumentTemplate.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/DocumentTemplateTest.php
+source_refs: https://github.com/sge-suite/sge/blob/master/database/migrations/2026_09_23_212413_create_document_templates_table.php, https://github.com/sge-suite/sge/blob/master/app/Models/DocumentTemplate.php
 ---
 > [!success] Estado
-> Migration, Model, factory, relação com campus, cast do tipo documental, validação, Activity Log e testes PostgreSQL implementados. Versões, arquivos DOCX, upload, autorização e geração ainda não fazem parte desta etapa.
+> Migration, Model, factory, relação com campus, cast do tipo documental, validação e Activity Log implementados. Versões, arquivos DOCX, upload, autorização e geração ainda não fazem parte desta etapa. Não há testes automatizados no repositório atualmente; a validação fica para a preparação para produção.
 
 ## Contrato
 
@@ -37,7 +37,7 @@ O template padrão manterá o marcador `${PARAGRAFO_REMUNERACAO}`. Na geração,
 - [x] Definir identificação, categoria e escopo global/por campus.
 - [x] Criar migration, Model e factory de `DocumentTemplate`.
 - [x] Validar escopo, campos obrigatórios e desativação.
-- [x] Testar schema sem `key`, FK, nomes repetidos, casts, scopes, Activity Log e rollback em PostgreSQL.
+- [ ] Testar schema sem `key`, FK, nomes repetidos, casts, scopes, Activity Log e rollback em PostgreSQL.
 - [ ] Relacionar versões e proteger versões já utilizadas na Migration 14.
 - [ ] Autorizar upload somente ao vínculo permitido do Setor de Estágio.
 - [ ] Usar `Media` para armazenar o DOCX da versão.

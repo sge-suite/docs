@@ -7,7 +7,7 @@ status: in-progress
 visibility: public
 tags: sge/desenvolvimento, sge/email, sge/checklist
 related: enums, e-mails-notificacoes-e-entregas, enum-emailmessagepurpose, enum-emaildeliveryattemptstatus, migration-05-notifications, migration-06-email-messages, migration-07-email-delivery-attempts, fase-03-activity-log
-source_refs: https://github.com/sge-suite/sge/blob/master/app/Actions/RequestEmailDelivery.php, https://github.com/sge-suite/sge/blob/master/app/Jobs/SendEmailDelivery.php, https://github.com/sge-suite/sge/blob/master/app/Mail/DeliveryMail.php, https://github.com/sge-suite/sge/blob/master/app/Policies/EmailDeliveryAttemptPolicy.php, https://github.com/sge-suite/sge/blob/master/app/Support/AdministrativeEmailLogScope.php, https://github.com/sge-suite/sge/blob/master/app/Support/EmailLogAccess.php, https://github.com/sge-suite/sge/blob/master/resources/views/pages/email-logs/%E2%9A%A1index.blade.php, https://github.com/sge-suite/sge/blob/master/resources/views/pages/email-logs/%E2%9A%A1show.blade.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/EmailDeliveryFlowTest.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/EmailLogInterfaceTest.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/Settings/SecurityTest.php, https://github.com/sge-suite/sge/blob/master/app/Support/CampusEmailLogScope.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/CampusLogInterfaceTest.php
+source_refs: https://github.com/sge-suite/sge/blob/master/app/Actions/RequestEmailDelivery.php, https://github.com/sge-suite/sge/blob/master/app/Jobs/SendEmailDelivery.php, https://github.com/sge-suite/sge/blob/master/app/Mail/DeliveryMail.php, https://github.com/sge-suite/sge/blob/master/app/Policies/EmailDeliveryAttemptPolicy.php, https://github.com/sge-suite/sge/blob/master/app/Support/AdministrativeEmailLogScope.php, https://github.com/sge-suite/sge/blob/master/app/Support/EmailLogAccess.php, https://github.com/sge-suite/sge/blob/master/resources/views/pages/email-logs/%E2%9A%A1index.blade.php, https://github.com/sge-suite/sge/blob/master/resources/views/pages/email-logs/%E2%9A%A1show.blade.php, https://github.com/sge-suite/sge/blob/master/app/Support/CampusEmailLogScope.php
 ---
 As tabelas `notifications`, `email_messages` e `email_delivery_attempts`, seus enums, Models, validações e telas de consulta administrativa existem. `RequestEmailDelivery` grava snapshots e reserva tentativas, depois despacha `SendEmailDelivery` após o commit. Os fluxos administrativos de criação de conta, criação ou encerramento de vínculo, exclusão de conta e alteração do e-mail registram o conteúdo renderizado. A troca de e-mail da conta gera avisos aos endereços anterior e novo. Quando a própria pessoa altera o e-mail, o aviso identifica que a mudança foi feita na própria conta e usa a assinatura do sistema; quando outra pessoa faz a alteração, o aviso mantém o nome e o tipo de vínculo de quem solicitou. Templates Markdown do Laravel produzem HTML e texto, preservados no snapshot. A recuperação de senha usa a Notification enfileirada do Fortify e não cria linhas nas tabelas próprias de entrega. O transporte vem de `config/mail.php`.
 
@@ -27,9 +27,9 @@ As tabelas `notifications`, `email_messages` e `email_delivery_attempts`, seus e
 - [x] Incluir a assinatura do vínculo solicitante em avisos administrativos; manter nome e função no snapshot para retries e exibição históricos.
 - [x] Identificar nos avisos de troca de e-mail quando a própria pessoa alterou sua conta; usar a assinatura do sistema nesse caso e preservar a identificação do vínculo quando outra pessoa solicitar a alteração.
 - [x] Reservar a tentativa de convite com `requested_by_affiliation_id` quando houver vínculo ativo; o Job preserva essa autoria.
-- [x] Cobrir por renderização os templates de conta criada, novo vínculo e alteração do e-mail, incluindo a distinção entre alteração própria e feita por outra pessoa; testes automatizados não encaminham mensagens ao SMTP.
+- [ ] Cobrir por renderização os templates de conta criada, novo vínculo e alteração do e-mail, incluindo a distinção entre alteração própria e feita por outra pessoa; testes automatizados não encaminham mensagens ao SMTP.
 - [ ] Validar a notificação operacional e os demais destinatários no Mailpit quando os fluxos de domínio forem ligados.
-- [x] Testar idempotência, falha do transporte, reprocessamento e motivo de falha sanitizado.
+- [ ] Testar idempotência, falha do transporte, reprocessamento e motivo de falha sanitizado.
 - [ ] Validar o comportamento sob concorrência real de workers.
 
 A API exige uma chave UUID estável por envio. Chamadas repetidas com a mesma chave e os mesmos dados devolvem a tentativa existente. Reutilizar uma chave com destinatário ou conteúdo diferente falha. O envio operacional recebe uma `DatabaseNotification` já criada e guarda um snapshot imutável de assunto e corpo. Os avisos de conta criada, novo vínculo, alteração do e-mail e alteração administrativa também guardam o conteúdo renderizado em `email_messages`; registros antigos de conta criada ou novo vínculo podem não ter esse conteúdo. O primeiro leva à solicitação de definição de senha e o aviso de novo vínculo ao login. A tela de Segurança reserva dois avisos com chaves distintas, um para o endereço anterior e outro para o novo, na mesma transação que atualiza `users.email`. Cada tentativa referencia o snapshot utilizado. Os e-mails usam os componentes Markdown nativos do Laravel, também documentados para Mail Notifications; o Job próprio mantém o histórico de tentativas e o resultado do transporte.
@@ -41,7 +41,7 @@ Workers de fila mantêm o código carregado em memória. Após alterar templates
 ## Notificações
 
 - [ ] Criar notificações operacionais somente na conta ou vínculo destinatário adequado.
-- [x] Manter leitura interna independente da entrega de e-mail; `read_at` é testado separadamente do histórico de transporte.
+- [x] Manter leitura interna independente da entrega de e-mail; `read_at` permanece separado do histórico de transporte. Automatizar a validação na preparação para produção.
 - [ ] Definir destinatários e canais para novo vínculo, documento disponível, correções, avaliações e eventos do estágio.
 - [ ] Manter o resumo do Setor de Estágio como notificação agrupada interna quando o contrato assim determinar.
 
@@ -57,7 +57,6 @@ Workers de fila mantêm o código carregado em memória. Após alterar templates
 - [ ] Definir autorizações e limites de consulta para outros tipos de vínculo.
 - [ ] Definir uma interface autorizada para solicitar reenvio. O detalhe atual não oferece ação de reenvio.
 
-`EmailLogInterfaceTest` e `CampusLogInterfaceTest` cobrem escopo por registro afetado, finalidades permitidas, contexto ausente ou inválido, tentativas, revalidação após troca de vínculo e proteção contra acesso a outro campus. Os demais fluxos operacionais continuam fora da consulta; seus limites dependem das respectivas Policies.
 
 ## Critério de saída
 

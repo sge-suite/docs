@@ -59,8 +59,8 @@ A implementação atual utiliza:
 
 - Regras de negócio importantes devem ficar em Services, Actions ou objetos de domínio, evitando controllers grandes.
 - Autorização deve ser centralizada em Gates e Policies.
-- A autorização é derivada do vínculo ativo, `AffiliationType`, campus/curso e estado do registro; a decisão fica no código e nos testes.
+- A autorização é derivada do vínculo ativo, `AffiliationType`, campus/curso e estado do registro; a decisão fica no código. A cobertura automatizada será retomada na preparação para produção.
 - Alterações persistentes devem ser feitas por migrations.
-- Integrações externas devem ser encapsuladas em Services e testadas isoladamente.
+- Integrações externas devem ser encapsuladas em Services; a validação automatizada isolada fica para a preparação para produção.
 - Cálculos determinísticos ficam em Services puros; autorização, transação e efeitos colaterais ficam em Actions/Policies.
 - Decisões que alterem o domínio devem manter os modelos e fluxos correspondentes sincronizados.

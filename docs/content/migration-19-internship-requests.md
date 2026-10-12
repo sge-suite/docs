@@ -10,7 +10,7 @@ related: enum-legalcapacitydeclaration, enum-internshiprequeststatus, migration-
 source_refs:
 ---
 > [!success] Estado
-> Migration, Model, factory, relações e testes PostgreSQL implementados. A tabela vem depois de `internships` por causa da FK única `internship_id`; o fluxo de envio, análise, aceite e criação transacional do estágio ainda será implementado.
+> Migration, Model, factory e relações implementados. A tabela vem depois de `internships` por causa da FK única `internship_id`; o fluxo de envio, análise, aceite e criação transacional do estágio ainda será implementado. Não há testes automatizados no repositório atualmente; a validação fica para a preparação para produção.
 
 ## Contrato
 
@@ -94,7 +94,7 @@ As duas solicitações pendentes de cadastro são estruturas de domínio própri
 - [x] Definir o histórico privado de evidências e o aceite das normas por data e hora.
 - [x] Criar migration, Model, factory, relações, índice por vínculo/status e FK única para o estágio.
 - [ ] Criar Policies e fluxos de envio, análise, aceite e reenvio.
-- [x] Testar no Model a compatibilidade de curso/tipo, os limites de carga horária e os ramos condicionais.
+- [ ] Testar no Model a compatibilidade de curso/tipo, os limites de carga horária e os ramos condicionais.
 - [ ] Implementar seleção na interface, cálculo da data projetada e fluxo de análise da evidência de emancipação e autorização por vínculo.
 
 ## Dependências

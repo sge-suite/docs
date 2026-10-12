@@ -13,7 +13,7 @@ source_refs:
 
 Esta página é destinada a quem prepara o ambiente de desenvolvimento do SGE. Pessoas que apenas usam o sistema não precisam executar estes comandos: para entender o processo, devem começar em [Visão geral](doc:visao-geral) ou [Pessoas e responsabilidades](doc:pessoas-e-responsabilidades).
 
-Os comandos abaixo criam uma cópia local do sistema para desenvolvimento e testes; eles não devem ser executados em um computador institucional de produção sem orientação da equipe técnica.
+Os comandos abaixo criam uma cópia local do sistema para desenvolvimento; eles não devem ser executados em um computador institucional de produção sem orientação da equipe técnica. O repositório está sem testes automatizados até a preparação para produção; veja [Testes automatizados](doc:testes-existentes).
 
 ## Requisitos
 
@@ -54,10 +54,8 @@ Depois disso, `sail artisan ...` equivale a `./vendor/bin/sail artisan ...`.
 ./vendor/bin/sail logs -f laravel.test
 ./vendor/bin/sail shell
 ./vendor/bin/sail artisan migrate
-./vendor/bin/sail artisan test
 ./vendor/bin/sail composer run lint:check
 ./vendor/bin/sail composer run types:check
-./vendor/bin/sail composer run test
 ./vendor/bin/sail npm run dev
 ```
 
@@ -85,7 +83,7 @@ As portas podem ser alteradas no `.env` por `APP_PORT`, `VITE_PORT`, `FORWARD_DB
 > Nunca versionar `.env`, credenciais de provedores externos ou dados reais. Alterações de banco, fluxo ou regra devem atualizar também a documentação relacionada.
 
 - Nunca registrar `.env` ou credenciais de provedores externos no Git.
-- Não usar dados reais em testes locais.
+- Não usar dados reais em ambientes locais.
 - Não executar `php artisan` ou `npm` no host quando a intenção for usar o ambiente do projeto; prefira o prefixo `./vendor/bin/sail`.
 - Para apagar volumes e dados locais, confirmar o alvo antes de usar comandos destrutivos do Docker.
 - Toda migration deve ser revisável e reversível quando possível.

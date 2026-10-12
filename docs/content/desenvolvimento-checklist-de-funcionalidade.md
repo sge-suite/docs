@@ -40,9 +40,8 @@ Copie este bloco para a nota da fase ou da funcionalidade. Marque somente o que 
 
 ## Qualidade e entrega
 
-- [ ] Testes unitários, feature e autorização criados.
-- [ ] Caminho feliz e caminhos de erro testados.
-- [ ] `./vendor/bin/sail composer run test` executado com sucesso.
+- [ ] Fluxos principais e erros revisados manualmente durante a implementação.
+- [ ] Testes automatizados ficam para a preparação da produção; consultar [Testes automatizados](doc:testes-existentes).
 - [ ] Fluxo Mermaid e canvas atualizados quando necessário.
 - [ ] Documentação textual atualizada.
 - [ ] Commit preparado com descrição objetiva.
@@ -50,7 +49,7 @@ Copie este bloco para a nota da fase ou da funcionalidade. Marque somente o que 
 ## Definição de pronto
 
 - [ ] Fluxo principal funciona do início ao fim.
-- [ ] Usuário permitido e proibido foram testados.
+- [ ] Usuário permitido e proibido foram verificados durante a revisão funcional; automatizar na preparação da produção.
 - [ ] Dados históricos não dependem somente de cadastros atuais.
 - [ ] E-mails/notificações previstos foram verificados no Mailpit.
 - [ ] Migration funciona em banco limpo.

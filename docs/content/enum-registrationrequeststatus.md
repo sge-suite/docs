@@ -7,7 +7,7 @@ status: implemented
 visibility: public
 tags: sge/enums, sge/cadastro
 related: migration-12a-supervisor-registration-requests, migration-12b-granting-party-registration-requests
-source_refs: https://github.com/sge-suite/sge/blob/master/app/Enums/RegistrationRequestStatus.php, https://github.com/sge-suite/sge/blob/master/app/Models/SupervisorRegistrationRequest.php, https://github.com/sge-suite/sge/blob/master/app/Models/GrantingPartyRegistrationRequest.php, https://github.com/sge-suite/sge/blob/master/tests/Unit/Enums/RegistrationRequestStatusTest.php
+source_refs: https://github.com/sge-suite/sge/blob/master/app/Enums/RegistrationRequestStatus.php, https://github.com/sge-suite/sge/blob/master/app/Models/SupervisorRegistrationRequest.php, https://github.com/sge-suite/sge/blob/master/app/Models/GrantingPartyRegistrationRequest.php
 ---
 | Case | Valor | Rótulo |
 | --- | --- | --- |
@@ -23,7 +23,7 @@ source_refs: https://github.com/sge-suite/sge/blob/master/app/Enums/Registration
 ## Checklist
 
 - [x] Enum, rótulos, `values()` e `options()` implementados.
-- [x] Testes unitários do contrato implementados.
+- [ ] Na preparação para produção, validar o contrato e as transições conforme [Testes automatizados](doc:testes-existentes).
 - [x] Adicionar o cast no Model da Migration 12A.
 - [x] Adicionar o cast no Model da Migration 12B.
 - [ ] Implementar transições e testes de aprovação/recusa/cancelamento.

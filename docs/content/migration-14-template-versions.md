@@ -10,7 +10,7 @@ related: migration-13-document-templates, geracao-de-documentos-docx-e-variaveis
 source_refs:
 ---
 > [!info] Estado
-> Schema, Model, factory, coleção privada do Media Library e testes PostgreSQL implementados. O upload validado e o bloqueio de alteração após uso dependem do fluxo documental e de `generated_documents`. Depende de [`document_templates`](doc:migration-13-document-templates), [`affiliations`](doc:migration-04-affiliations) e da tabela `media` já fornecida pelo Media Library.
+> Schema, Model, factory e coleção privada do Media Library implementados. O upload validado e o bloqueio de alteração após uso dependem do fluxo documental e de `generated_documents`. Depende de [`document_templates`](doc:migration-13-document-templates), [`affiliations`](doc:migration-04-affiliations) e da tabela `media` já fornecida pelo Media Library. Não há testes automatizados no repositório atualmente; a validação fica para a preparação para produção.
 
 ## Contrato
 
@@ -41,9 +41,9 @@ O validador aceita apenas `${NOME_DA_VARIAVEL}` do catálogo canônico, rejeita 
 - [ ] Validar DOCX e catálogo de variáveis `${variavel}` antes do uso.
 - [x] Selecionar a versão validada mais recente do template lógico.
 - [ ] Impedir alteração destrutiva e exclusão após uso em `generated_documents`; permitir exclusão física enquanto não houver uso.
-- [x] Testar seleção da versão validada, duplicidade de arquivo e nova versão.
+- [ ] Testar seleção da versão validada, duplicidade de arquivo e nova versão.
 - [ ] Testar inspeção OOXML, variável desconhecida e proteção de versão utilizada.
-- [x] Testar migrate/rollback da 14 e rollback da 13 na ordem das FKs.
+- [ ] Testar migrate/rollback da 14 e rollback da 13 na ordem das FKs.
 
 ## Dependências
 

@@ -22,6 +22,6 @@ Não existe escopo `Campus`. Uma exceção específica de um estágio fica em `i
 ## Checklist
 
 - [x] Criar enum string com `label()`, `values()` e `options()`.
-- [x] Cobrir cases, valores, rótulos e opções com teste unitário.
+- [ ] Cobrir cases, valores, rótulos e opções com teste unitário.
 - [x] Adicionar cast em `Holiday`.
 - [x] Validar as combinações de escopo e localização no domínio.

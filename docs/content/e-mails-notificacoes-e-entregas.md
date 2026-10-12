@@ -7,7 +7,7 @@ status: in-progress
 visibility: public
 tags: sge/planejamento, sge/email, sge/notificacoes, sge/auditoria
 related: enums, migrations, dominio-e-modelo-de-dados, fluxos-principais
-source_refs: https://github.com/sge-suite/sge/blob/master/app/Actions/RequestEmailDelivery.php, https://github.com/sge-suite/sge/blob/master/app/Jobs/SendEmailDelivery.php, https://github.com/sge-suite/sge/blob/master/app/Mail/DeliveryMail.php, https://github.com/sge-suite/sge/blob/master/app/Models/EmailMessage.php, https://github.com/sge-suite/sge/blob/master/app/Models/EmailDeliveryAttempt.php, https://github.com/sge-suite/sge/blob/master/app/Policies/EmailDeliveryAttemptPolicy.php, https://github.com/sge-suite/sge/blob/master/app/Support/AdministrativeEmailLogScope.php, https://github.com/sge-suite/sge/blob/master/app/Support/EmailLogAccess.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/EmailDeliveryFlowTest.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/EmailLogInterfaceTest.php
+source_refs: https://github.com/sge-suite/sge/blob/master/app/Actions/RequestEmailDelivery.php, https://github.com/sge-suite/sge/blob/master/app/Jobs/SendEmailDelivery.php, https://github.com/sge-suite/sge/blob/master/app/Mail/DeliveryMail.php, https://github.com/sge-suite/sge/blob/master/app/Models/EmailMessage.php, https://github.com/sge-suite/sge/blob/master/app/Models/EmailDeliveryAttempt.php, https://github.com/sge-suite/sge/blob/master/app/Policies/EmailDeliveryAttemptPolicy.php, https://github.com/sge-suite/sge/blob/master/app/Support/AdministrativeEmailLogScope.php, https://github.com/sge-suite/sge/blob/master/app/Support/EmailLogAccess.php
 diagram: mensageria-fluxo
 ---
 > [!abstract] Decisão de planejamento
@@ -83,15 +83,15 @@ O e-mail de conta criada leva à tela de recuperação com o e-mail preenchido. 
 
 As estruturas e o pipeline abaixo já existem; esta lista mostra o que está implementado e o que falta integrar. A migration de `notifications` não declara FKs porque `notifiable_type`/`notifiable_id` são polimórficos; a FK de `email_messages` depende de `notifications`; as referências de `email_delivery_attempts` dependem de `affiliations`.
 
-1. [x] Implementar os enums de finalidade e status; ambos já têm testes unitários.
-2. [x] Criar a migration nativa de `notifications` pelo gerador do Laravel e adaptar `data` para `jsonb`; adicionar `Notifiable` a `Affiliation` e cobrir a relação e a Policy por testes PostgreSQL.
+1. [x] Implementar os enums de finalidade e status.
+2. [x] Criar a migration nativa de `notifications` pelo gerador do Laravel e adaptar `data` para `jsonb`; adicionar `Notifiable` a `Affiliation`.
 3. [x] Criar as migrations de mensagens e tentativas com suas FKs.
 4. [x] Implementar Models, relações, validações e factories próprios de e-mail.
 5. [x] Manter o envio de recuperação do Fortify fora das tabelas de mensagens e tentativas.
 6. [x] Definir o convite inicial sem envio de senha; o link abre a tela de recuperação com o e-mail preenchido.
 7. [x] Criar o backend comum de reserva e envio em fila, com conteúdo persistido apenas nas finalidades que o exigem.
 8. [x] Configurar Jobs, timeout, reprocessamento explícito e motivo de falha sanitizado. O reprocessamento é pela Action; a interface de consulta não oferece reenvio.
-9. [x] Cobrir os fluxos implementados, idempotência, reenvio, renderização e proteção de segredos. Os testes não entregam mensagens ao Mailpit.
+9. [ ] Validar os fluxos implementados, idempotência, reenvio, renderização e proteção de segredos na preparação para produção, sem integração real com Meilisearch.
 10. [x] Disponibilizar índice e detalhes de envios para o Administrador do Sistema, revalidando o vínculo ativo e selecionado pela Policy em cada requisição.
 11. [x] Filtrar por registro afetado via `scope_context`, incluindo contas e vínculos administrativos sem inferir escopo pelo destinatário ou solicitante.
 12. [x] Mostrar o conteúdo persistido e as tentativas em visualização isolada; não expor segredos nem permitir reenvio na interface.

@@ -37,7 +37,7 @@ A caixa operacional usa `Affiliation::notifications()` após a Policy validar qu
 > `AffiliationType`, vínculo ativo, escopo e estado do registro são os únicos insumos de autorização. Gates e Policies codificam essas regras institucionais de modo determinístico; não há regra de acesso editável em banco.
 
 > [!note] Último vínculo usado
-> `last_used_at` guarda apenas o último vínculo ativo selecionado ou escolhido numa troca explícita de contexto; não é auditoria de login. O contexto implementado restaura o último vínculo ainda ativo; quando nenhum vínculo tem uso anterior, pede escolha explícita. A seleção e a troca atualizam o campo, mas requisições comuns e restauração não. A validação ocorre em cada requisição funcional; detalhes e testes estão na [Fase 02](doc:fase-02-conta-e-contexto).
+> `last_used_at` guarda apenas o último vínculo ativo selecionado ou escolhido numa troca explícita de contexto; não é auditoria de login. O contexto implementado restaura o último vínculo ainda ativo; quando nenhum vínculo tem uso anterior, pede escolha explícita. A seleção e a troca atualizam o campo, mas requisições comuns e restauração não. A validação ocorre em cada requisição funcional; detalhes estão na [Fase 02](doc:fase-02-conta-e-contexto).
 
 ## Convenção de implementação
 
@@ -45,4 +45,4 @@ A caixa operacional usa `Affiliation::notifications()` após a Policy validar qu
 - Não há `Gate::before` global: Policies revalidam o vínculo ativo e selecionado e aplicam o escopo de cada recurso;
 - Policies recebem o usuário e resolvem o vínculo ativo por serviço/contexto, verificando `AffiliationType`, campus, curso, posse do registro e estado do fluxo;
 - Blade e Livewire usam a API padrão (`@can`, `$user->can()`, `$this->authorize()` e middleware `can:`), nunca comparações espalhadas de string;
-- testes cobrem cada decisão da matriz com vínculo correto, tipo errado, campus errado, vínculo desativado e estado inválido.
+- antes da produção, validar cada decisão da matriz com vínculo correto, tipo errado, campus errado, vínculo desativado e estado inválido; atualmente não há testes automatizados.

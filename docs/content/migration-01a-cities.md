@@ -79,7 +79,7 @@ A obtenção do arquivo ocorre fora do fluxo de seed, durante o desenvolvimento 
 - a validação de `state` usa os 27 valores de [`BrazilianState`](doc:enum-brazilianstate);
 - a UF do endereço é obtida por `city_id`, sem campo estadual duplicado; feriados municipais devem pertencer à UF da cidade selecionada.
 
-O model `City` declara `holidays()` para os feriados municipais e `addresses()` para os endereços. `CityFactory` cria fixtures independentes de rede e do catálogo nacional nos testes de backend.
+O model `City` declara `holidays()` para os feriados municipais e `addresses()` para os endereços. `CityFactory` cria dados de exemplo sem depender de rede ou da carga do catálogo nacional.
 
 ## Checklist
 
@@ -88,5 +88,5 @@ O model `City` declara `holidays()` para os feriados municipais e `addresses()` 
 - [x] Adicionar `City::addresses()` e `CityFactory` para fixtures de backend.
 - [x] Gerar e revisar `database/data/cities.json` com o catálogo nacional pelo comando Artisan.
 - [x] Criar `CitySeeder` idempotente, executável sem rede e seguro para reexecução.
-- [x] Testar migration, carga local, unicidade do código IBGE e filtro por UF/nome.
-- [x] Testar campos inválidos do catálogo e preservar dados existentes quando a validação falha.
+- [ ] Testar migration, carga local, unicidade do código IBGE e filtro por UF/nome.
+- [ ] Testar campos inválidos do catálogo e preservar dados existentes quando a validação falha.

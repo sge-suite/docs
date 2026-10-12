@@ -7,10 +7,10 @@ status: implemented
 visibility: public
 tags: sge/enums, sge/estagio, sge/formularios
 related: migration-19-internship-requests
-source_refs: https://github.com/sge-suite/sge/blob/master/app/Enums/LegalCapacityDeclaration.php, https://github.com/sge-suite/sge/blob/master/tests/Unit/Enums/LegalCapacityDeclarationTest.php
+source_refs: https://github.com/sge-suite/sge/blob/master/app/Enums/LegalCapacityDeclaration.php
 ---
 > [!info] Escopo
-> A classe, os testes unitários, o cast no Model e a coluna da Migration 19 já existem. A exigência de comprovante na solicitação também está implementada pela Migration 19A; interface, upload e análise manual continuam planejados. Este enum registra a opção escolhida no formulário; não substitui a data de nascimento nem aprova automaticamente uma emancipação.
+> A classe, o cast no Model e a coluna da Migration 19 já existem. A exigência de comprovante na solicitação também está implementada pela Migration 19A; interface, upload e análise manual continuam planejados. Este enum registra a opção escolhida no formulário; não substitui a data de nascimento nem aprova automaticamente uma emancipação. Não há testes automatizados no repositório atualmente; a validação fica para a preparação para produção.
 
 ## Contrato
 
@@ -26,7 +26,7 @@ Em `Draft`, a opção pode ser nula. Fora de rascunho, ela é obrigatória. A es
 
 - [x] Criar enum string com `values()` e `options()`.
 - [x] Usar na [solicitação de estágio](doc:migration-19-internship-requests).
-- [x] Testar cases, valores, rótulos e opções.
-- [x] Testar divergência da opção `adult` com a data de nascimento e os campos obrigatórios de `minor`.
+- [ ] Testar cases, valores, rótulos e opções.
+- [ ] Testar divergência da opção `adult` com a data de nascimento e os campos obrigatórios de `minor`.
 - [ ] Testar anexo ausente e devolução do comprovante após a Migration 19A.
 - [ ] Exibir rótulos em português somente na interface.

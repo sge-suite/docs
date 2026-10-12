@@ -10,7 +10,7 @@ related: enum-internshipstatus, migration-19-internship-requests, migration-11-i
 source_refs:
 ---
 > [!info] Estado
-> Migration, Model, factory e testes PostgreSQL implementados. A criação do estágio após o aceite, o preenchimento completo dos snapshots e o cálculo automático do término pertencem ao fluxo funcional. Depende de vínculos, endereços, cursos, tipos de estágio, partes concedentes e [`InternshipStatus`](doc:enum-internshipstatus).
+> Migration, Model e factory implementados. A criação do estágio após o aceite, o preenchimento completo dos snapshots e o cálculo automático do término pertencem ao fluxo funcional. Depende de vínculos, endereços, cursos, tipos de estágio, partes concedentes e [`InternshipStatus`](doc:enum-internshipstatus). Não há testes automatizados no repositório atualmente; a validação fica para a preparação para produção.
 
 Um estágio é criado somente após o aceite de uma [solicitação de estágio](doc:migration-19-internship-requests). A Migration 15 vem antes da 19 somente para permitir que a solicitação acrescente sua FK única `internship_id`; no fluxo do produto, a solicitação nasce e é aceita antes de a linha do estágio ser criada.
 
@@ -75,8 +75,8 @@ As notas de relatório e apresentação são lançadas pelo orientador diretamen
 - [ ] Validar regras do tipo, carga horária, período, feriados nacionais/estaduais/municipais aplicáveis ao endereço de trabalho e idade.
 - [ ] Criar o serviço de cálculo e atualizar `projected_end_date` nos eventos autorizados.
 - [x] Criar factory para estágio em formalização, remunerado e liberado.
-- [x] Testar alteração de cadastro após snapshot sem alterar o histórico.
-- [x] Testar schema PostgreSQL, FKs, casts, validações, snapshots e rollback da 15.
+- [ ] Testar alteração de cadastro após snapshot sem alterar o histórico.
+- [ ] Testar schema PostgreSQL, FKs, casts, validações, snapshots e rollback da 15.
 - [ ] Testar o fluxo completo de aceite, cálculo, aditivos, documentos e conclusão.
 
 ## Dependências

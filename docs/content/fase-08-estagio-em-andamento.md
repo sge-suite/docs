@@ -11,7 +11,7 @@ source_refs:
 ---
 Base: [acompanhamento do estágio](doc:fluxos-principais#4-estagio-em-andamento).
 
-Priorize primeiro o cálculo puro da data final e as Actions transacionais de pausa, jornada, aditivo, substituição e cancelamento. Implemente Jobs/schedules idempotentes e testes antes das telas operacionais.
+Priorize primeiro o cálculo puro da data final e as Actions transacionais de pausa, jornada, aditivo, substituição e cancelamento. Implemente Jobs/schedules idempotentes antes das telas operacionais; a cobertura automatizada dessas regras fica para a preparação para produção.
 
 ## Checklist
 

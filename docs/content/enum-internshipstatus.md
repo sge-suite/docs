@@ -7,11 +7,11 @@ status: implemented
 visibility: public
 tags: sge/enums, sge/estagio
 related: enum-internshiprequeststatus, enum-generateddocumentstatus, migration-15-internships, schedules, fluxos-principais, ciclos-de-status
-source_refs: https://github.com/sge-suite/sge/blob/master/app/Enums/InternshipStatus.php, https://github.com/sge-suite/sge/blob/master/tests/Unit/Enums/InternshipStatusTest.php
+source_refs: https://github.com/sge-suite/sge/blob/master/app/Enums/InternshipStatus.php
 diagram: enum-internship-status
 ---
 > [!success] Estado
-> A classe e os testes unitários já existem e os cases correspondem ao ciclo do estágio. Ainda falta integrar o enum ao Model, à migration e às transições de domínio. Os estados de formulário e análise pertencem a `InternshipRequestStatus`, não a `internships.status`.
+> A classe existe e seus cases correspondem ao ciclo do estágio. Ainda falta integrar o enum ao Model, à migration e às transições de domínio. Os estados de formulário e análise pertencem a `InternshipRequestStatus`, não a `internships.status`. Não há testes automatizados no repositório atualmente; a validação fica para a preparação para produção.
 
 ## Contrato
 
@@ -40,7 +40,7 @@ Um estágio nasce quando a solicitação é aceita, inicialmente em `PendingForm
 - [x] Usar o valor inicial do enum na [migration de internships](doc:migration-15-internships).
 - [ ] Implementar guardas para transições permitidas.
 - [ ] Usar a mesma guarda na Action manual e em [Schedules](doc:schedules), sem `update` direto de status.
-- [x] Testar cases, valores, rótulos e opções.
+- [ ] Testar cases, valores, rótulos e opções.
 - [ ] Testar formalização, reemissão após pendência, liberação, pausa, retomada, conclusão e cancelamento no fluxo de domínio.
 - [ ] Atualizar [Fluxos principais](doc:fluxos-principais) se as transições forem alteradas.
 

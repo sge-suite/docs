@@ -46,7 +46,6 @@ O arquivo é registrado em `composer.json` no autoload `files`, portanto as fun�
 - [x] Criar guardas `function_exists()`.
 - [x] Manter delegação um-para-um para as classes de helper.
 - [x] Expor `numberToWords()` e `brlToWords()` como fachada do `NumberToWordsHelper`.
-- [ ] Criar teste de contrato para cada função global; `numberToWords()` e `brlToWords()` já são cobertos em `NumberToWordsHelperTest`.
 - [ ] Documentar colisões de nomes com pacotes/framework antes de adicionar função.
 - [x] Executar `composer dump-autoload` após criar/renomear função.
 - [x] Atualizar [Helpers](doc:helpers) ao alterar o catálogo.

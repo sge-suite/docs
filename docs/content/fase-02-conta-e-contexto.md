@@ -7,7 +7,7 @@ status: in-progress
 visibility: public
 tags: sge/desenvolvimento, sge/autenticacao, sge/checklist
 related: modelo-de-dados-acesso, e-mails-notificacoes-e-entregas, fluxos-principais, fase-03-activity-log, fase-05-administracao
-source_refs: https://github.com/sge-suite/sge/blob/master/app/Support/ActiveAffiliationContext.php, https://github.com/sge-suite/sge/blob/master/app/Http/Middleware/RequireActiveAffiliation.php, https://github.com/sge-suite/sge/blob/master/app/Http/Controllers/AffiliationSelectionController.php, https://github.com/sge-suite/sge/blob/master/app/Console/Commands/CreateAdmin.php, https://github.com/sge-suite/sge/blob/master/resources/views/pages/settings/%E2%9A%A1security.blade.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/ActiveAffiliationContextTest.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/CreateAdminCommandTest.php, https://github.com/sge-suite/sge/blob/master/tests/Feature/Settings/SecurityTest.php
+source_refs: https://github.com/sge-suite/sge/blob/master/app/Support/ActiveAffiliationContext.php, https://github.com/sge-suite/sge/blob/master/app/Http/Middleware/RequireActiveAffiliation.php, https://github.com/sge-suite/sge/blob/master/app/Http/Controllers/AffiliationSelectionController.php, https://github.com/sge-suite/sge/blob/master/app/Console/Commands/CreateAdmin.php, https://github.com/sge-suite/sge/blob/master/resources/views/pages/settings/%E2%9A%A1security.blade.php
 ---
 Referências: [modelo de acesso](doc:modelo-de-dados-acesso), [E-mails, notificações e entregas](doc:e-mails-notificacoes-e-entregas) e [fluxo de login](doc:fluxos-principais#1-acesso-e-vinculo).
 
@@ -20,7 +20,7 @@ O contexto de vínculo ativo, a proteção do painel, a seleção e troca de ví
 - [x] Não persistir o envio de recuperação de senha nas tabelas de mensagens e tentativas.
 - [ ] Impedir token, URL e conteúdo sensível em logs.
 - [x] Aplicar senha de 8–64 caracteres, maiúsculas/minúsculas, número, símbolo e verificação contra senhas comprometidas nos fluxos existentes.
-- [x] Testar solicitação, renderização e redefinição com link válido.
+- [ ] Testar solicitação, renderização e redefinição com link válido.
 - [ ] Completar testes de link expirado, reutilizado e solicitação repetida.
 
 ## Criação de conta
@@ -32,7 +32,6 @@ O contexto de vínculo ativo, a proteção do painel, a seleção e troca de ví
 - [x] Implementar a criação de contas e vínculos administrativos pela interface do Administrador do Sistema; consultar o CPF antes do envio, preservar a conta existente e reutilizar a Action transacional do `admin:create`. Ver [Fase 05](doc:fase-05-administracao).
 - [x] No `admin:create`, salvar o conteúdo renderizado do convite e do aviso de novo vínculo junto às tentativas, sem incluir senha, token ou URL assinada. O convite informa o primeiro vínculo e leva à recuperação com o e-mail preenchido para solicitar a definição da senha; o aviso de vínculo novo leva ao login.
 
-`CreateAdminCommandTest` cobre conta nova e CPF existente, validação no prompt de cada entrada, titularidade do registro institucional, e-mails da conta e do vínculo, criação mesmo com outro administrador ativo, confirmação, execução não interativa, autoria `terminal` e rollback. `AffiliationTest` e `UserManagementTest` cobrem reutilização de matrícula pela mesma pessoa e rejeição de matrícula pertencente a outra pessoa. `ProfileUpdateTest` verifica a exibição do e-mail da conta e o encaminhamento para Segurança. `SecurityTest` cobre a troca do e-mail, senha atual, confirmação do novo endereço, unicidade, preservação do e-mail do vínculo, autoria e reserva dos dois avisos. Os testes substituem a fila e não enviam e-mails para SMTP/Mailpit.
 
 ## Seleção de vínculo
 
@@ -46,7 +45,6 @@ O contexto de vínculo ativo, a proteção do painel, a seleção e troca de ví
 - [x] Registrar o vínculo usado em ações relevantes.
 
 > [!info] Contexto implementado
-> `ActiveAffiliationContext` consulta apenas vínculos ativos da conta, valida o identificador guardado em `active_affiliation_id` a cada requisição funcional e exige nova escolha quando inválido, desativado ou pertencente a outra conta. Um único vínculo é selecionado automaticamente. Com vários, restaura o mais recentemente usado quando existe `last_used_at`; se nenhum foi usado, a pessoa escolhe em `affiliations/select`. A seleção e troca explícitas atualizam `last_used_at`; restauração e requisições comuns não atualizam. A seleção do vínculo é memória operacional e não gera registro no Activity Log. `RequireActiveAffiliation` protege o painel e a Policy de notificações exige o vínculo selecionado. O contexto é acessível por injeção do serviço em Policies e Actions. `SetAuditActor` passa o vínculo validado ao `CauserResolver` do Spatie durante ações auditáveis. A rota de seleção continua `affiliations/select`; a troca fica no dropdown do perfil e aparece somente quando há mais de um vínculo ativo. Testes: `ActiveAffiliationContextTest`, `DashboardTest`, `NotificationsTest` e `DatabaseAuditTest`.
 
 ## Configurações próprias
 

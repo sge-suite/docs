@@ -1,58 +1,45 @@
 ---
 id: migration-22-holidays
 title: Migration 22 — holidays
-description: Calendário global auditável de feriados nacionais, estaduais e municipais.
+description: Calendário único auditável de feriados nacionais, estaduais e municipais.
 type: migration-reference
 status: implemented
 visibility: public
 tags: sge/migrations, sge/calendario, sge/calculos
-related: enum-holidayscope, enum-brazilianstate, migration-01a-cities, migration-15-internships, migration-22-internship-calendar-overrides
+related: calendario-de-feriados, enum-holidayscope, enum-brazilianstate, migration-01a-cities, migration-15-internships, migration-22-internship-calendar-overrides
 source_refs: https://github.com/sge-suite/sge/blob/master/app/Models/Holiday.php, https://github.com/sge-suite/sge/blob/master/app/Concerns/HolidayValidationRules.php, https://github.com/sge-suite/sge/blob/master/app/Console/Commands/ImportHolidays.php
 ---
-> [!success] Estado
-> Implementada como base de backend. Registra somente feriados oficiais reutilizáveis; recessos, folgas, pontes e fechamentos específicos entram como pausas do estágio. A consulta de cidades não depende da API e os feriados importados são persistidos antes de qualquer cálculo.
+## Estado
 
-## Contrato
+Persistência, importação por ano/UF, recorrência municipal fixa, gestão autorizada e consulta local implementadas. Todos os eventos aceitos, inclusive pontos facultativos, bloqueiam o calendário do SGE. A classificação operacional não comprova natureza jurídica. O cálculo de término permanece planejado.
 
-| Coluna | Tipo PostgreSQL | Nulo | Chaves/índices | Regra |
-| --- | --- | --- | --- | --- |
-| `id` | `bigint` | não | `PK` | Identificador da data. |
-| `date` | `date` | não | índice | Uma data por registro. Feriadão usa uma linha para cada dia. |
-| `name` | `varchar(255)` | não | — | Nome apresentado na lista e nos relatórios. |
-| `scope` | `varchar(255)` | não | índice | [`HolidayScope`](doc:enum-holidayscope): `national`, `state` ou `municipal`; validado por `HolidayValidationRules` e pelo cast do model. |
-| `state_code` | `char(2)` | sim | índice composto | UF validada por [`BrazilianState`](doc:enum-brazilianstate). Nula no escopo nacional, obrigatória no estadual e derivada da cidade no municipal. |
-| `city_id` | `bigint` | sim | `FK`, índice composto | Cidade do feriado municipal; `RESTRICT`. Obrigatória nesse escopo. |
-| `deleted_at` | `timestamp(0)` | sim | parte da unicidade | Exclusão lógica via `SoftDeletes`; permite auditoria e restauração. |
-| `created_at` | `timestamp(0)` | não | — | Auditoria. |
-| `updated_at` | `timestamp(0)` | não | — | Auditoria técnica. |
+## Ocorrências — holidays
 
-## Regras de localização
+Mantém `id`, `date`, `name`, `scope`, `state_code`, `city_id`, `deleted_at` e timestamps. Escopos nacionais não possuem localização; estaduais exigem UF e não possuem cidade; municipais exigem cidade e derivam/conferem sua UF. A FK municipal continua `RESTRICT`. O código IBGE único já pertence a `cities`.
 
-- `national`: `state_code` e `city_id` devem ser nulos;
-- `state`: `state_code` obrigatório e `city_id` nulo;
-- `municipal`: `city_id` obrigatório; o model deriva a UF da cidade e confere uma UF informada;
-- a mesma data pode ter registros nacional, estadual e municipal distintos;
-- feriados diferentes podem ocorrer na mesma data e no mesmo escopo; o mesmo feriado ativo não pode ser duplicado: nacional por data/nome, estadual por data/UF/nome e municipal por data/cidade/nome;
-- a exclusão é lógica (`deleted_at`); consultas normais ignoram registros excluídos e o Activity Log registra a auditoria;
-- nenhuma consulta de cálculo chama a BrasilAPI.
+| Coluna adicional | Contrato |
+| --- | --- |
+| `origin` | `manual` por padrão; também `brasil_api` e `recurrence`. Não há origem de transição para bancos antigos. |
+| `is_manually_adjusted` | Booleano, falso por padrão; alterações/exclusões/restaurações administrativas protegem a ocorrência da automação. |
+| `holiday_recurrence_id` | FK opcional para a recorrência municipal, `RESTRICT`. |
+| `occurrence_year` | Ano de geração; permanece estável mesmo se uma ocorrência for corrigida. |
 
-`HolidayValidationRules` compartilha as regras de data, nome, escopo, UF e cidade entre o model e a importação. A importação rejeita payloads inválidos antes de persistir qualquer linha; o model mantém ainda as regras relacionais entre escopo, cidade e UF, incluindo a derivação da UF em feriados municipais.
+A unicidade territorial inclui `deleted_at` e usa `NULLS NOT DISTINCT`. Não há coluna de campus em ocorrências ou recorrências. Acrescenta-se unicidade por recorrência/ano, inclusive para ocorrências excluídas. Datas coincidentes podem representar eventos distintos. Exclusão lógica não rompe correspondências de origem; exclusão física via Model é proibida.
 
-O comando `php artisan holidays:import {ano}` importa os feriados nacionais da BrasilAPI. Com `--uf=RS`, importa os nacionais e estaduais retornados para a UF. A chamada usa timeout e retry, ignora pontos facultativos e é idempotente: registros ativos existentes não são sobrescritos. Feriados municipais continuam previstos para cadastro manual quando houver fluxo administrativo.
+## Estruturas auxiliares
 
-As migrations do projeto exigem PostgreSQL. A unicidade usa `NULLS NOT DISTINCT` sobre data, nome, escopo, UF, cidade e `deleted_at`, permitindo escopos distintos e apenas uma versão ativa de cada feriado.
+- `holiday_recurrences`: nome, FK de cidade, mês/dia, anos inicial/final opcionais, observação, `deleted_at` e timestamps. Somente municipais fixos; valida datas usando ano bissexto e compara vigências. Encerramento usa ano final; exclusão lógica e restauração são oferecidas, sem exclusão física. Unicidade por nome/cidade/mês/dia usa `NULLS NOT DISTINCT`.
+- `holiday_import_runs`: linha única por ano/território (`national` ou UF), situação, tentativas, consulta/conclusão, erro, URL, payload JSONB e resumo. Uma falha preserva ocorrências e a última resposta válida. Conclusão indica processamento da resposta, não completude jurídica do calendário.
+- `holiday_sources`: chave de origem única, FK da consulta, FK opcional da ocorrência, payload, candidatos, situação (`pending`, `linked`, `ignored`), motivo/justificativa, ausência na fonte e última observação. A chave associa o item original mesmo após correções locais ou exclusão lógica. Múltiplas referências podem apontar à mesma ocorrência.
 
-O Administrador do Sistema será responsável por importar ou cadastrar dados quando a interface existir. O Setor de Estágio consulta e utiliza o calendário, mas não edita o calendário global; suas liberações ou bloqueios para um estágio ficam em [`internship_calendar_overrides`](doc:migration-22-internship-calendar-overrides).
+Models e operações administrativas registram Activity Log. Payloads e consultas técnicas permanecem nas estruturas de importação; o log registra transições, autoria, decisões e resultados. O evento de ocorrência registra também o território atual/anterior para consulta histórica autorizada.
 
-## Dependências e aplicação
+## Migration e bancos existentes
 
-O estágio usa o endereço histórico do local de trabalho para obter a cidade e a UF. O serviço combina os feriados nacionais, estaduais e municipais aplicáveis com a jornada e as pausas. Uma exceção de estágio não altera esta tabela: fica em `internship_calendar_overrides`. Recessos, feriadões e outros períodos sem atividade são pausas, não registros em `holidays`.
+A migration original de holidays cria diretamente ocorrências, recorrências, consultas de importação e correspondências da fonte, sem migration incremental ou classe auxiliar de sincronização. Não há FK de calendário para campi, e a migration de campi voltou a ser independente do calendário. PostgreSQL é obrigatório.
 
-## Checklist
+Bancos com versões anteriores serão recriados pelo responsável do ambiente com `migrate:fresh`, conforme decisão do projeto. Não há comando para adaptar schemas antigos. O seed do novo banco prepara o ano atual e os dois seguintes.
 
-- [x] Criar migration PostgreSQL com índices por data, localização e unicidade de registros ativos.
-- [x] Criar Model `Holiday` com `SoftDeletes`, cast de `scope` e `state_code`.
-- [x] Criar importação nacional/estadual idempotente com retry, sem sobrescrever registros.
-- [ ] Criar cadastro manual de datas municipais pelo Administrador do Sistema.
-- [ ] Testar schema, combinações de escopo/localização, unicidade, soft delete, filtro por UF e importação.
-- [ ] Testar campos inválidos no model e na importação sem alterar registros existentes.
+## Referências
+
+O comportamento administrativo, a importação, recorrência e aplicação ficam em [Calendário de feriados](doc:calendario-de-feriados), não no contrato de migration. A consulta para futuros cálculos combina ocorrências do calendário único por cidade/UF sem chamar API. Auditoria não substitui snapshots de cálculo; essa integração permanece fora desta entrega.

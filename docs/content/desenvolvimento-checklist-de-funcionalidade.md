@@ -41,7 +41,7 @@ Copie este bloco para a nota da fase ou da funcionalidade. Marque somente o que 
 ## Qualidade e entrega
 
 - [ ] Fluxos principais e erros revisados manualmente durante a implementação.
-- [ ] Testes automatizados ficam para a preparação da produção; consultar [Testes automatizados](doc:testes-existentes).
+- [ ] Conferir sintaxe, formatação e compilação conforme os arquivos alterados; não criar ou executar testes nesta etapa; consultar [Testes automatizados](doc:testes-existentes).
 - [ ] Fluxo Mermaid e canvas atualizados quando necessário.
 - [ ] Documentação textual atualizada.
 - [ ] Commit preparado com descrição objetiva.

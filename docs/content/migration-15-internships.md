@@ -10,7 +10,7 @@ related: enum-internshipstatus, migration-19-internship-requests, migration-11-i
 source_refs:
 ---
 > [!info] Estado
-> Migration, Model e factory implementados. A criação do estágio após o aceite, o preenchimento completo dos snapshots e o cálculo automático do término pertencem ao fluxo funcional. Depende de vínculos, endereços, cursos, tipos de estágio, partes concedentes e [`InternshipStatus`](doc:enum-internshipstatus). Não há testes automatizados no repositório atualmente; a validação fica para a preparação para produção.
+> Migration, Model e factory implementados. A criação do estágio após o aceite, o preenchimento completo dos snapshots e o cálculo automático do término pertencem ao fluxo funcional. Depende de vínculos, endereços, cursos, tipos de estágio, partes concedentes e [`InternshipStatus`](doc:enum-internshipstatus). Não há suíte automatizada nesta etapa; o fluxo de formalização e cálculo mantém validação pendente.
 
 Um estágio é criado somente após o aceite de uma [solicitação de estágio](doc:migration-19-internship-requests). A Migration 15 vem antes da 19 somente para permitir que a solicitação acrescente sua FK única `internship_id`; no fluxo do produto, a solicitação nasce e é aceita antes de a linha do estágio ser criada.
 
@@ -85,3 +85,7 @@ As notas de relatório e apresentação são lançadas pelo orientador diretamen
 - [granting_parties](doc:migration-12-granting-parties)
 - [InternshipStatus](doc:enum-internshipstatus)
 - [Modelo de dados histórico](doc:modelo-de-dados-historico)
+
+## Dependência de calendário
+
+A base local, importação anual e gestão estão implementadas em [Calendário de feriados](doc:calendario-de-feriados). Não há motor móvel nem chamada externa durante consultas. Todos os eventos aceitos bloqueiam o dia. Alteração do catálogo não dispara recálculo de estágios nesta entrega. O fluxo de cálculo/exceções e a definição de uma base histórica reproduzível continuam pendentes; Activity Log sozinho não congela suas entradas.

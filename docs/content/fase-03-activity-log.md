@@ -42,10 +42,14 @@ Eventos de endereço exibem o cadastro proprietário, com tipo, ID e nome regist
 
 ## Limites
 
-`LogsActivity` observa eventos dos Models. O `CitySeeder` usa `save()` por Model, e `User::delete()` exclui os dados pessoais pelo Model antes da conta, preservando os eventos Eloquent na mesma transação. Operações com Query Builder, SQL direto, `upsert`, exclusões exclusivamente por cascata no banco e escrita em tabelas técnicas não geram eventos Eloquent por Model. O bloqueio de edição de `activity_log` se aplica ao Model e ao comando de limpeza do pacote; acesso SQL direto ao banco não é protegido por esse mecanismo. O projeto está sem testes automatizados; a validação dessas regras será retomada antes da produção.
+`LogsActivity` observa eventos dos Models. O `CitySeeder` usa `save()` por Model, e `User::delete()` exclui os dados pessoais pelo Model antes da conta, preservando os eventos Eloquent na mesma transação. Operações com Query Builder, SQL direto, `upsert`, exclusões exclusivamente por cascata no banco e escrita em tabelas técnicas não geram eventos Eloquent por Model. O bloqueio de edição de `activity_log` se aplica ao Model e ao comando de limpeza do pacote; acesso SQL direto ao banco não é protegido por esse mecanismo. Não há suíte automatizada nesta etapa; a validação funcional permanece pendente.
 
 
 
 ## Próxima etapa
 
 [Fase 04 — Integração de e-mail](doc:fase-04-integracao-de-email)
+
+## Auditoria do calendário
+
+Inclui ocorrências, recorrências, consultas anuais/UF e decisões sobre itens importados. O Administrador consulta todos esses eventos; a manutenção do calendário é central e sua auditoria é exclusiva do Administrador. O Setor consulta apenas o calendário e as recorrências. Payloads externos permanecem nas tabelas técnicas, não são duplicados no Activity Log. Exclusões e restaurações de ocorrências preservam correspondências de origem.

@@ -191,3 +191,13 @@ source_refs:
 - **Limites:** senha atual e confirmação continuam exigidas para desativar ou excluir; último Administrador do Sistema ativo, referências de negócio, campus e tipo fora do escopo continuam protegidos. A edição não altera tipo, campus ou curso.
 
 - **Decisão:** Endereço, Campus e Concedente usam exclusão física. A exclusão Eloquent de qualquer proprietário atual de endereço remove a linha associada somente sem outras referências, preservando auditoria e histórico de terceiros. As migrations originais de Campus e Concedente foram ajustadas antes da produção; não há migration adicional de SoftDeletes para endereços.
+
+### D-027 — Calendário anual automático e recorrência municipal fixa
+
+- **Status:** implementado.
+- **Decisão:** buscar nacionais e estaduais das 27 UFs na BrasilAPI para ano atual e dois seguintes, reaproveitando consultas concluídas e recuperando falhas. Todos os eventos aceitos bloqueiam o calendário, inclusive facultativos. Municípios não são importados; possuem cadastro avulso ou recorrência fixa editável. Nenhum cálculo de Páscoa ou regra móvel existe no SGE.
+- **Manutenção:** calendário único, sem propriedade por campus. Somente Administrador do Sistema mantém ocorrências, recorrências, importações e revisão. Setor tem leitura de toda a base, sem restrição automática por UF ou cidade. A seleção territorial ocorre no futuro cálculo pelo local de execução.
+- **Compatibilidade:** migration original editada antes da produção, com todas as estruturas do calendário declaradas diretamente. Bancos existentes serão recriados pelo responsável com `migrate:fresh`; não haverá comando para adaptar schemas antigos.
+- **Limites:** esta entrega não implementa calculadora, snapshots de cálculo, vigências de localização ou fluxo de exceções. Soft delete e Activity Log não equivalem a calendário versionado reproduzível. A promessa de reprodução em D-019 continua dependente dessa futura definição.
+- **Validação:** testes removidos por decisão explícita do projeto. Nesta etapa, usar formatação, sintaxe e compilação, sem criar ou executar testes.
+- **Referências:** [Calendário de feriados](doc:calendario-de-feriados), [holidays](doc:migration-22-holidays) e [Testes](doc:testes-existentes).

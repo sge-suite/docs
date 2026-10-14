@@ -13,7 +13,7 @@ source_refs:
 
 Esta página é destinada a quem prepara o ambiente de desenvolvimento do SGE. Pessoas que apenas usam o sistema não precisam executar estes comandos: para entender o processo, devem começar em [Visão geral](doc:visao-geral) ou [Pessoas e responsabilidades](doc:pessoas-e-responsabilidades).
 
-Os comandos abaixo criam uma cópia local do sistema para desenvolvimento; eles não devem ser executados em um computador institucional de produção sem orientação da equipe técnica. O repositório está sem testes automatizados até a preparação para produção; veja [Testes automatizados](doc:testes-existentes).
+Os comandos abaixo criam uma cópia local do sistema para desenvolvimento; eles não devem ser executados em um computador institucional de produção sem orientação da equipe técnica. Não há suíte automatizada nesta etapa; veja [Testes automatizados](doc:testes-existentes).
 
 ## Requisitos
 

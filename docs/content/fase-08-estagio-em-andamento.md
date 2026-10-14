@@ -21,7 +21,7 @@ Priorize primeiro o cálculo puro da data final e as Actions transacionais de pa
 - [ ] Registrar os schedules em `routes/console.php` com `onOneServer`, `withoutOverlapping` e a operação de `schedule:run` em produção.
 - [ ] Implementar pausas com início/fim em data, motivo, estado `InProgress` de origem e validação de sobreposição.
 - [ ] Sincronizar o status imediatamente ao criar/alterar/remover pausa, além da reconciliação diária.
-- [ ] Usar calendário nacional, estadual e municipal versionado conforme a cidade/UF do endereço histórico do local de trabalho, sem dependência de rede no cálculo.
+- [ ] Usar calendário nacional, estadual e municipal persistido conforme a cidade/UF do endereço histórico do local de trabalho, sem dependência de rede no cálculo.
 - [ ] Permitir ao Setor de Estágio liberar ou bloquear uma data específica em `internship_calendar_overrides`, com motivo e auditoria; recessos, folgas, pontes e fechamentos devem ser representados por pausas, não por `holidays`.
 - [ ] Gravar a jornada inicial em `internships.weekly_hours` e impedir sua edição ordinária durante o estágio.
 - [ ] Permitir nova vigência de jornada somente após aditivo com assinaturas conferidas; impedir sobreposição/lacuna e reescrita de dias passados.
@@ -48,3 +48,7 @@ Priorize primeiro o cálculo puro da data final e as Actions transacionais de pa
 ## Próxima fase
 
 [Fase 09 — Avaliação e conclusão](doc:fase-09-avaliacao-e-conclusao)
+
+## Dependência de calendário
+
+A base local, importação anual e gestão estão implementadas em [Calendário de feriados](doc:calendario-de-feriados). Não há motor móvel nem chamada externa durante consultas. Todos os eventos aceitos bloqueiam o dia. Alteração do catálogo não dispara recálculo de estágios nesta entrega. O fluxo de cálculo/exceções e a definição de uma base histórica reproduzível continuam pendentes; Activity Log sozinho não congela suas entradas.

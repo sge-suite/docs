@@ -6,14 +6,14 @@ type: technical-reference
 status: planned
 visibility: public
 tags: sge/desenvolvimento, sge/schedules, sge/estagio, sge/notificacoes
-related: e-mails-notificacoes-e-entregas, ciclos-de-status, enum-internshipstatus, migration-17-internship-pauses, fase-08-estagio-em-andamento, configuracao-e-bootstrap
+related: calendario-de-feriados, e-mails-notificacoes-e-entregas, ciclos-de-status, enum-internshipstatus, migration-17-internship-pauses, fase-08-estagio-em-andamento, configuracao-e-bootstrap
 source_refs:
 ---
 ## Objetivo e limite
 
 Os schedules tratam somente fatos que passam a valer com o tempo, mesmo sem alguém abrir o sistema. Eles reconciliam o estado persistido com a data institucional, sempre por Actions e regras de transição já usadas pela interface. Não podem fazer `update` em massa, pular Policies quando houver um ator humano nem inventar um usuário como autor da alteração.
 
-O horário de referência será o `APP_TIMEZONE` institucional, configurado como `America/Sao_Paulo` antes da produção. Não haverá fuso por campus nesta primeira versão: todos os campi atendidos estão no mesmo fuso nacional. Cada comando aceita `--date=AAAA-MM-DD` para testes, reprocessamento controlado e investigação; sem a opção, usa a data corrente nesse fuso.
+O horário de referência será o `APP_TIMEZONE` institucional, configurado como `America/Sao_Paulo` antes da produção. Não haverá fuso por campus nesta primeira versão: todos os campi atendidos estão no mesmo fuso nacional. Os comandos de estágio planejados aceitarão `--date=AAAA-MM-DD` para reprocessamento controlado e investigação; sem a opção, usa a data corrente nesse fuso.
 
 > [!important] Ações imediatas e reconciliação
 > Criar, alterar ou remover uma pausa chama a mesma Action de sincronização imediatamente. O schedule diário é a rede de segurança para datas que viram sem interação humana e para recuperar uma execução eventualmente interrompida.
@@ -92,3 +92,9 @@ Cada destinatário recebe no máximo uma notificação por fato temporal. A Acti
 - [Pausas de estágio](doc:migration-17-internship-pauses)
 - [Fase de estágio em andamento](doc:fase-08-estagio-em-andamento)
 - [Configuração e bootstrap](doc:configuracao-e-bootstrap)
+
+## Preparação anual do calendário — implementada
+
+`holidays:prepare` roda diariamente às 03h no fuso institucional, com `onOneServer()` e `withoutOverlapping(180)`. Mantém ano atual e dois seguintes, consultando somente nacionais/UFs ainda não concluídos. Não recalcula estágios. O processo gera municipais por recorrência, recupera falhas e usa dados locais em qualquer consulta posterior. A cobertura é a dos dados retornados pela fonte, não uma certificação legal. Importações extraordinárias usam `holidays:import`, executado sequencialmente. O cron é necessário para a rotina diária; o worker atende à indexação Scout dos registros após commit.
+
+Para executar a rotina em produção, configure o cron do Laravel para chamar `php artisan schedule:run` a cada minuto, na pasta da aplicação. No desenvolvimento com Sail, use `./vendor/bin/sail artisan schedule:work`. O comando `holidays:prepare` também pode ser executado manualmente e não possui opção `--date`. O registro em `routes/console.php` não inicia o scheduler por conta própria.

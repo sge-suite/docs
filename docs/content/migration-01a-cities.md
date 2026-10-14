@@ -27,7 +27,7 @@ O catálogo nacional tem 5.571 municípios e é importado localmente. O catálog
 
 Não há chamada à BrasilAPI para consultas de cidades nem para o cálculo de feriados. A API/IBGE pode ser usada para obter ou revisar o arquivo versionado antes de uma nova implantação. A busca opcional por CEP nos formulários de campus, documentada em [`addresses`](doc:migration-01-addresses), resolve a cidade por nome normalizado e UF no catálogo local. Uma correspondência única é sugerida para revisão; ausência ou ambiguidade exige seleção manual. A resposta externa não cria municípios.
 
-`City` é indexado pelo Scout/Meilisearch com ID, nome, UF e código IBGE; `state` pode ser filtrado no mecanismo de busca. O catálogo no banco é a fonte de verdade das cidades e das FKs; cidade não é enum nem texto livre. A indexação Eloquent usa fila após commit. Após importar o catálogo existente, execute `scout:import 'App\Models\City'` e processe a fila, além de sincronizar as configurações dos índices.
+`City` é indexado pelo Scout/Meilisearch com ID, nome, UF e código IBGE; `state` pode ser filtrado no mecanismo de busca. O catálogo no banco é a fonte de verdade das cidades e das FKs; cidade não é enum nem texto livre. A indexação Eloquent usa fila após commit. Durante o seed, somente a sincronização individual do Scout é pausada; depois do commit, o catálogo é enviado ao índice em lotes de 500. Validação e auditoria continuam ativas. O catálogo atual gera 12 jobs de indexação, em vez de um por município. Reexecutar o seed também reenvia o catálogo em lotes para recuperar índices desatualizados. Sincronize as configurações dos índices e mantenha o worker ativo; `scout:import 'App\Models\City'` permanece disponível para manutenção extraordinária.
 
 O código IBGE é a identidade da cidade. O `CitySeeder` pode atualizar o nome oficial associado ao mesmo código em uma carga controlada; documentos gerados preservam os valores formatados no snapshot da geração, e endereços históricos continuam apontando para a mesma identidade municipal. Não há enum de cidades nem exclusão lógica como operação normal.
 
@@ -59,6 +59,7 @@ O `CitySeeder` implementado:
 - lê o arquivo local sem fazer requisições de rede;
 - valida o código IBGE com sete dígitos, a UF contra `BrazilianState`, o nome não vazio e o limite da coluna usando `CityValidationRules`;
 - insere ou atualiza pelo `ibge_code`, em lotes de 500 registros e dentro de uma transação;
+- indexa o catálogo em lotes de 500 após o commit, sem desativar validação ou Activity Log;
 - rejeita códigos IBGE duplicados no catálogo;
 - nunca apaga cidades automaticamente, porque endereços e feriados podem referenciá-las;
 - é chamado explicitamente pelo seeder principal.

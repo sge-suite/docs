@@ -21,7 +21,7 @@ Serviço puro, sem Eloquent e sem relógio global. Recebe um DTO com data inicia
 - margem é contada em dias corridos; após a margem, a data avança até um dia programado não bloqueado;
 - máximo defensivo de dez anos de iteração, configurável apenas em teste.
 
-O calendário de feriados nacional, estadual e municipal versionado, aplicável à cidade e à UF do endereço histórico do local de trabalho, é carregado antes da chamada; o serviço não consulta API. A fonte externa, quando usada, serve somente à importação administrativa do calendário, nunca durante o cálculo. O serviço usa os feriados, pausas e exceções aplicáveis ao intervalo; o resultado persistido no estágio é a data projetada. Mudanças autorizadas da previsão são registradas no Activity Log.
+Os feriados nacionais, estaduais e municipais do calendário único persistido, aplicáveis à cidade e à UF do endereço histórico do local de trabalho, são carregados antes da chamada; o serviço não consulta API. A fonte externa, quando usada, serve somente à importação administrativa do calendário, nunca durante o cálculo. O serviço usa os feriados, pausas e exceções aplicáveis ao intervalo; o resultado persistido no estágio é a data projetada. Mudanças autorizadas da previsão são registradas no Activity Log.
 
 ## Recalculo
 
@@ -32,3 +32,7 @@ Criação do estágio, nova pausa, alteração/cancelamento de pausa, ativação
 - [Migration 22 — holidays](doc:migration-22-holidays)
 - [Migration 22A — internship_calendar_overrides](doc:migration-22-internship-calendar-overrides)
 - [Migration 23 — internship_work_schedules](doc:migration-23-internship-work-schedules)
+
+## Dependência de calendário
+
+A base local, importação anual e gestão estão implementadas em [Calendário de feriados](doc:calendario-de-feriados). Não há motor móvel nem chamada externa durante consultas. Todos os eventos aceitos bloqueiam o dia. Alteração do catálogo não dispara recálculo de estágios nesta entrega. O fluxo de cálculo/exceções e a definição de uma base histórica reproduzível continuam pendentes; Activity Log sozinho não congela suas entradas.

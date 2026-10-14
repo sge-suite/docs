@@ -277,3 +277,7 @@ Antes da produção, validar cada ação em cenários positivos e negativos: ví
 ## Gestão direta de partes concedentes
 
 Somente o vínculo ativo selecionado de Setor de Estágio lista, consulta, cadastra, edita, desativa, reativa e exclui concedentes do próprio campus. Administrador do Sistema e outros perfis não herdam acesso a esse catálogo. Campus desativado permite somente consulta; vínculo desativado não autoriza acesso. Desativação e exclusão exigem senha atual e confirmação, e reativação exige confirmação. Exclusão física acompanhada do endereço próprio exige ausência de estágios, solicitações de estágio e solicitações de cadastro vinculados. Edição pode manter concedente desativada, sem alterar campus ou situação. Novas associações exigem cadastro ativo, preservando as existentes e seus snapshots. `GrantingPartyPolicy` protege rotas, ações transacionais e requisições Livewire. A concedente não recebe conta nem permissão de autoaprovação.
+
+## Calendário de feriados
+
+Somente o Administrador do Sistema ativo selecionado cadastra, altera, exclui/restaura feriados e recorrências, mantém importações, revisa pendências e consulta a auditoria do calendário. Setor de Estágio ativo selecionado tem somente leitura de todos os feriados e recorrências, sem restrição automática por UF, município ou campus. Não há propriedade de calendário por campus. Os filtros são opcionais; a cidade de execução será considerada no futuro cálculo do estágio. Outros perfis não recebem acesso. Ver [Calendário de feriados](doc:calendario-de-feriados).

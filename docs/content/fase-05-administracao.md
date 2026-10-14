@@ -11,7 +11,7 @@ source_refs: https://github.com/sge-suite/sge/blob/master/routes/web.php, https:
 ---
 Base: [papéis por vínculo](doc:pessoas-e-responsabilidades), [Matriz de autorização](doc:matriz-de-autorizacao) e [Perfis e responsabilidades por vínculo](doc:perfis-e-responsabilidades-por-vinculo).
 
-A estrutura de perfis e o contexto de vínculo existem. O provisionamento inicial ou a inclusão de Administrador do Sistema também pode ser feito por `admin:create`. A gestão global de campi tem backend, Policies, Form Requests e páginas Livewire com Flux. O Administrador do Sistema também dispõe de telas para administrar contas e vínculos administrativos, consultar a auditoria administrativa e ver o histórico de e-mails associados a essas contas e vínculos. A tela Meu campus e a gestão completa de cursos estão implementadas para o Setor de Estágio. A gestão local de usuários e vínculos e as consultas de auditoria e e-mails compartilham as telas administrativas com autorização pelo campus do vínculo ativo selecionado. A gestão de tipos de estágio também está implementada; operações das jornadas de estágio continuam pendentes. O projeto está sem testes automatizados até a preparação para produção.
+A estrutura de perfis e o contexto de vínculo existem. O provisionamento inicial ou a inclusão de Administrador do Sistema também pode ser feito por `admin:create`. A gestão global de campi tem backend, Policies, Form Requests e páginas Livewire com Flux. O Administrador do Sistema também dispõe de telas para administrar contas e vínculos administrativos, consultar a auditoria administrativa e ver o histórico de e-mails associados a essas contas e vínculos. A tela Meu campus e a gestão completa de cursos estão implementadas para o Setor de Estágio. A gestão local de usuários e vínculos e as consultas de auditoria e e-mails compartilham as telas administrativas com autorização pelo campus do vínculo ativo selecionado. A gestão de tipos de estágio também está implementada; operações das jornadas de estágio continuam pendentes. Não há suíte automatizada nesta etapa; os fluxos mantêm pendências de validação funcional.
 
 ## Policies e escopo
 
@@ -116,9 +116,9 @@ Desativação e exclusão exigem confirmação e senha atual; reativação exige
 
 ### Índices e integrações
 
-Os índices de `Campus` e `City` são configurados em `config/scout.php`. A sincronização Eloquent ocorre por fila após commit. Execute `./vendor/bin/sail artisan scout:sync-index-settings` e importe registros existentes com `scout:import 'App\Models\Campus'` e `scout:import 'App\Models\City'`. Mantenha um worker de fila ativo; o Meilisearch também processa suas tarefas de indexação de modo assíncrono. Configure `SCOUT_PREFIX` ao compartilhar o serviço entre ambientes.
+Os índices de `Campus`, `City`, `Holiday` e `HolidayRecurrence` são configurados em `config/scout.php`. A sincronização Eloquent ocorre por fila após commit. O seed de cidades e feriados pausa somente os jobs individuais e envia os registros em lotes ao concluir a persistência. Execute `./vendor/bin/sail artisan scout:sync-index-settings`; o comando `scout:import` continua disponível para reindexação extraordinária de cada Model. Mantenha um worker de fila ativo; o Meilisearch também processa suas tarefas de indexação de modo assíncrono. Configure `SCOUT_PREFIX` ao compartilhar o serviço entre ambientes.
 
-A busca de produção depende do serviço Meilisearch e da configuração descritos acima. A suíte de testes foi removida; antes da produção, a busca poderá ser validada sem exigir integração real com Meilisearch.
+A busca de produção depende do serviço Meilisearch e da configuração descritos acima. A validação funcional da busca permanece pendente; não há suíte automatizada nesta etapa.
 
 O botão **Consultar CNPJ**, nos formulários de cadastro e edição, usa `BrasilApiCompanyLookup` para consultar `cnpj/v1/{cnpj}` na BrasilAPI. Valida e normaliza o CNPJ antes da chamada, com conexão limitada a 3 segundos e resposta a 10 segundos. Preenche razão social como nome, telefone, e-mail e endereço quando disponíveis; resolve a cidade por `ibge_code` e UF na tabela local, sem busca textual nem criação de cidades. Uma consulta bem-sucedida reinicializa o seletor com essa cidade; quando não houver correspondência, limpa a seleção anterior e solicita UF/cidade manualmente. Campos ausentes na resposta não apagam valores digitados. Os dados permanecem editáveis e só são gravados pelo envio normal ao controller, com Form Requests e auditoria. A consulta em si não grava dados nem atividades. Falhas, CNPJ não encontrado e respostas inválidas exibem erro e preservam o formulário. A permissão e o estado do campus são revalidados em cada requisição. Representante legal e seguro continuam sob responsabilidade de quem cadastra; não são inferidos do quadro de sócios. A consulta independente por CEP está implementada com revisão antes de aplicar, conforme descrito abaixo.
 
@@ -127,7 +127,7 @@ O botão **Consultar CNPJ**, nos formulários de cadastro e edição, usa `Brasi
 - [ ] Implementar autorização e Actions de gestão dos cadastros e análises antes de criar as telas operacionais.
 - [ ] Administrar templates DOCX e versões.
 - [ ] Administrar concedentes e solicitações pendentes no escopo do campus; cadastros e aprovações devem preservar essa associação mesmo quando CPF/CNPJ se repetirem.
-- [ ] Administrar a importação do calendário nacional/estadual e o cadastro manual de feriados municipais.
+- [x] Consultar todos os feriados e recorrências do calendário único, sem escrita ou restrição territorial automática; importação e manutenção global são exclusivas do Administrador do Sistema.
 - [ ] Analisar estágios enviados.
 - [ ] Analisar solicitações de supervisor/concedente.
 - [ ] Validar documentos, avaliações, pendências e liberação.
@@ -190,4 +190,8 @@ Todas as listas paginadas abaixo usam o padrão comum de **15 registros por pág
 | Parte concedente — detalhes | Histórico da concedente e de seu endereço | 15 | Setor de Estágio, campus selecionado |
 | E-mail — detalhes | Tentativas de entrega | 15 | Segundo a Policy da mensagem |
 
-Esse padrão reúne **15 listas paginadas**, todas com 15 itens por página: sete índices, seis históricos em detalhes, a lista de vínculos na tela de usuário e as tentativas na tela de e-mail. O projeto está sem testes automatizados no momento; a política de retomada antes da produção está em [Testes automatizados](doc:testes-existentes).
+Esse padrão reúne **15 listas paginadas**, todas com 15 itens por página: sete índices, seis históricos em detalhes, a lista de vínculos na tela de usuário e as tentativas na tela de e-mail. A decisão vigente sobre testes e a política de validação estão em [Testes automatizados](doc:testes-existentes).
+
+## Calendário global — implementado
+
+Somente o Administrador do Sistema ativo selecionado cadastra, altera, exclui/restaura feriados e recorrências, mantém importações, revisa pendências e consulta a auditoria do calendário. Setor de Estágio ativo selecionado tem somente leitura de todos os feriados e recorrências, sem restrição automática por UF, município ou campus. Não há propriedade de calendário por campus. Os filtros são opcionais; a cidade de execução será considerada no futuro cálculo do estágio. Outros perfis não recebem acesso. Ver [Calendário de feriados](doc:calendario-de-feriados).

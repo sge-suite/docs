@@ -11,12 +11,12 @@ related: desenvolvimento-checklist-de-funcionalidade, fases-de-desenvolvimento
 
 ## Estado atual
 
-O repositório SGE não contém arquivos de testes automatizados. A árvore `tests/` foi removida porque executar e manter a suíte estava atrasando o desenvolvimento das funcionalidades. A retomada dos testes fica para a preparação da versão de produção, quando o escopo funcional estiver mais estável.
+A suíte de testes foi removida por decisão explícita do projeto. Não há arquivos de testes de calendário ou das demais funcionalidades no repositório atual. As dependências existentes não significam que haja uma suíte implementada.
 
-Durante a implementação, a equipe não precisa executar `sail test`. A configuração e as dependências de desenvolvimento do runner podem ser reutilizadas quando a suíte for criada novamente; elas não representam cobertura ativa. Referências de teste em checklists antigos passam a ser critérios para a preparação da produção, não bloqueios para concluir cada funcionalidade.
+A instrução explícita do responsável é não criar nem executar testes nesta etapa; ela prevalece sobre a orientação geral do `AGENTS.md` para testes de cada alteração.
 
-## Preparação para produção
+## Conferências atuais
 
-Antes da publicação, definir e implementar uma suíte pequena, rápida e direcionada às regras de negócio críticas. Dar prioridade aos cálculos de término de estágio quando suas regras forem definidas, às transições de estado, às gravações transacionais e às permissões por vínculo e campus. Não recriar testes de HTML, navegação ou integração real com Meilisearch.
+Usar formatação com Pint, conferência de sintaxe PHP, compilação de views Blade e build do frontend, conforme os arquivos alterados. Essas conferências não comprovam regras funcionais ou autorização em execução.
 
-As validações de produção devem ocorrer em banco de testes isolado, com execução reproduzível e sem concorrer com operações que recriam o schema. O resultado dessa etapa deve atualizar esta página e a documentação funcional correspondente.
+Não aplicar migrations nem recriar bancos por iniciativa do agente. Uma futura retomada de testes exige nova decisão do responsável.

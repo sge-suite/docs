@@ -17,13 +17,13 @@ source_refs:
 | Estados e transições | [Ciclos de status](doc:ciclos-de-status) | enum e fluxo correspondentes |
 | Esquema, índices e FKs | notas de migration | diagramas conceituais |
 | Decisão aprovada | [Backlog e decisões](doc:backlog-e-decisoes) | notas de implementação relacionadas |
-| Estado do código existente | nota técnica com `source_refs` | código apontado pela mesma lista; testes automatizados estão suspensos até a preparação para produção |
+| Estado do código existente | nota técnica com `source_refs` | código apontado pela mesma lista; validação e decisão vigente sobre testes em [Testes automatizados](doc:testes-existentes) |
 
 Uma nota derivada deve linkar para a fonte principal em vez de repetir o contrato inteiro.
 
 ## Limite de detalhe de interface
 
-Documente comportamentos de tela quando alterarem regras do domínio, autorização, dados ou uma operação necessária ao usuário. Omita ajustes de apresentação, como alinhamento, espaçamento, cores, ícones e transições visuais. Notas de migration descrevem schema, persistência, relações e regras do dado; não registram acabamento de formulários. Durante a implementação, detalhes visuais ficam no código; testes automatizados serão retomados na preparação para produção.
+Documente comportamentos de tela quando alterarem regras do domínio, autorização, dados ou uma operação necessária ao usuário. Omita ajustes de apresentação, como alinhamento, espaçamento, cores, ícones e transições visuais. Notas de migration descrevem schema, persistência, relações e regras do dado; não registram acabamento de formulários. Durante a implementação, detalhes visuais ficam no código; a validação segue a decisão registrada em [Testes automatizados](doc:testes-existentes).
 
 ## Estados das notas
 
@@ -38,7 +38,7 @@ Documente comportamentos de tela quando alterarem regras do domínio, autorizaç
 | `completed` | Marco concluído e sem trabalho pendente próprio. |
 | `archived` | Material preservado apenas para consulta histórica. |
 
-Não marque uma fase como `completed` se seu checklist ainda tiver itens pendentes. Para uma nota de código, `implemented` pode coexistir com pendências de integração; testes automatizados são tratados na preparação para produção e seu adiamento deve ficar explícito.
+Não marque uma fase como `completed` se seu checklist ainda tiver itens pendentes. Para uma nota de código, `implemented` pode coexistir com pendências de integração; a cobertura direcionada e as pendências de validação devem ficar explícitas.
 
 ## Frontmatter e referências de código
 
@@ -66,4 +66,4 @@ O Aurelius publica as notas em `content/` e os diagramas em `diagrams/`, gerando
 1. Atualize a fonte principal e as notas derivadas afetadas.
 2. Verifique links e frontmatter com `npm run check`.
 3. Execute `npm run build` quando a alteração afetar conteúdo publicado.
-4. Atualize o checklist da fase quando houver código novo; mantenha os testes automatizados para a preparação para produção conforme [Testes automatizados](doc:testes-existentes).
+4. Atualize o checklist da fase quando houver código novo; registre as conferências realizadas e as pendências de validação conforme [Testes automatizados](doc:testes-existentes).

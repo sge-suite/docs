@@ -14,7 +14,7 @@ source_refs:
 
 Este índice é uma fotografia editorial da documentação publicada. Os documentos vinculados continuam sendo a fonte de verdade; os status servem para navegação e acompanhamento, não substituem o contrato técnico.
 
-**Como interpretar os status:** `implemented` indica que o artefato já existe no código; a integração com o domínio, as migrations e as Policies podem continuar pendentes. Não há testes automatizados atualmente; serão retomados na preparação para produção conforme [Testes automatizados](doc:testes-existentes). `defined` indica contrato aprovado ainda não implementado; `planned` indica trabalho ainda não iniciado.
+**Como interpretar os status:** `implemented` indica que o artefato já existe no código; a integração com o domínio, as migrations e as Policies podem continuar pendentes. Não há testes automatizados atualmente; uma retomada depende de nova decisão conforme [Testes automatizados](doc:testes-existentes). `defined` indica contrato aprovado ainda não implementado; `planned` indica trabalho ainda não iniciado.
 
 ## Fases
 
@@ -120,7 +120,7 @@ Sequência física dos arquivos em `database/migrations`; os números permanecem
 - [Service — InternshipEndDateCalculator](doc:service-internshipenddatecalculator) — **planned** — Contrato técnico do cálculo reproduzível da previsão de término.
 - [Service — InternshipGradeCalculator](doc:service-internshipgradecalculator) — **planned** — Contrato técnico das notas de supervisor, relatório, apresentação e resultado consolidado.
 - [Services](doc:services) — **planned** — Índice dos serviços de domínio planejados para cálculos, documentos, snapshots e transições.
-- [Testes automatizados](doc:testes-existentes) — **maintained** — A suíte foi removida durante a implementação; retomada planejada para a preparação para produção.
+- [Testes automatizados](doc:testes-existentes) — **maintained** — A suíte foi removida durante a implementação; a retomada depende de nova decisão do responsável.
 
 ## Integrações
 
@@ -131,3 +131,5 @@ Sequência física dos arquivos em `database/migrations`; os números permanecem
 
 - [Backlog e decisões](doc:backlog-e-decisoes) — **in-progress** — Decisões aprovadas e assuntos ainda pendentes no planejamento do SGE.
 - [Cadastros pendentes de supervisor e concedente](doc:cadastros-pendentes-de-supervisor-e-concedente) — **planned** — Contrato de dados e análise dos cadastros solicitados durante a abertura de estágio.
+
+- [Calendário de feriados](doc:calendario-de-feriados) — **implemented** — Importação anual automática nacional/27 UFs, recorrências municipais fixas, cadastro manual, autorização, auditoria e busca por nome.

@@ -195,3 +195,7 @@ Esse padrão reúne **15 listas paginadas**, todas com 15 itens por página: set
 ## Calendário global — implementado
 
 Somente o Administrador do Sistema ativo selecionado cadastra, altera, exclui/restaura feriados e recorrências, mantém importações, revisa pendências e consulta a auditoria do calendário. Setor de Estágio ativo selecionado tem somente leitura de todos os feriados e recorrências, sem restrição automática por UF, município ou campus. Não há propriedade de calendário por campus. Os filtros são opcionais; a cidade de execução será considerada no futuro cálculo do estágio. Outros perfis não recebem acesso. Ver [Calendário de feriados](doc:calendario-de-feriados).
+
+### Importação de partes concedentes
+
+A gestão direta inclui importação CSV pelo Setor de Estágio no campus selecionado, com prévia em memória, paginação de 100 linhas, confirmação individual ou em massa de duplicidades e processamento sequencial em lotes de até 25 linhas. Não há tabelas de importação nem retomada persistida depois de sair da tela. O cadastro aceita CNPJ numérico ou alfanumérico; erros de consulta são exibidos uma única vez no campo. O contrato de arquivo, recuperação por CSV de erros e exportação compatível do sistema anterior estão em [Partes concedentes](doc:migration-12-granting-parties).

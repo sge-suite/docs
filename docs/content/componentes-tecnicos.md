@@ -6,7 +6,7 @@ type: technical-hub
 status: in-progress
 visibility: public
 tags: sge/desenvolvimento, sge/arquitetura, sge/checklist
-related: casts, helpers, concerns, actions, services, model-user, providers, schedules, testes-existentes, configuracao-e-bootstrap, migrations, enums, arquitetura-atual
+related: casts, helpers, concerns, actions, services, model-user, providers, schedules, testes-existentes, configuracao-e-bootstrap, migrations, enums, arquitetura-atual, component-file-upload
 source_refs:
 ---
 Esta nota é o inventário do código transversal do projeto novo. Cada componente tem uma nota própria com responsabilidade, contrato, uso atual, testes e pendências.
@@ -26,6 +26,10 @@ Esta nota é o inventário do código transversal do projeto novo. Cada componen
 | Seeders                | 🟢 Implementado | [Migration 01A — cities](doc:migration-01a-cities) |
 | Testes                 | ⚪ Suspensos até a preparação para produção | [Testes automatizados](doc:testes-existentes) |
 | Bootstrap/configuração | 🟡 Em uso | [Configuração e bootstrap](doc:configuracao-e-bootstrap) |
+
+## Componentes Blade
+
+- [Upload de arquivos](doc:component-file-upload) — campo reutilizável de arquivos com seleção, arrastar e soltar, estado de envio e remoção de uploads temporários.
 
 ## Regra de manutenção
 

@@ -78,7 +78,7 @@ Não existem tabelas de importação, histórico de origens ou fingerprints. A p
 
 O CSV de erros contém somente linhas com erro, preservando os cabeçalhos cadastrais originais, sua ordem e valores anteriores à normalização. Acrescenta `__sge_formato` (`erros-v1`), `__sge_linha_original`, `__sge_erros`, `__sge_excedentes` e `__sge_escape`. Preserva a linha física inicial e o intervalo de registros multilinha. Fórmulas são neutralizadas com escape reversível; ao reenviar, o servidor restaura o valor e recalcula validação, cidade e duplicidades, sem reutilizar decisões ou erros antigos. Valores excedentes devem ser redistribuídos nas colunas corretas e a célula de controle limpa após revisão.
 
-A importação mantém a auditoria normal das mutações Eloquent de concedentes e endereços, com autoria pelo vínculo. Não gera evento extra de conclusão nem registro de alteração do campus. Resumos antigos desse tipo são omitidos nas consultas de auditoria, sem excluir os registros persistidos. O índice de concedentes usa a rolagem da página, sem limite vertical interno na tabela.
+A importação mantém a auditoria normal das mutações Eloquent de concedentes e endereços, com autoria pelo vínculo. Não gera evento extra de conclusão nem registro de alteração do campus. O índice de concedentes usa a rolagem da página, sem limite vertical interno na tabela.
 
 ### Exportação do SGE-IFFarSA
 

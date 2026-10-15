@@ -31,7 +31,7 @@ Durante o `HolidaySeeder`, somente a sincronização individual do Scout é paus
 
 `holidays:import {year}` consulta nacionais e as 27 UFs, sequencialmente. `--uf=RS` limita a consulta à UF e aproveita somente estaduais; `--refresh` força nova consulta. Consultas concluídas não são repetidas automaticamente. A virada anual acrescenta somente o novo terceiro ano normalmente; falhas anteriores são recuperadas por território. Municipais são gerados também para anos solicitados fora desse horizonte.
 
-Não existe página dedicada de atualização automática nem endpoint para enfileirar importações. Pendências reais da fonte aparecem no calendário para o Administrador, com acesso à revisão. Situação técnica e falhas permanecem persistidas e consultáveis pelos comandos e auditoria. A manutenção extraordinária usa os comandos administrativos. Seed, schedule e comando processam as consultas sequencialmente, com locks contra concorrência. Não há e-mail automático. Falhas ficam nas importações e são recuperadas pela rotina diária.
+Não existe página dedicada de atualização automática nem endpoint para enfileirar importações. Pendências reais da fonte aparecem no calendário para o Administrador, com acesso à revisão. Situação técnica e falhas permanecem persistidas e consultáveis pelos comandos, sem gerar Activity Log nas tabelas de controle. A auditoria acompanha as alterações efetivas dos feriados e recorrências. A manutenção extraordinária usa os comandos administrativos. Seed, schedule e comando processam as consultas sequencialmente, com locks contra concorrência. Não há e-mail automático. Falhas ficam nas importações e são recuperadas pela rotina diária.
 
 ## Contrato BrasilAPI
 

@@ -40,7 +40,7 @@ O índice identifica registro, ação, autoria e data. O detalhe apresenta apena
 
 Eventos de endereço exibem o cadastro proprietário, com tipo, ID e nome registrado, e os campos anteriores e novos em cards. Nas telas de detalhe de campus e parte concedente, a linha do tempo também inclui as alterações dos endereços que pertenceram àquele cadastro; assim, a edição do endereço fica identificada como evento do endereço associado, sem parecer uma alteração direta dos campos do proprietário. A associação é registrada antes da gravação do evento com `beforeActivityLogged`, conforme a API instalada do Activity Log. Quando esse contexto não existe em registros antigos ou na criação anterior ao proprietário, a consulta usa evidências imutáveis das associações de Campus e Concedente; ausência de evidência ou escopo compartilhado entre campi impede acesso. Alterações em endereço residencial e dados de outros processos não são incluídas nos catálogos da auditoria. A identificação e os eventos continuam disponíveis após substituir ou excluir o cadastro. A consulta não modifica eventos antigos.
 
-Importações CSV de usuários/vínculos e partes concedentes registram somente as mutações normais dos Models envolvidos. A conclusão da importação não gera atividade própria nem evento associado ao campus. Os antigos eventos `user_import_completed` e `granting_party_import_completed` são omitidos nas consultas de auditoria e históricos, sem exclusão dos dados persistidos.
+Importações CSV de usuários/vínculos e partes concedentes registram somente as mutações normais dos Models envolvidos. A conclusão da importação não gera atividade própria nem evento associado ao campus.
 
 ## Limites
 
@@ -54,4 +54,4 @@ Importações CSV de usuários/vínculos e partes concedentes registram somente 
 
 ## Auditoria do calendário
 
-Inclui ocorrências, recorrências, consultas anuais/UF e decisões sobre itens importados. O Administrador consulta todos esses eventos; a manutenção do calendário é central e sua auditoria é exclusiva do Administrador. O Setor consulta apenas o calendário e as recorrências. Payloads externos permanecem nas tabelas técnicas, não são duplicados no Activity Log. Exclusões e restaurações de ocorrências preservam correspondências de origem.
+Inclui as alterações efetivas de ocorrências e recorrências. `holiday_import_runs` e `holiday_sources` guardam controle técnico da sincronização e revisão, sem `LogsActivity` e sem participação nos filtros ou históricos da auditoria. Ao resolver um item importado, somente as mutações efetivas de feriados geram Activity Log. O Administrador consulta todos esses eventos; a manutenção do calendário é central e sua auditoria é exclusiva do Administrador. O Setor consulta apenas o calendário e as recorrências. Payloads externos permanecem nas tabelas técnicas, não são duplicados no Activity Log. Exclusões e restaurações de ocorrências preservam correspondências de origem.

@@ -7,7 +7,7 @@ status: implemented
 visibility: public
 tags: sge/migrations, sge/calendario, sge/calculos
 related: calendario-de-feriados, enum-holidayscope, enum-brazilianstate, migration-01a-cities, migration-15-internships, migration-22-internship-calendar-overrides
-source_refs: https://github.com/sge-suite/sge/blob/master/app/Models/Holiday.php, https://github.com/sge-suite/sge/blob/master/app/Concerns/HolidayValidationRules.php, https://github.com/sge-suite/sge/blob/master/app/Console/Commands/ImportHolidays.php
+source_refs: https://github.com/sge-suite/sge/blob/master/app/Models/Holiday.php, https://github.com/sge-suite/sge/blob/master/app/Models/HolidayRecurrence.php, https://github.com/sge-suite/sge/blob/master/app/Models/HolidayImportRun.php, https://github.com/sge-suite/sge/blob/master/app/Models/HolidaySource.php, https://github.com/sge-suite/sge/blob/master/app/Concerns/HolidayValidationRules.php, https://github.com/sge-suite/sge/blob/master/app/Console/Commands/ImportHolidays.php, https://github.com/sge-suite/sge/blob/master/app/Actions/ImportHolidayTerritory.php
 ---
 ## Estado
 
@@ -32,7 +32,7 @@ A unicidade territorial inclui `deleted_at` e usa `NULLS NOT DISTINCT`. Não há
 - `holiday_import_runs`: linha única por ano/território (`national` ou UF), situação, tentativas, consulta/conclusão, erro, URL, payload JSONB e resumo. Uma falha preserva ocorrências e a última resposta válida. Conclusão indica processamento da resposta, não completude jurídica do calendário.
 - `holiday_sources`: chave de origem única, FK da consulta, FK opcional da ocorrência, payload, candidatos, situação (`pending`, `linked`, `ignored`), motivo/justificativa, ausência na fonte e última observação. A chave associa o item original mesmo após correções locais ou exclusão lógica. Múltiplas referências podem apontar à mesma ocorrência.
 
-Models e operações administrativas registram Activity Log. Payloads e consultas técnicas permanecem nas estruturas de importação; o log registra transições, autoria, decisões e resultados. O evento de ocorrência registra também o território atual/anterior para consulta histórica autorizada.
+Alterações efetivas em feriados e recorrências registram Activity Log. `holiday_import_runs` e `holiday_sources` guardam o estado técnico da sincronização e revisão, sem `LogsActivity` e sem eventos próprios na auditoria. Ao resolver um item importado, somente as alterações resultantes nos feriados ou recorrências são auditadas. O evento de ocorrência registra também o território atual/anterior para consulta histórica autorizada.
 
 ## Migration e bancos existentes
 

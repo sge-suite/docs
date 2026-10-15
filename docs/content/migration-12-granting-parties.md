@@ -66,6 +66,8 @@ Cidade e UF são resolvidas exclusivamente no catálogo local, com UF em maiúsc
 
 ### Prévia, duplicidades e processamento
 
+O modelo baixado respeita o separador selecionado na tela. A infraestrutura de CSV, upload, paginação, downloads e controle de lotes é compartilhada com a importação de usuários, preservando as regras próprias de cada cadastro.
+
 A prévia é validada integralmente antes de criar endereços ou concedentes. Exibe filtros, **100 linhas por página**, erros e cadastros duplicados locais, incluindo os desativados. Todas as ocorrências válidas de documento repetido no arquivo exigem confirmação, assim como documentos já existentes no campus. Cadastros de outros campi não são exibidos como conflito local.
 
 Cada linha duplicada tem confirmação individual inicialmente desmarcada. **Selecionar todas as duplicidades** e **Desmarcar todas** abrangem todas as páginas e filtros; apenas linhas válidas são elegíveis. A aprovação permite criar outro cadastro, inclusive cópia exata; não atualiza, reativa nem mescla cadastros. Duplicidades sem aprovação são ignoradas com motivo explícito. Um conflito novo após a prévia gera erro e exige reenvio para nova revisão.
@@ -76,7 +78,7 @@ Não existem tabelas de importação, histórico de origens ou fingerprints. A p
 
 O CSV de erros contém somente linhas com erro, preservando os cabeçalhos cadastrais originais, sua ordem e valores anteriores à normalização. Acrescenta `__sge_formato` (`erros-v1`), `__sge_linha_original`, `__sge_erros`, `__sge_excedentes` e `__sge_escape`. Preserva a linha física inicial e o intervalo de registros multilinha. Fórmulas são neutralizadas com escape reversível; ao reenviar, o servidor restaura o valor e recalcula validação, cidade e duplicidades, sem reutilizar decisões ou erros antigos. Valores excedentes devem ser redistribuídos nas colunas corretas e a célula de controle limpa após revisão.
 
-O resumo de conclusão é auditado no campus com autoria pelo vínculo e contadores, sem repetir o CSV ou os dados pessoais. Os eventos Eloquent dos cadastros permanecem preservados. O índice de concedentes usa a rolagem da página, sem limite vertical interno na tabela.
+A importação mantém a auditoria normal das mutações Eloquent de concedentes e endereços, com autoria pelo vínculo. Não gera evento extra de conclusão nem registro de alteração do campus. Resumos antigos desse tipo são omitidos nas consultas de auditoria, sem excluir os registros persistidos. O índice de concedentes usa a rolagem da página, sem limite vertical interno na tabela.
 
 ### Exportação do SGE-IFFarSA
 

@@ -21,7 +21,7 @@ As tabelas `notifications`, `email_messages` e `email_delivery_attempts`, seus e
 - [x] Configurar timeout SMTP de 10 segundos, Job de 60 segundos e limite de três tentativas. A nova tentativa é explícita; o Job não repete automaticamente um SMTP de resultado incerto.
 - [x] Reprocessar falhas pela Action, preservando tentativas anteriores e o conteúdo imutável.
 - [x] Manter a recuperação de senha fora de `email_messages` e `email_delivery_attempts`; a Notification do Fortify é enfileirada após o commit.
-- [x] Enviar e-mail de conta criada informando o primeiro vínculo e levando à recuperação com o e-mail preenchido para solicitar a definição da senha; armazenar assunto, HTML e texto já renderizados.
+- [x] Enviar um único e-mail de conta criada ao login, incluindo tipo do primeiro vínculo, campus/escopo, matrícula, curso e contato quando aplicáveis, sem aviso separado para esse primeiro vínculo e levando à recuperação com o e-mail preenchido para solicitar a definição da senha; armazenar assunto, HTML e texto já renderizados.
 - [x] Ao criar vínculo em conta existente, avisar `users.email` e `affiliations.email` com link de login; deduplicar quando forem iguais e armazenar um snapshot imutável por envio.
 - [x] Armazenar os avisos administrativos de desativação/exclusão de vínculo e exclusão de conta, com a finalidade, o conteúdo e o registro associado.
 - [x] Incluir a assinatura do vínculo solicitante em avisos administrativos; manter nome e função no snapshot para retries e exibição históricos.

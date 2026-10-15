@@ -200,31 +200,32 @@ Somente o Administrador do Sistema ativo selecionado cadastra, altera, exclui/re
 
 A rota `users/import` e o botão **Importar CSV** são exclusivos do vínculo ativo selecionado de Setor de Estágio. O campus é obtido no servidor e revalidado nas ações e transações; o CSV não pode selecionar outro campus ou conceder acesso de Administrador do Sistema. A importação aceita Setor de Estágios, Coordenador de Curso, Orientador, Discente, Supervisor e Direção de Ensino.
 
-O arquivo tem uma linha por vínculo, com até **500 linhas não vazias**, agrupadas pelo CPF normalizado. Todos os sete cabeçalhos abaixo devem existir, mesmo quando o valor puder ficar vazio.
+O arquivo tem uma linha por vínculo, com até **500 linhas não vazias**, agrupadas pelo CPF normalizado. Todos os seis cabeçalhos abaixo devem existir, mesmo quando o valor puder ficar vazio.
 
 | Coluna | Preenchimento |
 | --- | --- |
 | `cpf` | Obrigatório; identifica globalmente a conta. Texto numérico, com máscara opcional. |
 | `nome` | Obrigatório; deve ser igual nas linhas da mesma pessoa. |
-| `email_login` | Obrigatório; deve ser igual nas linhas da mesma pessoa. |
+| `email` | Obrigatório por vínculo. Para conta nova, o e-mail da primeira linha da pessoa também será o endereço de acesso. Pode variar nas demais linhas. |
 | `tipo_vinculo` | Obrigatório; nome de um dos tipos permitidos acima. |
-| `email_vinculo` | Vazio usa o `email_login` informado no arquivo. |
 | `matricula` | Obrigatória exceto para Supervisor, que deve deixá-la vazia. Preserve zeros à esquerda. |
 | `curso` | Nome exato de um único curso ativo do campus, obrigatório somente para Discente; vazio nos demais tipos. |
+
+O modelo atual usa somente `email`; arquivos preparados com `email_login` e `email_vinculo` devem ser adaptados aos seis cabeçalhos atuais. A primeira linha é determinada pela ordem do CSV, independentemente da paginação ou dos filtros. Se ela contiver erro, o grupo inteiro fica bloqueado; o sistema não escolhe silenciosamente o e-mail de outra linha.
 
 Exemplo com CPFs gerados aleatoriamente, incluindo dois vínculos para a mesma pessoa. Substitua o curso pelo nome exato de um curso ativo do campus:
 
 ```csv
-cpf;nome;email_login;tipo_vinculo;email_vinculo;matricula;curso
-566.457.240-04;Ana Exemplo;ana@example.com;Orientador;;000001;
-566.457.240-04;Ana Exemplo;ana@example.com;Coordenador de Curso;;000001;
-353.310.950-03;Bruno Exemplo;bruno@example.com;Discente;;000002;Nome exato de um curso ativo do campus
-677.849.900-14;Carla Exemplo;carla@example.com;Supervisor;;;
-066.880.730-05;Daniel Exemplo;daniel@example.com;Setor de Estágios;;000004;
-953.619.760-08;Elisa Exemplo;elisa@example.com;Direção de Ensino;;000005;
+cpf;nome;email;tipo_vinculo;matricula;curso
+566.457.240-04;Ana Exemplo;ana@example.com;Orientador;000001;
+566.457.240-04;Ana Exemplo;ana.coordenacao@example.com;Coordenador de Curso;000001;
+353.310.950-03;Bruno Exemplo;bruno@example.com;Discente;000002;Nome exato de um curso ativo do campus
+677.849.900-14;Carla Exemplo;carla@example.com;Supervisor;;
+066.880.730-05;Daniel Exemplo;daniel@example.com;Setor de Estágios;000004;
+953.619.760-08;Elisa Exemplo;elisa@example.com;Direção de Ensino;000005;
 ```
 
-Não são aceitos senha, datas, situação ou campos profissionais opcionais de Supervisor. Conta existente é reutilizada pelo CPF, preservando nome, login e senha; divergências com os dados fornecidos são avisadas na prévia. A consulta exibe os dados da conta encontrada mesmo quando seus vínculos são de outro campus; links para detalhes continuam sujeitos à Policy, e nenhum vínculo externo é exibido. Identificadores que apontem para pessoas diferentes bloqueiam os grupos envolvidos. As regras normais de matrícula continuam valendo: titularidade global da pessoa e unicidade dos registros de Discente, inclusive desativados.
+Não são aceitos senha, datas, situação ou campos profissionais opcionais de Supervisor. Para conta nova, a primeira linha do CPF na ordem do arquivo define o e-mail de acesso e do primeiro vínculo; os e-mails das outras linhas pertencem somente aos respectivos vínculos. CPF e nome devem ser iguais no grupo. Conta existente é reutilizada pelo CPF, preservando nome, login e senha; os e-mails informados serão apenas dos vínculos, e divergências de conta são avisadas na prévia. A unicidade do login é conferida somente no primeiro e-mail de cada conta nova; contatos de vínculos podem se repetir entre pessoas. A consulta exibe os dados da conta encontrada mesmo quando seus vínculos são de outro campus; links para detalhes continuam sujeitos à Policy, e nenhum vínculo externo é exibido. Identificadores que apontem para pessoas diferentes bloqueiam os grupos envolvidos. As regras normais de matrícula continuam valendo: titularidade global da pessoa e unicidade dos registros de Discente, inclusive desativados.
 
 Um vínculo ativo equivalente é identificado por pessoa, tipo e campus. Se curso, matrícula e contato coincidirem, a linha é ignorada; divergências bloqueiam o grupo. Repetições idênticas no arquivo também são ignoradas. Histórico equivalente desativado exige autorização explícita para criar um novo vínculo, sem reativar ou alterar o anterior. A seleção em massa abrange todas as pessoas elegíveis em todas as páginas e filtros. Ela não autoriza conflitos de identificadores ou tipos proibidos.
 
@@ -233,6 +234,8 @@ A prévia tem filtros e **100 linhas por página**. A confirmação revalida os 
 A conta nova recebe um único e-mail no endereço de login com os detalhes do primeiro vínculo e instruções para definir senha. Vínculos adicionais geram seus próprios avisos à conta e ao contato do vínculo, deduplicando endereços iguais. Todos usam `SendEmailDelivery` após o commit. Ignorar um vínculo coincidente não gera outro aviso. A conclusão da importação não confirma entrega; a tela oferece acesso aos registros de e-mail autorizados.
 
 O contrato de UTF-8, BOM, separadores, tamanhos e metadados de correção é compartilhado com a [importação de concedentes](doc:migration-12-granting-parties). O CSV de erros inclui todas as linhas dos grupos bloqueados, mantendo dados originais, numeração e escape reversível de fórmulas. A prévia e o resultado ficam somente na tela; não há tabelas de acompanhamento, fingerprints ou histórico persistido de importação. Ao sair, um lote em andamento pode concluir. O reenvio confere contas e vínculos definitivos para evitar recriá-los; falhas de resposta ou de enfileiramento após o commit exigem conferir também os registros de e-mail. Não há garantia de execução única do transporte.
+
+As instruções das duas telas são voltadas ao preenchimento em planilha, com texto maior, orientação de até 2 MB e sem detalhes de codificação. O parser mantém a tolerância técnica maior para o arquivo de correção, devido às colunas adicionais.
 
 As duas importações usam `ImportCsv` para leitura, escrita e correção, `InteractsWithCsvImport` para upload, paginação e downloads, `csv-import.js` para lotes e componentes Blade comuns para campus, formulário, ações e revisão das linhas. Validadores, autorizações e transações permanecem próprios de cada domínio. A auditoria registra somente as mutações dos cadastros, sem evento extra de conclusão ou alteração artificial do campus.
 

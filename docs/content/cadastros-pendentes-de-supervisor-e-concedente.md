@@ -32,14 +32,14 @@ Em `draft`, campos de negócio podem ser nulos. Em todos os demais estados, as c
 | `cpf` | informado pelo discente, válido e normalizado; obrigatório fora de rascunho. |
 | `phone` / `email` | obrigatórios fora de rascunho e normalizados. |
 | `job_role` | obrigatório fora de rascunho. |
-| `qualification` | obrigatório fora de rascunho. |
-| `training` | nullable; formação declarada. |
-| `professional_experience` | texto nullable; experiência profissional declarada. |
+| `has_academic_background` | escolha entre formação na área e experiência nas atividades do estagiário; obrigatória fora de rascunho. |
+| `training_course` / `education_level` | obrigatórios fora de rascunho no ramo de formação; nível usa o enum `EducationLevel` com as cinco opções do formulário. Vazios no ramo de experiência. |
+| `experience_time` | tempo de experiência na função em texto livre; obrigatório fora de rascunho no ramo de experiência, vazio no ramo de formação. |
 | `supervisor_affiliation_id` | FK nullable para o vínculo criado ou selecionado na aprovação; obrigatório quando `status = approved`. |
 
 Este pedido registra a proposta do discente e a análise do Setor. Os dados profissionais atuais ficam em `user_personal_data`, compartilhados pelos vínculos da mesma conta. Se já houver um vínculo de supervisor selecionável, a solicitação de estágio pode referenciá-lo diretamente e não precisa criar este pedido. Quando houver pendência, o registro mantém os dados profissionais enviados; após aprovação, associa um vínculo de supervisor existente ou criado em transação. No aceite, os dados necessários são copiados para `internships.supervisor_snapshot`.
 
-A Migration 12A guarda o CPF informado pelo discente em coluna própria, validado e normalizado pelo `CpfCast`; `users.cpf` continua único na conta. A associação a uma conta existente ou a criação da conta e do vínculo será feita no futuro fluxo de aprovação. Cargo, qualificação, formação e experiência atuais ficam em `user_personal_data`. O supervisor preenche ou confirma esses dados no futuro formulário, e cada estágio conserva seu próprio snapshot histórico.
+A Migration 12A guarda o CPF informado pelo discente em coluna própria, validado e normalizado pelo `CpfCast`; `users.cpf` continua único na conta. A associação a uma conta existente ou a criação da conta e do vínculo será feita no futuro fluxo de aprovação. Cargo/função, curso de formação, nível e tempo de experiência na função atuais ficam em `user_personal_data`. O supervisor pode manter ambos os conjuntos como referência em Dados pessoais. No futuro formulário de avaliação, escolhe o ramo adequado àquele estagiário e confirma a cópia ou informa outros dados. Cada avaliação e cada estágio conservam suas próprias respostas/snapshots, sem sincronização com o perfil.
 
 ## `granting_party_registration_requests`
 

@@ -18,8 +18,8 @@ source_refs:
 | Setor de Estágio | Próprio campus | Dados do próprio campus, cursos, tipos de estágio e gestão local de usuários/vínculos; dados de acesso de contas locais e dados profissionais opcionais de supervisor; auditoria e e-mails de cadastro e alterações dentro do escopo local; demais fluxos previstos em Policy. | Estágios, documentos, avaliações, pendências e liberação. | Não cria campi nem altera seu ciclo de ativação; não gerencia vínculos de Administrador do Sistema, contas externas ou dados de acesso de outros administradores; não consulta logs administrativos gerais. Aprova/devolve avaliação sem editar a resposta. |
 | Coordenador              | Cursos que referenciam o vínculo       | Consultas e atestado de orientação previsto.                                | Ações acadêmicas explicitamente atribuídas ao curso.      | Não recebe automaticamente a análise operacional do Setor de Estágio.                   |
 | Orientador               | Próprios orientandos                   | Consulta e lançamento das notas sob sua responsabilidade.                   | Avaliação acadêmica que lhe for atribuída.                | Não opera estágios fora dos próprios orientandos.                                       |
-| Discente                 | Próprio vínculo e processos permitidos | Perfil permitido, rascunho e correções do próprio estágio.                  | Não aprova registros.                                     | Não altera CPF, dados alheios ou registros já congelados.                               |
-| Supervisor               | Próprios estágios vinculados           | Draft, envio, cancelamento permitido e edição da própria avaliação devolvida. | Não aprova a própria resposta.                            | `Submitted` bloqueia edição; `Returned` reabre o mesmo formulário; `Approved` é imutável. |
+| Discente                 | Próprio vínculo e processos permitidos | RG, órgão emissor, emissão, nascimento, telefone compartilhado e endereço atual próprios; rascunho e correções do próprio estágio.                  | Não aprova registros.                                     | Não altera CPF, dados alheios ou registros já congelados.                               |
+| Supervisor               | Próprios estágios vinculados           | Cargo/função, curso de formação, nível, tempo de experiência na função e telefone compartilhado próprios; Draft, envio, cancelamento permitido e edição da própria avaliação devolvida. | Não aprova a própria resposta.                            | `Submitted` bloqueia edição; `Returned` reabre o mesmo formulário; `Approved` é imutável. |
 | Direção de Ensino        | Escopo institucional a confirmar       | Consultas e relatórios autorizados.                                         | A definir por decisão institucional.                      | Não presumir poder de edição ou aprovação sem Policy explícita.                         |
 
 ## Regras transversais
@@ -39,6 +39,10 @@ source_refs:
 - [Fase de administração](doc:fase-05-administracao)
 - [Trilhas funcionais por vínculo](doc:pessoas-e-responsabilidades)
 - [Decisão sobre avaliação](doc:backlog-e-decisoes#d-009-ciclo-e-validade-da-avaliacao-do-supervisor)
+
+## Configuração própria de dados pessoais
+
+Implementada na aba Dados pessoais, com perfil único por conta. Exige identidade autenticada e vínculo ativo selecionado de Discente ou Supervisor; não soma permissões de outros vínculos. Discente não altera campos profissionais; Supervisor não altera RG, nascimento ou endereço. Nome, CPF, login, senha, emancipação e dados de outras pessoas não são aceitos. Policy, Form Request e Action revalidam a autorização, inclusive dentro da transação; o identificador de contexto do formulário serve somente para recusar submissão após troca de vínculo. Campos omitidos são preservados e opcionais vazios podem ser limpos. O endereço atual é exclusivo e alterações preservam referências e snapshots históricos. Campus inativo mantém esta configuração pessoal disponível.
 
 ## Gestão de tipos de estágio
 

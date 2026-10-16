@@ -18,7 +18,7 @@ source_refs: https://github.com/sge-suite/sge/blob/master/app/Enums/Registration
 | `Rejected` | `rejected` | Recusada |
 | `Cancelled` | `cancelled` | Cancelada |
 
-`Draft` aceita nulos nos campos cadastrais de supervisor e concedente. Fora dele, o pedido de supervisor exige nome, CPF, telefone, e-mail, cargo e qualificação; o pedido de concedente exige documento CPF/CNPJ, identificação, endereço, representante e área de atuação. `Approved` exige associação ao vínculo de supervisor ou à concedente resultante. `Rejected` e `Cancelled` exigem motivo. Não há exclusão física.
+`Draft` aceita nulos nos campos cadastrais de supervisor e concedente. Fora dele, o pedido de supervisor exige nome, CPF, telefone, e-mail, cargo/função e a escolha entre formação na área ou experiência nas atividades. Formação exige curso e nível (`EducationLevel`); experiência exige tempo de experiência na função; o pedido de concedente exige documento CPF/CNPJ, identificação, endereço, representante e área de atuação. `Approved` exige associação ao vínculo de supervisor ou à concedente resultante. `Rejected` e `Cancelled` exigem motivo. Não há exclusão física.
 
 ## Checklist
 

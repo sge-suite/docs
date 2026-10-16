@@ -30,6 +30,7 @@ source_refs:
 | ✅ Implementado | [Enum — GeneratedDocumentStatus](doc:enum-generateddocumentstatus)    | `generated_documents.status`     |
 | ✅ Implementado | [Enum — GeneratedDocumentOrigin](doc:enum-generateddocumentorigin)    | `generated_documents.origin`     |
 | ✅ Implementado | [Enum — EvaluationStatus](doc:enum-evaluationstatus)           | `supervisor_evaluations.status`  |
+| ✅ Implementado | `EducationLevel` | nível de formação do supervisor no perfil de referência, pedido de cadastro e avaliação; cinco opções do formulário, detalhadas na [Migration 02](doc:migration-02-user-personal-data). |
 | ✅ Implementado | `EvaluationConcept` | opções de conceitos da avaliação, com rótulos em português. |
 | ✅ Implementado | [Enum — RegistrationRequestStatus](doc:enum-registrationrequeststatus)  | solicitações de cadastro pendente |
 | ✅ Implementado | [Enum — InternshipCancellationRequestStatus](doc:enum-internshipcancellationrequeststatus) | `internship_cancellation_requests.status` |

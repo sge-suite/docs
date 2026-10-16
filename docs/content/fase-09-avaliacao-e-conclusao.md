@@ -26,6 +26,9 @@ Implemente o cálculo puro das notas e as transições/autorização no backend 
 
 ## Implementação
 
+- [x] Alinhar curso, nível (`EducationLevel`), cargo/função e tempo de experiência aos dois ramos do formulário e preparar a cópia própria pela Action `PrepareSupervisorEvaluationReference`, sem gravação automática.
+- [ ] Integrar a cópia à tela de avaliação, permitindo confirmar os dados de referência ou informar outros sem alterar o perfil.
+
 - [ ] Registrar a liberação no estágio e notificar o supervisor pelo vínculo e canal permitido.
 - [ ] Permitir autosave Livewire em `Draft`, com campos nulos até o preenchimento completo.
 - [ ] Validar campos obrigatórios e condicionais antes do envio e em estados não `Draft`.

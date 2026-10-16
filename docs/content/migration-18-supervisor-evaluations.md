@@ -6,7 +6,7 @@ type: migration-reference
 status: implemented
 visibility: public
 tags: sge/migrations, sge/avaliacao, sge/banco-de-dados
-related: enum-evaluationstatus, backlog-e-decisoes, fase-09-avaliacao-e-conclusao
+related: migration-02-user-personal-data, enum-evaluationstatus, backlog-e-decisoes, fase-09-avaliacao-e-conclusao
 source_refs:
 ---
 > [!info] Estado
@@ -58,7 +58,9 @@ O formulário é fixo. Não há tabela de definições do formulário, versão p
 | Comentários | `considerations`, `suggestions_to_institution`, `performance_issues`, `other_observations` |
 | Carga horária | `hours_requirement_met`, `estimated_hours_remaining` |
 
-`has_academic_background` e `job_role` são obrigatórios fora de `Draft`. Quando `has_academic_background` for verdadeiro, `training_course` e `education_level` são obrigatórios e `experience_time` fica nulo; quando for falso, os dados de formação ficam nulos e `experience_time` é obrigatório. Essa regra segue os ramos do formulário atual do supervisor. Os dez critérios são obrigatórios fora de rascunho e precisam ser um dos valores de `EvaluationConcept`, cujos rótulos em português são usados na interface. O snapshot do tipo de estágio conserva os valores dos conceitos, com a chave `excellent` exibida como “Ótimo” e `unsatisfactory` usando o valor configurado no tipo. Os quatro comentários são opcionais em qualquer estado.
+`has_academic_background` e `job_role` são obrigatórios fora de `Draft`. Quando `has_academic_background` for verdadeiro, `training_course` e `education_level` são obrigatórios e `experience_time` fica nulo; quando for falso, os dados de formação ficam nulos e `experience_time` é obrigatório. Essa regra segue os ramos do formulário atual do supervisor. `education_level` usa o enum PHP `EducationLevel`, persistido em string, com exatamente Médio/Técnico, Graduação/Tecnólogo, Especialização, Mestrado e Doutorado. `experience_time` continua texto livre, conforme o campo do formulário. Os campos do ramo oposto também são recusados em rascunho quando a escolha foi informada. Os dez critérios são obrigatórios fora de rascunho e precisam ser um dos valores de `EvaluationConcept`, cujos rótulos em português são usados na interface. O snapshot do tipo de estágio conserva os valores dos conceitos, com a chave `excellent` exibida como “Ótimo” e `unsatisfactory` usando o valor configurado no tipo. Os quatro comentários são opcionais em qualquer estado.
+
+A Action `PrepareSupervisorEvaluationReference` prepara uma cópia explícita dos dados profissionais do perfil para a futura tela de avaliação. Exige identidade autenticada, vínculo ativo e selecionado de Supervisor e estágio associado a esse mesmo vínculo; não recebe `user_id` nem busca dados de terceiros. A escolha do ramo é relativa àquele estágio: copia cargo/função e somente curso/nível ou tempo de experiência, retornando nulos para o ramo oposto. Perfil ausente retorna campos nulos. A Action não grava avaliação nem perfil; a futura tela deverá permitir confirmar os valores ou digitar outros, validando e autorizando novamente no salvamento. Não há sincronização automática; respostas persistidas e snapshots históricos permanecem independentes do perfil.
 
 Fora de `Draft`, `hours_requirement_met` é obrigatório. Quando for falso, `estimated_hours_remaining` é obrigatório e positivo; o supervisor ainda preenche os demais campos. A identificação do discente vem do estágio, não de texto livre na avaliação.
 
@@ -102,6 +104,8 @@ Fora de `Draft`, `hours_requirement_met` é obrigatório. Quando for falso, `est
 - [x] Confirmar o contrato de campos contra critérios e escalas aprovados.
 - [x] Criar [`EvaluationStatus`](doc:enum-evaluationstatus).
 - [x] Criar `supervisor_evaluations` com respostas em colunas, sem versão do formulário nem FK de revisor; acrescentar as referências de avaliação vigente em `internships`, Models, casts e índices.
+- [x] Alinhar o enum de nível e as regras condicionais com o cadastro e preparar a cópia própria, explícita e sem persistência automática.
+- [ ] Implementar a confirmação/edição da referência na tela completa da avaliação.
 - [ ] Implementar liberação, notificação e ações de salvamento/envio; o Model já valida rascunho parcial e imutabilidade após envio.
 - [ ] Implementar autosave Livewire em `Draft` e edição integral em `Returned` com auditoria de alterações.
 - [ ] Atualizar a avaliação vigente em transação após aprovação.

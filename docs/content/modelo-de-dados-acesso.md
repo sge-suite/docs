@@ -39,6 +39,10 @@ A caixa operacional usa `Affiliation::notifications()` após a Policy validar qu
 > [!note] Último vínculo usado
 > `last_used_at` guarda apenas o último vínculo ativo selecionado ou escolhido numa troca explícita de contexto; não é auditoria de login. O contexto implementado restaura o último vínculo ainda ativo; quando nenhum vínculo tem uso anterior, pede escolha explícita. A seleção e a troca atualizam o campo, mas requisições comuns e restauração não. A validação ocorre em cada requisição funcional; detalhes estão na [Fase 02](doc:fase-02-conta-e-contexto).
 
+## Perfil pessoal compartilhado
+
+A aba Dados pessoais usa a relação existente `User::personalData()` e o `user_id` único de `user_personal_data`, sem perfil por vínculo nem nova migration. A própria pessoa edita somente os campos autorizados pelo vínculo ativo selecionado: identificação, nascimento e endereço no contexto Discente; dados profissionais no contexto Supervisor; telefone compartilhado nos dois contextos. As gravações releem conta e vínculo no servidor e não recebem identidade, tipo ou campus livres. Campos omitidos permanecem; opcionais podem ser limpos explicitamente. Endereço usa cidade do catálogo e CEP validado, recebe linha exclusiva e preserva referências históricas ao mudar. Nome, CPF, acesso, emancipação e snapshots de estágios não são editados nesse fluxo.
+
 ## Convenção de implementação
 
 - um middleware resolve e valida o vínculo ativo da sessão, incluindo `deactivated_at`;

@@ -128,7 +128,7 @@ Cada versão declara quais itens abaixo são obrigatórios ou opcionais. Uma var
 | `${SUPERVISOR_NOME}` | `supervisor_snapshot.name`. |
 | `${SUPERVISOR_EMAIL}` / `${SUPERVISOR_TELEFONE}` | contatos do snapshot. |
 | `${SUPERVISOR_CARGO}` | cargo/função na concedente. |
-| `${SUPERVISOR_QUALIFICACAO}` | qualificação declarada e aprovada. |
+| `${SUPERVISOR_QUALIFICACAO}` | qualificação confirmada no snapshot: curso e nível de formação ou tempo de experiência na função, conforme o contexto; não ler o perfil atual para documentos históricos. |
 | `${SUPERVISOR_FORMACAO}` / `${SUPERVISOR_EXPERIENCIA}` | opcionais conforme o documento. |
 
 ### Estágio, jornada e remuneração

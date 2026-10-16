@@ -24,8 +24,10 @@ Na Migration 19, a solicitação de estágio aponta diretamente para um vínculo
 | --- | --- |
 | `id` | `bigint`, chave primária. |
 | `cpf` | `varchar(255)` nullable no banco; obrigatório fora de `Draft`, validado e normalizado pelo `CpfCast`. O banco não limita o comprimento. |
-| `name`, `phone`, `email`, `job_role`, `qualification` | `varchar(255)` nullable no banco; no Model são obrigatórios e validados fora de `Draft`. |
-| `training`, `professional_experience` | `text` nullable e opcionais. |
+| `name`, `phone`, `email`, `job_role` | `varchar(255)` nullable no banco; no Model são obrigatórios e validados fora de `Draft`. |
+| `has_academic_background` | `boolean` nullable em `Draft`; obrigatório nos demais estados, relativo à área do estagiário. |
+| `training_course`, `education_level` | `varchar(255)` nullable; obrigatórios fora de `Draft` no ramo de formação. Nível usa `EducationLevel`, com as cinco opções do formulário. |
+| `experience_time` | `varchar(255)` nullable; tempo de experiência em texto livre, obrigatório fora de `Draft` no ramo de experiência. |
 | `status` | `varchar(255)` obrigatório, convertido pelo cast PHP `RegistrationRequestStatus`. |
 | `supervisor_affiliation_id` | `bigint` nullable, única FK para `affiliations`, com `ON DELETE RESTRICT`; deve ser vínculo do tipo `Supervisor` e é obrigatório em `Approved`. |
 | `reviewed_at` | `timestamp(0)` nullable, convertido para datetime. |
@@ -36,11 +38,11 @@ O schema cria somente a chave primária e a FK do vínculo resultante. Não há 
 
 ## Model, relação e validação
 
-`SupervisorRegistrationRequest` relaciona-se com a `Affiliation` do supervisor resultante; `Affiliation` expõe a relação inversa. O Model usa os casts de `RegistrationRequestStatus`, `CpfCast`, `PhoneCast` e datetime.
+`SupervisorRegistrationRequest` relaciona-se com a `Affiliation` do supervisor resultante; `Affiliation` expõe a relação inversa. O Model usa os casts de `RegistrationRequestStatus`, `EducationLevel`, boolean, `CpfCast`, `PhoneCast` e datetime.
 
-No evento `saving`, nome, CPF, telefone, e-mail, cargo e qualificação podem ficar nulos somente em `Draft`; nos demais status exigem conteúdo válido. O `CpfCast` valida CPF brasileiro e o persiste apenas com dígitos; o telefone usa o `PhoneCast` existente e também é persistido apenas com dígitos. Treinamento e experiência profissional são opcionais. Aprovação exige uma FK para vínculo do tipo `Supervisor`; recusa e cancelamento exigem motivo. Não há transições de status ou fluxo de análise nesta migration.
+No evento `saving`, nome, CPF, telefone, e-mail e cargo/função podem ficar nulos somente em `Draft`; nos demais status exigem conteúdo válido. O `CpfCast` valida CPF brasileiro e o persiste apenas com dígitos; o telefone usa o `PhoneCast` existente e também é persistido apenas com dígitos. A escolha `has_academic_background` é obrigatória fora de `Draft`: formação na área exige curso e nível, deixando tempo de experiência vazio; experiência nas atividades exige tempo de experiência, deixando curso e nível vazios. Mesmo em rascunho, não se misturam os dois ramos quando a escolha já foi informada. A validação é compartilhada com o Model da avaliação. Aprovação exige uma FK para vínculo do tipo `Supervisor`; recusa e cancelamento exigem motivo. Não há transições de status ou fluxo de análise nesta migration.
 
-A identidade da conta fica em `users`, que possui CPF único, nome e e-mail. O pedido guarda o CPF informado pelo discente, sem unicidade própria; na criação da conta, a unicidade de `users.cpf` continua sendo a regra final. A associação a uma conta ou vínculo existente e a criação transacional pertencem ao fluxo futuro. Os campos profissionais atuais pertencem a `user_personal_data`; o usuário supervisor poderá preenchê-los ou confirmá-los no futuro formulário, após a criação da conta e do vínculo. A autorização de edição por tipo de vínculo e a composição do snapshot do estágio serão implementadas no fluxo funcional.
+A identidade da conta fica em `users`, que possui CPF único, nome e e-mail. O pedido guarda o CPF informado pelo discente, sem unicidade própria; na criação da conta, a unicidade de `users.cpf` continua sendo a regra final. A associação a uma conta ou vínculo existente e a criação transacional pertencem ao fluxo futuro. Os campos profissionais atuais pertencem a `user_personal_data`; o usuário supervisor pode mantê-los em Configurações → Dados pessoais, após a criação da conta e do vínculo. Esses dados são apenas referência para cópia e confirmação em cada avaliação. A composição do snapshot do estágio e o fluxo de análise permanecem planejados.
 
 ## Auditoria
 

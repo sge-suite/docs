@@ -35,7 +35,7 @@ Esta é a referência operacional para implementar as telas, Gates, Policies e t
 | Coordenador | cursos que o referenciam como coordenador | consulta acadêmica | não | atestado de orientação previsto |
 | Orientador | próprios orientandos | sim, nas notas acadêmicas | não | lançamento de relatório e apresentação |
 | Discente | próprio vínculo/processo | sim, na própria solicitação e pedidos | próprios dados permitidos | envio, correção, desistência e pedido de cancelamento |
-| Supervisor | estágios sob sua supervisão | sim, na própria avaliação | não | envio ou cancelamento da própria avaliação |
+| Supervisor | estágios sob sua supervisão e perfil próprio permitido | sim, na própria avaliação | próprios dados profissionais e telefone | envio ou cancelamento da própria avaliação |
 | Direção de Ensino | institucional a confirmar | consulta, quando autorizada | não | nenhuma definida atualmente |
 
 ## Administrador do Sistema
@@ -177,7 +177,7 @@ Opera exclusivamente a própria solicitação e o próprio estágio, dentro do c
 
 ### Ações permitidas
 
-- alterar a própria senha e e-mail de login; como discente, também atualizar RG, nascimento e endereço atuais permitidos;
+- alterar a própria senha e e-mail de login pelos fluxos existentes; na aba Dados pessoais, atualizar RG, órgão emissor, emissão, nascimento, telefone compartilhado e endereço atual, exclusivamente no contexto Discente;
 - criar, salvar progressivamente e editar a própria solicitação em `Draft`;
 - enviar a solicitação, responder uma devolução nas seções liberadas e acompanhar o resultado da análise;
 - registrar a capacidade civil, informar responsável quando necessário e enviar comprovante privado de emancipação pelo SGE;
@@ -208,6 +208,7 @@ Responde pela avaliação dos estágios em que está formalmente vinculado como 
 
 ### Ações permitidas
 
+- atualizar cargo/função, curso de formação, nível e tempo de experiência na função e telefone compartilhado na aba Dados pessoais, exclusivamente no contexto Supervisor;
 - consultar os próprios estágios e avaliações liberadas;
 - criar ou continuar a avaliação em `Draft`, com salvamento progressivo;
 - enviar a avaliação completa como `Submitted`;
@@ -253,6 +254,10 @@ Não há notificações operacionais definidas. Consultas a relatórios ou dados
 ### Controles a implementar
 
 Criar `TeachingDirectionReportPolicy` somente após confirmar relatórios, abrangência e necessidade de dados pessoais. Na preparação para produção, validar ausência de permissão de escrita e negar acesso a relatórios fora do escopo ainda não decidido.
+
+## Configuração própria de dados pessoais — implementada
+
+`UserPersonalDataPolicy`, `UpdateOwnPersonalDataRequest` e `UpdateOwnPersonalData` limitam a edição à pessoa autenticada com vínculo ativo selecionado de Discente ou Supervisor. A aba e o seletor de cidade reautorizam requisições Livewire. Vários vínculos não somam permissões: Discente não altera dados profissionais; Supervisor não altera RG, nascimento ou endereço. O perfil é único por conta, o telefone é compartilhado e campus inativo não bloqueia esta configuração. Campos omitidos permanecem; opcionais podem ser limpos explicitamente. RG preenchido exige órgão e emissão; datas futuras, telefone inválido, cidade fora do catálogo e CEP inválido são recusados. Mudanças de endereço preservam propriedade exclusiva e referências históricas; nenhuma snapshot de estágio é editada. Eventos normais dos Models registram mudanças reais com autoria do vínculo, sem evento genérico nem ampliação de consulta ao Activity Log. As exigências de envio dos fluxos de estágio e avaliação continuam pendentes.
 
 ## Mapa de implementação e validação antes da produção
 

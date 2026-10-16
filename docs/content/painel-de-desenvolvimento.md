@@ -22,7 +22,7 @@ Para a sequência e o andamento atuais, consulte [Fases de desenvolvimento](doc:
 
 - [Fase 00 — Preparação](doc:fase-00-preparacao) — **completed** — Checklist do ambiente, qualidade e fluxo de trabalho do projeto novo.
 - [Fase 01 — Fundação de dados](doc:fase-01-fundacao-de-dados) — **completed** — Migrations, Models e factories da base de dados.
-- [Fase 02 — Conta e contexto](doc:fase-02-conta-e-contexto) — **in-progress** — Contexto, `admin:create`, administração de contas/vínculos administrativos, troca própria de senha/e-mail e avisos implementados; edição própria de perfil pessoal pendente.
+- [Fase 02 — Conta e contexto](doc:fase-02-conta-e-contexto) — **in-progress** — Contexto, `admin:create`, administração de contas/vínculos administrativos, troca própria de senha/e-mail e avisos implementados; configuração própria de dados pessoais de Discente e Supervisor implementada, incluindo endereço com busca por CEP; validações restantes da fase seguem pendentes.
 - [Fase 03 — Activity Log](doc:fase-03-activity-log) — **completed** — Eventos Eloquent, autoria por vínculo e auditoria dos campos pessoais e profissionais implementados.
 - [Fase 04 — Integração de e-mail](doc:fase-04-integracao-de-email) — **in-progress** — Pipeline em fila e três fluxos de conta integrados; notificações operacionais de domínio e administração de entregas pendentes.
 - [Fase 05 — Administração hierárquica](doc:fase-05-administracao) — **in-progress** — Gestão global de campi, administração de contas e vínculos e painel global do Administrador do Sistema concluídos; interface local, cursos, tipos e demais operações administrativas pendentes.
@@ -40,6 +40,7 @@ Para a sequência e o andamento atuais, consulte [Fases de desenvolvimento](doc:
 - [Enum — EmailDeliveryAttemptStatus](doc:enum-emaildeliveryattemptstatus) — **implemented** — Estados usados pelo Job de entrega e pela Action de reprocessamento.
 - [Enum — EmailMessagePurpose](doc:enum-emailmessagepurpose) — **implemented** — Finalidades dos fluxos de notificação, conta criada, novo vínculo e alteração de e-mail já implementados.
 - [Enum — EmancipationEvidenceStatus](doc:enum-emancipationevidencestatus) — **implemented** — Cast e validação do Model `EmancipationEvidence`; upload HTTP e análise ainda pendentes.
+- `EducationLevel` — **implemented** — Cinco níveis de formação do formulário do supervisor, usados no perfil, pedido de cadastro e avaliação; contrato na [Migration 02](doc:migration-02-user-personal-data).
 - [Enum — EvaluationStatus](doc:enum-evaluationstatus) — **implemented** — Cast e validação do Model `SupervisorEvaluation`, com schema da Migration 18; fluxo funcional de análise pendente.
 - [Enum — GeneratedDocumentOrigin](doc:enum-generateddocumentorigin) — **implemented** — Origem do documento registrado no processo de estágio.
 - [Enum — GeneratedDocumentStatus](doc:enum-generateddocumentstatus) — **implemented** — Ciclo de vida de cada documento gerado ou registrado no estágio.
@@ -111,7 +112,7 @@ Sequência física dos arquivos em `database/migrations`; os números permanecem
 - [Helper — Funções globais](doc:helper-funcoes-globais) — **implemented** — Funções globais carregadas pelo Composer que delegam a helpers de domínio.
 - [Helper — NumberToWordsHelper](doc:helper-numbertowordshelper) — **implemented** — Conversão determinística de números e valores em reais para texto por extenso.
 - [Helpers](doc:helpers) — **in-progress** — Índice dos helpers de formatação, normalização e apresentação do SGE.
-- [Model — User](doc:model-user) — **in-progress** — Conta autenticável, autoria no Activity Log, recuperação de senha enfileirada, relações e identificação editável pela administração; edição própria do perfil pessoal segue pendente.
+- [Model — User](doc:model-user) — **in-progress** — Conta autenticável, autoria no Activity Log, recuperação de senha enfileirada, relações e identificação editável pela administração; configuração própria do perfil pessoal implementada para Discente e Supervisor, com autorização por vínculo selecionado.
 - [Provider — AppServiceProvider](doc:provider-appserviceprovider) — **implemented** — Auditoria, integridade de `activity_log`, proteção Eloquent, locale, timezone e moeda.
 - [Provider — FortifyServiceProvider](doc:provider-fortifyserviceprovider) — **implemented** — Configuração atual de Actions, telas e rate limiting de autenticação do Fortify.
 - [Providers](doc:providers) — **in-progress** — Índice dos Service Providers que configuram autenticação, locale, moeda e comportamento Eloquent.

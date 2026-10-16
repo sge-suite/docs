@@ -15,7 +15,7 @@ Esta lista registra a sequência e o estado atuais. A fundação de dados está 
 
 - [x] [00 — Preparação](doc:fase-00-preparacao)
 - [ ] [01 — Fundação de dados](doc:fase-01-fundacao-de-dados) — migrations, Models e factories concluídos; testes automatizados serão retomados antes da produção.
-- **02 — Conta e contexto (em andamento):** contexto ativo, seleção/troca, `admin:create`, gestão de contas/vínculos administrativos, alteração própria de senha/e-mail e avisos correspondentes implementados; edição de perfil pessoal próprio permanece pendente.
+- **02 — Conta e contexto (em andamento):** contexto ativo, seleção/troca, `admin:create`, gestão de contas/vínculos administrativos, alteração própria de senha/e-mail e avisos correspondentes implementados; edição própria de dados pessoais de Discente e Supervisor, com telefone compartilhado e endereço com busca por CEP, implementada. As verificações pendentes da fase continuam em seu checklist.
 - **[03 — Activity Log](doc:fase-03-activity-log) (concluída):** auditoria Eloquent, autoria por vínculo, registro dos campos pessoais e profissionais de `UserPersonalData` e consulta administrativa com escopo limitado implementados.
 - **[04 — Integração de e-mail](doc:fase-04-integracao-de-email) (em andamento):** backend de reserva, envio em fila, conteúdo renderizado das mensagens administrativas e consulta de e-mails compartilhada por Administrador do Sistema e Setor de Estágio, com escopos distintos, implementados; integração das notificações operacionais de domínio, outros escopos e retenção continuam pendentes.
 

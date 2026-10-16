@@ -11,7 +11,7 @@ source_refs: https://github.com/sge-suite/sge/blob/master/app/Support/ActiveAffi
 ---
 Referências: [modelo de acesso](doc:modelo-de-dados-acesso), [E-mails, notificações e entregas](doc:e-mails-notificacoes-e-entregas) e [fluxo de login](doc:fluxos-principais#1-acesso-e-vinculo).
 
-O contexto de vínculo ativo, a proteção do painel, a seleção e troca de vínculo, `admin:create` e as configurações próprias de senha e e-mail estão implementados. O Administrador do Sistema também pode cadastrar contas e vínculos administrativos pela interface, na [Fase 05](doc:fase-05-administracao). A edição de perfil pessoal fora da administração de contas segue pendente.
+O contexto de vínculo ativo, a proteção do painel, a seleção e troca de vínculo, `admin:create` e as configurações próprias de senha e e-mail estão implementados. O Administrador do Sistema também pode cadastrar contas e vínculos administrativos pela interface, na [Fase 05](doc:fase-05-administracao). As configurações próprias de Discente e Supervisor estão implementadas na aba **Dados pessoais**, com perfil único compartilhado pela conta.
 
 ## Login e recuperação de senha
 
@@ -51,9 +51,19 @@ O contexto de vínculo ativo, a proteção do painel, a seleção e troca de ví
 - [x] Exibir o e-mail da conta sem edição em Perfil, com link para Segurança. Em Segurança, exigir confirmação de senha para acessar a página e pedir a senha atual e duas entradas iguais do novo e-mail no formulário de troca. Validar formato e unicidade, normalizar o endereço e exigir vínculo ativo da própria conta. A atualização de `users.email` e a reserva de dois avisos na fila ocorrem na mesma transação: um para o endereço anterior e outro para o novo. O novo e-mail passa a ser usado no login e na recuperação de senha; `affiliations.email` permanece igual. O fluxo não exige confirmação pelo novo endereço antes da troca.
 - [x] Impedir alteração do nome na configuração atual.
 - [x] Permitir ao Administrador do Sistema corrigir o CPF na edição administrativa da conta, validando formato e unicidade; a pessoa não o altera na configuração própria.
-- [ ] Permitir ao discente alterar RG, nascimento e endereço atual.
-- [ ] Impedir edição de dados pessoais por outro vínculo.
+- [x] Permitir ao Discente alterar RG, órgão emissor, data de emissão, nascimento, telefone e endereço atual.
+- [x] Usar campos profissionais estruturados e o enum `EducationLevel` conforme o formulário, como referência opcional de cópia independente para avaliações.
+- [x] Permitir ao Supervisor alterar cargo/função, curso de formação, nível e tempo de experiência na função e telefone compartilhado.
+- [x] Impedir edição de campos fora do tipo de vínculo ativo selecionado e de dados de outra pessoa.
+- [x] Revalidar identidade, vínculo, tipo e posse na gravação transacional; recusar formulários de um vínculo que deixou de ser o selecionado.
+- [x] Preservar campos omitidos, permitir limpeza explícita dos opcionais e validar o conjunto do RG, datas sem futuro, telefone e endereço.
+- [x] Manter endereço próprio com cidade do catálogo e CEP validado por PT-BR Validator; preservar referências históricas e snapshots ao substituir ou remover o endereço atual.
+- [x] Reutilizar a busca por CEP e o modal de revisão de Campus e Concedente, sem salvar antes da confirmação do formulário.
+
+Os campos continuam opcionais nesta configuração; RG, órgão emissor e emissão são exigidos em conjunto quando preenchidos. A exigência de telefone e de outros dados no envio da solicitação de estágio pertence ao futuro fluxo de solicitação. Desmarcar **Informar endereço atual** remove explicitamente a associação atual, sem apagar endereços históricos. Campus inativo não bloqueia estas configurações pessoais.
+
+A interface reutiliza o layout de configurações, os campos de endereço, o seletor de cidade e a busca por CEP com revisão. `InteractsWithAddressLookup` compartilha a lógica com Campus e Concedente: consulta BrasilAPI, resolve cidade no catálogo, preserva número e campos não retornados, permite cancelar e invalida a proposta se o CEP mudar. Consulta e aplicação não gravam nem auditam; falhas mantêm o preenchimento manual. Form Request, Policy e Action não aceitam edição de nome, CPF, login, senha ou emancipação. A auditoria usa os eventos normais dos Models com o vínculo responsável; salvar sem mudanças não cria atividade nem evento genérico de perfil. A entrega foi verificada sem Pest, com 171 checagens temporárias em SQLite em memória, incluindo renderização completa em sete cenários de criação e edição de usuários/vínculos nos contextos do Setor e do Administrador do Sistema. Também passaram análise estática do backend alterado, sintaxe dos templates compilados, Pint, compilação Blade e build. A extração dos SFCs existentes de Campus e Concedente mantém oito diagnósticos estáticos anteriores, reproduzidos nas versões originais. Validação de concorrência em PostgreSQL e navegação real continuam pendentes.
 
 ## Fase seguinte na sequência
 
-O contexto e as configurações de acesso implementados dão suporte às próximas fases. A gestão administrativa de contas e vínculos está disponível; seguem em aberto as edições pessoais próprias e as jornadas de domínio.
+O contexto e as configurações de acesso implementados dão suporte às próximas fases. A gestão administrativa de contas e vínculos está disponível; as configurações pessoais próprias estão disponíveis e seguem em aberto as jornadas de domínio.

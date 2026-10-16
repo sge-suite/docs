@@ -30,7 +30,7 @@ A auditoria e o histórico de e-mails compartilham telas entre Administrador do 
 
 ## Delimitação de responsabilidade
 
-`users` mantém autenticação, CPF e e-mail de login. O Administrador do Sistema e o Setor de Estágio autorizado podem editar nome, CPF e e-mail pela área Usuários; o Setor fica limitado às contas do campus, não altera dados de acesso de outros administradores e pode editar a própria conta mesmo quando também possui vínculo de Administrador do Sistema; a alteração do endereço de login envia avisos ao endereço anterior e ao novo. [`user_personal_data`](doc:migration-02-user-personal-data) guarda dados pessoais atuais e campos profissionais opcionais do supervisor em um perfil compartilhado pela conta. Cadastro e login não exigem esse perfil. O Setor pode informar e editar os dados profissionais opcionais ao cadastrar ou editar um vínculo de supervisor, sem matrícula. O futuro formulário do supervisor poderá preencher ou confirmar esses dados com autorização própria. Excluir um vínculo não exclui a conta nem esse perfil.
+`users` mantém autenticação, CPF e e-mail de login. O Administrador do Sistema e o Setor de Estágio autorizado podem editar nome, CPF e e-mail pela área Usuários; o Setor fica limitado às contas do campus, não altera dados de acesso de outros administradores e pode editar a própria conta mesmo quando também possui vínculo de Administrador do Sistema; a alteração do endereço de login envia avisos ao endereço anterior e ao novo. [`user_personal_data`](doc:migration-02-user-personal-data) guarda dados pessoais atuais e campos profissionais opcionais do supervisor em um perfil compartilhado pela conta. Cadastro e login não exigem esse perfil. O Setor pode informar e editar os dados profissionais opcionais ao cadastrar ou editar um vínculo de supervisor, sem matrícula. A aba Dados pessoais permite ao Supervisor preencher ou confirmar seus dados profissionais e o telefone compartilhado. No contexto Discente, permite RG, órgão emissor, emissão, nascimento, telefone e endereço com busca por CEP e revisão. Policy e Action revalidam a própria conta e o vínculo ativo selecionado, sem editar dados de acesso ou snapshots históricos. Excluir um vínculo não exclui a conta nem esse perfil.
 
 ## Checklist
 
@@ -40,6 +40,7 @@ A auditoria e o histórico de e-mails compartilham telas entre Administrador do 
 - [x] Aplicar `CpfCast` no estado atual.
 - [x] Criar relações com `Affiliation` e `UserPersonalData` e habilitar notificações nativas do Laravel. A conta não possui relação direta com `EmailMessage`; seu histórico é separado.
 - [x] Manter CPF em `$fillable`, docblock e casts de `User`.
+- [x] Disponibilizar configuração própria de dados pessoais de Discente e Supervisor por meio do perfil único da conta, com campos restritos ao vínculo ativo selecionado.
 - [ ] Testar conta sem dados pessoais completos.
 - [ ] Testar conta com múltiplos vínculos em PostgreSQL.
 - [x] Permitir a administração de nome, CPF e e-mail de login por `UserController`, preservando as notificações de troca de e-mail e a auditoria sem senha.

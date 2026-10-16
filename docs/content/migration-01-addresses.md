@@ -10,7 +10,7 @@ related: migration-01a-cities, actions, concerns, testes-existentes, dominio-e-m
 source_refs: https://github.com/sge-suite/sge/blob/master/database/migrations/2026_09_16_153327_create_addresses_table.php, https://github.com/sge-suite/sge/blob/master/app/Models/Address.php, https://github.com/sge-suite/sge/blob/master/app/Concerns/AddressValidationRules.php, https://github.com/sge-suite/sge/blob/master/app/Actions/CopyAddress.php
 ---
 > [!success] Estado
-> Base backend implementada: migration, model, factories, relacionamentos, validação dos campos obrigatórios, Activity Log e cópia histórica. CEP obrigatório com PT-BR Validator e consulta com revisão estão implementados nos formulários de campus. Integrações restantes e a formalização continuam pendentes.
+> Base backend implementada: migration, model, factories, relacionamentos, validação dos campos obrigatórios, Activity Log e cópia histórica. CEP obrigatório com PT-BR Validator e consulta com revisão estão implementados nos formulários de campus. A configuração própria do Discente também integra o endereço atual e a consulta por CEP com revisão; a formalização continua pendente.
 
 ## Contrato implementado
 
@@ -55,7 +55,7 @@ O Activity Log registra a identificação do cadastro proprietário em `properti
 
 Uma origem não persistida gera `InvalidArgumentException`; se a linha já foi removida, a releitura gera `ModelNotFoundException`. A criação da cópia também passa pelas regras do model e pelo Activity Log.
 
-O fluxo de campus impede editar seu endereço quando uma referência de outro proprietário ou estágio aponta para a mesma linha. Não há bloqueio genérico de edição/exclusão de endereços históricos para os demais cadastros; essa proteção será implementada junto às futuras FKs e operações de formalização. A cópia existe, mas os outros fluxos ainda precisam integrar seu uso.
+O fluxo de campus impede editar seu endereço quando uma referência de outro proprietário ou estágio aponta para a mesma linha. Na configuração própria do Discente, alterações criam nova linha e associam somente o perfil atual. Endereço já associado a outro proprietário ou estágio também recebe uma linha exclusiva ao ser enviado, mesmo com conteúdo igual. Substituição e remoção explícita apagam o endereço anterior somente sem qualquer referência; referências históricas e snapshots permanecem intactos. Campos de endereço omitidos preservam valores e um endereço informado deve estar completo, com cidade do catálogo e CEP válido. Não há edição direta de endereço histórico por esse fluxo. Não há bloqueio genérico de edição/exclusão de endereços históricos para todas as demais operações; essa proteção será implementada junto às futuras FKs e operações de formalização. A cópia existe, mas os outros fluxos ainda precisam integrar seu uso.
 
 Na formalização futura, `internships.workplace_address_id` deverá apontar para uma cópia do endereço da concedente nesta mesma tabela. `internships.student_address_id` poderá apontar para a cópia do endereço do discente quando necessário. Essas linhas deverão ser preservadas sem alterações retroativas; a mudança do cadastro atual poderá criar outra linha e trocar sua FK.
 
@@ -78,12 +78,14 @@ Não há testes automatizados no repositório atualmente. Na preparação para p
 - [x] Validar cidade, logradouro, bairro e número textual, incluindo `s/n`.
 - [x] Usar timestamps nativos, sem casts explícitos de data.
 - [x] Registrar alterações cadastrais no Activity Log, sem campos de autoria.
-- [ ] Implementar e testar a cópia histórica na própria tabela.
+- [x] Implementar a cópia histórica na própria tabela.
+- [ ] Validar a cópia histórica em suíte automatizada persistente.
 - [ ] Testar schema, migrate, rollback e persistência em PostgreSQL.
 - [x] Atualizar [Domínio e modelo de dados](doc:dominio-e-modelo-de-dados).
 - [x] Validar CEP obrigatoriamente com PT-BR Validator e armazenar somente oito dígitos.
 - [x] Implementar consulta opcional de CEP nos formulários de campus, com revisão e resolução da cidade no catálogo local.
-- [ ] Criar telas e endpoints de cadastro nas etapas correspondentes.
+- [x] Integrar campos, busca por CEP com revisão e gravação de endereço atual nas configurações próprias do Discente, preservando propriedade e histórico.
+- [ ] Completar telas e endpoints nas demais etapas de domínio.
 - [ ] Integrar cópias e impedir alteração/exclusão de linhas históricas ao implementar a formalização.
 
 ## Próximas dependências

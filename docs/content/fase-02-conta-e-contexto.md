@@ -39,7 +39,7 @@ O contexto de vínculo ativo, a proteção do painel, a seleção e troca de ví
 - [x] Bloquear acesso funcional sem vínculo ativo.
 - [x] Selecionar automaticamente um único vínculo e exibir escolha para vários.
 - [x] Armazenar vínculo atual na sessão.
-- [x] Permitir troca sem novo login.
+- [x] Permitir troca sem novo login. Com exatamente dois vínculos ativos, o menu troca diretamente para o outro por POST autenticado com CSRF e mostra toast Flux com o novo contexto no painel. Com mais de dois, mantém a tela de escolha. A quantidade e a posse são revalidadas no servidor; se o cenário mudar ou não houver seleção válida, retorna à tela de escolha.
 - [x] Atualizar contexto de autorização, campus e `last_used_at`.
 - [x] Registrar middleware/serviço único para resolver o vínculo ativo em cada requisição.
 - [x] Registrar o vínculo usado em ações relevantes.

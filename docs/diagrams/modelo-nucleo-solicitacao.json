@@ -2,8 +2,8 @@
   "id": "modelo-nucleo-solicitacao",
   "kind": "db-schema",
   "title": "Esquema lógico — solicitação e formalização",
-  "description": "Tabelas e colunas que registram a solicitação e os cadastros usados para formalizar o estágio.",
-  "summary": "A solicitação é enviada por um vínculo discente, referencia curso, tipo e concedente, e mantém o estado que conduz à formalização.",
+  "description": "Esquema lógico da solicitação de estágio, incluindo orientador escolhido, período acadêmico e períodos permitidos pelo tipo.",
+  "summary": "O Discente envia a solicitação com orientador e período acadêmico permitidos pelo tipo de estágio; o Setor analisa, resolve cadastros pendentes e cria o estágio no aceite.",
   "source": {
     "language": "mermaid",
     "path": "diagrams/sources/modelo-nucleo-solicitacao.mmd"
@@ -24,13 +24,15 @@
     },
     "relationships": [
       { "from": "AFFILIATIONS", "to": "INTERNSHIP_REQUESTS", "label": "submitted_by_affiliation_id", "fromPort": { "side": "right", "field": "id" }, "toPort": { "side": "left", "field": "submitted_by_affiliation_id" } },
+      { "from": "AFFILIATIONS", "to": "INTERNSHIP_REQUESTS", "label": "advisor_affiliation_id", "fromPort": { "side": "right", "field": "id" }, "toPort": { "side": "left", "field": "advisor_affiliation_id" } },
       { "from": "COURSES", "to": "INTERNSHIP_REQUESTS", "label": "course_id", "fromPort": { "side": "right", "field": "id" }, "toPort": { "side": "left", "field": "course_id" } },
       { "from": "INTERNSHIP_TYPES", "to": "INTERNSHIP_REQUESTS", "label": "internship_type_id", "fromPort": { "side": "left", "field": "id" }, "toPort": { "side": "right", "field": "internship_type_id" } },
       { "from": "GRANTING_PARTIES", "to": "INTERNSHIP_REQUESTS", "label": "granting_party_id", "fromPort": { "side": "left", "field": "id" }, "toPort": { "side": "right", "field": "granting_party_id" } }
     ]
   },
   "sourceRefs": [
-    "content/modelo-de-dados-nucleo.md"
+    "content/modelo-de-dados-nucleo.md",
+    "content/migration-11-internship-types.md"
   ],
   "data": {
     "sourceDocument": "modelo-de-dados-nucleo",

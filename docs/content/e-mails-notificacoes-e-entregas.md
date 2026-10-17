@@ -11,7 +11,7 @@ source_refs: https://github.com/sge-suite/sge/blob/master/app/Actions/RequestEma
 diagram: mensageria-fluxo
 ---
 > [!abstract] Decisão de planejamento
-> As Migrations 05–07, o backend de envio em fila e as telas de consulta administrativa estão implementados. O Administrador do Sistema consulta mensagens ligadas a contas e vínculos administrativos, inclusive quando o destinatário é externo. A tela mostra o conteúdo salvo e as tentativas, sem ação de reenvio. A integração de notificações operacionais nos fluxos de domínio, os escopos para outros vínculos e a política de retenção continuam pendentes.
+> As Migrations 05–07, o backend de envio em fila e as telas de consulta administrativa estão implementados. O fluxo de abertura envia aviso interno e e-mail para decisões e correções; os avisos de correção incluem mensagens por etapa e a orientação geral do Setor. O Administrador do Sistema consulta mensagens ligadas a contas e vínculos administrativos, inclusive quando o destinatário é externo. A tela mostra o conteúdo salvo e as tentativas, sem ação de reenvio. Integrações de outros eventos operacionais, escopos de consulta para outros vínculos e política de retenção continuam pendentes.
 
 ## Objetivo e limites
 
@@ -36,7 +36,7 @@ Usa a tabela nativa plural do Laravel, com `data` em `jsonb`. Cada linha represe
 | `read_at`                           | timestamp nullable | Leitura no SGE; não representa leitura do e-mail.                          |
 | `created_at` / `updated_at`         | timestamp          | Auditoria temporal.                                                        |
 
-Notificações de estágio, vínculo, avaliação e demais eventos operacionais serão criadas no vínculo destinatário antes de seguirem por e-mail. A caixa de notificações por vínculo já usa `Affiliation::notifications()`; `AffiliationPolicy::viewNotifications` exige que o vínculo ativo pertença à conta autenticada, e a relação não mistura caixas de vínculos diferentes. Ainda faltam as classes que criam essas notificações nos fluxos de domínio. Recuperação de senha e convite inicial não criam registros internos em `notifications`.
+Avisos de decisão e correção da solicitação de estágio são criados no vínculo discente e seguem por e-mail após o commit. A caixa de notificações por vínculo usa `Affiliation::notifications()`; `AffiliationPolicy::viewNotifications` exige que o vínculo ativo pertença à conta autenticada, e a relação não mistura caixas de vínculos diferentes. Outros avisos de estágio, avaliação e documento ainda aguardam integração aos respectivos fluxos. Recuperação de senha e convite inicial não criam registros internos em `notifications`.
 
 O schema nativo não recebe coluna de deduplicação. Para evento reexecutável, a Action precisa persistir e consultar a fonte de idempotência do domínio. `email_messages.idempotency_key` cobre a mensagem de e-mail; um aviso somente interno que exigir deduplicação durável precisa de um registro operacional próprio antes de o fluxo ser ativado.
 
@@ -61,7 +61,7 @@ O Model bloqueia exclusão e mudança de uma tentativa finalizada. `RequestEmail
 | Novo vínculo em conta existente | Uma mensagem imutável e uma tentativa `new_affiliation` por endereço avisado. | Avisa o e-mail da conta e o do vínculo, deduplicando quando iguais, e leva ao login. |
 | Alteração de e-mail da conta | Uma mensagem imutável e uma tentativa por endereço avisado. | A própria pessoa recebe um aviso que identifica a alteração como feita na própria conta e assina em nome do sistema. Quando outra pessoa solicita a alteração, o aviso identifica o nome e o tipo do vínculo solicitante. Os dois avisos, para os endereços anterior e novo, preservam o mesmo conteúdo em cada tentativa. |
 | Alteração administrativa | Uma mensagem imutável e uma tentativa `administrative_change` por endereço avisado. | Registra conteúdo dos avisos de desativação/exclusão de vínculo e exclusão de conta; o contexto aponta para a conta ou vínculo afetado. |
-| Notificação operacional | `notifications`, `email_messages` e tentativas. | Guarda assunto e conteúdo renderizado na mensagem; destinatário e transporte na tentativa. |
+| Decisão ou correção da solicitação de estágio | `notifications`, `email_messages` e tentativas. | A correção detalha cada etapa afetada, a mensagem específica e, quando informada, a orientação geral; o destinatário e o transporte ficam na tentativa. Outros eventos operacionais aguardam integração. |
 | Resumo interno do Setor | Apenas `notifications`. | Conteúdo interno pertinente ao vínculo. |
 
 > [!warning] Segredos não entram no histórico
@@ -69,7 +69,7 @@ O Model bloqueia exclusão e mudança de uma tentativa finalizada. `RequestEmail
 
 O e-mail de conta criada leva à tela de recuperação com o e-mail preenchido. A pessoa então solicita o link para definir a senha. Essa notificação do Fortify é enfileirada com payload cifrado, pois a fila técnica precisa transportar temporariamente o token; ela não cria histórico nas tabelas de e-mail da aplicação.
 
-## Fluxos planejados
+## Fluxos operacionais ainda em integração
 
 ### Recuperação de senha
 
@@ -102,3 +102,9 @@ As estruturas e o pipeline abaixo já existem; esta lista mostra o que está imp
 A duração de retenção de `email_messages`, tentativas e conteúdo precisa seguir a política institucional de auditoria e LGPD. Até essa decisão, o acesso deve ser mínimo, auditado e permitido apenas a perfis administrativos autorizados; limpeza automática não deve ser implementada sem a definição formal de prazo.
 
 Veja também [Enums](doc:enums), [Migrations](doc:migrations), [Painel de desenvolvimento](doc:painel-de-desenvolvimento), [Domínio e modelo de dados](doc:dominio-e-modelo-de-dados) e [Fluxos principais](doc:fluxos-principais).
+
+## Integração da abertura — 16/10/2026
+
+Devolução, recusa e aceite da abertura enfileiram `DeliverInternshipRequestNotice` após commit. O job preserva uma UUID por decisão, cria a notificação no vínculo discente e usa `RequestEmailDelivery::notification` para reservar mensagem/tentativa com a mesma chave. Reexecução não duplica notificação nem reserva. O texto contém apenas número/situação e orientação de acesso; motivos detalhados, dados pessoais e comprovantes permanecem no sistema.
+
+`internship-requests:notify-office`, agendado às 08h no fuso institucional, cria somente um resumo interno diário por vínculo ativo do Setor e campus, agrupando solicitações Submitted/UnderReview. A identidade determinística por destinatário/data e a PK da notificação impedem duplicidade. Não envia e-mail ao Setor nem distribui a mesma pendência em mensagens individuais. O resumo aponta para Analisar solicitações. Avisos documentais e escolha de interessados continuam posteriores.

@@ -9,7 +9,7 @@ tags: sge/desenvolvimento, sge/email, sge/checklist
 related: enums, e-mails-notificacoes-e-entregas, enum-emailmessagepurpose, enum-emaildeliveryattemptstatus, migration-05-notifications, migration-06-email-messages, migration-07-email-delivery-attempts, fase-03-activity-log
 source_refs: https://github.com/sge-suite/sge/blob/master/app/Actions/RequestEmailDelivery.php, https://github.com/sge-suite/sge/blob/master/app/Jobs/SendEmailDelivery.php, https://github.com/sge-suite/sge/blob/master/app/Mail/DeliveryMail.php, https://github.com/sge-suite/sge/blob/master/app/Policies/EmailDeliveryAttemptPolicy.php, https://github.com/sge-suite/sge/blob/master/app/Support/AdministrativeEmailLogScope.php, https://github.com/sge-suite/sge/blob/master/app/Support/EmailLogAccess.php, https://github.com/sge-suite/sge/blob/master/resources/views/pages/email-logs/%E2%9A%A1index.blade.php, https://github.com/sge-suite/sge/blob/master/resources/views/pages/email-logs/%E2%9A%A1show.blade.php, https://github.com/sge-suite/sge/blob/master/app/Support/CampusEmailLogScope.php
 ---
-As tabelas `notifications`, `email_messages` e `email_delivery_attempts`, seus enums, Models, validações e telas de consulta administrativa existem. `RequestEmailDelivery` grava snapshots e reserva tentativas, depois despacha `SendEmailDelivery` após o commit. Os fluxos administrativos de criação de conta, criação ou encerramento de vínculo, exclusão de conta e alteração do e-mail registram o conteúdo renderizado. A troca de e-mail da conta gera avisos aos endereços anterior e novo. Quando a própria pessoa altera o e-mail, o aviso identifica que a mudança foi feita na própria conta e usa a assinatura do sistema; quando outra pessoa faz a alteração, o aviso mantém o nome e o tipo de vínculo de quem solicitou. Templates Markdown do Laravel produzem HTML e texto, preservados no snapshot. A recuperação de senha usa a Notification enfileirada do Fortify e não cria linhas nas tabelas próprias de entrega. O transporte vem de `config/mail.php`.
+As tabelas `notifications`, `email_messages` e `email_delivery_attempts`, seus enums, Models, validações e telas de consulta administrativa existem. `RequestEmailDelivery` grava snapshots e reserva tentativas, depois despacha `SendEmailDelivery` após o commit. Os fluxos administrativos de criação de conta, criação ou encerramento de vínculo, exclusão de conta e alteração do e-mail registram o conteúdo renderizado. A troca de e-mail da conta gera avisos aos endereços anterior e novo. Quando a própria pessoa altera o e-mail, o aviso identifica que a mudança foi feita na própria conta e usa a assinatura do sistema; quando outra pessoa faz a alteração, o aviso mantém o nome e o tipo de vínculo de quem solicitou. Templates Markdown do Laravel produzem HTML e texto, preservados no snapshot. A recuperação de senha usa a Notification enfileirada do Fortify e não cria linhas nas tabelas próprias de entrega. O fluxo de solicitação de estágio envia aviso interno e e-mail ao Discente após decisão; correções incluem mensagens por etapa e orientação geral do Setor. Outros avisos de documento, avaliação e execução ainda dependem da integração de seus fluxos. O transporte vem de `config/mail.php`.
 
 ## Backend de envio
 
@@ -28,7 +28,8 @@ As tabelas `notifications`, `email_messages` e `email_delivery_attempts`, seus e
 - [x] Identificar nos avisos de troca de e-mail quando a própria pessoa alterou sua conta; usar a assinatura do sistema nesse caso e preservar a identificação do vínculo quando outra pessoa solicitar a alteração.
 - [x] Reservar a tentativa de convite com `requested_by_affiliation_id` quando houver vínculo ativo; o Job preserva essa autoria.
 - [ ] Cobrir por renderização os templates de conta criada, novo vínculo e alteração do e-mail, incluindo a distinção entre alteração própria e feita por outra pessoa; testes automatizados não encaminham mensagens ao SMTP.
-- [ ] Validar a notificação operacional e os demais destinatários no Mailpit quando os fluxos de domínio forem ligados.
+- [x] Integrar notificação interna e e-mail pós-commit para decisões e correções da solicitação, incluindo mensagens de correção por seção.
+- [ ] Validar no Mailpit os avisos de solicitação e os demais destinatários dos fluxos que ainda serão ligados.
 - [ ] Testar idempotência, falha do transporte, reprocessamento e motivo de falha sanitizado.
 - [ ] Validar o comportamento sob concorrência real de workers.
 
@@ -40,9 +41,10 @@ Workers de fila mantêm o código carregado em memória. Após alterar templates
 
 ## Notificações
 
-- [ ] Criar notificações operacionais somente na conta ou vínculo destinatário adequado.
+- [x] Direcionar as notificações de decisão e correção da solicitação ao vínculo discente proprietário, com autorização por vínculo.
 - [x] Manter leitura interna independente da entrega de e-mail; `read_at` permanece separado do histórico de transporte. Automatizar a validação na preparação para produção.
-- [ ] Definir destinatários e canais para novo vínculo, documento disponível, correções, avaliações e eventos do estágio.
+- [x] Definir o destinatário e os canais dos avisos de decisão e correção da solicitação de estágio.
+- [ ] Integrar os avisos de documento disponível, avaliações e eventos de execução; os avisos administrativos de novo vínculo já estão implementados.
 - [ ] Manter o resumo do Setor de Estágio como notificação agrupada interna quando o contrato assim determinar.
 
 ## Histórico de e-mails por escopo

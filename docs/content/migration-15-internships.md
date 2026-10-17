@@ -10,7 +10,7 @@ related: enum-internshipstatus, migration-19-internship-requests, migration-11-i
 source_refs:
 ---
 > [!info] Estado
-> Migration, Model e factory implementados. A criação do estágio após o aceite, o preenchimento completo dos snapshots e o cálculo automático do término pertencem ao fluxo funcional. Depende de vínculos, endereços, cursos, tipos de estágio, partes concedentes e [`InternshipStatus`](doc:enum-internshipstatus). Não há suíte automatizada nesta etapa; o fluxo de formalização e cálculo mantém validação pendente.
+> Migration, Model, factory, criação transacional após o aceite e snapshots da abertura estão implementados. O cálculo inicial da data projetada também é aplicado no envio e no aceite. Liberação documental, recálculo após alterações futuras e base historicamente reproduzível continuam pendentes. Depende de vínculos, endereços, cursos, tipos de estágio, partes concedentes e [`InternshipStatus`](doc:enum-internshipstatus).
 
 Um estágio é criado somente após o aceite de uma [solicitação de estágio](doc:migration-19-internship-requests). A Migration 15 vem antes da 19 somente para permitir que a solicitação acrescente sua FK única `internship_id`; no fluxo do produto, a solicitação nasce e é aceita antes de a linha do estágio ser criada.
 
@@ -36,7 +36,7 @@ O estágio guarda `student_affiliation_id` como FK direta do vínculo discente a
 | `weekly_hours`                    | JSONB obrigatório com a jornada inicial pactuada, de domingo a sábado.             |
 | `activities`                       | texto obrigatório com as atividades previstas.                                     |
 | `internship_sector`                | setor/área de realização, nullable.                                                |
-| `planned_start_date`               | data proposta pelo discente, validada contra o prazo mínimo após o envio.          |
+| `planned_start_date`               | data proposta pelo discente, no mínimo sete dias corridos após cada envio.          |
 | `projected_end_date`               | data calculada pela jornada, feriados aplicáveis ao endereço de trabalho e pausas.  |
 | `released_at`                      | momento em que o Setor de Estágio libera o início após as assinaturas.             |
 | `released_by_affiliation_id`       | vínculo do Setor de Estágio que realizou a liberação.                              |
@@ -58,7 +58,7 @@ O estágio guarda `student_affiliation_id` como FK direta do vínculo discente a
 
 Toda informação histórica mantém a FK de origem quando ela existe e também o snapshot do estado usado no processo. O endereço do local do estágio não fica em JSONB: `workplace_address_id` aponta para a linha de `addresses` criada na formalização. A jornada inicial fica em `weekly_hours`; vigências posteriores só surgem de aditivo formalizado na Migration 23. A data prevista de término continua calculada automaticamente a partir da carga horária e dos limites congelados em `internship_type_snapshot`, da jornada aplicável em cada data, dos feriados pertinentes ao endereço histórico e das pausas. O estágio persiste o resultado em `projected_end_date`, sem JSONB de fórmula, versão de algoritmo ou entradas do cálculo.
 
-Os snapshots têm contrato fechado: `student_snapshot` inclui nome, e-mail, matrícula do vínculo, período/semestre, CPF, RG (com emissor e data), nascimento, telefone e responsável legal quando aplicável; `granting_party_snapshot` inclui documento, nome, representante, contato, área, conselho e processo; `supervisor_snapshot` inclui nome, telefone, e-mail, cargo/função, curso de formação, nível e tempo de experiência na função; `internship_type_snapshot.rules` preserva o contrato histórico de carga, pesos, conceitos, limites e margem, montado a partir das colunas escalares de `internship_types`; o conceito `excellent` recebe o peso do supervisor e `unsatisfactory` recebe o valor configurado em `unsatisfactory_value` (inicialmente `0`); e os endereços históricos são relações para `addresses`. Esses dados permanecem disponíveis para documento e auditoria, sem depender do cadastro atual. Os dados profissionais atuais do supervisor ficam em `user_personal_data`; são uma referência para cópia e confirmação no futuro fluxo, sem sincronização automática com `supervisor_snapshot` ou avaliações. Novos snapshots devem usar `job_role`, `training_course`, `education_level` e `experience_time`; snapshots já formalizados conservam integralmente seus dados originais.
+Os snapshots têm contrato fechado: `student_snapshot` inclui nome, e-mail e matrícula do vínculo, período permitido, CPF, RG (com emissor e data), nascimento, telefone e responsável legal quando aplicável; `granting_party_snapshot` contém o cadastro aprovado; `supervisor_snapshot` contém identidade, contato, cargo/função e a qualificação acadêmica ou profissional escolhida pelo Setor, com a referência de origem; `internship_type_snapshot.rules` preserva carga, pesos, conceitos, limites, margem e anos/semestres permitidos a partir do tipo vigente no envio. Os endereços históricos são relações para linhas independentes de `addresses`. Esses dados permanecem disponíveis para o processo sem depender dos cadastros atuais. Cargo/função fica em `user_personal_data`; qualificações atuais ficam em `supervisor_qualifications`. Alterações posteriores não sincronizam os snapshots já formalizados.
 
 As notas de relatório e apresentação são lançadas pelo orientador diretamente na escala do peso correspondente. `supervisor_grade` não é digitada: é a média, com uma casa decimal, dos valores dos dez conceitos da avaliação vigente e aprovada. Para cada componente com peso maior que zero a respectiva nota é obrigatória antes de calcular `consolidated_grade`; peso zero contribui com zero. A nota consolidada é a soma das três contribuições, com uma casa decimal, e permanece nula enquanto faltar componente obrigatório. Alterações posteriores das notas ficam no Activity Log.
 
@@ -70,10 +70,10 @@ As notas de relatório e apresentação são lançadas pelo orientador diretamen
 - [x] Usar exclusão restrita nas FKs históricas.
 - [x] Criar Model com casts de status, snapshots, jornada, datas e valores.
 - [x] Guardar `student_affiliation_id` diretamente no estágio.
-- [ ] Conferir no fluxo de aceite que `student_affiliation_id = internship_requests.affiliation_id`.
-- [ ] Implementar criação do snapshot no momento correto do fluxo.
-- [ ] Validar regras do tipo, carga horária, período, feriados nacionais/estaduais/municipais aplicáveis ao endereço de trabalho e idade.
-- [ ] Criar o serviço de cálculo e atualizar `projected_end_date` nos eventos autorizados.
+- [x] Conferir no fluxo de aceite que `student_affiliation_id = internship_requests.affiliation_id`.
+- [x] Implementar snapshots no envio e sua cópia aprovada na formalização.
+- [x] Validar no envio/aceite regras do tipo, período permitido, jornada, data inicial, capacidade civil e disponibilidade dos feriados aplicáveis ao local.
+- [x] Calcular a previsão inicial no envio/aceite; recálculos por mudanças posteriores e base de cálculo historicamente reproduzível continuam pendentes.
 - [x] Criar factory para estágio em formalização, remunerado e liberado.
 - [ ] Testar alteração de cadastro após snapshot sem alterar o histórico.
 - [ ] Testar schema PostgreSQL, FKs, casts, validações, snapshots e rollback da 15.
@@ -88,4 +88,12 @@ As notas de relatório e apresentação são lançadas pelo orientador diretamen
 
 ## Dependência de calendário
 
-A base local, importação anual e gestão estão implementadas em [Calendário de feriados](doc:calendario-de-feriados). Não há motor móvel nem chamada externa durante consultas. Todos os eventos aceitos bloqueiam o dia. Alteração do catálogo não dispara recálculo de estágios nesta entrega. O fluxo de cálculo/exceções e a definição de uma base histórica reproduzível continuam pendentes; Activity Log sozinho não congela suas entradas.
+A base local, importação anual e gestão estão implementadas em [Calendário de feriados](doc:calendario-de-feriados). O cálculo inicial da abertura usa o endereço do local de trabalho e exige importações nacionais/estaduais completas, sem pendências, para os anos envolvidos. Não há chamada externa durante o cálculo. Alteração posterior do catálogo não dispara recálculo de estágios. Recálculos por pausas, aditivos e exceções, além de uma base histórica reproduzível, continuam pendentes; Activity Log sozinho não congela as entradas.
+
+## Formalização da abertura — 16/10/2026
+
+`ReviewInternshipRequest` cria o estágio em transação depois do aceite, com orientador/supervisor ativos do campus e ambas as referências de cadastro resolvidas. Preserva o vínculo discente de origem, os dados pessoais/tipo congelados na solicitação, os dados aprovados de concedente/supervisor e a jornada. O endereço aprovado da concedente e o endereço histórico discente recebem novas linhas exclusivas em `addresses`. Endereços atuais e históricos anteriores não são reescritos.
+
+Correções anteriores à liberação deixam o estágio PendingCorrection e preservam seus dados até o novo aceite. A aprovação aplica somente os grupos devolvidos e seus derivados ao mesmo estágio e retorna a PendingFormalization. Documentos não são gerados, liberados ou sobrescritos por esta Action; geração/reemissão e o restante do ciclo ficam pendentes. O cálculo inicial usa o calendário local conferido, sem representar a implementação completa do recálculo posterior de pausas/aditivos ou da base histórica reproduzível de D-019.
+
+A devolução manual antes da liberação também atende AwaitingSignatures: documentos Generated/AwaitingSignature são cancelados com o motivo, mantendo seus snapshots e os documentos Signed como histórico. O novo aceite volta a PendingFormalization e exige nova geração documental pela integração posterior.

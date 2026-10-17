@@ -6,8 +6,8 @@ type: migration-reference
 status: implemented
 visibility: public
 tags: sge/migrations, sge/estagio, sge/banco-de-dados
-related: migration-09-courses, service-internshipenddatecalculator
-source_refs:
+related: migration-09-courses, migration-19-internship-requests, service-internshipenddatecalculator
+source_refs: https://github.com/sge-suite/sge/blob/master/database/migrations/2026_09_23_132907_create_internship_types_table.php, https://github.com/sge-suite/sge/blob/master/app/Models/InternshipType.php, https://github.com/sge-suite/sge/blob/master/app/Concerns/InternshipTypeValidationRules.php
 ---
 > [!success] Estado
 > Migration, Model, factory e regras Laravel em PHP implementados após [`courses`](doc:migration-09-courses). A gestão pelo Setor de Estágio está implementada na [Fase 05](doc:fase-05-administracao); o snapshot pertence à Migration 15 e é preservado nas alterações do catálogo. Não há testes automatizados no repositório atualmente; a validação fica para a preparação para produção.
@@ -19,6 +19,7 @@ source_refs:
 | `id` | `bigint` autoincremental, chave primária. |
 | `course_id` | `bigint` obrigatório, FK para `courses.id` com `ON DELETE RESTRICT`. |
 | `name` | Nome obrigatório, `varchar(255)`. |
+| `allowed_academic_periods` | JSONB obrigatório com os anos e semestres permitidos para a abertura; lista de 1 a 50 valores distintos no formato `3º ano` ou `6º semestre`. |
 | `required_hours` | Carga horária obrigatória, inteiro positivo. |
 | `supervisor_evaluation_weight` | Peso da avaliação do supervisor, inteiro positivo. |
 | `report_weight` | Peso do relatório, inteiro positivo. |
@@ -45,16 +46,18 @@ As regras são aplicadas pela validação Laravel no Model ao salvar. A migratio
 
 A validação também exige curso ativo na criação, troca de curso ou reativação. Uma desativação posterior do curso não bloqueia a edição de um tipo já existente enquanto sua associação não mudar. `active()` filtra tipos não desativados; esta migration não cria índices secundários explícitos.
 
+`allowed_academic_periods` é uma lista configurada pelo Setor junto ao tipo. A abertura oferece somente esses valores e valida a escolha no servidor; o snapshot do tipo preserva a lista que estava vigente no envio. O ano/semestre não é texto livre.
+
 Os pesos e os valores dos conceitos são configurados no tipo de estágio, nunca na resposta da avaliação nem livremente em cada estágio. Na criação do estágio, o snapshot pode agrupar esses valores no contrato histórico `internship_type_snapshot.rules`, montado a partir das colunas escalares, usando o peso do supervisor para `excellent`; alterar o tipo depois não pode recalcular históricos já formalizados.
 
 ## Checklist
 
-- [x] Definir que pesos e valores dos conceitos pertencem ao tipo de estágio.
+- [x] Definir que pesos, valores dos conceitos e períodos acadêmicos permitidos pertencem ao tipo de estágio.
 - [x] Definir campos escalares, precisão dos pesos e conceitos, limites de jornada e margem do cálculo de término.
 - [x] Criar migration sem constraints `CHECK` de regras de negócio e sem índice secundário explícito.
 - [x] Criar Model com casts e validação Laravel em PHP.
 - [x] Criar factory com regras completas.
-- [x] Implementar validação da carga horária obrigatória, dos pesos, conceitos e limites diário e semanal da jornada.
+- [x] Implementar validação da carga horária obrigatória, períodos distintos no formato permitido, pesos, conceitos e limites diário e semanal da jornada.
 - [ ] Testar consulta de tipos por curso/campus e ciclo de desativação.
 - [ ] Testar preservação do snapshot, datas e demais atributos após edição, troca de curso, desativação e reativação do tipo usado em estágio formalizado.
 - [ ] Testar conceitos fora do peso, `excellent` derivado do peso do supervisor, valores repetidos, ordem inválida, limites de jornada fora dos intervalos definidos e margem negativa.

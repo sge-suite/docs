@@ -9,7 +9,7 @@ tags: sge/desenvolvimento, sge/checklist
 related: fase-00-preparacao, fase-04-integracao-de-email, fase-01-fundacao-de-dados, fase-02-conta-e-contexto, fase-05-administracao, fase-06-documentos, fase-07-abertura-do-estagio, fase-08-estagio-em-andamento, fase-09-avaliacao-e-conclusao, fase-03-activity-log, componentes-tecnicos, enums, migrations
 source_refs:
 ---
-Esta lista registra a sequência e o estado atuais. A fundação de dados está concluída. Contexto de vínculo, criação administrativa por terminal e interface, configurações de senha/e-mail, auditoria Eloquent, gestão global de campi, contas e vínculos administrativos e painel global do Administrador do Sistema estão implementados. O Setor de Estágio dispõe de Meu campus, cursos, gestão local de usuários/vínculos e consultas locais de auditoria/e-mails; fluxos operacionais de estágio e edições pessoais próprias seguem pendentes.
+Esta lista registra a sequência e o estado atuais. A fundação de dados está concluída. Contexto de vínculo, criação administrativa por terminal e interface, configurações de senha/e-mail e dados pessoais, auditoria Eloquent, gestão de campi, usuários e vínculos, e as telas locais do Setor estão implementados. A abertura do estágio inclui rascunho, envio, análise, correção e criação do estágio no aceite; documentação, execução, avaliação e conclusão seguem em andamento.
 
 ## Ordem atual
 
@@ -21,19 +21,19 @@ Esta lista registra a sequência e o estado atuais. A fundação de dados está 
 
 - [ ] [05 — Administração](doc:fase-05-administracao) — gestão global de campi, contas/vínculos administrativos e painel do Administrador do Sistema concluídos; Meu campus, cursos, usuários/vínculos locais e consultas locais de Logs implementados para o Setor de Estágio; tipos de estágio e demais operações administrativas pendentes.
 - [ ] [06 — Documentos](doc:fase-06-documentos) — fechar validação, geração e assinatura com serviços de backend reutilizáveis.
-- [ ] [07 — Abertura do estágio](doc:fase-07-abertura-do-estagio) — completar Actions e regras transacionais antes e junto do formulário.
+- [ ] [07 — Abertura do estágio](doc:fase-07-abertura-do-estagio) — envio, análise, correções, cadastros pendentes e aceite estão implementados; falta concluir a integração documental e os requisitos de histórico do cálculo.
 - [ ] [08 — Estágio em andamento](doc:fase-08-estagio-em-andamento) — concluir cálculos, transições, notificações e schedules antes das telas correspondentes.
 - [ ] [09 — Avaliação e conclusão](doc:fase-09-avaliacao-e-conclusao) — finalizar autorização, cálculo e transições de avaliação e conclusão.
 
-## Trabalho de backend antes das telas de domínio
+## Próximas entregas de backend e integração
 
 1. **Implementado:** resolver e validar o vínculo ativo, selecionar ou restaurar o contexto, disponibilizá-lo a Policies/Actions e registrar a autoria nas alterações Eloquent.
 2. **Concluído:** Models de negócio registram autoria pelo vínculo, valores anteriores/novos e exclusão de segredos no Activity Log. A suíte automatizada foi removida e será retomada na preparação para produção.
-3. **Em andamento:** o backend de e-mail com filas, idempotência e reprocessamento atende criação de conta, vínculos administrativos, alterações administrativas e troca de e-mail. A consulta de envios é compartilhada por Administrador do Sistema e Setor de Estágio, limitada ao escopo de cada vínculo ativo selecionado. Faltam notificações de domínio, escopos para outros vínculos e política de retenção.
-4. Implementar Services puros e Actions transacionais para cálculos, formalização, correções, cancelamentos e associações dos cadastros pendentes.
+3. **Em andamento:** o backend de e-mail com filas, idempotência e reprocessamento atende criação de conta, vínculos administrativos, alterações administrativas e troca de e-mail. A consulta de envios é compartilhada por Administrador do Sistema e Setor de Estágio, limitada ao escopo de cada vínculo ativo selecionado. Os avisos de decisão/correção da abertura estão integrados; notificações de outros eventos, escopos para outros vínculos e política de retenção continuam pendentes.
+4. Completar a geração e reemissão documental, os recálculos posteriores e a reprodução histórica da previsão; abertura, correções e associações de cadastros pendentes já estão implementadas.
 5. Preparar validação e geração DOCX, notificações e Jobs idempotentes. Seus testes de concorrência, falhas e efeitos após commit ficam para a preparação para produção.
 
-A seleção de vínculo já é a primeira interface compartilhada e estabelece o contexto para as próximas telas. Cada conjunto funcional seguirá com seu backend, começando pelos perfis administrativos mais amplos e avançando aos papéis de campus, estágio, curso e participantes.
+A seleção de vínculo estabelece o contexto para cada tela. A próxima sequência prioriza documento, execução do estágio, avaliação e conclusão, completando os fluxos a partir do estágio criado no aceite.
 
 ## Navegação
 

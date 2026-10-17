@@ -6,7 +6,7 @@ type: reference-hub
 status: in-progress
 visibility: public
 tags: sge/desenvolvimento, sge/enums, sge/banco-de-dados
-related: enum-affiliationtype, enum-brazilianstate, enum-holidayscope, enum-emailmessagepurpose, enum-emaildeliveryattemptstatus, enum-internshiprequeststatus, enum-legalcapacitydeclaration, enum-internshiprequestcorrectionstatus, enum-internshipstatus, enum-partydocumenttype, enum-generateddocumenttype, enum-generateddocumentstatus, enum-generateddocumentorigin, enum-evaluationstatus, enum-registrationrequeststatus, enum-internshipcancellationrequeststatus, enum-emancipationevidencestatus, migrations, dominio-e-modelo-de-dados, enums-e-migrations
+related: enum-affiliationtype, enum-brazilianstate, enum-holidayscope, enum-emailmessagepurpose, enum-emaildeliveryattemptstatus, enum-internshiprequeststatus, enum-legalcapacitydeclaration, enum-internshiprequestcorrectionstatus, enum-internshipstatus, enum-partydocumenttype, enum-educationlevel, enum-supervisorqualificationtype, enum-generateddocumenttype, enum-generateddocumentstatus, enum-generateddocumentorigin, enum-evaluationstatus, enum-registrationrequeststatus, enum-internshipcancellationrequeststatus, enum-emancipationevidencestatus, migrations, dominio-e-modelo-de-dados, enums-e-migrations
 source_refs:
 ---
 > [!abstract] Critério
@@ -30,7 +30,8 @@ source_refs:
 | ✅ Implementado | [Enum — GeneratedDocumentStatus](doc:enum-generateddocumentstatus)    | `generated_documents.status`     |
 | ✅ Implementado | [Enum — GeneratedDocumentOrigin](doc:enum-generateddocumentorigin)    | `generated_documents.origin`     |
 | ✅ Implementado | [Enum — EvaluationStatus](doc:enum-evaluationstatus)           | `supervisor_evaluations.status`  |
-| ✅ Implementado | `EducationLevel` | nível de formação do supervisor no perfil de referência, pedido de cadastro e avaliação; cinco opções do formulário, detalhadas na [Migration 02](doc:migration-02-user-personal-data). |
+| ✅ Implementado | [Enum — EducationLevel](doc:enum-educationlevel) | níveis acadêmicos persistidos nas qualificações e avaliações de supervisor. |
+| ✅ Implementado | [Enum — SupervisorQualificationType](doc:enum-supervisorqualificationtype) | distingue formação acadêmica e experiência profissional em cada qualificação do supervisor. |
 | ✅ Implementado | `EvaluationConcept` | opções de conceitos da avaliação, com rótulos em português. |
 | ✅ Implementado | [Enum — RegistrationRequestStatus](doc:enum-registrationrequeststatus)  | solicitações de cadastro pendente |
 | ✅ Implementado | [Enum — InternshipCancellationRequestStatus](doc:enum-internshipcancellationrequeststatus) | `internship_cancellation_requests.status` |

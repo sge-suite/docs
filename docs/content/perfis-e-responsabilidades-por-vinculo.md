@@ -285,4 +285,8 @@ Somente o vínculo ativo selecionado de Setor de Estágio lista, consulta, cadas
 
 ## Calendário de feriados
 
-Somente o Administrador do Sistema ativo selecionado cadastra, altera, exclui/restaura feriados e recorrências, mantém importações, revisa pendências e consulta a auditoria do calendário. Setor de Estágio ativo selecionado tem somente leitura de todos os feriados e recorrências, sem restrição automática por UF, município ou campus. Não há propriedade de calendário por campus. Os filtros são opcionais; a cidade de execução será considerada no futuro cálculo do estágio. Outros perfis não recebem acesso. Ver [Calendário de feriados](doc:calendario-de-feriados).
+Somente o Administrador do Sistema ativo selecionado cadastra, altera, exclui/restaura feriados e recorrências, mantém importações, revisa pendências e consulta a auditoria do calendário. Setor de Estágio ativo selecionado tem somente leitura de todos os feriados e recorrências, sem restrição automática por UF, município ou campus. Não há propriedade de calendário por campus. Os filtros são opcionais; o cálculo inicial da abertura usa os feriados da cidade do endereço histórico do local de trabalho. Outros perfis não recebem acesso. Ver [Calendário de feriados](doc:calendario-de-feriados).
+
+## Entrega da abertura — 16/10/2026
+
+As Policies de solicitação e comprovante e as Actions de envio/análise/correção estão implementadas. Discente usa Minhas solicitações; Setor usa Analisar solicitações do próprio campus e associa os cadastros que criou pela gestão existente. O envio exige dados pessoais completos; salvar pelo formulário atualiza a configuração compartilhada e o envio congela um snapshot. O Discente escolhe um orientador ativo do campus; o Setor pode confirmar ou trocar o vínculo no aceite. Correções e reenvios preservam a mesma solicitação; o estágio fica inalterado até nova aprovação. Não há acesso do Discente ao Activity Log.

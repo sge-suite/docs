@@ -1,5 +1,6 @@
 erDiagram
     USERS ||--|| USER_PERSONAL_DATA : user_id
+    USERS ||--o{ SUPERVISOR_QUALIFICATIONS : user_id
     USERS ||--o{ AFFILIATIONS : user_id
     CITIES ||--o{ ADDRESSES : city_id
     ADDRESSES ||--o{ USER_PERSONAL_DATA : address_id
@@ -18,7 +19,18 @@ erDiagram
         bigint id PK
         bigint user_id FK
         varchar rg
+        varchar phone
+        varchar job_role
         bigint address_id FK
+    }
+    SUPERVISOR_QUALIFICATIONS {
+        bigint id PK
+        bigint user_id FK
+        varchar type
+        varchar training_course
+        varchar education_level
+        varchar experience_area
+        varchar experience_time
     }
     ADDRESSES {
         bigint id PK

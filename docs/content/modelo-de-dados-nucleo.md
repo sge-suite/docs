@@ -20,12 +20,13 @@ diagram: modelo-nucleo-identidade
 | Entidade | Responsabilidade |
 | --- | --- |
 | `users` | identidade autenticada e credenciais |
-| `user_personal_data` | Dados pessoais atuais e dados profissionais opcionais do supervisor, compartilhados por usuário; CPF permanece em `users` |
+| `user_personal_data` | Dados pessoais atuais, telefone e cargo/função compartilhados por usuário; CPF permanece em `users` |
+| `supervisor_qualifications` | várias formações acadêmicas e experiências profissionais por pessoa supervisora |
 | `cities` | catálogo local de municípios por código IBGE e UF |
 | `addresses` | endereços atuais e cópias históricas usadas por estágios |
 | `affiliations` | função institucional, campus e e-mail contextual; a Migration 10 adiciona `course_id` obrigatório para vínculos de discente |
 | `campuses` e `courses` | escopo acadêmico e administrativo |
-| `internship_types` | regras de carga, notas e exceções aplicáveis ao curso |
+| `internship_types` | regras de carga e notas, além dos anos/semestres de acesso permitidos para o curso |
 | `granting_parties` | cadastro atual da concedente, vinculado a um campus; CPF/CNPJ podem se repetir e os dados locais não são compartilhados |
 
 Uma pessoa possui uma conta e quantos vínculos forem necessários. O vínculo ativo, e não a conta isolada, define o contexto usado por Gates e Policies.
@@ -34,9 +35,9 @@ Uma pessoa possui uma conta e quantos vínculos forem necessários. O vínculo a
 
 {{diagram:modelo-nucleo-solicitacao}}
 
-- Existe uma solicitação por processo iniciado pelo discente; devoluções editam o mesmo registro.
+- Existe uma solicitação por processo iniciado pelo discente; devoluções editam o mesmo registro. O envio exige todos os campos obrigatórios; rascunhos incompletos podem ser salvos e retomados.
 - Evidências de emancipação são registros privados, analisados manualmente pelo Setor.
-- O estágio nasce apenas após o aceite da solicitação e preserva FKs e snapshots dos dados aprovados.
+- O estágio nasce apenas após o aceite da solicitação e preserva FKs e snapshots dos dados aprovados. O Discente escolhe o orientador no formulário; o Setor pode confirmar ou alterar a associação no aceite.
 - Correções posteriores atualizam somente os campos autorizados e não apagam documentos ou estados anteriores.
 
 ## Execução, formalização e conclusão

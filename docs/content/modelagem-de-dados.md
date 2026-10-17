@@ -23,7 +23,7 @@ Contas, dados pessoais, cidades, endereços e vínculos formam o contexto instit
 
 {{diagram:modelo-nucleo-identidade}}
 
-Detalhes dos contratos: [cities](doc:migration-01a-cities), [addresses](doc:migration-01-addresses), [user_personal_data](doc:migration-02-user-personal-data), [campuses](doc:migration-03-campuses), [affiliations](doc:migration-04-affiliations), [courses](doc:migration-09-courses) e [internship_types](doc:migration-11-internship-types).
+Detalhes dos contratos: [cities](doc:migration-01a-cities), [addresses](doc:migration-01-addresses), [perfil pessoal e qualificações](doc:migration-02-user-personal-data), [campuses](doc:migration-03-campuses), [affiliations](doc:migration-04-affiliations), [courses](doc:migration-09-courses) e [internship_types](doc:migration-11-internship-types).
 
 ## Contexto de acesso
 

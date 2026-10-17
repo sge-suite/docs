@@ -19,7 +19,7 @@ source_refs:
 | `return_reason` | obrigatório em `Returned`; não contém o arquivo. |
 | timestamps | auditoria técnica. |
 
-Cada linha possui exatamente uma mídia privada na coleção `emancipation_evidence`. Novo envio cria nova linha; não substitui o binário anterior. A prova só é visível ao discente proprietário e ao Setor autorizado, nunca ao supervisor, orientador, e-mail, documento gerado ou Activity Log. A solicitação só pode ser aceita como `emancipated_minor` quando houver evidência `Approved` vigente.
+Cada linha possui exatamente uma mídia privada na coleção `emancipation_evidence`. Novo envio cria nova linha; não substitui o binário anterior. A prova só é visível ao discente proprietário e ao Setor autorizado, nunca ao supervisor, orientador, e-mail, documento gerado ou Activity Log. A solicitação só pode ser aceita como `emancipated_minor` quando houver evidência `Approved` do último envio.
 
 A confirmação atual continua em `user_personal_data.emancipation_verified_at`. A autoria da decisão é registrada no Activity Log; não há FK de revisor nem nova coluna no perfil. A evidência permanece como histórico e fonte da análise.
 
@@ -31,4 +31,12 @@ O upload deve usar armazenamento privado, validação de tipo/tamanho e autoriza
 
 ## Estado da implementação
 
-Migration, Model, factory, coleção privada `emancipation_evidence` e validação da evidência no envio e no aceite da solicitação estão implementados. Upload HTTP, autorização por vínculo, análise manual e atualização transacional de `emancipation_verified_at` ficam para o fluxo funcional.
+Migration, Model, factory, coleção privada `emancipation_evidence`, upload HTTP, autorização por vínculo, análise manual e validação da evidência no envio e aceite estão implementados.
+
+## Fluxo implementado — 16/10/2026
+
+`StoreEmancipationEvidence` autoriza a solicitação e o vínculo selecionado novamente sob bloqueio, valida PDF/JPEG/PNG até 10 MB e cria registro/mídia privados em transação. Cada envio usa nome interno gerado e preserva os anteriores. A rota autenticada exige `EmancipationEvidencePolicy`, devolve conteúdo sem cache e não divulga URL de armazenamento. O observador de infraestrutura omite integralmente os metadados desta coleção do Activity Log.
+
+`ReviewEmancipationEvidence` restringe a decisão ao Setor do mesmo campus e ao último envio Submitted. Aprovação registra `emancipation_verified_at`; devolução exige motivo e libera a seção `legal_capacity` da mesma solicitação, ou acrescenta essa seção à correção aberta. O aceite exige o último envio aprovado. Um arquivo anterior aprovado não substitui a análise de um novo comprovante.
+
+O estado PendingCorrection admite o último comprovante Returned para permitir sua substituição. Novo envio da solicitação exige novamente comprovante vigente anexado e não devolvido; o aceite exige aprovação do último envio. O motivo detalhado permanece no registro privado da evidência, sem cópia automática para auditoria ou e-mail.

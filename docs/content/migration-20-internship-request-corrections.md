@@ -10,7 +10,7 @@ related: enum-internshiprequestcorrectionstatus, migration-base-04-activity-log,
 source_refs:
 ---
 > [!success] Estado
-> Migration, Model, factory e validação da pendência implementados. O fluxo de correção e autorização permanece planejado.
+> Migration, Model, factory e validação da pendência implementados. O fluxo de correção e autorização está implementado, conforme a atualização ao final desta página.
 
 ## Contrato
 
@@ -39,8 +39,8 @@ O [`activity_log`](doc:migration-base-04-activity-log) deve registrar a abertura
 - [x] Definir enum, transições e responsável por encerrar a correção.
 - [x] Definir que uma correção respondida sempre volta para nova análise formal do Setor de Estágio.
 - [x] Criar validação no Model que impeça mais de uma correção aberta por solicitação.
-- [ ] Garantir serialização da abertura concorrente na Action transacional.
-- [ ] Mapear códigos de seções para os componentes da tela.
+- [x] Garantir serialização da abertura concorrente na Action transacional.
+- [x] Mapear códigos de seções para os componentes da tela.
 - [x] Criar migration, Model, factory e relação com a solicitação.
 - [ ] Criar Policy, fluxo e testes de autorização.
 
@@ -49,3 +49,11 @@ O [`activity_log`](doc:migration-base-04-activity-log) deve registrar a abertura
 - [internship_requests](doc:migration-19-internship-requests)
 - [affiliations](doc:migration-04-affiliations)
 - [activity_log](doc:migration-base-04-activity-log)
+
+## Edição orientada implementada — 16/10/2026
+
+A abertura de correção é serializada pelo bloqueio da solicitação em `ReviewInternshipRequest`. Os códigos aceitos são `personal_data`, `internship`, `granting_party`, `supervisor`, `activities`, `schedule`, `planned_start_date`, `legal_capacity` e `remuneration`. A interface marca os grupos liberados; as Actions recusam alterações de outros grupos, inclusive por chamadas forjadas.
+
+**Salvar mantém a correção Open** e preserva o preenchimento; somente o **reenvio explícito**, com ciência e validação completa, marca Responded e devolve a solicitação para Submitted. Isso substitui a expressão anterior “ao salvar” quando usada com sentido de reenvio. O Setor resolve apenas na nova aprovação. O estágio já existente conserva os dados aprovados enquanto se corrige a solicitação; no novo aceite recebe somente campos autorizados e derivados. Documentos anteriores não são sobrescritos; sua geração/reemissão permanece integração posterior.
+
+A devolução manual antes da liberação também atende AwaitingSignatures: documentos Generated/AwaitingSignature são cancelados com o motivo, mantendo seus snapshots e os documentos Signed como histórico. O novo aceite volta a PendingFormalization e exige nova geração documental pela integração posterior.

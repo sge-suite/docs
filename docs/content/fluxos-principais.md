@@ -13,7 +13,7 @@ diagram: fluxos-principais-jornada
 > [!info] Estado da página
 > Este é o fluxo funcional definido para o produto. As etapas e automações descritas são o comportamento-alvo; a implementação ainda está em andamento.
 
-Esta página apresenta a jornada do estágio de ponta a ponta. Para saber quem atua em cada etapa, consulte [Pessoas e responsabilidades](doc:pessoas-e-responsabilidades). Para o significado de cada situação exibida pelo sistema, consulte [Ciclos de status](doc:ciclos-de-status).
+A abertura e sua análise estão implementadas; formalização documental, liberação e demais fases continuam em andamento. Esta página apresenta o fluxo-alvo de ponta a ponta. Para saber quem atua em cada etapa, consulte [Pessoas e responsabilidades](doc:pessoas-e-responsabilidades); os status ficam em [Ciclos de status](doc:ciclos-de-status).
 
 ## Visão da jornada
 
@@ -29,7 +29,7 @@ Uma pessoa que possui mais de um vínculo pode trocar de contexto quando necess�
 
 ## 2. Solicitação
 
-O discente inicia a própria solicitação, preenche os dados necessários e pode salvar o preenchimento antes do envio. Depois de enviar, acompanha a situação do processo e responde às correções pedidas pelo Setor de Estágio.
+O Discente inicia e salva uma solicitação incompleta como rascunho; somente o envio completo inicia a análise. Seleciona o período acadêmico permitido pelo tipo e um orientador ativo do campus. Se a concedente ou o supervisor ainda não estiver cadastrado, pode enviar uma proposta tipada junto com a abertura; o Setor associa os registros antes de aceitar o estágio. Depois do envio, o Discente acompanha a situação e responde às correções pedidas pelo Setor.
 
 Se a solicitação precisar de ajuste, o Setor informa o que deve ser corrigido. O discente trabalha na mesma solicitação e a reenvia para nova análise. Antes da formalização, também pode desistir do pedido.
 

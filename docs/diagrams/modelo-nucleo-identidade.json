@@ -2,29 +2,30 @@
   "id": "modelo-nucleo-identidade",
   "kind": "db-schema",
   "title": "Esquema lógico — identidade e cadastros",
-  "description": "Tabelas e colunas de identidade, dados pessoais, cidades, endereços, campus e vínculos institucionais.",
-  "summary": "A conta possui dados pessoais e vínculos; cidades são catalogadas pelo código IBGE, endereços apontam para elas e cadastros mantêm endereços atuais.",
+  "description": "Tabelas e colunas de identidade, dados pessoais, qualificações de supervisor, cidades, endereços, campus e vínculos institucionais.",
+  "summary": "A conta possui dados pessoais, qualificações de supervisor e vínculos; cidades são catalogadas pelo código IBGE, endereços apontam para elas e cadastros mantêm endereços atuais.",
   "source": {
     "language": "mermaid",
     "path": "diagrams/sources/modelo-nucleo-identidade.mmd"
   },
   "presentation": {
     "width": 1760,
-    "height": 1040,
+    "height": 1160,
     "initialZoom": 1.05
   },
   "layout": {
     "canvas": {
       "width": 1760,
-      "height": 1040
+      "height": 1160
     },
     "entities": {
       "USERS": { "x": 80, "y": 80, "width": 320 },
       "USER_PERSONAL_DATA": { "x": 640, "y": 80, "width": 360 },
+      "SUPERVISOR_QUALIFICATIONS": { "x": 80, "y": 380, "width": 430 },
       "CITIES": { "x": 1320, "y": 80, "width": 340 },
       "ADDRESSES": { "x": 1320, "y": 360, "width": 340 },
-      "CAMPUSES": { "x": 80, "y": 600, "width": 420 },
-      "AFFILIATIONS": { "x": 720, "y": 600, "width": 360 }
+      "CAMPUSES": { "x": 80, "y": 800, "width": 420 },
+      "AFFILIATIONS": { "x": 720, "y": 800, "width": 360 }
     },
     "relationships": [
       {
@@ -43,9 +44,18 @@
         "label": "user_id",
         "fromPort": { "side": "right", "field": "id", "fieldOffset": 8 },
         "toPort": { "side": "left", "field": "user_id" },
-        "waypoints": [{ "x": 512, "y": 136 }, { "x": 512, "y": 520 }, { "x": 680, "y": 520 }, { "x": 680, "y": 636 }],
-        "labelPlacement": { "x": 544, "y": 336 },
-        "cardinalityPlacement": { "from": { "x": 432, "y": 152 }, "to": { "x": 696, "y": 620 } }
+        "waypoints": [{ "x": 512, "y": 136 }, { "x": 512, "y": 700 }, { "x": 680, "y": 700 }, { "x": 680, "y": 836 }],
+        "labelPlacement": { "x": 544, "y": 460 },
+        "cardinalityPlacement": { "from": { "x": 432, "y": 152 }, "to": { "x": 696, "y": 820 } }
+      },
+      {
+        "from": "USERS",
+        "to": "SUPERVISOR_QUALIFICATIONS",
+        "label": "user_id",
+        "fromPort": { "side": "bottom", "field": "id" },
+        "toPort": { "side": "top", "field": "user_id" },
+        "labelPlacement": { "x": 300, "y": 330 },
+        "cardinalityPlacement": { "from": { "x": 224, "y": 320 }, "to": { "x": 296, "y": 368 } }
       },
       {
         "from": "CITIES",
@@ -72,9 +82,9 @@
         "label": "address_id",
         "fromPort": { "side": "left", "field": "id", "fieldOffset": 8 },
         "toPort": { "side": "right", "field": "address_id" },
-        "waypoints": [{ "x": 1200, "y": 136 }, { "x": 1200, "y": 400 }, { "x": 536, "y": 400 }, { "x": 536, "y": 664 }],
-        "labelPlacement": { "x": 868, "y": 384 },
-        "cardinalityPlacement": { "from": { "x": 1288, "y": 152 }, "to": { "x": 524, "y": 648 } }
+        "waypoints": [{ "x": 1260, "y": 420 }, { "x": 1260, "y": 690 }, { "x": 536, "y": 690 }, { "x": 536, "y": 864 }],
+        "labelPlacement": { "x": 880, "y": 674 },
+        "cardinalityPlacement": { "from": { "x": 1288, "y": 408 }, "to": { "x": 524, "y": 848 } }
       },
       {
         "from": "CAMPUSES",
@@ -82,14 +92,15 @@
         "label": "campus_id",
         "fromPort": { "side": "right", "field": "id" },
         "toPort": { "side": "left", "field": "campus_id" },
-        "waypoints": [{ "x": 608, "y": 608 }, { "x": 608, "y": 664 }],
-        "labelPlacement": { "x": 608, "y": 592 },
-        "cardinalityPlacement": { "from": { "x": 524, "y": 592 }, "to": { "x": 696, "y": 648 } }
+        "waypoints": [{ "x": 608, "y": 808 }, { "x": 608, "y": 864 }],
+        "labelPlacement": { "x": 608, "y": 792 },
+        "cardinalityPlacement": { "from": { "x": 524, "y": 792 }, "to": { "x": 696, "y": 848 } }
       }
     ]
   },
   "sourceRefs": [
-    "content/modelo-de-dados-nucleo.md"
+    "content/modelo-de-dados-nucleo.md",
+    "content/migration-02-user-personal-data.md"
   ],
   "data": {
     "sourceDocument": "modelo-de-dados-nucleo",

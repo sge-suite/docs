@@ -2,6 +2,7 @@ erDiagram
     AFFILIATIONS ||--o{ INTERNSHIP_REQUESTS : submitted_by_affiliation_id
     COURSES ||--o{ INTERNSHIP_REQUESTS : course_id
     INTERNSHIP_TYPES ||--o{ INTERNSHIP_REQUESTS : internship_type_id
+    AFFILIATIONS ||--o{ INTERNSHIP_REQUESTS : advisor_affiliation_id
     GRANTING_PARTIES o|--o{ INTERNSHIP_REQUESTS : granting_party_id
 
     AFFILIATIONS {
@@ -23,6 +24,7 @@ erDiagram
         bigint course_id FK
         varchar name
         jsonb rules
+        jsonb allowed_academic_periods
         timestamp deactivated_at
     }
     GRANTING_PARTIES {
@@ -36,10 +38,13 @@ erDiagram
     INTERNSHIP_REQUESTS {
         bigint id PK
         bigint submitted_by_affiliation_id FK
+        bigint advisor_affiliation_id FK
         bigint course_id FK
         bigint internship_type_id FK
         bigint granting_party_id FK
         bigint internship_id FK
         varchar status
+        varchar student_year_semester
         date planned_start_date
+        jsonb student_snapshot
     }

@@ -94,3 +94,7 @@ Não há testes automatizados no repositório atualmente. Na preparação para p
 - [campuses](doc:migration-03-campuses)
 - [granting_parties](doc:migration-12-granting-parties)
 - [internships](doc:migration-15-internships)
+
+## Históricos da abertura — 16/10/2026
+
+Solicitações passaram a ter `student_address_id` e `workplace_address_id` próprios. O envio copia o endereço do perfil e o endereço confirmado/proposto da concedente; a formalização cria novas cópias para o estágio. `Address::hasReferences` inclui essas FKs e o Model recusa edição de qualquer endereço histórico de solicitação/estágio. Mudanças do cadastro atual continuam criando sua própria linha, sem sincronizar o histórico. A origem municipal dos pedidos usa `city_id`, preservando a identidade IBGE.

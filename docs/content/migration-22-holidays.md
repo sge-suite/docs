@@ -11,7 +11,7 @@ source_refs: https://github.com/sge-suite/sge/blob/master/app/Models/Holiday.php
 ---
 ## Estado
 
-Persistência, importação por ano/UF, recorrência municipal fixa, gestão autorizada e consulta local implementadas. Todos os eventos aceitos, inclusive pontos facultativos, bloqueiam o calendário do SGE. A classificação operacional não comprova natureza jurídica. O cálculo de término permanece planejado.
+Persistência, importação por ano/UF, recorrência municipal fixa, gestão autorizada e consulta local implementadas. Todos os eventos aceitos, inclusive pontos facultativos, bloqueiam o calendário do SGE. A classificação operacional não comprova natureza jurídica. O cálculo inicial de término usa este calendário no envio da solicitação e no aceite; recálculos posteriores e reprodução histórica completa permanecem pendentes.
 
 ## Ocorrências — holidays
 
@@ -42,4 +42,4 @@ Bancos com versões anteriores serão recriados pelo responsável do ambiente co
 
 ## Referências
 
-O comportamento administrativo, a importação, recorrência e aplicação ficam em [Calendário de feriados](doc:calendario-de-feriados), não no contrato de migration. A consulta para futuros cálculos combina ocorrências do calendário único por cidade/UF sem chamar API. Auditoria não substitui snapshots de cálculo; essa integração permanece fora desta entrega.
+O comportamento administrativo, a importação, recorrência e aplicação ficam em [Calendário de feriados](doc:calendario-de-feriados), não no contrato de migration. A consulta usada pela abertura e pelo aceite combina ocorrências do calendário único por cidade/UF sem chamar API. Auditoria não substitui snapshots de cálculo; recálculos posteriores e reprodução histórica completa permanecem fora desta entrega.

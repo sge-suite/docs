@@ -44,7 +44,7 @@ source_refs:
 
 - [x] Preservar linhas de endereço usadas historicamente; alterações criam nova linha quando necessário.
 - [x] Garantir CPF único e normalizado na conta.
-- [ ] Impedir alteração do CPF em futuros fluxos de configuração da conta; pertence à [Fase 02](doc:fase-02-conta-e-contexto).
+- [x] Manter o CPF protegido nas configurações próprias; correção administrativa é autorizada e validada pela gestão de contas da [Fase 05](doc:fase-05-administracao).
 - [x] Normalizar CPF, CNPJ, UF e e-mails pelos casts e validações aplicáveis; CEP usa obrigatoriamente `FormatoCep` do PT-BR Validator e é persistido somente com oito dígitos.
 - [x] Permitir múltiplos vínculos por pessoa sem trocar campus dentro do vínculo.
 - [x] Exigir curso em vínculo discente e respeitar escopo do campus.

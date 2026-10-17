@@ -24,10 +24,10 @@ Para a sequência e o andamento atuais, consulte [Fases de desenvolvimento](doc:
 - [Fase 01 — Fundação de dados](doc:fase-01-fundacao-de-dados) — **completed** — Migrations, Models e factories da base de dados.
 - [Fase 02 — Conta e contexto](doc:fase-02-conta-e-contexto) — **in-progress** — Contexto, `admin:create`, administração de contas/vínculos administrativos, troca própria de senha/e-mail e avisos implementados; configuração própria de dados pessoais de Discente e Supervisor implementada, incluindo endereço com busca por CEP; validações restantes da fase seguem pendentes.
 - [Fase 03 — Activity Log](doc:fase-03-activity-log) — **completed** — Eventos Eloquent, autoria por vínculo e auditoria dos campos pessoais e profissionais implementados.
-- [Fase 04 — Integração de e-mail](doc:fase-04-integracao-de-email) — **in-progress** — Pipeline em fila e três fluxos de conta integrados; notificações operacionais de domínio e administração de entregas pendentes.
+- [Fase 04 — Integração de e-mail](doc:fase-04-integracao-de-email) — **in-progress** — Pipeline em fila, avisos de solicitação e fluxos administrativos implementados; notificações de documento/execução, escopos para outros vínculos e retenção pendentes.
 - [Fase 05 — Administração hierárquica](doc:fase-05-administracao) — **in-progress** — Gestão global de campi, administração de contas e vínculos e painel global do Administrador do Sistema concluídos; interface local, cursos, tipos e demais operações administrativas pendentes.
 - [Fase 06 — Documentos](doc:fase-06-documentos) — **planned** — Checklist de templates DOCX, versões, geração e acompanhamento de assinatura.
-- [Fase 07 — Abertura do estágio](doc:fase-07-abertura-do-estagio) — **planned** — Checklist de criação da solicitação, envio, análise e formalização inicial do estágio.
+- [Fase 07 — Abertura do estágio](doc:fase-07-abertura-do-estagio) — **in-progress** — Rascunho, envio, análise, correção, cadastros pendentes e criação do estágio no aceite implementados; geração documental permanece pendente.
 - [Fase 08 — Estágio em andamento](doc:fase-08-estagio-em-andamento) — **planned** — Checklist de pausas, substituições, aditivos, cancelamento e histórico do estágio.
 - [Fase 09 — Avaliação e conclusão](doc:fase-09-avaliacao-e-conclusao) — **planned** — Checklist de avaliações, notas, requisitos de encerramento e conclusão do estágio.
 - [Fases de desenvolvimento](doc:fases-de-desenvolvimento) — **in-progress** — Índice das fases executáveis do desenvolvimento do SGE.
@@ -39,17 +39,18 @@ Para a sequência e o andamento atuais, consulte [Fases de desenvolvimento](doc:
 - [Enum — HolidayScope](doc:enum-holidayscope) — **implemented** — Escopo nacional, estadual ou municipal de um feriado.
 - [Enum — EmailDeliveryAttemptStatus](doc:enum-emaildeliveryattemptstatus) — **implemented** — Estados usados pelo Job de entrega e pela Action de reprocessamento.
 - [Enum — EmailMessagePurpose](doc:enum-emailmessagepurpose) — **implemented** — Finalidades dos fluxos de notificação, conta criada, novo vínculo e alteração de e-mail já implementados.
-- [Enum — EmancipationEvidenceStatus](doc:enum-emancipationevidencestatus) — **implemented** — Cast e validação do Model `EmancipationEvidence`; upload HTTP e análise ainda pendentes.
-- `EducationLevel` — **implemented** — Cinco níveis de formação do formulário do supervisor, usados no perfil, pedido de cadastro e avaliação; contrato na [Migration 02](doc:migration-02-user-personal-data).
+- [Enum — EmancipationEvidenceStatus](doc:enum-emancipationevidencestatus) — **implemented** — Cast e validação do Model `EmancipationEvidence`; upload privado e análise pelo Setor implementados.
+- [Enum — EducationLevel](doc:enum-educationlevel) — **implemented** — Cinco níveis acadêmicos, com “Graduação” como rótulo de `undergraduate`.
+- [Enum — SupervisorQualificationType](doc:enum-supervisorqualificationtype) — **implemented** — Distingue formação acadêmica e experiência profissional do supervisor.
 - [Enum — EvaluationStatus](doc:enum-evaluationstatus) — **implemented** — Cast e validação do Model `SupervisorEvaluation`, com schema da Migration 18; fluxo funcional de análise pendente.
 - [Enum — GeneratedDocumentOrigin](doc:enum-generateddocumentorigin) — **implemented** — Origem do documento registrado no processo de estágio.
 - [Enum — GeneratedDocumentStatus](doc:enum-generateddocumentstatus) — **implemented** — Ciclo de vida de cada documento gerado ou registrado no estágio.
 - [Enum — GeneratedDocumentType](doc:enum-generateddocumenttype) — **implemented** — Tipos de documentos registrados no processo de estágio.
 - [Enum — InternshipCancellationRequestStatus](doc:enum-internshipcancellationrequeststatus) — **implemented** — Ciclo do pedido de cancelamento de estágio formalizado; fluxo decisório pendente.
-- [Enum — InternshipRequestCorrectionStatus](doc:enum-internshiprequestcorrectionstatus) — **implemented** — Ciclo de cada pendência devolvida na solicitação de estágio; fluxo de análise pendente.
-- [Enum — InternshipRequestStatus](doc:enum-internshiprequeststatus) — **implemented** — Ciclo de preenchimento, envio e análise da solicitação nativa de estágio; transições do fluxo pendentes.
+- [Enum — InternshipRequestCorrectionStatus](doc:enum-internshiprequestcorrectionstatus) — **implemented** — Ciclo das correções por seção; devolução, resposta e nova análise implementadas.
+- [Enum — InternshipRequestStatus](doc:enum-internshiprequeststatus) — **implemented** — Ciclo de rascunho, envio, análise, aceite, recusa e correção da solicitação de estágio.
 - [Enum — InternshipStatus](doc:enum-internshipstatus) — **implemented** — Cast e validação de status no Model `Internship`; operações funcionais do ciclo de estágio permanecem pendentes.
-- [Enum — LegalCapacityDeclaration](doc:enum-legalcapacitydeclaration) — **implemented** — Opção declarada pelo discente para a capacidade civil; interface e análise manual pendentes.
+- [Enum — LegalCapacityDeclaration](doc:enum-legalcapacitydeclaration) — **implemented** — Declaração aplicável a menores; maioridade inferida da data de nascimento e evidência de emancipação analisada pelo Setor.
 - [Enum — PartyDocumentType](doc:enum-partydocumenttype) — **implemented** — Tipo de documento de identificação da parte concedente.
 - [Enum — RegistrationRequestStatus](doc:enum-registrationrequeststatus) — **implemented** — Ciclo das solicitações de cadastro de supervisor e parte concedente.
 
@@ -65,7 +66,7 @@ Sequência física dos arquivos em `database/migrations`; os números permanecem
 - [Migration 01A — cities](doc:migration-01a-cities) — **implemented** — Catálogo local de cidades identificado pelo código IBGE, carregado pelo `CitySeeder` antes dos endereços.
 - [Migration 22 — holidays](doc:migration-22-holidays) — **implemented** — Base persistida de feriados nacional, estadual e municipal, com importação BrasilAPI para nacionais e estaduais.
 - [Migration 01 — addresses](doc:migration-01-addresses) — **implemented** — Base backend com cidade local, validação dos campos obrigatórios, Activity Log e cópia histórica; CEP obrigatório validado com PT-BR Validator, armazenado sem máscara e consultado na BrasilAPI com revisão nos formulários de campus.
-- [Migration 02 — user_personal_data](doc:migration-02-user-personal-data) — **implemented** — Dados pessoais e profissionais opcionais por usuário; CPF permanece na conta.
+- [Migration 02 — user_personal_data](doc:migration-02-user-personal-data) — **implemented** — Perfil pessoal, cargo/função e qualificações múltiplas de supervisor; CPF permanece na conta.
 - [Migration 03 — campuses](doc:migration-03-campuses) — **implemented** — Tabela de campi; representante legal e cargo permanecem textuais no próprio campus.
 - [Migration 04 — affiliations](doc:migration-04-affiliations) — **implemented** — Schema, Model, validação, factory, relações e Activity Log; contexto de sessão e seleção de vínculo estão implementados na Fase 02.
 - [Migration 05 — notifications](doc:migration-05-notifications) — **implemented** — Tabela nativa do Laravel para notificações internas.
@@ -118,7 +119,7 @@ Sequência física dos arquivos em `database/migrations`; os números permanecem
 - [Providers](doc:providers) — **in-progress** — Índice dos Service Providers que configuram autenticação, locale, moeda e comportamento Eloquent.
 - [Desenvolvimento — Checklist de funcionalidade](doc:desenvolvimento-checklist-de-funcionalidade) — **maintained** — Checklist reutilizável para implementar qualquer funcionalidade ou regra do SGE.
 - [Schedules](doc:schedules) — **planned** — Contrato dos comandos agendados que reconciliam a execução do estágio e vencimentos documentais.
-- [Service — InternshipEndDateCalculator](doc:service-internshipenddatecalculator) — **planned** — Contrato técnico do cálculo reproduzível da previsão de término.
+- [Service — InternshipEndDateCalculator](doc:service-internshipenddatecalculator) — **in-progress** — Cálculo inicial no envio e no aceite implementado; recálculos futuros e histórico reproduzível pendentes.
 - [Service — InternshipGradeCalculator](doc:service-internshipgradecalculator) — **planned** — Contrato técnico das notas de supervisor, relatório, apresentação e resultado consolidado.
 - [Services](doc:services) — **planned** — Índice dos serviços de domínio planejados para cálculos, documentos, snapshots e transições.
 - [Testes automatizados](doc:testes-existentes) — **maintained** — A suíte foi removida durante a implementação; a retomada depende de nova decisão do responsável.
@@ -131,6 +132,6 @@ Sequência física dos arquivos em `database/migrations`; os números permanecem
 ## Decisões
 
 - [Backlog e decisões](doc:backlog-e-decisoes) — **in-progress** — Decisões aprovadas e assuntos ainda pendentes no planejamento do SGE.
-- [Cadastros pendentes de supervisor e concedente](doc:cadastros-pendentes-de-supervisor-e-concedente) — **planned** — Contrato de dados e análise dos cadastros solicitados durante a abertura de estágio.
+- [Cadastros pendentes de supervisor e concedente](doc:cadastros-pendentes-de-supervisor-e-concedente) — **implemented** — Propostas e análise pelo Setor integradas à abertura; associação é exigida antes do aceite.
 
 - [Calendário de feriados](doc:calendario-de-feriados) — **implemented** — Importação anual automática nacional/27 UFs, recorrências municipais fixas, cadastro manual, autorização, auditoria e busca por nome.

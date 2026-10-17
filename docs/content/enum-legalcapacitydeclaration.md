@@ -1,7 +1,7 @@
 ---
 id: enum-legalcapacitydeclaration
 title: Enum — LegalCapacityDeclaration
-description: Opção declarada pelo discente para a capacidade civil no formulário de abertura.
+description: Capacidade civil do discente determinada pela data de nascimento ou declarada quando menor.
 type: enum-reference
 status: implemented
 visibility: public
@@ -10,17 +10,17 @@ related: migration-19-internship-requests
 source_refs: https://github.com/sge-suite/sge/blob/master/app/Enums/LegalCapacityDeclaration.php
 ---
 > [!info] Escopo
-> A classe, o cast no Model e a coluna da Migration 19 já existem. A exigência de comprovante na solicitação também está implementada pela Migration 19A; interface, upload e análise manual continuam planejados. Este enum registra a opção escolhida no formulário; não substitui a data de nascimento nem aprova automaticamente uma emancipação. Não há testes automatizados no repositório atualmente; a validação fica para a preparação para produção.
+> A classe, o cast no Model e a coluna da Migration 19 já existem. A data de nascimento define automaticamente a maioridade; o enum registra uma declaração somente para menores. Envio privado, análise manual e conferência da evidência no aceite estão implementados. O enum não substitui a data de nascimento nem aprova automaticamente uma emancipação.
 
 ## Contrato
 
 | Case | Valor persistido | Rótulo | Regra no envio |
 | --- | --- | --- | --- |
-| `Adult` | `adult` | Maior de idade | Aceito somente se a data de nascimento indicar 18 anos completos. Não pede responsável legal. |
+| `Adult` | `adult` | Maior de idade | Definido automaticamente quando a data de nascimento indicar 18 anos completos; não é opção manual. |
 | `Minor` | `minor` | Menor de idade | Exige nome, CPF, parentesco e e-mail do responsável legal. |
 | `EmancipatedMinor` | `emancipated_minor` | Menor emancipado | Exige anexo privado do comprovante e dispensa os dados do responsável até a análise do Setor. |
 
-Em `Draft`, a opção pode ser nula. Fora de rascunho, ela é obrigatória. A escolha `adult` incompatível com a data de nascimento é recusada no servidor. Para `emancipated_minor`, a solicitação pode ser enviada e segue para análise manual; a escolha não altera os dados pessoais nem vale como aprovação. Se o Setor devolver o comprovante como inválido, a correção indica a seção de capacidade civil: o discente pode enviar novo comprovante ou mudar a opção para `minor`, caso em que informa o responsável legal.
+Em `Draft`, a opção pode ser nula enquanto os dados pessoais estiverem incompletos. Quando a data indica maioridade, o sistema grava `adult`; menores precisam escolher uma das outras duas opções. Para `emancipated_minor`, a solicitação pode ser enviada e segue para análise manual; a escolha não altera os dados pessoais nem vale como aprovação. Se o Setor devolver o comprovante como inválido, a correção indica a seção de capacidade civil: o discente pode enviar novo comprovante ou mudar a opção para `minor`, caso em que informa o responsável legal.
 
 ## Checklist
 
@@ -29,4 +29,4 @@ Em `Draft`, a opção pode ser nula. Fora de rascunho, ela é obrigatória. A es
 - [ ] Testar cases, valores, rótulos e opções.
 - [ ] Testar divergência da opção `adult` com a data de nascimento e os campos obrigatórios de `minor`.
 - [ ] Testar anexo ausente e devolução do comprovante após a Migration 19A.
-- [ ] Exibir rótulos em português somente na interface.
+- [x] Calcular maioridade a partir da data de nascimento e exigir declaração somente de menores.

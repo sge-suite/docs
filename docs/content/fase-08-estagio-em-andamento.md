@@ -51,4 +51,4 @@ Priorize primeiro o cálculo puro da data final e as Actions transacionais de pa
 
 ## Dependência de calendário
 
-A base local, importação anual e gestão estão implementadas em [Calendário de feriados](doc:calendario-de-feriados). Não há motor móvel nem chamada externa durante consultas. Todos os eventos aceitos bloqueiam o dia. Alteração do catálogo não dispara recálculo de estágios nesta entrega. O fluxo de cálculo/exceções e a definição de uma base histórica reproduzível continuam pendentes; Activity Log sozinho não congela suas entradas.
+A base local, importação anual e gestão estão implementadas em [Calendário de feriados](doc:calendario-de-feriados). O cálculo inicial da previsão já usa os feriados no envio da solicitação e no aceite, sem motor móvel nem chamada externa durante consultas. Todos os eventos aceitos bloqueiam o dia. Alteração do catálogo não dispara recálculo de estágios; ajustes por mudanças futuras, exceções e uma base histórica reproduzível continuam pendentes. Activity Log sozinho não congela as entradas do cálculo.

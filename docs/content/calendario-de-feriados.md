@@ -17,7 +17,7 @@ O SGE usa ocorrências persistidas. Todos os eventos aceitos, inclusive pontos f
 
 Feriados e recorrências não pertencem a campi. O calendário é único para o SGE, com escopo nacional, estadual ou municipal conforme o território do evento. Somente o Administrador do Sistema ativo e selecionado cadastra, altera, exclui/restaura ocorrências e recorrências e revisa pendências. Importações extraordinárias são executadas pelo comando administrativo.
 
-O Setor de Estágio ativo e selecionado consulta todos os feriados e recorrências, inclusive de outras UFs ou municípios. Ano, escopo, UF e cidade são filtros opcionais e não uma restrição territorial imposta pelo campus. A localidade de execução do estágio será considerada somente na seleção dos feriados para o futuro cálculo.
+O Setor de Estágio ativo e selecionado consulta todos os feriados e recorrências, inclusive de outras UFs ou municípios. Ano, escopo, UF e cidade são filtros opcionais e não uma restrição territorial imposta pelo campus. A localidade de execução do estágio é usada no cálculo inicial da previsão ao enviar a solicitação e novamente no aceite.
 
 A separação por `campus_id` e a publicação de cadastros locais foram removidas das migrations originais. O responsável pelo ambiente fará `migrate:fresh`; a aplicação não converte nem elimina registros dos bancos antigos automaticamente.
 
@@ -63,9 +63,9 @@ Administrador do Sistema mantém toda a base e consulta sua auditoria. Setor de 
 
 Lixeiras são individuais por tipo de cadastro, sem separação por campus. Seus links aparecem quando existem excluídos. Apenas o Administrador restaura ou altera registros. Confirmações revalidam autorização antes de exibir o alvo e as gravações revalidam dentro da transação. A revisão de pendências usa a Policy do item importado, nas rotas, Livewire, requisição e Action. Auditoria de manutenção do calendário é central, pelo Administrador.
 
-## Integração futura
+## Uso no cálculo da previsão
 
-`HolidayCalendar::occurrences(city, startsOn, endsOn)` seleciona os escopos nacional, estadual e municipal aplicáveis à cidade do local de execução, sem argumento de campus. `blockedDates` deduplica datas. A listagem administrativa e a consulta do Setor não impõem essa seleção territorial. Não há chamadas externas durante consulta nem recálculo automático de estágios. A integração do cálculo e o retrato histórico de suas entradas permanecem pendentes.
+`HolidayCalendar::occurrences(city, startsOn, endsOn)` seleciona os escopos nacional, estadual e municipal aplicáveis à cidade do local de execução, sem argumento de campus. `blockedDates` deduplica datas. A listagem administrativa e a consulta do Setor não impõem essa seleção territorial. O serviço usa o calendário local no cálculo de término durante o envio da solicitação e no aceite, sem chamadas externas. Alterações posteriores do calendário não disparam recálculos; histórico reproduzível das entradas e recálculos futuros permanecem pendentes.
 
 ## Validação
 

@@ -1,89 +1,80 @@
 ---
 id: schedules
 title: Schedules
-description: Contrato dos comandos agendados que reconciliam a execução do estágio e vencimentos documentais.
+description: Comandos agendados ativos e rotinas de estágio ainda planejadas.
 type: technical-reference
-status: planned
+status: in-progress
 visibility: public
 tags: sge/desenvolvimento, sge/schedules, sge/estagio, sge/notificacoes
 related: calendario-de-feriados, e-mails-notificacoes-e-entregas, ciclos-de-status, enum-internshipstatus, migration-17-internship-pauses, fase-08-estagio-em-andamento, configuracao-e-bootstrap
-source_refs:
+source_refs: https://github.com/sge-suite/sge/blob/master/routes/console.php, https://github.com/sge-suite/sge/blob/master/app/Console/Commands/SyncInternshipExecutionStatuses.php, https://github.com/sge-suite/sge/blob/master/app/Actions/SyncInternshipExecutionStatus.php, https://github.com/sge-suite/sge/blob/master/app/Actions/NotifyInternshipExecutionStatus.php
 ---
 ## Objetivo e limite
 
-Os schedules tratam somente fatos que passam a valer com o tempo, mesmo sem alguém abrir o sistema. Eles reconciliam o estado persistido com a data institucional, sempre por Actions e regras de transição já usadas pela interface. Não podem fazer `update` em massa, pular Policies quando houver um ator humano nem inventar um usuário como autor da alteração.
+Os schedules tratam fatos que passam a valer com o tempo, mesmo sem alguém abrir o sistema. O sincronizador da execução do estágio já está ativo e reconcilia o estado persistido com a data institucional por uma Action. As rotinas de aviso de término previsto e resumo diário operacional do Setor continuam planejadas.
 
-O horário de referência será o `APP_TIMEZONE` institucional, configurado como `America/Sao_Paulo` antes da produção. Não haverá fuso por campus nesta primeira versão: todos os campi atendidos estão no mesmo fuso nacional. Os comandos de estágio planejados aceitarão `--date=AAAA-MM-DD` para reprocessamento controlado e investigação; sem a opção, usa a data corrente nesse fuso.
+O horário de referência usa `app.timezone`, atualmente `America/Sao_Paulo`. Não há fuso por campus. `internships:sync-execution-status` aceita `--date=AAAA-MM-DD` para reprocessamento controlado e investigação; sem a opção, usa a data corrente nesse fuso.
 
 > [!important] Ações imediatas e reconciliação
 > Criar, alterar ou remover uma pausa chama a mesma Action de sincronização imediatamente. O schedule diário é a rede de segurança para datas que viram sem interação humana e para recuperar uma execução eventualmente interrompida.
 
-Todo processamento associado a campus deve ignorar campi desativados na seleção e conferir o estado novamente dentro da transação antes de gravar. Para evitar corrida com a desativação, bloquear primeiro o campus e depois o estágio. Durante o período inativo, schedules não mudam estados nem criam notificações ou e-mails para esses processos. Reativar não dispara um replay; a próxima execução regular segue os critérios temporais normais, sem reenviar lembretes cujo prazo já passou.
+O sincronizador ignora campi desativados na seleção e confere o estado novamente dentro da transação antes de gravar. Para evitar corrida com a desativação, bloqueia primeiro o campus e depois o estágio. Enquanto o campus está inativo, não altera status nem cria notificações ou e-mails. Reativar não dispara um replay além da reconciliação normal da data vigente.
 
-## Comandos iniciais
+## Rotinas ativas
 
 | Comando | Horário | Seleção e efeito | Não faz |
 | --- | --- | --- | --- |
-| `internships:sync-execution-status` | diariamente, 00:05 | Move `Released` para `InProgress` quando a data planejada de início chegou; move `InProgress` para `Paused` se houver pausa ativa; move `Paused` para `InProgress` quando não houver mais pausa ativa. | Não conclui, cancela, recalcula a previsão nem altera estágios finais. |
-| `internships:notify-projected-end` | diariamente, 08:00 | Para estágio `InProgress` com `projected_end_date = data + 7 dias`, avisa o discente e monta o resumo interno do Setor de Estágio. | Não conclui o estágio, não altera a previsão nem envia e-mail ao Setor. |
+| `internships:sync-execution-status` | diariamente, 00:05 | Em campus ativo, move `Released` para `InProgress` quando a data planejada chegou e ajusta para `Paused` ou `InProgress` conforme pausas vigentes. Notifica o discente quando o status muda. | Não conclui, cancela nem recalcula a previsão. |
+| `holidays:prepare` | diariamente, 03:00 | Importa feriados nacionais e estaduais e gera feriados municipais por recorrência para o ano atual e os dois seguintes. | Não recalcula estágios. |
+| `internship-requests:notify-office` | diariamente, 08:00 | Envia ao Setor o resumo interno das solicitações pendentes, agrupado por campus e destinatário. | Não resume eventos da execução dos estágios nem envia e-mail ao Setor. |
 
-Os horários são deliberadamente separados: o aviso de término roda depois da sincronização de início, pausa e retomada. Em produção, os dois comandos serão registrados em `routes/console.php` com `dailyAt`, `onOneServer()` e `withoutOverlapping()`. O servidor executará `php artisan schedule:run` a cada minuto; `schedule:work` é apenas a alternativa de desenvolvimento local.
+As três rotinas estão registradas em `routes/console.php`, no fuso institucional, com `onOneServer()` e `withoutOverlapping()`. Em produção, o servidor executa `php artisan schedule:run` a cada minuto; `schedule:work` é a alternativa de desenvolvimento local.
+
+## Rotinas de estágio adiadas
+
+O aviso ao discente de término previsto e o resumo diário dos eventos operacionais do Setor não estão implementados nem registrados no scheduler. A regra de aviso precisa ser revista: em muitos casos, quando faltam sete dias para a previsão, o estágio já terminou na prática. O prazo e o evento que devem disparar o aviso serão definidos antes de criar essa rotina.
+
+O resumo diário futuro deverá reunir eventos de início, pausa e retomada e as pendências de execução relevantes para o Setor. O resumo existente de `internship-requests:notify-office` cobre somente solicitações pendentes.
 
 ## Regra de sincronização de execução
 
-A Action `SynchronizeInternshipExecutionStatus` recebe um estágio bloqueado e uma data de referência. Ela consulta a pausa cujo intervalo inclusivo contém a data (`starts_at <= data <= ends_at`) e aplica somente uma das regras abaixo, nesta ordem de elegibilidade.
+A Action `SyncInternshipExecutionStatus` recebe um estágio bloqueado e uma data de referência. Ela considera pausas executadas e planejadas cujos intervalos inclusivos contêm a data, e aplica as regras abaixo.
 
 | Estado atual | Condição | Estado resultante |
 | --- | --- | --- |
-| `Released` | `planned_start_date <= data` | `InProgress` |
+| `Released` | `planned_start_date <= data` e sem pausa vigente | `InProgress` |
+| `Released` | `planned_start_date <= data` e com pausa vigente | `Paused` |
 | `InProgress` | há uma pausa ativa na data | `Paused` |
 | `Paused` | não há pausa ativa na data | `InProgress` |
 | `PendingFormalization`, `AwaitingSignatures`, `PendingCorrection`, `Completed` ou `Cancelled` | qualquer condição | sem alteração |
 
-Uma pausa pertence à execução: só pode ser cadastrada para estágio já `InProgress`, tem `starts_at`, `ends_at` e `reason` obrigatórios e não pode começar antes de `planned_start_date`. Assim, não existe transição direta de `Released` para `Paused` nem uma pausa prévia que oculte a entrada em andamento.
+Uma pausa nova só pode ser cadastrada enquanto o estágio está em andamento; ela exige início, fim e motivo e não pode começar antes de `planned_start_date`. Períodos já cadastrados podem ser ajustados enquanto o estágio está em andamento ou pausado. O início de uma pausa planejada pode coincidir com o primeiro dia: nesse caso o sincronizador registra a entrada em andamento e a pausa, e envia ao discente uma notificação consolidada de início em pausa.
 
-`Completed` continua uma decisão de negócio, não uma consequência do calendário. Mesmo que a previsão de término tenha chegado, o estágio só é concluído quando a carga horária integral é confirmada; avaliações e notas permanecem em trilha acadêmica separada. O cálculo da previsão também não é agendado: ele é refeito na Action que muda data de início, jornada, calendário ou pausa e persiste sua base reproduzível.
+`Completed` continua uma decisão de negócio, não uma consequência do calendário. Mesmo que a previsão de término tenha chegado, o estágio só é concluído quando a carga horária integral é confirmada. A previsão não é recalculada por este schedule: ela é refeita e persistida ao salvar alterações relevantes do estágio ou mudanças de pausa.
 
 ## Auditoria, concorrência e idempotência
 
-Cada transição de status feita por schedule é processada individualmente, em transação curta, com `lockForUpdate()` no estágio. A consulta externa usa `chunkById`; o estado e as condições sempre são lidos novamente dentro do lock. Nessas transições, as propriedades do `activity_log` registram ao menos:
+Cada estágio é processado em transação curta, com `lockForUpdate()` no campus e no estágio. A consulta externa usa `eachById`; o estado e as condições são lidos novamente dentro do lock. As transições registram no `activity_log`:
 
-- `source: scheduled`, nome do comando e data de referência;
-- status anterior e resultante, ou motivo de não haver alteração;
-- `internship_pause_id`, quando aplicável; e
-- identificador técnico da execução para correlação operacional.
+- `source: scheduled`, nome do comando, `run_id` e data de referência; e
+- status anterior e resultante e `internship_pause_id`, quando houver pausa executada associada.
 
-O `causer` é nulo ou representa explicitamente o sistema, nunca o Setor de Estágio ou outro usuário sem ação humana. O lembrete de término previsto não cria Activity Log: a notificação deduplicada, os snapshots de e-mail e a telemetria do command são sua trilha operacional. Cancelamento, correção e alteração de estado continuam exclusivamente manuais e registrados no Activity Log. Falhas de uma unidade não interrompem as demais; elas são registradas e tornam o comando inelegível como sucesso para o monitoramento.
+O `causer` da transição agendada é o sistema, nunca o Setor ou outro usuário sem ação humana. Falhas em um estágio não interrompem os demais; são registradas e fazem o comando terminar com falha.
 
 O lock distribuído de `onOneServer()` depende do cache compartilhado já previsto. `withoutOverlapping()` deve ter TTL acima da duração observada do comando, com alerta se o lock ficar retido. A operação de produção monitora falha do scheduler, comandos atrasados, duração anormal e quantidade de estágios processados; não deve corrigir registros diretamente no banco.
 
-## Notificações dos eventos temporais
+## Notificações das transições implementadas
 
-A própria Action cria a notificação interna na mesma transação da transição. Para o discente, o Job de e-mail é despachado após o commit; a falha desse Job nunca remove o aviso dentro do sistema. O Setor de Estágio não recebe um e-mail nem uma notificação por estágio: às 08:00 recebe uma única notificação interna por campus e destinatário, com contagens e links filtrados. A fila trata tentativas, backoff e falhas conforme [E-mails, notificações e entregas](doc:e-mails-notificacoes-e-entregas).
+A Action cria a notificação interna na mesma transação da mudança de status e registra a entrega de e-mail para o discente. O Job é despachado após o commit; uma falha de e-mail não remove a notificação interna. A fila trata tentativas, backoff e falhas conforme [E-mails, notificações e entregas](doc:e-mails-notificacoes-e-entregas). O Setor não recebe um aviso por estágio nesse fluxo.
 
 | Evento | Discente | Setor de Estágio |
 | --- | --- | --- |
-| entrada automática em andamento | notificação interna e e-mail | entra no resumo diário. |
-| início ou término de pausa | notificação interna e e-mail | entra no resumo diário. |
-| previsão de término a sete dias | notificação interna e e-mail, uma única vez | entra no resumo diário. |
+| entrada automática em andamento | notificação interna e e-mail | sem resumo operacional de estágio implementado. |
+| início ou término de pausa | notificação interna e e-mail | sem resumo operacional de estágio implementado. |
 
-O lembrete de término usa exclusivamente a `projected_end_date` vigente, porque ela já incorpora jornada, calendário, exceções e pausas. A chave estável do aviso inclui estágio, data projetada vigente, limiar de sete dias e destinatário. Assim, a rotina diária só envia uma vez para a mesma previsão; se um evento autorizado alterar a data, a mudança relevante da previsão é comunicada pelo próprio fluxo de alteração, não por uma sequência de lembretes.
+O aviso de término previsto e o resumo diário dos estágios continuam pendentes de definição e implementação. O critério de sete dias descrito em versões anteriores não foi adotado.
 
-O resumo do Setor agrega, no mínimo, estágios iniciados, pausados ou retomados no dia, estágios com término previsto em sete dias e estágios cuja previsão já passou sem conclusão. Ele é somente interno e não expõe dados sensíveis na listagem resumida.
-
-Cada destinatário recebe no máximo uma notificação por fato temporal. A Action usa uma chave estável que combina evento, estágio, data efetiva e destinatário. Quando houver e-mail, essa chave participa de `email_messages.idempotency_key`. Para o resumo somente interno, a implementação deve definir antes um registro operacional durável de despacho; a tabela nativa `notifications` não deve receber colunas próprias para essa finalidade.
-
-## Validação automatizada antes da produção
-
-- congelar a data institucional e testar início, pausa ativa, término de pausa e todos os estados que devem permanecer imutáveis;
-- executar cada comando duas vezes para provar idempotência de status, Activity Log, correção, notificação e e-mail;
-- testar concorrência entre alteração manual de pausa e schedule, incluindo releitura sob lock;
-- garantir que `Completed` nunca seja produzido pelo command e que a previsão só seja recalculada pelos gatilhos de domínio;
-- testar lembrete exatamente a sete dias, nova previsão após mudança autorizada e ausência de aviso fora do limiar;
-- testar resumo único interno por campus/destinatário, sem `email_message` para o Setor;
-- testar despacho de e-mail do discente somente após commit, destinatário sem canal de e-mail e a idempotência da fonte de despacho;
-- testar que um campus desativado é ignorado antes da gravação e revalidado dentro do lock, sem status, notificação ou e-mail; e
-- executar em ambiente com cache compartilhado e validar `onOneServer`, `withoutOverlapping` e os alertas operacionais.
+Uma execução repetida não duplica o aviso de uma transição já aplicada: o estado é relido dentro do lock e a Action não envia notificação quando não há mudança.
 
 ## Relações
 
@@ -95,6 +86,6 @@ Cada destinatário recebe no máximo uma notificação por fato temporal. A Acti
 
 ## Preparação anual do calendário — implementada
 
-`holidays:prepare` roda diariamente às 03h no fuso institucional, com `onOneServer()` e `withoutOverlapping(180)`. Mantém ano atual e dois seguintes, consultando somente nacionais/UFs ainda não concluídos. Não recalcula estágios. O processo gera municipais por recorrência, recupera falhas e usa dados locais em qualquer consulta posterior. A cobertura é a dos dados retornados pela fonte, não uma certificação legal. Importações extraordinárias usam `holidays:import`, executado sequencialmente. O cron é necessário para a rotina diária; o worker atende à indexação Scout dos registros após commit.
+`holidays:prepare` roda diariamente às 03h no fuso institucional, com `onOneServer()` e `withoutOverlapping(180)`. Mantém o ano atual e os dois seguintes, consultando somente nacionais e estaduais ainda não concluídos. Não recalcula estágios. O processo gera municipais por recorrência, recupera falhas e usa dados locais em qualquer consulta posterior. A cobertura é a dos dados retornados pela fonte, não uma certificação legal. Importações extraordinárias usam `holidays:import`, executado sequencialmente.
 
 Para executar a rotina em produção, configure o cron do Laravel para chamar `php artisan schedule:run` a cada minuto, na pasta da aplicação. No desenvolvimento com Sail, use `./vendor/bin/sail artisan schedule:work`. O comando `holidays:prepare` também pode ser executado manualmente e não possui opção `--date`. O registro em `routes/console.php` não inicia o scheduler por conta própria.

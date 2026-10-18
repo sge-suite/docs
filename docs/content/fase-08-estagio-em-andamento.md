@@ -3,37 +3,39 @@ id: fase-08-estagio-em-andamento
 title: Fase 08 — Estágio em andamento
 description: Checklist de pausas, substituições, aditivos, cancelamento e histórico do estágio.
 type: development-phase
-status: planned
+status: in-progress
 visibility: public
 tags: sge/desenvolvimento, sge/estagio, sge/checklist
 related: fluxos-principais, migration-17-internship-pauses, migration-22-holidays, migration-22-internship-calendar-overrides, migration-23-internship-work-schedules, enum-internshipstatus, enum-generateddocumenttype, schedules, fase-09-avaliacao-e-conclusao
-source_refs:
+source_refs: https://github.com/sge-suite/sge/blob/master/routes/console.php, https://github.com/sge-suite/sge/blob/master/app/Actions/ProjectInternshipEndDate.php, https://github.com/sge-suite/sge/blob/master/app/Actions/UpdateInternshipData.php, https://github.com/sge-suite/sge/blob/master/app/Console/Commands/SyncInternshipExecutionStatuses.php
 ---
 Base: [acompanhamento do estágio](doc:fluxos-principais#4-estagio-em-andamento).
 
-Priorize primeiro o cálculo puro da data final e as Actions transacionais de pausa, jornada, aditivo, substituição e cancelamento. Implemente Jobs/schedules idempotentes antes das telas operacionais; a cobertura automatizada dessas regras fica para a preparação para produção.
+As telas do Setor para editar o estágio, consultar a previsão e manter exceções de calendário estão disponíveis. O cálculo considera as regras copiadas para o estágio, pausas, calendário e exceções, e a previsão é atualizada ao salvar mudanças relevantes. A execução completa ainda depende dos fluxos documentais, mudanças formais de jornada, avaliação e conclusão.
 
 ## Checklist
 
 - [ ] Liberar o estágio pelo Setor de Estágio somente após requisitos documentais e assinaturas.
-- [ ] Criar `internships:sync-execution-status`, diário e idempotente, para iniciar estágio liberado, pausar execução e retomar pausa encerrada.
+- [x] Criar `internships:sync-execution-status`, diário e idempotente, para iniciar estágio liberado, pausar execução e retomar pausa encerrada.
 - [ ] Permitir que o Setor decida manualmente se registra a assinatura, cancela o documento ou abre correção da nova data após analisar o vencimento documental.
-- [ ] Registrar os schedules em `routes/console.php` com `onOneServer`, `withoutOverlapping` e a operação de `schedule:run` em produção.
-- [ ] Implementar pausas com início/fim em data, motivo, estado `InProgress` de origem e validação de sobreposição.
-- [ ] Sincronizar o status imediatamente ao criar/alterar/remover pausa, além da reconciliação diária.
+- [x] Registrar `internships:sync-execution-status` em `routes/console.php` às 00:05 com `onOneServer` e `withoutOverlapping`.
+- [ ] Implementar pausas com início/fim em data, motivo e validação de sobreposição; novos períodos só podem ser criados em `InProgress`.
+- [x] Sincronizar o status imediatamente ao criar/alterar/remover pausa, além da reconciliação diária.
 - [ ] Usar calendário nacional, estadual e municipal persistido conforme a cidade/UF do endereço histórico do local de trabalho, sem dependência de rede no cálculo.
-- [ ] Permitir ao Setor de Estágio liberar ou bloquear uma data específica em `internship_calendar_overrides`, com motivo e auditoria; recessos, folgas, pontes e fechamentos devem ser representados por pausas, não por `holidays`.
+- [x] Permitir ao Setor de Estágio liberar ou bloquear uma data específica em `internship_calendar_overrides`, com motivo e auditoria; recessos, folgas, pontes e fechamentos devem ser representados por pausas, não por `holidays`.
 - [ ] Gravar a jornada inicial em `internships.weekly_hours` e impedir sua edição ordinária durante o estágio.
 - [ ] Permitir nova vigência de jornada somente após aditivo com assinaturas conferidas; impedir sobreposição/lacuna e reescrita de dias passados.
-- [ ] Recalcular término com carga horária, jornada pactuada ou aditivo formalizado, calendário, pausas e margem congelada.
-- [ ] Recalcular e persistir `internships.projected_end_date` após pausas, feriados aplicáveis e aditivos formalizados, sem JSONB de fórmula.
+- [x] Recalcular a previsão a partir das regras salvas no estágio, jornada, calendário, exceções, pausas e margem.
+- [x] Persistir `internships.projected_end_date` após alterações relevantes do estágio e pausas; o histórico completo das entradas e do calendário usado ainda não é congelado.
 - [ ] Implementar substituição autorizada de orientador/supervisor.
 - [ ] Preservar pessoa anterior e motivo da substituição.
 - [ ] Gerar aditivo pelo fluxo de documentos.
 - [ ] Dar ao aditivo ciclo próprio de assinatura.
 - [ ] Implementar cancelamento com permissão, motivo, Activity Log e notificações.
-- [ ] Criar notificações deduplicadas e Jobs pós-commit para o discente em início, pausa, retomada, vencimento documental e lembrete único de término previsto a sete dias.
-- [ ] Criar resumo diário interno, por campus e destinatário do Setor de Estágio, agrupando os eventos temporais e pendências sem enviar e-mail ao Setor.
+- [x] Notificar o discente, dentro do sistema e por e-mail após commit, quando o estágio inicia, pausa ou retoma.
+- [ ] Definir e implementar o aviso de término previsto. O prazo anterior de sete dias foi adiado para revisão.
+- [ ] Criar resumo diário interno, por campus e destinatário do Setor de Estágio, agrupando eventos temporais e pendências sem enviar e-mail ao Setor.
+- [x] Disponibilizar telas do Setor para editar dados e regras congeladas do estágio, consultar o calendário projetado e registrar exceções em conjunto com as alterações salvas.
 - [x] Permitir que o discente solicite cancelamento antes do início ou durante o andamento.
 - [x] Definir a decisão do Setor de Estágio e os efeitos documentais da aprovação do cancelamento.
 - [ ] Preservar histórico de todas as alterações.
@@ -51,4 +53,4 @@ Priorize primeiro o cálculo puro da data final e as Actions transacionais de pa
 
 ## Dependência de calendário
 
-A base local, importação anual e gestão estão implementadas em [Calendário de feriados](doc:calendario-de-feriados). O cálculo inicial da previsão já usa os feriados no envio da solicitação e no aceite, sem motor móvel nem chamada externa durante consultas. Todos os eventos aceitos bloqueiam o dia. Alteração do catálogo não dispara recálculo de estágios; ajustes por mudanças futuras, exceções e uma base histórica reproduzível continuam pendentes. Activity Log sozinho não congela as entradas do cálculo.
+A base local, importação anual e gestão estão implementadas em [Calendário de feriados](doc:calendario-de-feriados). O cálculo da previsão considera feriados persistidos, exceções, pausas e regras copiadas para o estágio, sem chamada externa durante consultas. Alterar o tipo de estágio não muda o snapshot de regras já salvo no estágio. Alterações relevantes do próprio estágio recalculam a data prevista. Ainda falta preservar uma versão reproduzível de todas as entradas e datas consideradas em cada cálculo; o Activity Log sozinho não congela esses dados.

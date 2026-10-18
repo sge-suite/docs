@@ -23,7 +23,7 @@ Este mapa descreve os pontos de entrada que não são Models, Helpers ou migrati
 
 ### `routes/console.php`
 
-Atualmente registra apenas o comando padrão `inspire`. Os comandos de domínio `internships:sync-execution-status` e `internships:notify-projected-end` estão planejados em [Schedules](doc:schedules); quando implementados, deverão rodar no `APP_TIMEZONE`, com `onOneServer()` e `withoutOverlapping()`, e serão acionados por `php artisan schedule:run`.
+Registra três rotinas diárias no fuso de `app.timezone`, todas com `onOneServer()` e `withoutOverlapping()`: `internships:sync-execution-status` às 00:05, `holidays:prepare` às 03:00 e `internship-requests:notify-office` às 08:00. O aviso de término previsto e o resumo diário dos eventos operacionais do estágio ainda estão planejados; veja [Schedules](doc:schedules). Em produção, `php artisan schedule:run` deve ser chamado a cada minuto pelo cron.
 
 ### `bootstrap/providers.php`
 

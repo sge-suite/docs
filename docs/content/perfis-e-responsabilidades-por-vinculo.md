@@ -110,7 +110,7 @@ Cadastro de conta, novo vínculo, troca de e-mail de login, desativação e excl
 
 ### Notificações e auditoria
 
-Recebe no sistema um resumo diário agrupado por campus e destinatário, sem e-mail operacional fragmentado. Suas decisões e mudanças registram vínculo responsável, motivo e efeitos no Activity Log. As telas de Logs aplicam o campus do vínculo ativo a cada requisição, inclusive ao trocar de contexto ou acessar diretamente um evento. Autor e destinatário não concedem acesso a registros externos. Dados de acesso de outros administradores são protegidos; a própria conta pode consultar seus avisos de troca de e-mail mesmo quando também possui vínculo global. Avisos enviados a interessados de assinatura mantêm categorias e quantidade, nunca endereços de e-mail no log.
+Recebe no sistema um resumo diário agrupado por campus e destinatário das solicitações pendentes. O resumo diário de eventos operacionais dos estágios ainda está planejado. Suas decisões e mudanças registram vínculo responsável, motivo e efeitos no Activity Log. As telas de Logs aplicam o campus do vínculo ativo a cada requisição, inclusive ao trocar de contexto ou acessar diretamente um evento. Autor e destinatário não concedem acesso a registros externos. Dados de acesso de outros administradores são protegidos; a própria conta pode consultar seus avisos de troca de e-mail mesmo quando também possui vínculo global. Avisos enviados a interessados de assinatura mantêm categorias e quantidade, nunca endereços de e-mail no log.
 
 ### Controles a implementar
 

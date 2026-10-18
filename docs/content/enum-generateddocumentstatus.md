@@ -25,7 +25,7 @@ O status pertence ao documento, não ao estágio. `Cancelled` encerra o ciclo do
 
 A transição de um documento assinável para `AwaitingSignature` exige que o Setor informe o local de disponibilização para assinatura em campo textual genérico e, se optar por disparar o aviso, selecione ao menos um interessado elegível. A plataforma é somente um valor informado no registro; não é case do enum nem constante do sistema.
 
-Quando a data de início vencer antes da assinatura, o documento continua `AwaitingSignature`: não há schedule para esse fato. Cancelamento, pendência documental e correção são decisões manuais do Setor, sempre com motivo e Activity Log. Uma reemissão só inicia novo ciclo documental depois de eventual correção ser aprovada, preservando o cancelado no histórico.
+Quando a data de início vencer antes da assinatura, o documento continua `AwaitingSignature`: não há schedule para esse fato. Cancelamento e devolução do estágio para correção são decisões manuais do Setor, sempre com motivo e Activity Log. Uma reemissão só inicia novo ciclo documental depois de eventual correção ser aprovada, preservando o cancelado no histórico.
 
 `OrientationCertificate` usa `Generated` e não passa por assinatura. Não existem os status `Registered` ou `Released` para documentos; `Released` pertence ao ciclo do estágio. Falhas técnicas de Job não viram status persistente sem decisão explícita.
 

@@ -10,7 +10,7 @@ related: fluxos-principais, pessoas-e-responsabilidades, glossario
 source_refs:
 ---
 > [!info] Estado da página
-> Os ciclos abaixo são os status definidos para o domínio. Eles documentam o comportamento esperado e não significam que todas as transições já estejam implementadas.
+> Os ciclos abaixo registram os status do domínio. Hoje, início, pausa e retomada do estágio são sincronizados automaticamente; as demais transições documentais, conclusão e cancelamento ainda dependem de fluxos próprios.
 
 Um estado indica em que ponto o processo está, como “Em análise” ou “Em andamento”. Ele não é um julgamento sobre a pessoa: mostra o que já aconteceu, o que ainda falta e quem pode agir em seguida.
 
@@ -36,14 +36,14 @@ A retirada pode acontecer antes do aceite. O diagrama mostra os pontos de retira
 | --- | --- |
 | Em formalização | O estágio foi criado e os documentos estão sendo preparados. |
 | Aguardando assinaturas | Os documentos foram encaminhados e aguardam conclusão e conferência das assinaturas. |
-| Com pendência documental | Alguma informação ou documento precisa ser corrigido antes de seguir. |
+| Com pendência de correção | A solicitação de um estágio já criado foi devolvida para ajuste; o estágio volta à formalização quando o Setor aprova a correção. |
 | Liberado | As assinaturas foram conferidas; o estágio aguarda ou alcançou sua data de início. |
 | Em andamento | O estágio está em execução. |
 | Pausado | Há uma pausa válida no período. |
 | Concluído | A carga horária integral do estágio foi cumprida. |
 | Cancelado | O processo foi encerrado sem conclusão. |
 
-Uma pausa só é registrada durante o estágio em andamento. Quando a pausa começa ou termina, o sistema atualiza a situação do estágio conforme a data registrada. A conclusão não acontece apenas porque a data prevista de término chegou: é preciso confirmar o cumprimento da carga horária.
+Uma pausa executada só é registrada para estágio em andamento ou pausado. Quando a pausa começa ou termina, a Action atualiza a situação imediatamente; o schedule diário também sincroniza datas que mudaram sem interação. Essas transições notificam o discente. A conclusão não acontece apenas porque a data prevista de término chegou: é preciso confirmar o cumprimento da carga horária.
 
 O diagrama mostra os caminhos representativos de cancelamento antes e durante a execução. A regra completa é que um estágio ainda não concluído pode ser cancelado; as exceções e a autorização aplicável ficam registradas no histórico do processo.
 

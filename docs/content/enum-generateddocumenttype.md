@@ -22,7 +22,11 @@ source_refs: https://github.com/sge-suite/sge/blob/master/app/Enums/GeneratedDoc
 
 O tipo descreve a categoria do documento, não cada template. Templates continuam sendo registros separados, com versões próprias; portanto, novos templates não exigem novos cases neste enum.
 
-O atestado de orientação terá um template ativo administrado pelo setor de estágio. Esse template poderá ser versionado e será utilizado pelos coordenadores. A emissão do atestado apenas registra a geração, sem fluxo de assinatura.
+O atestado de orientação possui **um único template lógico em todo o sistema**, administrado pelo Setor de Estágio dentro do escopo autorizado. A existência de qualquer registro `orientation_certificate`, inclusive desativado, impede outro cadastro desse tipo em qualquer campus ou no escopo global. Também não é permitido converter outro template para esse tipo quando já existir um. O tipo do atestado existente é preservado: a manutenção ocorre no mesmo cadastro, por edição de metadados e, quando necessário, reativação.
+
+A unicidade do cadastro não elimina o versionamento do DOCX. O único template pode receber novas versões: cada arquivo diferente cria uma revisão independente, a nova pendente preserva a vigente e arquivos utilizados não são sobrescritos ou removidos. A emissão futura pelos coordenadores registra a versão exata utilizada, sem fluxo de assinatura. Não há limite de um documento emitido por este contrato: a unicidade se refere ao template lógico.
+
+Esta regra não amplia acesso entre campi nem concede manutenção global a novos perfis. Sem permissão sobre o cadastro existente, o vínculo não pode editá-lo nem criar um substituto.
 
 [`GeneratedDocumentOrigin`](doc:enum-generateddocumentorigin) descreve quem forneceu/gerou o documento e [`GeneratedDocumentStatus`](doc:enum-generateddocumentstatus) descreve o ciclo do registro.
 
@@ -33,6 +37,7 @@ O atestado de orientação terá um template ativo administrado pelo setor de es
 - [x] Criar enum string e rótulos.
 - [x] Implementar `options()` e `values()`.
 - [x] Adicionar cast em `DocumentTemplate`.
+- [x] Impedir segundo template lógico de atestado no sistema, inclusive por conversão de tipo, preservando o cadastro desativado e o versionamento do arquivo.
 - [x] Adicionar cast em `GeneratedDocument`.
 - [x] Usar o enum na [migration de generated_documents](doc:migration-16-generated-documents).
 - [x] Validar no Model as combinações de tipo, origem e status.

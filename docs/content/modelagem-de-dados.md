@@ -55,13 +55,13 @@ Detalhes dos contratos: [internships](doc:migration-15-internships), [internship
 
 ## Documentos e versões
 
-Templates são catálogos; versões são imutáveis depois da ativação; documentos gerados preservam a versão e o snapshot usado no processo.
+Templates são catálogos; arquivos e identidade das versões são imutáveis desde o upload, e versões utilizadas não podem ser removidas; documentos gerados preservam a versão e o snapshot usado no processo.
 
 {{diagram:modelo-documentos-schema}}
 
 | Tabela | Papel | Contrato |
 | --- | --- | --- |
-| `document_templates` | catálogo de modelos por campus ou globais | [Migration 13](doc:migration-13-document-templates) |
+| `document_templates` | catálogo por campus, tipo e classificação de remuneração | [Migration 13](doc:migration-13-document-templates) |
 | `template_versions` | versões, variáveis e validação do arquivo | [Migration 14](doc:migration-14-template-versions) |
 | `generated_documents` | documento gerado ou registrado no estágio | [Migration 16](doc:migration-16-generated-documents) |
 

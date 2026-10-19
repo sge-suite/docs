@@ -18,7 +18,7 @@ Centralizar a escrita em português de números usados nos documentos. A impleme
 | `cardinal()` | inteiro não negativo | número por extenso em português, como `cento e vinte`. |
 | `brl()` | `string`, `int` ou `Brick\Math\BigDecimal` não negativo | valor completo, como `mil e duzentos reais e cinquenta centavos`. |
 
-`brl()` será usado por `RemunerationParagraphFormatter`, que monta o §1º de remuneração em `${PARAGRAFO_REMUNERACAO}`, junto a [`CurrencyHelper`](doc:helper-currencyhelper) para o valor `R$ 1.200,50`.
+`brl()` fornece o texto de `${ESTAGIO_BOLSA_EXTENSO}` e `${ESTAGIO_AUXILIO_TRANSPORTE_EXTENSO}`; [`CurrencyHelper`](doc:helper-currencyhelper) formata os respectivos valores. As cláusulas são fixas em templates distintos com ou sem remuneração.
 
 ## Implementação atual
 
@@ -36,11 +36,11 @@ Centralizar a escrita em português de números usados nos documentos. A impleme
 - omitir a parcela igual a zero quando houver apenas reais ou apenas centavos; o valor total zero é `zero reais`;
 - lançar `InvalidArgumentException` para negativos e entradas inválidas;
 - tratar zero, um real, um centavo, negativos e valores sem centavos nos testes;
-- não criar texto jurídico: o §1º é responsabilidade do serviço de documentos.
+- não criar texto jurídico: as cláusulas pertencem ao DOCX escolhido.
 
 ## Checklist
 
-- [x] Definir uso no §1º de remuneração.
+- [x] Definir uso nas variáveis monetárias por extenso.
 - [x] Implementar `cardinal()` e `brl()`.
 - [x] Expor `numberToWords()` e `brlToWords()` em `app/helpers.php` para leitura em Blade.
 - [ ] Cobrir plurais, zeros, centavos e entradas inválidas com testes unitários.

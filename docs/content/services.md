@@ -23,9 +23,9 @@ Services concentram regras que combinam dados, mas não representam por si só u
 | `EvaluationStateTransitionService` | guardas de edição, envio, retorno, aprovação e cancelamento. |
 | `RegistrationRequestApprovalService` | associa/cria supervisor ou concedente em transação. |
 | `EmancipationReviewService` | aprova/devolve prova sem expor arquivo no log. |
-| `TemplateVariableCatalog` / `TemplateValidator` | catálogo e validação de DOCX. |
+| `TemplateVariableCatalog` / `TemplateInspector` | catálogo e inspeção de DOCX já implementados. |
 | `DocumentSnapshotBuilder` / `DocumentVariableResolver` | contexto histórico e valores do documento. |
-| `RemunerationParagraphFormatter` / `DocxDocumentGenerator` | texto jurídico e geração temporária. |
+| `DocxDocumentGenerator` | futura geração temporária com cláusulas definidas em templates por remuneração. |
 
 O conjunto documental é detalhado em [Geração de documentos DOCX e variáveis](doc:geracao-de-documentos-docx-e-variaveis). Nenhum desses serviços deve retornar resposta HTTP, ler sessão global ou decidir permissão do usuário.
 

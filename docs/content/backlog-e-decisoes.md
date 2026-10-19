@@ -73,7 +73,7 @@ source_refs:
 ### D-010 — Templates DOCX versionados e saída sem arquivo final
 
 - **Status:** definido.
-- **Decisão:** templates DOCX serão cadastrados separadamente dos tipos de documento. O catálogo de variáveis é fixo no código e cada DOCX usa as variáveis necessárias. Cada arquivo diferente enviado e validado cria uma versão; cada geração usa a versão validada mais recente e referencia exatamente a versão e a snapshot de dados usadas. Após uso, uma correção cria outra versão e a anterior permanece. Uma versão nunca usada pode ser excluída fisicamente com sua mídia. O SGE não armazena o arquivo DOCX/PDF final ou o documento assinado.
+- **Decisão:** templates DOCX serão cadastrados separadamente dos tipos de documento. O catálogo de variáveis é fixo no código e cada DOCX usa as variáveis necessárias. Cada arquivo diferente enviado e validado cria uma versão; cada geração usa a versão vigente selecionada e referencia exatamente a versão e a snapshot de dados usadas. Após uso, uma correção cria outra versão e a anterior permanece. Uma versão nunca usada pode ser excluída fisicamente com sua mídia. O SGE não armazena o arquivo DOCX/PDF final ou o documento assinado.
 - **Motivo:** permite rastrear e, quando necessário, reproduzir a geração histórica sem misturar template, tipo documental e arquivo final.
 - **Referências:** [Migration 13 — document_templates](doc:migration-13-document-templates), [Migration 14 — template_versions](doc:migration-14-template-versions) e [Migration 16 — generated_documents](doc:migration-16-generated-documents).
 
@@ -114,7 +114,7 @@ source_refs:
 ### D-016 — Parágrafo de remuneração gerado no documento
 
 - **Status:** definido.
-- **Decisão:** o template padrão usa o marcador descritivo `${PARAGRAFO_REMUNERACAO}`. `RemunerationParagraphFormatter` insere o §1º completo: remunerado, com bolsa e auxílio-transporte em moeda e por extenso; ou não remunerado. A condição é definida diretamente por `is_remunerated`; não haverá tabela de regras nem editor de texto neste momento. O número de processo de credenciamento é uma substituição de dado simples quando o template o solicitar. Quando houver diferenças relevantes de credenciamento, serão mantidos templates separados e o Setor de Estágio escolherá manualmente o modelo aplicável em cada geração.
+- **Decisão:** modelos com e sem remuneração são DOCXs separados, classificados por `document_templates.remuneration` (`paid`, `unpaid` ou `any`). O texto jurídico fica no arquivo; somente os valores de bolsa e auxílio usam variáveis. Não há parágrafo automático nem formatter de cláusulas. O Setor escolhe manualmente um modelo compatível com o estágio. O atestado único usa `any`.
 - **Motivo:** o §1º é conhecido e estável; manter a regra em um único serviço evita multiplicar templates por combinações de remuneração. Já as diferenças estruturais de credenciamento justificam modelos próprios, sem automatismo de seleção.
 - **Referências:** [Migration 12 — granting_parties](doc:migration-12-granting-parties), [Migration 13 — document_templates](doc:migration-13-document-templates), [Migration 16 — generated_documents](doc:migration-16-generated-documents) e [Helper — NumberToWordsHelper](doc:helper-numbertowordshelper).
 
@@ -209,3 +209,26 @@ source_refs:
 - **Schema:** por decisão do responsável, os quatro snapshots JSONB, as FKs de endereços históricos e `decision_reason` ficam na Migration 19 original, e `city_id` fica na Migration 12B original. A migration aditiva foi removida; o responsável fará a recriação do banco com `migrate:fresh`. Nenhuma migration foi executada nesta adequação.
 - **Histórico:** perfis continuam atuais e compartilhados; snapshots e endereços copiados preservam o envio. Endereços do estágio são novas cópias do local aprovado. Pedidos originais e suas decisões permanecem depois da associação. Correções não criam outra solicitação nem versões artificiais; salvar mantém a correção aberta, e reenviar explicitamente marca respondida e exige nova análise.
 - **Limites:** calculadora inicial usa somente o calendário local completo/revisado e não faz chamadas externas. O recálculo posterior, a base historicamente reproduzível de D-019 e a geração/reemissão de documentos continuam pendentes. Nenhuma evidência privada ou seus metadados entram em auditoria, snapshot documental ou e-mail.
+
+### D-029 — Gestão segura de templates sem geração
+
+- **Status:** contrato definido e implementado nesta etapa.
+- **Decisão:** reutilizar Migrations 13, 14 e 16 e coleção privada `template_file`, sem novas dependências. Classificação de remuneração na Migration 13 original, aplicada ao banco existente por migration temporária, sem fresh. Validar estrutura e marcadores no upload, sem confirmação posterior nem ação de disponibilizar. Cada arquivo aceito já é validado; tentativa recusada preserva a vigente e arquivo nunca é substituído. Versão usada não muda nem é removida. Excluir versão nunca usada remove mídia e pode fazer a anterior validada voltar a vigorar. Auditoria permanente de upload preserva a sequência numérica.
+- **Catálogo:** sem obrigatoriedade ou classificação de variáveis, revisão 7 no código e guia consultável, com correspondência para 47 dos 48 marcadores legados e os oito campos do atestado; o marcador de parágrafo composto foi substituído por modelos separados; somente três tipos existentes, sem variável de numeração pública. Variáveis sem fonte/contrato são reservadas e rejeitadas. Não inferir dados institucionais de vínculos ou inventar snapshots.
+- **Escopo:** Setor consulta e mantém somente o próprio campus. O campus é definido pelo vínculo ativo no backend, sem seletor no formulário ou filtro de escopo na lista. Registros antigos sem campus são preservados, mas não recebem acesso por este fluxo. A regra de unicidade institucional do atestado permanece independente do filtro de acesso.
+- **Exclusão do catálogo:** permitida quando nenhuma versão tiver sido usada por documentos, mediante autorização e senha atual; versões e arquivos sem uso são removidos na mesma operação, com limpeza de mídia após o commit e auditoria preservada.
+- **Limites:** sem documentos gerados, prévias preenchidas, PDF, assinatura ou arquivos da concedente. Revisão manual do original substitui exigência de geração fictícia nesta etapa; não certifica conteúdo jurídico automaticamente. Verificação sem criar ou executar testes, conforme solicitação do responsável.
+- **Referência:** [Contrato e catálogo](doc:geracao-de-documentos-docx-e-variaveis).
+
+### D-030 — Cadastro único de template de atestado de orientação
+
+- **Status:** definido pelo responsável e implementado.
+- **Decisão:** apenas um template lógico `orientation_certificate` em todo o sistema, incluindo registros desativados e todos os escopos. Impedir segunda criação e conversão de outro tipo enquanto existir o cadastro. O tipo do atestado existente é preservado; nome/descrição e disponibilidade podem ser mantidos conforme autorização.
+- **Histórico:** conservar o versionamento do DOCX previsto no contrato anterior. Um cadastro único pode ter várias revisões; arquivos diferentes não substituem a versão anterior. A unicidade não limita documentos emitidos no futuro.
+- **Autorização:** a regra não amplia escrita global ou acesso entre campi. Não expor identificação ou dados de um atestado de outro campus ao informar a indisponibilidade de novo cadastro.
+- **Implementação:** lock transacional do catálogo e validação do Model, sem alteração de schema ou dependências. Verificação sem criar ou executar testes, conforme solicitação vigente.
+- **Referências:** [GeneratedDocumentType](doc:enum-generateddocumenttype), [catálogo](doc:migration-13-document-templates) e [versões](doc:migration-14-template-versions).
+
+As variáveis disponíveis do catálogo DOCX são comuns a todos os tipos e classificações de remuneração. O tipo classifica o template, sem restringir os marcadores aceitos no upload; o guia oferece busca global. Variáveis reservadas, sem origem implementada, continuam identificadas separadamente.
+
+A vigência do template DOCX é um ponteiro operacional `current_version_id`, mantido no catálogo. Upload aprovado seleciona a nova versão; o Setor pode selecionar outra versão aprovada com confirmação, integridade do arquivo e auditoria. A troca preserva versões e documentos já vinculados. Excluir a vigente seleciona a maior versão aprovada restante; excluir outra versão não muda a seleção.

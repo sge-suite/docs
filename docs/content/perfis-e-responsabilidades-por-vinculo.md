@@ -32,11 +32,11 @@ Esta é a referência operacional para implementar as telas, Gates, Policies e t
 | --- | --- | --- | --- | --- |
 | Administrador do Sistema | institucional/global | não, salvo atribuição futura explícita | campi e vínculos administrativos globais | ativação e estrutura institucional |
 | Setor de Estágio | próprio campus | sim | dados do campus, cursos, tipos, concedentes, pendências, templates e gestão local prevista em Policy | administração local, análise, formalização, liberação e avaliação |
-| Coordenador | cursos que referenciam o vínculo titular/substituto | consulta restrita e histórico de atestados | não | atestado com versão vigente automática, DOCX/PDF e snapshot |
+| Coordenador | cursos que referenciam o vínculo titular/substituto, mais estágios de seus próprios orientandos no campus | consulta acadêmica e histórico de atestados | não | atestado com versão vigente automática, DOCX/PDF e snapshot |
 | Orientador | próprios orientandos | sim, nas notas acadêmicas | não | lançamento de relatório e apresentação |
 | Discente | próprio vínculo/processo | sim, na própria solicitação e pedidos | próprios dados permitidos | envio, correção, desistência e pedido de cancelamento |
 | Supervisor | estágios sob sua supervisão e perfil próprio permitido | sim, na própria avaliação | próprios dados profissionais e telefone | envio ou cancelamento da própria avaliação |
-| Direção de Ensino | institucional a confirmar | consulta, quando autorizada | não | nenhuma definida atualmente |
+| Direção de Ensino | estágios do campus do vínculo ativo | consulta e painel resumido | não | somente leitura; relatórios detalhados ainda serão definidos |
 
 ## Administrador do Sistema
 
@@ -123,7 +123,8 @@ Consulta o acompanhamento acadêmico do curso vinculado. Não se confunde com o 
 
 ### Ações permitidas
 
-- consultar estágios e informações acadêmicas autorizadas do próprio curso;
+- consultar estágios dos cursos que referenciam o vínculo como coordenador titular ou substituto e os estágios de seus próprios orientandos no campus;
+- consultar informações acadêmicas do estágio, sem permissão para editar o processo;
 - emitir o atestado de orientação, exclusivamente como titular/substituto referenciado pelo curso no próprio campus, e baixar novamente suas emissões autorizadas;
 - escolher DOCX (padrão) ou PDF no modal, sem selecionar template; o sistema usa a versão vigente validada disponível;
 - exercer apenas outras ações acadêmicas que sejam atribuídas explicitamente por decisão futura e Policy correspondente.
@@ -168,7 +169,7 @@ Recebe notificação interna e e-mail quando selecionado para assinatura ou quan
 
 ### Controles a implementar
 
-`InternshipPolicy::viewAsAdvisor` e `InternshipGradePolicy` validam a relação de orientação, campus, estado do estágio e limites da escala. Testar lançamento em orientando alheio, nota fora do peso, estágio cancelado ou nota já bloqueada por regra de conclusão.
+`InternshipPolicy::view` e `updateAdvisorGrades` validam a relação de orientação e o vínculo ativo selecionado. A Action revalida o vínculo e o campus em transação, limita as notas aos pesos congelados no estágio e registra a autoria. O Coordenador pode consultar as notas quando também for o orientador daquele estágio, mas não pode lançá-las.
 
 ## Discente
 
@@ -236,17 +237,19 @@ Quando tiver conta, recebe notificação interna e e-mail pelos fatos que exigir
 
 ### Finalidade e escopo
 
-É um vínculo institucional de consulta. O escopo exato de campus e os relatórios que poderá acessar ainda dependem de confirmação institucional.
+É um vínculo de consulta aos estágios do campus do vínculo ativo. O painel apresenta totais por situação, estágios em andamento e concluídos, e uma listagem resumida; os relatórios detalhados permanecem para uma etapa futura.
 
 ### Ações atualmente permitidas
 
-- consultar informações gerais e relatórios somente quando uma Policy definir expressamente o escopo institucional aplicável.
+- consultar estágios e informações resumidas dentro do campus do vínculo ativo;
+- consultar o painel com a quantidade de estágios concluídos e outros totais por situação.
 
 ### Limites e proibições
 
 - não possui criação, edição, aprovação, liberação, assinatura, lançamento de nota ou cancelamento definidos;
 - não deve receber acesso operacional por analogia com Administrador, Coordenador ou Setor de Estágio;
-- enquanto o escopo não estiver definido, a Policy nega qualquer consulta que não seja pública ou estritamente necessária à própria conta.
+- não consulta outros campi nem recebe edição, aprovação, liberação, assinatura ou lançamento de notas;
+- não possui relatórios detalhados ou exportação de dados nesta etapa.
 
 ### Notificações e auditoria
 
@@ -254,7 +257,7 @@ Não há notificações operacionais definidas. Consultas a relatórios ou dados
 
 ### Controles a implementar
 
-Criar `TeachingDirectionReportPolicy` somente após confirmar relatórios, abrangência e necessidade de dados pessoais. Na preparação para produção, validar ausência de permissão de escrita e negar acesso a relatórios fora do escopo ainda não decidido.
+`InternshipPolicy` restringe a consulta ao campus do vínculo ativo e mantém a Direção em modo somente leitura. Relatórios detalhados devem receber escopo e Policy próprios quando forem implementados.
 
 ## Configuração própria de dados pessoais — implementada
 
@@ -275,7 +278,7 @@ Antes da produção, validar cada ação em cenários positivos e negativos: ví
 
 ## Pendências institucionais que bloqueiam novas permissões
 
-- definir o escopo e a lista de relatórios da Direção de Ensino;
+- definir a lista de relatórios detalhados da Direção de Ensino;
 - confirmar se o Coordenador terá alguma ação acadêmica além de consulta por curso e emissão de atestado de orientação;
 - confirmar quais dados e relatórios poderão ser visualizados por cada vínculo sem relação direta com o estágio;
 - definir a política de auditoria para consultas sensíveis, caso ela exija registros além do Activity Log de alterações.

@@ -3,13 +3,13 @@ id: service-internshipgradecalculator
 title: Service — InternshipGradeCalculator
 description: Contrato técnico das notas de supervisor, relatório, apresentação e resultado consolidado.
 type: technical-reference
-status: planned
+status: implemented
 visibility: public
 tags: sge/services, sge/avaliacao, sge/calculos
 related: migration-11-internship-types, migration-18-supervisor-evaluations
-source_refs:
+source_refs: https://github.com/sge-suite/sge/blob/master/app/Support/InternshipGradeCalculator.php, https://github.com/sge-suite/sge/blob/master/app/Actions/UpdateAdvisorGrades.php
 ---
-Serviço puro que recebe o snapshot de regras do tipo, os dez conceitos da avaliação aprovada e as notas lançadas pelo orientador. Retorna as contribuições e, quando completas, a nota consolidada.
+Componente de cálculo que recebe as regras congeladas no estágio, os dez conceitos da avaliação aprovada e as notas lançadas pelo orientador. Retorna as contribuições e, quando completas, a nota consolidada. O orientador lança as notas de relatório e apresentação; os valores são validados e salvos com a autoria do vínculo.
 
 ## Fórmulas
 

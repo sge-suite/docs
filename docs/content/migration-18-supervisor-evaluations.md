@@ -97,6 +97,7 @@ Fora de `Draft`, `hours_requirement_met` é obrigatório. Quando for falso, `est
 - [x] Definir que o Orientador lança as notas de relatório e apresentação.
 - [x] Definir a fórmula de média dos conceitos e soma das três contribuições.
 - [x] Definir cálculo consolidado a partir do snapshot do tipo de estágio.
+- [x] Implementar o cálculo das contribuições e o lançamento das notas de relatório e apresentação pelo Orientador.
 - [x] Registrar decisão em [D-009](doc:backlog-e-decisoes#d-009-ciclo-e-validade-da-avaliacao-do-supervisor).
 
 ## Checklist de implementação
@@ -111,4 +112,4 @@ Fora de `Draft`, `hours_requirement_met` é obrigatório. Quando for falso, `est
 - [ ] Atualizar a avaliação vigente em transação após aprovação.
 - [ ] Testar autorização, devolução, aprovação, cálculo e pendências.
 - [ ] Testar migrate/rollback da Migration 18 junto à Migration 15; a ordem completa depende das migrations ainda planejadas.
-- [ ] Atualizar [fase de avaliação](doc:fase-09-avaliacao-e-conclusao).
+- [x] Atualizar [fase de avaliação](doc:fase-09-avaliacao-e-conclusao) para refletir o lançamento das notas e cálculo consolidados implementados.

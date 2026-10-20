@@ -27,7 +27,7 @@ O SGE não dá a mesma tela e as mesmas ações para todas as pessoas. Cada pess
 | Orientador | Acompanha a parte acadêmica. | Registra as notas de relatório e apresentação. |
 | Coordenador de curso | Consulta o acompanhamento do curso. | Consulta estágios do curso e emite o atestado de orientação previsto. |
 | Administrador do Sistema | Mantém a estrutura institucional geral. | Cria e administra campi e vínculos administrativos globais. |
-| Direção de Ensino | Consulta informações institucionais quando autorizada. | O conjunto de relatórios ainda será definido pela instituição. |
+| Direção de Ensino | Acompanha os estágios do campus do vínculo selecionado. | Consulta um painel resumido, incluindo estágios concluídos. |
 
 ## Discente
 
@@ -59,7 +59,7 @@ Ele não substitui o supervisor na avaliação, não altera os critérios de not
 
 ## Coordenador de curso
 
-O coordenador acompanha os estágios ligados ao seu curso. Pode consultar informações acadêmicas do curso e emitir o atestado de orientação previsto no processo.
+O coordenador acompanha os estágios dos cursos que coordena e os estágios de seus próprios orientandos no campus. Pode consultar informações acadêmicas e emitir o atestado de orientação usando o modelo vigente.
 
 Ele não assume automaticamente as tarefas do Setor de Estágio, nem lança as notas que pertencem ao orientador. Outras atribuições acadêmicas só serão incluídas se a instituição as definir de forma explícita.
 
@@ -73,7 +73,7 @@ O Administrador do Sistema cuida da estrutura geral, como campi e vínculos admi
 
 ## Direção de Ensino
 
-A Direção de Ensino é um vínculo de consulta institucional. Os relatórios e o alcance exato desse acesso ainda dependem de definição da instituição. Enquanto isso não estiver definido, não recebe ações de edição, aprovação, assinatura ou lançamento de notas por padrão.
+A Direção de Ensino consulta os estágios do campus associado ao vínculo selecionado. O painel mostra totais simples, incluindo a quantidade de estágios concluídos. A Direção não edita nem aprova processos; relatórios detalhados serão definidos em uma etapa posterior.
 
 ## O que acontece quando uma ação não está disponível
 

@@ -37,9 +37,9 @@ Implemente o cálculo puro das notas e as transições/autorização no backend 
 - [ ] Permitir aprovar ou devolver pelo Setor de Estágio, sem alterar respostas.
 - [ ] Devolver a resposta com motivo quando a carga horária não estiver cumprida e permitir cancelamento auditável pelo supervisor.
 - [ ] Selecionar em transação a avaliação aprovada mais recente.
-- [ ] Calcular nota do supervisor usando snapshot do tipo.
-- [ ] Implementar o lançamento, pelo Orientador, das notas de relatório e apresentação.
-- [ ] Calcular nota consolidada conforme pesos congelados.
+- [x] Calcular nota do supervisor usando snapshot do tipo.
+- [x] Implementar o lançamento, pelo Orientador, das notas de relatório e apresentação.
+- [x] Calcular nota consolidada conforme pesos congelados.
 - [ ] Verificar carga horária e requisitos de encerramento.
 - [ ] Manter estágio em andamento enquanto a carga horária integral não estiver confirmada, sem bloqueá-lo por avaliações ou notas pendentes.
 - [ ] Concluir preservando notas, documentos, snapshots e histórico.

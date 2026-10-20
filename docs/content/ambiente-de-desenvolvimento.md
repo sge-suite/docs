@@ -21,7 +21,7 @@ Os comandos abaixo criam uma cópia local do sistema para desenvolvimento; eles 
 - Git.
 - Composer e PHP 8.3+ apenas para o bootstrap local; a execução principal ocorre pelo Sail.
 
-O `compose.yaml` utiliza Laravel Sail com runtime PHP 8.5, PostgreSQL 18, Meilisearch e Mailpit.
+O `compose.yaml` utiliza Laravel Sail com runtime PHP 8.5, PostgreSQL 18, Meilisearch, Mailpit e Gotenberg 8.38.1/LibreOffice para PDF.
 
 ## Primeira configuração
 
@@ -76,6 +76,16 @@ Para o desenvolvimento contínuo, o projeto também possui o script Composer `de
 | PostgreSQL  | `localhost:5432`        | Banco local, conforme as variáveis do `.env`. |
 
 As portas podem ser alteradas no `.env` por `APP_PORT`, `VITE_PORT`, `FORWARD_DB_PORT`, `FORWARD_MAILPIT_DASHBOARD_PORT` e `FORWARD_MEILISEARCH_PORT`.
+
+## Geração DOCX e PDF
+
+Após atualizar o sistema, execute `./vendor/bin/sail composer install` e `./vendor/bin/sail up -d` para instalar PHPWord e iniciar/conectar o conversor. O primeiro início baixa a imagem `gotenberg/gotenberg:8.38.1-libreoffice`. O serviço é acessível pela aplicação em `http://gotenberg:3000`, sem porta pública, em rede interna.
+
+`DOCUMENT_PDF_CONVERTER_URL` é opcional e usa esse endereço por padrão. Em outro ambiente, configure um conversor privado equivalente. Após mudar configuração em ambiente com cache, atualize o cache de configuração.
+
+O usuário da aplicação precisa gravar em `storage/app/private/generated-documents-tmp`, diretório privado com permissão 0700; os arquivos recebem 0600. O servidor transmite e remove DOCX/PDF; o scheduler limpa órfãos com mais de uma hora. Execute o scheduler pelo Sail no desenvolvimento e configure sua execução em produção, conforme [Schedules](doc:schedules).
+
+Fontes e versão do LibreOffice influenciam o PDF. Os limites de fidelidade visual e a conferência dos modelos estão no [contrato documental](doc:geracao-de-documentos-docx-e-variaveis#arquivos-temporarios-e-pdf).
 
 ## Cuidados
 

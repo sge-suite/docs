@@ -35,7 +35,7 @@ A proposta de supervisor não cadastrado exige nome, CPF, telefone, e-mail, carg
 - Recusa e desistência preservam o histórico. Desistir exige senha atual e só é permitido antes de existir estágio formalizado.
 - Salvar uma correção mantém a pendência aberta; somente o reenvio explícito e completo a devolve à fila de análise. O Setor aprova novamente antes de aplicar dados corrigidos ao estágio.
 - No primeiro aceite, o sistema cria o estágio na mesma transação, associa-o à solicitação e copia os dados aprovados, as qualificações selecionadas e os endereços históricos. Um novo aceite após correção atualiza apenas os grupos aprovados do estágio ainda não liberado.
-- Devolução antes da liberação cancela documentos gerados ou aguardando assinatura; documentos assinados permanecem como histórico. Geração ou reemissão dos documentos após o novo aceite permanece pendente.
+- Devolução antes da liberação cancela documentos de formalização gerados ou aguardando assinatura, com o motivo da correção; atestados e documentos assinados permanecem no histórico. Após novo aceite, o Setor pode emitir novamente com os dados atuais; baixar uma emissão anterior preserva seus dados originais. Assinatura e liberação continuam pendentes.
 - Avisos individuais de decisão e correção usam notificação interna e e-mail em fila após commit. O Setor recebe um resumo interno diário das solicitações que aguardam análise.
 
 ## Evidência de emancipação

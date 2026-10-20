@@ -1,17 +1,19 @@
 ---
 id: geracao-de-documentos-docx-e-variaveis
 title: Geração de documentos DOCX e variáveis
-description: Arquitetura da geração DOCX, validação de templates e catálogo canônico de variáveis.
+description: Geração e reprodução histórica em DOCX/PDF, validação de templates e catálogo canônico de variáveis.
 type: integration-contract
-status: defined
+status: implemented
 visibility: public
 tags: sge/documentos, sge/templates, sge/integracoes
 related: migration-13-document-templates, migration-14-template-versions, migration-16-generated-documents, helper-numbertowordshelper
-source_refs:
+source_refs: https://github.com/sge-suite/sge/blob/master/app/Actions/GenerateInternshipDocument.php, https://github.com/sge-suite/sge/blob/master/app/Actions/RebuildGeneratedDocument.php, https://github.com/sge-suite/sge/blob/master/app/Support/GeneratedDocumentSnapshot.php, https://github.com/sge-suite/sge/blob/master/app/Support/DocxRenderer.php, https://github.com/sge-suite/sge/blob/master/app/Support/DocxToPdf.php, https://github.com/sge-suite/sge/blob/master/app/Support/TemporaryDocumentDownload.php, https://github.com/sge-suite/sge/blob/master/app/Policies/GeneratedDocumentPolicy.php
 ---
-## Escopo desta entrega e arquitetura futura
+## Escopo implementado
 
-Esta etapa implementa somente catálogo lógico, armazenamento privado de templates originais, inspeção OOXML, versões e guia de variáveis. Não gera termos, contratos, aditivos, rescisões, PDFs, prévias preenchidas, documentos finais, assinaturas ou documentos da concedente. `generated_documents` já existe (Migration 16); é apenas consultada para proteger versões usadas. PHPWord e novas dependências não são necessárias nesta etapa.
+A aplicação mantém templates privados e gera documentos dos tipos `main`, `addendum` e `orientation_certificate` a partir da versão vigente validada. Cada emissão, inclusive de atestado, cria um registro com dados congelados e referência à versão usada. O download oferece DOCX, selecionado por padrão, ou PDF convertido diretamente do DOCX. Os arquivos finais são temporários; o acervo contém originais dos templates e registros das emissões. Assinaturas, avisos aos interessados, registro operacional de documentos externos e liberação do estágio continuam pendentes.
+
+PHPWord 1.4 fornece a escrita dos trechos OOXML preenchidos. O motor preserva o pacote original em vez de reconstruir o documento inteiro. A conversão PDF usa LibreOffice no serviço privado Gotenberg 8.38.1 do Compose. A visualização HTML do original continua separada da geração, aproximada e sem preencher os marcadores.
 
 ## Autorização e ciclo de vida
 
@@ -39,7 +41,7 @@ Inspecionar texto OOXML em parágrafos, tabelas, cabeçalhos, rodapés, notas e 
 
 ## Formatação e grafia no template
 
-Fonte, tamanho, negrito, itálico, alinhamento e espaçamento pertencem ao DOCX. A futura substituição deverá trocar somente o texto do marcador e preservar as propriedades de cada ocorrência e parágrafo, inclusive cabeçalhos/rodapés. Não reconstruir o documento como texto puro nem inserir HTML. Formatá-lo inteiro com estilo uniforme; o mesmo nome pode ter tamanhos diferentes no corpo e na assinatura. A geração continua futura.
+Fonte, tamanho, negrito, itálico, alinhamento e espaçamento pertencem ao DOCX. A substituição altera o texto do marcador, inclusive quando dividido entre runs, e preserva as propriedades de cada ocorrência e parágrafo, inclusive cabeçalhos/rodapés. O documento não é reconstruído como texto puro nem recebe HTML. O mesmo nome pode ter tamanhos diferentes no corpo e na assinatura. A revisão 2 do motor inclui `doNotExpandShiftReturn` para reduzir a expansão de linhas com quebra manual em parágrafos justificados; quebras manuais desnecessárias ainda devem ser corrigidas no template.
 
 O inspetor aceita `${NOME}` e `${NOME|MODIFICADOR}`. Somente um modificador por ocorrência, sem espaços, parâmetros, expressões ou encadeamento. O nome base deve existir e estar disponível. Tipo e remuneração não restringem o uso de variáveis. `detected_variables` usa nomes base; `validation_report.detected_markers` preserva as expressões completas reconhecidas. Conteúdo desconhecido nunca é persistido no relatório. O catálogo está na revisão 7 e o inspetor na revisão 6.
 
@@ -50,9 +52,9 @@ O inspetor aceita `${NOME}` e `${NOME|MODIFICADOR}`. Somente um modificador por 
 | `PRIMEIRA_MAIUSCULA` | Converte o texto para minúsculas e torna maiúscula apenas a primeira letra. |
 | `INICIAIS_MAIUSCULAS` | Capitaliza palavras e mantém partículas internas como de, da, do, das, dos, em, e, na, no, para e com em minúsculas. Mantém as siglas explicitamente conhecidas pelo formatter. |
 
-Exemplo: `${DISCENTE_NOME|INICIAIS_MAIUSCULAS}` transforma `MARIA DE SOUZA EM SILVA` em `Maria de Souza em Silva`. A grafia original continua no cadastro. Nomes especiais e siglas não cadastradas na lista precisam de revisão; usar o nome sem modificador quando a grafia original já estiver correta. A futura snapshot deve preservar o valor base e o texto transformado por expressão. `TemplateTextFormatter` já implementa essas transformações, sem gerar arquivos nem consultar dados de estágio.
+Exemplo: `${DISCENTE_NOME|INICIAIS_MAIUSCULAS}` transforma `MARIA DE SOUZA EM SILVA` em `Maria de Souza em Silva`. A grafia original continua no cadastro. Nomes especiais e siglas não cadastradas na lista precisam de revisão; usar o nome sem modificador quando a grafia original já estiver correta. O snapshot preserva o valor base e os trechos transformados por expressão. `TemplateTextFormatter` aplica as transformações; o resolver e o motor compõem a emissão.
 
-Não há modificadores de negrito/itálico: aplicar essas propriedades no Word. O efeito nativo de caixa alta também pode ser usado quando a intenção for apenas visual; não altera o texto Unicode. O modelo institucional mantém o cabeçalho e a linha divisória da referência, corpo justificado e identificação inferior pequena. `${CAMPUS_IDENTIFICACAO}` compõe o literal “Campus” e o nome da cidade, sem usar o nome completo cadastrado do campus. Somente o literal fica em itálico; a cidade permanece em estilo normal. Essa variável possui dois trechos estruturados, sem HTML, produzidos por `TemplateTextFormatter::campusIdentification()`. A geração futura deverá preservar fonte, tamanho e negrito da ocorrência, aplicando os dois estados de itálico. Os modificadores de caixa transformam o texto inteiro sem perder essa separação. `${CAMPUS_NOME}` continua disponível para o nome completo cadastrado, sem esse tratamento especial. Endereço, telefone, cidade e UF são variáveis. O conteúdo e a completude de cada modelo são revisados pelo Setor; o catálogo não impõe uma lista de marcadores.
+Não há modificadores de negrito/itálico: aplicar essas propriedades no Word. O efeito nativo de caixa alta também pode ser usado quando a intenção for apenas visual; não altera o texto Unicode. O modelo institucional mantém o cabeçalho e a linha divisória da referência, corpo justificado e identificação inferior pequena. `${CAMPUS_IDENTIFICACAO}` compõe o literal “Campus” e o nome da cidade, sem usar o nome completo cadastrado do campus. Somente o literal fica em itálico; a cidade permanece em estilo normal. Essa variável possui dois trechos estruturados, sem HTML, produzidos por `TemplateTextFormatter::campusIdentification()`. O motor preserva fonte, tamanho e negrito da ocorrência, aplicando os dois estados de itálico. Os modificadores de caixa transformam o texto inteiro sem perder essa separação. `${CAMPUS_NOME}` continua disponível para o nome completo cadastrado, sem esse tratamento especial. Endereço, telefone, cidade e UF são variáveis. O conteúdo e a completude de cada modelo são revisados pelo Setor; o catálogo não impõe uma lista de marcadores.
 
 ## Templates por remuneração
 
@@ -60,7 +62,7 @@ Não há modificadores de negrito/itálico: aplicar essas propriedades no Word. 
 
 O texto jurídico é escrito em cada DOCX, sem variável de parágrafo composto nem formatter de cláusulas. Modelos remunerados usam `${ESTAGIO_BOLSA_VALOR}`, `${ESTAGIO_BOLSA_EXTENSO}`, `${ESTAGIO_AUXILIO_TRANSPORTE_VALOR}` e `${ESTAGIO_AUXILIO_TRANSPORTE_EXTENSO}` quando aplicáveis. Esses marcadores são aceitos em qualquer tipo e classificação de template. O Setor define no próprio DOCX quais valores deseja apresentar; não há declaração de marcadores obrigatórios ou opcionais. Modelos independentes não devem conter cláusulas que dependam da modalidade sem uma classificação específica.
 
-A futura escolha é manual pelo Setor, filtrada por campus, tipo, disponibilidade e compatibilidade com `internships.is_remunerated`: `paid` aceita somente estágio remunerado, `unpaid` somente não remunerado e `any` aceita ambos. O scope `matchingRemuneration()` fornece esse recorte; não é seleção automática nem geração.
+A escolha do template é manual pelo Setor, filtrada por campus, tipo, disponibilidade e compatibilidade com `internships.is_remunerated`: `paid` aceita somente estágio remunerado, `unpaid` somente não remunerado e `any` aceita ambos. O scope `matchingRemuneration()` fornece esse recorte e a Action o verifica novamente sob lock. A classificação não exige valores positivos, não preenche dados ausentes e não adapta a cláusula jurídica. Para o coordenador, o atestado usa automaticamente o template vigente disponível no campus, sem seletor de template.
 
 A alteração de schema fica na Migration 13 original. Para o banco já existente, uma migration temporária adiciona a coluna sem recriar tabelas; a aplicação foi concluída em 19/10/2026 e o arquivo temporário foi removido conforme solicitação do responsável. Dados históricos e versões imutáveis são preservados. Novos uploads usam `DISCENTE_*`; não há alias `ALUNO_*` nem alteração de DOCX persistido.
 
@@ -150,13 +152,13 @@ O legado exigia os oito valores abaixo. Essa correspondência é uma referência
 
 Atenção ao homônimo: `DATA_EMISSAO` nos termos era a emissão do RG; no atestado era a data atual por extenso. Os nomes canônicos distinguem essas duas informações.
 
-A revisão 7 do catálogo preserva a correspondência do atestado com `DISCENTE_*`, usa modelos separados por remuneração e aceita os modificadores documentados. Não inclui variável de numeração pública. Não modifica schema de variáveis nem relatório de versões já persistidas; novos uploads usam o catálogo atual, sem restrição por tipo ou remuneração. A geração e o congelamento dos dados continuam em fase posterior.
+A revisão 7 do catálogo preserva a correspondência do atestado com `DISCENTE_*`, usa modelos separados por remuneração e aceita os modificadores documentados. Não inclui variável de numeração pública. Não modifica schema de variáveis nem relatório de versões já persistidas; novos uploads usam o catálogo atual, sem restrição por tipo ou remuneração. A emissão e o congelamento dos dados estão implementados, inclusive para o atestado.
 
 ## Catálogo canônico fechado
 
-O guia do aplicativo usa o mesmo catálogo fixo do código (`TemplateVariableCatalog`, revisão 7). Exemplos abaixo são estáticos e fictícios; não há leitura de dados reais no guia. “Disponível” significa que há fonte de domínio para autorar o template; nenhum resolver/gerador está implementado. “Reservada” é rejeitada no upload enquanto a fonte/contrato faltar. Nenhuma variável lê comprovante de emancipação, token, senha, log ou caminho privado.
+O guia do aplicativo usa o mesmo catálogo fixo do código (`TemplateVariableCatalog`, revisão 7). Exemplos abaixo são estáticos e fictícios; não há leitura de dados reais no guia. “Disponível” significa que o resolver possui fonte de domínio para o marcador; a autorização da emissão ainda pode restringir seu uso. “Reservada” é rejeitada no upload enquanto a fonte/contrato faltar. Nenhuma variável lê comprovante de emancipação, token, senha, log ou caminho privado.
 
-Todos os valores resolvidos e o texto composto deverão ser congelados em `generated_documents.snapshot` na fase futura de geração. Snapshots existentes não são substituídos por cadastros atuais. Campus, curso e orientador ainda não possuem snapshot próprio no estágio; essa lacuna é explicitada por variável. Campos operacionais são congelados na emissão futura. Datas usarão DateHelper; valores monetários CurrencyHelper/NumberToWordsHelper, decimais sem float.
+Todos os valores resolvidos e os trechos transformados são congelados em `generated_documents.snapshot` na emissão. Snapshots existentes não são substituídos por cadastros atuais. Campus, curso e orientador ainda não possuem snapshot próprio no estágio; essa lacuna é explicitada por variável. Campos operacionais são congelados na emissão. Datas usam DateHelper; valores monetários CurrencyHelper/NumberToWordsHelper, decimais sem float.
 
 ### `${DOCUMENTO_DATA_EMISSAO}`
 
@@ -164,12 +166,12 @@ Todos os valores resolvidos e o texto composto deverão ser congelados em `gener
 | --- | --- |
 | Descrição | Data de emissão |
 | Tipo | date |
-| Origem | Instante da futura geração |
-| Snapshot | Congelar na futura geração; não existe snapshot deste dado no estágio. Nunca atualizar documento anterior. |
+| Origem | Instante da emissão |
+| Snapshot | Congelar na emissão; não existe snapshot deste dado no estágio. Nunca atualizar documento anterior. |
 | Formato | dd/mm/aaaa |
 | Sensibilidade | institucional |
 | Condição | Dado preenchido no contexto autorizado. |
-| Vazio | Valor ausente será tratado pela resolução futura, sem exigir presença do marcador e sem presumir zero. |
+| Vazio | Se o marcador estiver presente, valor ausente bloqueia a emissão, salvo as exceções de vazio documentadas no fluxo; não se presume zero. |
 | Disponibilidade | Disponível para template |
 | Exemplo fictício | 20/10/2026 |
 
@@ -179,12 +181,12 @@ Todos os valores resolvidos e o texto composto deverão ser congelados em `gener
 | --- | --- |
 | Descrição | Data de emissão por extenso |
 | Tipo | date |
-| Origem | Instante da futura geração |
-| Snapshot | Congelar na futura geração; não existe snapshot deste dado no estágio. Nunca atualizar documento anterior. |
+| Origem | Instante da emissão |
+| Snapshot | Congelar na emissão; não existe snapshot deste dado no estágio. Nunca atualizar documento anterior. |
 | Formato | DateHelper em pt_BR |
 | Sensibilidade | institucional |
 | Condição | Dado preenchido no contexto autorizado. |
-| Vazio | Valor ausente será tratado pela resolução futura, sem exigir presença do marcador e sem presumir zero. |
+| Vazio | Se o marcador estiver presente, valor ausente bloqueia a emissão, salvo as exceções de vazio documentadas no fluxo; não se presume zero. |
 | Disponibilidade | Disponível para template |
 | Exemplo fictício | 20 de outubro de 2026 |
 
@@ -195,11 +197,11 @@ Todos os valores resolvidos e o texto composto deverão ser congelados em `gener
 | Descrição | Nome do template lógico |
 | Tipo | string |
 | Origem | document_templates.name |
-| Snapshot | Congelar na futura geração; não existe snapshot deste dado no estágio. Nunca atualizar documento anterior. |
+| Snapshot | Congelar na emissão; não existe snapshot deste dado no estágio. Nunca atualizar documento anterior. |
 | Formato | texto |
 | Sensibilidade | institucional |
 | Condição | Dado preenchido no contexto autorizado. |
-| Vazio | Valor ausente será tratado pela resolução futura, sem exigir presença do marcador e sem presumir zero. |
+| Vazio | Se o marcador estiver presente, valor ausente bloqueia a emissão, salvo as exceções de vazio documentadas no fluxo; não se presume zero. |
 | Disponibilidade | Disponível para template |
 | Exemplo fictício | Termo de exemplo |
 
@@ -210,7 +212,7 @@ Todos os valores resolvidos e o texto composto deverão ser congelados em `gener
 | Descrição | Identificação curta: Campus e cidade, com itálico somente em Campus |
 | Tipo | rich_text |
 | Origem | Literal Campus + campuses.address.city.name; não usa campuses.name |
-| Snapshot | Na futura geração, congelar o nome da cidade e os dois trechos textuais com seus estados de itálico; não reler a cidade atual em emissões históricas. |
+| Snapshot | Na emissão, congelar o nome da cidade e os dois trechos textuais com seus estados de itálico; não reler a cidade atual em emissões históricas. |
 | Formato | Campus em itálico + espaço + cidade em estilo normal; tamanho, fonte e negrito herdados do marcador |
 | Sensibilidade | institucional |
 | Condição | Campus com endereço e cidade definidos; todos os quatro modificadores de caixa são aceitos. |
@@ -227,11 +229,11 @@ A representação é uma lista de dois trechos com `text` e `italic`, nunca HTML
 | Descrição | Nome do campus |
 | Tipo | string |
 | Origem | campuses.name |
-| Snapshot | Congelar na futura geração; não existe snapshot deste dado no estágio. Nunca atualizar documento anterior. |
+| Snapshot | Congelar na emissão; não existe snapshot deste dado no estágio. Nunca atualizar documento anterior. |
 | Formato | texto |
 | Sensibilidade | institucional |
 | Condição | Dado preenchido no contexto autorizado. |
-| Vazio | Valor ausente será tratado pela resolução futura, sem exigir presença do marcador e sem presumir zero. |
+| Vazio | Se o marcador estiver presente, valor ausente bloqueia a emissão, salvo as exceções de vazio documentadas no fluxo; não se presume zero. |
 | Disponibilidade | Disponível para template |
 | Exemplo fictício | Campus Exemplo |
 
@@ -242,11 +244,11 @@ A representação é uma lista de dois trechos com `text` e `italic`, nunca HTML
 | Descrição | CNPJ do campus |
 | Tipo | string |
 | Origem | campuses.cnpj |
-| Snapshot | Congelar na futura geração; não existe snapshot deste dado no estágio. Nunca atualizar documento anterior. |
+| Snapshot | Congelar na emissão; não existe snapshot deste dado no estágio. Nunca atualizar documento anterior. |
 | Formato | CNPJ formatado |
 | Sensibilidade | institucional |
 | Condição | Dado preenchido no contexto autorizado. |
-| Vazio | Valor ausente será tratado pela resolução futura, sem exigir presença do marcador e sem presumir zero. |
+| Vazio | Se o marcador estiver presente, valor ausente bloqueia a emissão, salvo as exceções de vazio documentadas no fluxo; não se presume zero. |
 | Disponibilidade | Disponível para template |
 | Exemplo fictício | 00.000.000/0000-00 |
 
@@ -257,11 +259,11 @@ A representação é uma lista de dois trechos com `text` e `italic`, nunca HTML
 | Descrição | Telefone do campus |
 | Tipo | string |
 | Origem | campuses.phone |
-| Snapshot | Congelar na futura geração; não existe snapshot deste dado no estágio. Nunca atualizar documento anterior. |
+| Snapshot | Congelar na emissão; não existe snapshot deste dado no estágio. Nunca atualizar documento anterior. |
 | Formato | telefone brasileiro |
 | Sensibilidade | institucional |
 | Condição | Dado preenchido no contexto autorizado. |
-| Vazio | Valor ausente será tratado pela resolução futura, sem exigir presença do marcador e sem presumir zero. |
+| Vazio | Se o marcador estiver presente, valor ausente bloqueia a emissão, salvo as exceções de vazio documentadas no fluxo; não se presume zero. |
 | Disponibilidade | Disponível para template |
 | Exemplo fictício | (00) 0000-0000 |
 
@@ -272,11 +274,11 @@ A representação é uma lista de dois trechos com `text` e `italic`, nunca HTML
 | Descrição | Representante do campus |
 | Tipo | string |
 | Origem | campuses.legal_representative_name |
-| Snapshot | Congelar na futura geração; não existe snapshot deste dado no estágio. Nunca atualizar documento anterior. |
+| Snapshot | Congelar na emissão; não existe snapshot deste dado no estágio. Nunca atualizar documento anterior. |
 | Formato | texto |
 | Sensibilidade | institucional |
 | Condição | Dado preenchido no contexto autorizado. |
-| Vazio | Valor ausente será tratado pela resolução futura, sem exigir presença do marcador e sem presumir zero. |
+| Vazio | Se o marcador estiver presente, valor ausente bloqueia a emissão, salvo as exceções de vazio documentadas no fluxo; não se presume zero. |
 | Disponibilidade | Disponível para template |
 | Exemplo fictício | Pessoa Representante Fictícia |
 
@@ -287,11 +289,11 @@ A representação é uma lista de dois trechos com `text` e `italic`, nunca HTML
 | Descrição | Cargo do representante |
 | Tipo | string |
 | Origem | campuses.legal_representative_position |
-| Snapshot | Congelar na futura geração; não existe snapshot deste dado no estágio. Nunca atualizar documento anterior. |
+| Snapshot | Congelar na emissão; não existe snapshot deste dado no estágio. Nunca atualizar documento anterior. |
 | Formato | texto |
 | Sensibilidade | institucional |
 | Condição | Dado preenchido no contexto autorizado. |
-| Vazio | Valor ausente será tratado pela resolução futura, sem exigir presença do marcador e sem presumir zero. |
+| Vazio | Se o marcador estiver presente, valor ausente bloqueia a emissão, salvo as exceções de vazio documentadas no fluxo; não se presume zero. |
 | Disponibilidade | Disponível para template |
 | Exemplo fictício | Direção de exemplo |
 
@@ -302,11 +304,11 @@ A representação é uma lista de dois trechos com `text` e `italic`, nunca HTML
 | Descrição | E-mail do campus |
 | Tipo | string |
 | Origem | Campo/configuração inexistente em campuses; não inferir do vínculo operador |
-| Snapshot | Congelar na futura geração; não existe snapshot deste dado no estágio. Nunca atualizar documento anterior. |
+| Snapshot | Congelar na emissão; não existe snapshot deste dado no estágio. Nunca atualizar documento anterior. |
 | Formato | texto |
 | Sensibilidade | institucional |
 | Condição | Dado preenchido no contexto autorizado. |
-| Vazio | Valor ausente será tratado pela resolução futura, sem exigir presença do marcador e sem presumir zero. |
+| Vazio | Se o marcador estiver presente, valor ausente bloqueia a emissão, salvo as exceções de vazio documentadas no fluxo; não se presume zero. |
 | Disponibilidade | Reservada; upload rejeitado |
 | Exemplo fictício | Exemplo fictício |
 
@@ -317,11 +319,11 @@ A representação é uma lista de dois trechos com `text` e `italic`, nunca HTML
 | Descrição | Signatário do Setor de Estágio |
 | Tipo | string |
 | Origem | Campo/configuração inexistente em campuses; não inferir do vínculo operador |
-| Snapshot | Congelar na futura geração; não existe snapshot deste dado no estágio. Nunca atualizar documento anterior. |
+| Snapshot | Congelar na emissão; não existe snapshot deste dado no estágio. Nunca atualizar documento anterior. |
 | Formato | texto |
 | Sensibilidade | institucional |
 | Condição | Dado preenchido no contexto autorizado. |
-| Vazio | Valor ausente será tratado pela resolução futura, sem exigir presença do marcador e sem presumir zero. |
+| Vazio | Se o marcador estiver presente, valor ausente bloqueia a emissão, salvo as exceções de vazio documentadas no fluxo; não se presume zero. |
 | Disponibilidade | Reservada; upload rejeitado |
 | Exemplo fictício | Exemplo fictício |
 
@@ -332,11 +334,11 @@ A representação é uma lista de dois trechos com `text` e `italic`, nunca HTML
 | Descrição | Cargo do signatário do Setor |
 | Tipo | string |
 | Origem | Campo/configuração inexistente em campuses; não inferir do vínculo operador |
-| Snapshot | Congelar na futura geração; não existe snapshot deste dado no estágio. Nunca atualizar documento anterior. |
+| Snapshot | Congelar na emissão; não existe snapshot deste dado no estágio. Nunca atualizar documento anterior. |
 | Formato | texto |
 | Sensibilidade | institucional |
 | Condição | Dado preenchido no contexto autorizado. |
-| Vazio | Valor ausente será tratado pela resolução futura, sem exigir presença do marcador e sem presumir zero. |
+| Vazio | Se o marcador estiver presente, valor ausente bloqueia a emissão, salvo as exceções de vazio documentadas no fluxo; não se presume zero. |
 | Disponibilidade | Reservada; upload rejeitado |
 | Exemplo fictício | Exemplo fictício |
 
@@ -347,11 +349,11 @@ A representação é uma lista de dois trechos com `text` e `italic`, nunca HTML
 | Descrição | Seguro: seguradora |
 | Tipo | string |
 | Origem | campuses.insurance_company_name |
-| Snapshot | Congelar na futura geração; não existe snapshot deste dado no estágio. Nunca atualizar documento anterior. |
+| Snapshot | Congelar na emissão; não existe snapshot deste dado no estágio. Nunca atualizar documento anterior. |
 | Formato | texto |
 | Sensibilidade | institucional |
 | Condição | Dado preenchido no contexto autorizado. |
-| Vazio | Valor ausente será tratado pela resolução futura, sem exigir presença do marcador e sem presumir zero. |
+| Vazio | Se o marcador estiver presente, valor ausente bloqueia a emissão, salvo as exceções de vazio documentadas no fluxo; não se presume zero. |
 | Disponibilidade | Disponível para template |
 | Exemplo fictício | Seguro fictício |
 
@@ -362,11 +364,11 @@ A representação é uma lista de dois trechos com `text` e `italic`, nunca HTML
 | Descrição | Seguro: apólice |
 | Tipo | string |
 | Origem | campuses.insurance_policy_number |
-| Snapshot | Congelar na futura geração; não existe snapshot deste dado no estágio. Nunca atualizar documento anterior. |
+| Snapshot | Congelar na emissão; não existe snapshot deste dado no estágio. Nunca atualizar documento anterior. |
 | Formato | texto |
 | Sensibilidade | institucional |
 | Condição | Dado preenchido no contexto autorizado. |
-| Vazio | Valor ausente será tratado pela resolução futura, sem exigir presença do marcador e sem presumir zero. |
+| Vazio | Se o marcador estiver presente, valor ausente bloqueia a emissão, salvo as exceções de vazio documentadas no fluxo; não se presume zero. |
 | Disponibilidade | Disponível para template |
 | Exemplo fictício | EXEMPLO-000 |
 
@@ -381,7 +383,7 @@ A representação é uma lista de dois trechos com `text` e `italic`, nunca HTML
 | Formato | endereço brasileiro |
 | Sensibilidade | institucional |
 | Condição | Dado preenchido no contexto autorizado. |
-| Vazio | Valor ausente será tratado pela resolução futura, sem exigir presença do marcador e sem presumir zero. |
+| Vazio | Se o marcador estiver presente, valor ausente bloqueia a emissão, salvo as exceções de vazio documentadas no fluxo; não se presume zero. |
 | Disponibilidade | Disponível para template |
 | Exemplo fictício | Rua Exemplo, 10, Bairro Fictício, Cidade Exemplo/RS, 00000-000 |
 
@@ -396,7 +398,7 @@ A representação é uma lista de dois trechos com `text` e `italic`, nunca HTML
 | Formato | texto |
 | Sensibilidade | institucional |
 | Condição | Dado preenchido no contexto autorizado. |
-| Vazio | Valor ausente será tratado pela resolução futura, sem exigir presença do marcador e sem presumir zero. |
+| Vazio | Se o marcador estiver presente, valor ausente bloqueia a emissão, salvo as exceções de vazio documentadas no fluxo; não se presume zero. |
 | Disponibilidade | Disponível para template |
 | Exemplo fictício | Rua Exemplo |
 
@@ -411,7 +413,7 @@ A representação é uma lista de dois trechos com `text` e `italic`, nunca HTML
 | Formato | texto |
 | Sensibilidade | institucional |
 | Condição | Dado preenchido no contexto autorizado. |
-| Vazio | Valor ausente será tratado pela resolução futura, sem exigir presença do marcador e sem presumir zero. |
+| Vazio | Se o marcador estiver presente, valor ausente bloqueia a emissão, salvo as exceções de vazio documentadas no fluxo; não se presume zero. |
 | Disponibilidade | Disponível para template |
 | Exemplo fictício | 10 |
 
@@ -426,7 +428,7 @@ A representação é uma lista de dois trechos com `text` e `italic`, nunca HTML
 | Formato | texto |
 | Sensibilidade | institucional |
 | Condição | Dado preenchido no contexto autorizado. |
-| Vazio | Valor ausente será tratado pela resolução futura, sem exigir presença do marcador e sem presumir zero. |
+| Vazio | Se o marcador estiver presente, valor ausente bloqueia a emissão, salvo as exceções de vazio documentadas no fluxo; não se presume zero. |
 | Disponibilidade | Disponível para template |
 | Exemplo fictício | Bairro Fictício |
 
@@ -441,7 +443,7 @@ A representação é uma lista de dois trechos com `text` e `italic`, nunca HTML
 | Formato | texto |
 | Sensibilidade | institucional |
 | Condição | Dado preenchido no contexto autorizado. |
-| Vazio | Valor ausente será tratado pela resolução futura, sem exigir presença do marcador e sem presumir zero. |
+| Vazio | Se o marcador estiver presente, valor ausente bloqueia a emissão, salvo as exceções de vazio documentadas no fluxo; não se presume zero. |
 | Disponibilidade | Disponível para template |
 | Exemplo fictício | Cidade Exemplo |
 
@@ -456,7 +458,7 @@ A representação é uma lista de dois trechos com `text` e `italic`, nunca HTML
 | Formato | sigla UF |
 | Sensibilidade | institucional |
 | Condição | Dado preenchido no contexto autorizado. |
-| Vazio | Valor ausente será tratado pela resolução futura, sem exigir presença do marcador e sem presumir zero. |
+| Vazio | Se o marcador estiver presente, valor ausente bloqueia a emissão, salvo as exceções de vazio documentadas no fluxo; não se presume zero. |
 | Disponibilidade | Disponível para template |
 | Exemplo fictício | RS |
 
@@ -471,7 +473,7 @@ A representação é uma lista de dois trechos com `text` e `italic`, nunca HTML
 | Formato | 00000-000 |
 | Sensibilidade | institucional |
 | Condição | Dado preenchido no contexto autorizado. |
-| Vazio | Valor ausente será tratado pela resolução futura, sem exigir presença do marcador e sem presumir zero. |
+| Vazio | Se o marcador estiver presente, valor ausente bloqueia a emissão, salvo as exceções de vazio documentadas no fluxo; não se presume zero. |
 | Disponibilidade | Disponível para template |
 | Exemplo fictício | 00000-000 |
 
@@ -486,7 +488,7 @@ A representação é uma lista de dois trechos com `text` e `italic`, nunca HTML
 | Formato | endereço brasileiro |
 | Sensibilidade | pessoal |
 | Condição | Dado preenchido no contexto autorizado. |
-| Vazio | Valor ausente será tratado pela resolução futura, sem exigir presença do marcador e sem presumir zero. |
+| Vazio | Se o marcador estiver presente, valor ausente bloqueia a emissão, salvo as exceções de vazio documentadas no fluxo; não se presume zero. |
 | Disponibilidade | Disponível para template |
 | Exemplo fictício | Rua Exemplo, 10, Bairro Fictício, Cidade Exemplo/RS, 00000-000 |
 
@@ -501,7 +503,7 @@ A representação é uma lista de dois trechos com `text` e `italic`, nunca HTML
 | Formato | texto |
 | Sensibilidade | pessoal |
 | Condição | Dado preenchido no contexto autorizado. |
-| Vazio | Valor ausente será tratado pela resolução futura, sem exigir presença do marcador e sem presumir zero. |
+| Vazio | Se o marcador estiver presente, valor ausente bloqueia a emissão, salvo as exceções de vazio documentadas no fluxo; não se presume zero. |
 | Disponibilidade | Disponível para template |
 | Exemplo fictício | Rua Exemplo |
 
@@ -516,7 +518,7 @@ A representação é uma lista de dois trechos com `text` e `italic`, nunca HTML
 | Formato | texto |
 | Sensibilidade | pessoal |
 | Condição | Dado preenchido no contexto autorizado. |
-| Vazio | Valor ausente será tratado pela resolução futura, sem exigir presença do marcador e sem presumir zero. |
+| Vazio | Se o marcador estiver presente, valor ausente bloqueia a emissão, salvo as exceções de vazio documentadas no fluxo; não se presume zero. |
 | Disponibilidade | Disponível para template |
 | Exemplo fictício | 10 |
 
@@ -531,7 +533,7 @@ A representação é uma lista de dois trechos com `text` e `italic`, nunca HTML
 | Formato | texto |
 | Sensibilidade | pessoal |
 | Condição | Dado preenchido no contexto autorizado. |
-| Vazio | Valor ausente será tratado pela resolução futura, sem exigir presença do marcador e sem presumir zero. |
+| Vazio | Se o marcador estiver presente, valor ausente bloqueia a emissão, salvo as exceções de vazio documentadas no fluxo; não se presume zero. |
 | Disponibilidade | Disponível para template |
 | Exemplo fictício | Bairro Fictício |
 
@@ -546,7 +548,7 @@ A representação é uma lista de dois trechos com `text` e `italic`, nunca HTML
 | Formato | texto |
 | Sensibilidade | pessoal |
 | Condição | Dado preenchido no contexto autorizado. |
-| Vazio | Valor ausente será tratado pela resolução futura, sem exigir presença do marcador e sem presumir zero. |
+| Vazio | Se o marcador estiver presente, valor ausente bloqueia a emissão, salvo as exceções de vazio documentadas no fluxo; não se presume zero. |
 | Disponibilidade | Disponível para template |
 | Exemplo fictício | Cidade Exemplo |
 
@@ -561,7 +563,7 @@ A representação é uma lista de dois trechos com `text` e `italic`, nunca HTML
 | Formato | sigla UF |
 | Sensibilidade | pessoal |
 | Condição | Dado preenchido no contexto autorizado. |
-| Vazio | Valor ausente será tratado pela resolução futura, sem exigir presença do marcador e sem presumir zero. |
+| Vazio | Se o marcador estiver presente, valor ausente bloqueia a emissão, salvo as exceções de vazio documentadas no fluxo; não se presume zero. |
 | Disponibilidade | Disponível para template |
 | Exemplo fictício | RS |
 
@@ -576,7 +578,7 @@ A representação é uma lista de dois trechos com `text` e `italic`, nunca HTML
 | Formato | 00000-000 |
 | Sensibilidade | pessoal |
 | Condição | Dado preenchido no contexto autorizado. |
-| Vazio | Valor ausente será tratado pela resolução futura, sem exigir presença do marcador e sem presumir zero. |
+| Vazio | Se o marcador estiver presente, valor ausente bloqueia a emissão, salvo as exceções de vazio documentadas no fluxo; não se presume zero. |
 | Disponibilidade | Disponível para template |
 | Exemplo fictício | 00000-000 |
 
@@ -591,7 +593,7 @@ A representação é uma lista de dois trechos com `text` e `italic`, nunca HTML
 | Formato | endereço brasileiro |
 | Sensibilidade | pessoal ou empresarial |
 | Condição | Dado preenchido no contexto autorizado. |
-| Vazio | Valor ausente será tratado pela resolução futura, sem exigir presença do marcador e sem presumir zero. |
+| Vazio | Se o marcador estiver presente, valor ausente bloqueia a emissão, salvo as exceções de vazio documentadas no fluxo; não se presume zero. |
 | Disponibilidade | Disponível para template |
 | Exemplo fictício | Rua Exemplo, 10, Bairro Fictício, Cidade Exemplo/RS, 00000-000 |
 
@@ -606,7 +608,7 @@ A representação é uma lista de dois trechos com `text` e `italic`, nunca HTML
 | Formato | texto |
 | Sensibilidade | pessoal ou empresarial |
 | Condição | Dado preenchido no contexto autorizado. |
-| Vazio | Valor ausente será tratado pela resolução futura, sem exigir presença do marcador e sem presumir zero. |
+| Vazio | Se o marcador estiver presente, valor ausente bloqueia a emissão, salvo as exceções de vazio documentadas no fluxo; não se presume zero. |
 | Disponibilidade | Disponível para template |
 | Exemplo fictício | Rua Exemplo |
 
@@ -621,7 +623,7 @@ A representação é uma lista de dois trechos com `text` e `italic`, nunca HTML
 | Formato | texto |
 | Sensibilidade | pessoal ou empresarial |
 | Condição | Dado preenchido no contexto autorizado. |
-| Vazio | Valor ausente será tratado pela resolução futura, sem exigir presença do marcador e sem presumir zero. |
+| Vazio | Se o marcador estiver presente, valor ausente bloqueia a emissão, salvo as exceções de vazio documentadas no fluxo; não se presume zero. |
 | Disponibilidade | Disponível para template |
 | Exemplo fictício | 10 |
 
@@ -636,7 +638,7 @@ A representação é uma lista de dois trechos com `text` e `italic`, nunca HTML
 | Formato | texto |
 | Sensibilidade | pessoal ou empresarial |
 | Condição | Dado preenchido no contexto autorizado. |
-| Vazio | Valor ausente será tratado pela resolução futura, sem exigir presença do marcador e sem presumir zero. |
+| Vazio | Se o marcador estiver presente, valor ausente bloqueia a emissão, salvo as exceções de vazio documentadas no fluxo; não se presume zero. |
 | Disponibilidade | Disponível para template |
 | Exemplo fictício | Bairro Fictício |
 
@@ -651,7 +653,7 @@ A representação é uma lista de dois trechos com `text` e `italic`, nunca HTML
 | Formato | texto |
 | Sensibilidade | pessoal ou empresarial |
 | Condição | Dado preenchido no contexto autorizado. |
-| Vazio | Valor ausente será tratado pela resolução futura, sem exigir presença do marcador e sem presumir zero. |
+| Vazio | Se o marcador estiver presente, valor ausente bloqueia a emissão, salvo as exceções de vazio documentadas no fluxo; não se presume zero. |
 | Disponibilidade | Disponível para template |
 | Exemplo fictício | Cidade Exemplo |
 
@@ -666,7 +668,7 @@ A representação é uma lista de dois trechos com `text` e `italic`, nunca HTML
 | Formato | sigla UF |
 | Sensibilidade | pessoal ou empresarial |
 | Condição | Dado preenchido no contexto autorizado. |
-| Vazio | Valor ausente será tratado pela resolução futura, sem exigir presença do marcador e sem presumir zero. |
+| Vazio | Se o marcador estiver presente, valor ausente bloqueia a emissão, salvo as exceções de vazio documentadas no fluxo; não se presume zero. |
 | Disponibilidade | Disponível para template |
 | Exemplo fictício | RS |
 
@@ -681,7 +683,7 @@ A representação é uma lista de dois trechos com `text` e `italic`, nunca HTML
 | Formato | 00000-000 |
 | Sensibilidade | pessoal ou empresarial |
 | Condição | Dado preenchido no contexto autorizado. |
-| Vazio | Valor ausente será tratado pela resolução futura, sem exigir presença do marcador e sem presumir zero. |
+| Vazio | Se o marcador estiver presente, valor ausente bloqueia a emissão, salvo as exceções de vazio documentadas no fluxo; não se presume zero. |
 | Disponibilidade | Disponível para template |
 | Exemplo fictício | 00000-000 |
 
@@ -692,11 +694,11 @@ A representação é uma lista de dois trechos com `text` e `italic`, nunca HTML
 | Descrição | Nome do discente |
 | Tipo | string |
 | Origem | internships.student_snapshot.name |
-| Snapshot | Preservar o snapshot histórico indicado; copiar o valor resolvido para generated_documents.snapshot na futura geração. |
+| Snapshot | Preservar o snapshot histórico indicado; copiar o valor resolvido para generated_documents.snapshot na emissão. |
 | Formato | texto |
 | Sensibilidade | pessoal |
 | Condição | Dado preenchido no contexto autorizado. |
-| Vazio | Valor ausente será tratado pela resolução futura, sem exigir presença do marcador e sem presumir zero. |
+| Vazio | Se o marcador estiver presente, valor ausente bloqueia a emissão, salvo as exceções de vazio documentadas no fluxo; não se presume zero. |
 | Disponibilidade | Disponível para template |
 | Exemplo fictício | Discente Fictício |
 
@@ -707,11 +709,11 @@ A representação é uma lista de dois trechos com `text` e `italic`, nunca HTML
 | Descrição | E-mail do vínculo discente |
 | Tipo | string |
 | Origem | internships.student_snapshot.email |
-| Snapshot | Preservar o snapshot histórico indicado; copiar o valor resolvido para generated_documents.snapshot na futura geração. |
+| Snapshot | Preservar o snapshot histórico indicado; copiar o valor resolvido para generated_documents.snapshot na emissão. |
 | Formato | e-mail |
 | Sensibilidade | pessoal |
 | Condição | Dado preenchido no contexto autorizado. |
-| Vazio | Valor ausente será tratado pela resolução futura, sem exigir presença do marcador e sem presumir zero. |
+| Vazio | Se o marcador estiver presente, valor ausente bloqueia a emissão, salvo as exceções de vazio documentadas no fluxo; não se presume zero. |
 | Disponibilidade | Disponível para template |
 | Exemplo fictício | discente@example.invalid |
 
@@ -722,11 +724,11 @@ A representação é uma lista de dois trechos com `text` e `italic`, nunca HTML
 | Descrição | Telefone do discente |
 | Tipo | string |
 | Origem | internships.student_snapshot.phone |
-| Snapshot | Preservar o snapshot histórico indicado; copiar o valor resolvido para generated_documents.snapshot na futura geração. |
+| Snapshot | Preservar o snapshot histórico indicado; copiar o valor resolvido para generated_documents.snapshot na emissão. |
 | Formato | telefone brasileiro |
 | Sensibilidade | pessoal |
 | Condição | Dado preenchido no contexto autorizado. |
-| Vazio | Valor ausente será tratado pela resolução futura, sem exigir presença do marcador e sem presumir zero. |
+| Vazio | Se o marcador estiver presente, valor ausente bloqueia a emissão, salvo as exceções de vazio documentadas no fluxo; não se presume zero. |
 | Disponibilidade | Disponível para template |
 | Exemplo fictício | (00) 00000-0000 |
 
@@ -737,11 +739,11 @@ A representação é uma lista de dois trechos com `text` e `italic`, nunca HTML
 | Descrição | Matrícula do discente |
 | Tipo | string |
 | Origem | internships.student_snapshot.registration_number |
-| Snapshot | Preservar o snapshot histórico indicado; copiar o valor resolvido para generated_documents.snapshot na futura geração. |
+| Snapshot | Preservar o snapshot histórico indicado; copiar o valor resolvido para generated_documents.snapshot na emissão. |
 | Formato | texto |
 | Sensibilidade | pessoal |
 | Condição | Dado preenchido no contexto autorizado. |
-| Vazio | Valor ausente será tratado pela resolução futura, sem exigir presença do marcador e sem presumir zero. |
+| Vazio | Se o marcador estiver presente, valor ausente bloqueia a emissão, salvo as exceções de vazio documentadas no fluxo; não se presume zero. |
 | Disponibilidade | Disponível para template |
 | Exemplo fictício | EXEMPLO000 |
 
@@ -752,11 +754,11 @@ A representação é uma lista de dois trechos com `text` e `italic`, nunca HTML
 | Descrição | Ano/semestre declarado |
 | Tipo | string |
 | Origem | internships.student_snapshot.student_year_semester |
-| Snapshot | Preservar o snapshot histórico indicado; copiar o valor resolvido para generated_documents.snapshot na futura geração. |
+| Snapshot | Preservar o snapshot histórico indicado; copiar o valor resolvido para generated_documents.snapshot na emissão. |
 | Formato | texto |
 | Sensibilidade | pessoal |
 | Condição | Dado preenchido no contexto autorizado. |
-| Vazio | Valor ausente será tratado pela resolução futura, sem exigir presença do marcador e sem presumir zero. |
+| Vazio | Se o marcador estiver presente, valor ausente bloqueia a emissão, salvo as exceções de vazio documentadas no fluxo; não se presume zero. |
 | Disponibilidade | Disponível para template |
 | Exemplo fictício | 4º semestre |
 
@@ -767,11 +769,11 @@ A representação é uma lista de dois trechos com `text` e `italic`, nunca HTML
 | Descrição | Nascimento do discente |
 | Tipo | date |
 | Origem | internships.student_snapshot.birth_date |
-| Snapshot | Preservar o snapshot histórico indicado; copiar o valor resolvido para generated_documents.snapshot na futura geração. |
+| Snapshot | Preservar o snapshot histórico indicado; copiar o valor resolvido para generated_documents.snapshot na emissão. |
 | Formato | dd/mm/aaaa |
 | Sensibilidade | pessoal |
 | Condição | Dado preenchido no contexto autorizado. |
-| Vazio | Valor ausente será tratado pela resolução futura, sem exigir presença do marcador e sem presumir zero. |
+| Vazio | Se o marcador estiver presente, valor ausente bloqueia a emissão, salvo as exceções de vazio documentadas no fluxo; não se presume zero. |
 | Disponibilidade | Disponível para template |
 | Exemplo fictício | 01/01/2000 |
 
@@ -782,11 +784,11 @@ A representação é uma lista de dois trechos com `text` e `italic`, nunca HTML
 | Descrição | CPF do discente |
 | Tipo | string |
 | Origem | internships.student_snapshot.cpf |
-| Snapshot | Preservar o snapshot histórico indicado; copiar o valor resolvido para generated_documents.snapshot na futura geração. |
+| Snapshot | Preservar o snapshot histórico indicado; copiar o valor resolvido para generated_documents.snapshot na emissão. |
 | Formato | CPF formatado |
 | Sensibilidade | pessoal |
 | Condição | Dado preenchido no contexto autorizado. |
-| Vazio | Valor ausente será tratado pela resolução futura, sem exigir presença do marcador e sem presumir zero. |
+| Vazio | Se o marcador estiver presente, valor ausente bloqueia a emissão, salvo as exceções de vazio documentadas no fluxo; não se presume zero. |
 | Disponibilidade | Disponível para template |
 | Exemplo fictício | 000.000.000-00 |
 
@@ -797,11 +799,11 @@ A representação é uma lista de dois trechos com `text` e `italic`, nunca HTML
 | Descrição | RG do discente |
 | Tipo | string |
 | Origem | internships.student_snapshot.rg |
-| Snapshot | Preservar o snapshot histórico indicado; copiar o valor resolvido para generated_documents.snapshot na futura geração. |
+| Snapshot | Preservar o snapshot histórico indicado; copiar o valor resolvido para generated_documents.snapshot na emissão. |
 | Formato | texto |
 | Sensibilidade | pessoal |
 | Condição | Dado preenchido no contexto autorizado. |
-| Vazio | Valor ausente será tratado pela resolução futura, sem exigir presença do marcador e sem presumir zero. |
+| Vazio | Se o marcador estiver presente, valor ausente bloqueia a emissão, salvo as exceções de vazio documentadas no fluxo; não se presume zero. |
 | Disponibilidade | Disponível para template |
 | Exemplo fictício | RG fictício |
 
@@ -812,11 +814,11 @@ A representação é uma lista de dois trechos com `text` e `italic`, nunca HTML
 | Descrição | Órgão emissor do RG |
 | Tipo | string |
 | Origem | internships.student_snapshot.rg_issuer |
-| Snapshot | Preservar o snapshot histórico indicado; copiar o valor resolvido para generated_documents.snapshot na futura geração. |
+| Snapshot | Preservar o snapshot histórico indicado; copiar o valor resolvido para generated_documents.snapshot na emissão. |
 | Formato | texto |
 | Sensibilidade | pessoal |
 | Condição | Dado preenchido no contexto autorizado. |
-| Vazio | Valor ausente será tratado pela resolução futura, sem exigir presença do marcador e sem presumir zero. |
+| Vazio | Se o marcador estiver presente, valor ausente bloqueia a emissão, salvo as exceções de vazio documentadas no fluxo; não se presume zero. |
 | Disponibilidade | Disponível para template |
 | Exemplo fictício | Órgão de exemplo |
 
@@ -827,11 +829,11 @@ A representação é uma lista de dois trechos com `text` e `italic`, nunca HTML
 | Descrição | Emissão do RG |
 | Tipo | date |
 | Origem | internships.student_snapshot.rg_issue_date |
-| Snapshot | Preservar o snapshot histórico indicado; copiar o valor resolvido para generated_documents.snapshot na futura geração. |
+| Snapshot | Preservar o snapshot histórico indicado; copiar o valor resolvido para generated_documents.snapshot na emissão. |
 | Formato | dd/mm/aaaa |
 | Sensibilidade | pessoal |
 | Condição | Dado preenchido no contexto autorizado. |
-| Vazio | Valor ausente será tratado pela resolução futura, sem exigir presença do marcador e sem presumir zero. |
+| Vazio | Se o marcador estiver presente, valor ausente bloqueia a emissão, salvo as exceções de vazio documentadas no fluxo; não se presume zero. |
 | Disponibilidade | Disponível para template |
 | Exemplo fictício | 01/01/2020 |
 
@@ -842,11 +844,11 @@ A representação é uma lista de dois trechos com `text` e `italic`, nunca HTML
 | Descrição | Nome do curso |
 | Tipo | string |
 | Origem | internships.course.name |
-| Snapshot | Congelar na futura geração; não existe snapshot deste dado no estágio. Nunca atualizar documento anterior. |
+| Snapshot | Congelar na emissão; não existe snapshot deste dado no estágio. Nunca atualizar documento anterior. |
 | Formato | texto |
 | Sensibilidade | institucional |
 | Condição | Dado preenchido no contexto autorizado. |
-| Vazio | Valor ausente será tratado pela resolução futura, sem exigir presença do marcador e sem presumir zero. |
+| Vazio | Se o marcador estiver presente, valor ausente bloqueia a emissão, salvo as exceções de vazio documentadas no fluxo; não se presume zero. |
 | Disponibilidade | Disponível para template |
 | Exemplo fictício | Curso de Exemplo |
 
@@ -857,11 +859,11 @@ A representação é uma lista de dois trechos com `text` e `italic`, nunca HTML
 | Descrição | Nome do responsável legal |
 | Tipo | string |
 | Origem | internships.student_snapshot.legal_guardian_name |
-| Snapshot | Preservar o snapshot histórico indicado; copiar o valor resolvido para generated_documents.snapshot na futura geração. |
+| Snapshot | Preservar o snapshot histórico indicado; copiar o valor resolvido para generated_documents.snapshot na emissão. |
 | Formato | texto |
 | Sensibilidade | pessoal |
 | Condição | Somente menor não emancipado; nunca expor prova de emancipação. |
-| Vazio | Valor ausente será tratado pela resolução futura, sem exigir presença do marcador e sem presumir zero. |
+| Vazio | Se o marcador estiver presente, valor ausente bloqueia a emissão, salvo as exceções de vazio documentadas no fluxo; não se presume zero. |
 | Disponibilidade | Disponível para template |
 | Exemplo fictício | Responsável fictício |
 
@@ -872,11 +874,11 @@ A representação é uma lista de dois trechos com `text` e `italic`, nunca HTML
 | Descrição | CPF do responsável legal |
 | Tipo | string |
 | Origem | internships.student_snapshot.legal_guardian_cpf |
-| Snapshot | Preservar o snapshot histórico indicado; copiar o valor resolvido para generated_documents.snapshot na futura geração. |
+| Snapshot | Preservar o snapshot histórico indicado; copiar o valor resolvido para generated_documents.snapshot na emissão. |
 | Formato | CPF formatado |
 | Sensibilidade | pessoal |
 | Condição | Somente menor não emancipado; nunca expor prova de emancipação. |
-| Vazio | Valor ausente será tratado pela resolução futura, sem exigir presença do marcador e sem presumir zero. |
+| Vazio | Se o marcador estiver presente, valor ausente bloqueia a emissão, salvo as exceções de vazio documentadas no fluxo; não se presume zero. |
 | Disponibilidade | Disponível para template |
 | Exemplo fictício | 000.000.000-00 |
 
@@ -887,11 +889,11 @@ A representação é uma lista de dois trechos com `text` e `italic`, nunca HTML
 | Descrição | Parentesco do responsável legal |
 | Tipo | string |
 | Origem | internships.student_snapshot.legal_guardian_kinship |
-| Snapshot | Preservar o snapshot histórico indicado; copiar o valor resolvido para generated_documents.snapshot na futura geração. |
+| Snapshot | Preservar o snapshot histórico indicado; copiar o valor resolvido para generated_documents.snapshot na emissão. |
 | Formato | texto |
 | Sensibilidade | pessoal |
 | Condição | Somente menor não emancipado; nunca expor prova de emancipação. |
-| Vazio | Valor ausente será tratado pela resolução futura, sem exigir presença do marcador e sem presumir zero. |
+| Vazio | Se o marcador estiver presente, valor ausente bloqueia a emissão, salvo as exceções de vazio documentadas no fluxo; não se presume zero. |
 | Disponibilidade | Disponível para template |
 | Exemplo fictício | Responsável fictício |
 
@@ -902,11 +904,11 @@ A representação é uma lista de dois trechos com `text` e `italic`, nunca HTML
 | Descrição | E-mail do responsável legal |
 | Tipo | string |
 | Origem | internships.student_snapshot.legal_guardian_email |
-| Snapshot | Preservar o snapshot histórico indicado; copiar o valor resolvido para generated_documents.snapshot na futura geração. |
+| Snapshot | Preservar o snapshot histórico indicado; copiar o valor resolvido para generated_documents.snapshot na emissão. |
 | Formato | texto |
 | Sensibilidade | pessoal |
 | Condição | Somente menor não emancipado; nunca expor prova de emancipação. |
-| Vazio | Valor ausente será tratado pela resolução futura, sem exigir presença do marcador e sem presumir zero. |
+| Vazio | Se o marcador estiver presente, valor ausente bloqueia a emissão, salvo as exceções de vazio documentadas no fluxo; não se presume zero. |
 | Disponibilidade | Disponível para template |
 | Exemplo fictício | Responsável fictício |
 
@@ -917,7 +919,7 @@ A representação é uma lista de dois trechos com `text` e `italic`, nunca HTML
 | Descrição | Bloco de identificação do responsável |
 | Tipo | string |
 | Origem | internships.student_snapshot.legal_capacity_declaration e legal_guardian_* |
-| Snapshot | Preservar o snapshot histórico indicado; copiar o valor resolvido para generated_documents.snapshot na futura geração. |
+| Snapshot | Preservar o snapshot histórico indicado; copiar o valor resolvido para generated_documents.snapshot na emissão. |
 | Formato | bloco textual |
 | Sensibilidade | pessoal |
 | Condição | Somente menor não emancipado; maior/emancipado recebe bloco vazio. |
@@ -932,11 +934,11 @@ A representação é uma lista de dois trechos com `text` e `italic`, nunca HTML
 | Descrição | Nome/razão social |
 | Tipo | string |
 | Origem | internships.granting_party_snapshot.name |
-| Snapshot | Preservar o snapshot histórico indicado; copiar o valor resolvido para generated_documents.snapshot na futura geração. |
+| Snapshot | Preservar o snapshot histórico indicado; copiar o valor resolvido para generated_documents.snapshot na emissão. |
 | Formato | texto |
 | Sensibilidade | pessoal ou empresarial |
 | Condição | Dado preenchido no contexto autorizado. |
-| Vazio | Valor ausente será tratado pela resolução futura, sem exigir presença do marcador e sem presumir zero. |
+| Vazio | Se o marcador estiver presente, valor ausente bloqueia a emissão, salvo as exceções de vazio documentadas no fluxo; não se presume zero. |
 | Disponibilidade | Disponível para template |
 | Exemplo fictício | Concedente Fictícia |
 
@@ -947,11 +949,11 @@ A representação é uma lista de dois trechos com `text` e `italic`, nunca HTML
 | Descrição | CPF/CNPJ da concedente |
 | Tipo | string |
 | Origem | internships.granting_party_snapshot.document_number + document_type |
-| Snapshot | Preservar o snapshot histórico indicado; copiar o valor resolvido para generated_documents.snapshot na futura geração. |
+| Snapshot | Preservar o snapshot histórico indicado; copiar o valor resolvido para generated_documents.snapshot na emissão. |
 | Formato | CPF/CNPJ formatado |
 | Sensibilidade | pessoal ou empresarial |
 | Condição | Dado preenchido no contexto autorizado. |
-| Vazio | Valor ausente será tratado pela resolução futura, sem exigir presença do marcador e sem presumir zero. |
+| Vazio | Se o marcador estiver presente, valor ausente bloqueia a emissão, salvo as exceções de vazio documentadas no fluxo; não se presume zero. |
 | Disponibilidade | Disponível para template |
 | Exemplo fictício | Exemplo fictício |
 
@@ -962,11 +964,11 @@ A representação é uma lista de dois trechos com `text` e `italic`, nunca HTML
 | Descrição | E-mail da concedente |
 | Tipo | string |
 | Origem | internships.granting_party_snapshot.email |
-| Snapshot | Preservar o snapshot histórico indicado; copiar o valor resolvido para generated_documents.snapshot na futura geração. |
+| Snapshot | Preservar o snapshot histórico indicado; copiar o valor resolvido para generated_documents.snapshot na emissão. |
 | Formato | texto |
 | Sensibilidade | pessoal ou empresarial |
 | Condição | Dado preenchido no contexto autorizado. |
-| Vazio | Valor ausente será tratado pela resolução futura, sem exigir presença do marcador e sem presumir zero. |
+| Vazio | Se o marcador estiver presente, valor ausente bloqueia a emissão, salvo as exceções de vazio documentadas no fluxo; não se presume zero. |
 | Disponibilidade | Disponível para template |
 | Exemplo fictício | Exemplo fictício |
 
@@ -977,11 +979,11 @@ A representação é uma lista de dois trechos com `text` e `italic`, nunca HTML
 | Descrição | Telefone da concedente |
 | Tipo | string |
 | Origem | internships.granting_party_snapshot.phone |
-| Snapshot | Preservar o snapshot histórico indicado; copiar o valor resolvido para generated_documents.snapshot na futura geração. |
+| Snapshot | Preservar o snapshot histórico indicado; copiar o valor resolvido para generated_documents.snapshot na emissão. |
 | Formato | texto |
 | Sensibilidade | pessoal ou empresarial |
 | Condição | Dado preenchido no contexto autorizado. |
-| Vazio | Valor ausente será tratado pela resolução futura, sem exigir presença do marcador e sem presumir zero. |
+| Vazio | Se o marcador estiver presente, valor ausente bloqueia a emissão, salvo as exceções de vazio documentadas no fluxo; não se presume zero. |
 | Disponibilidade | Disponível para template |
 | Exemplo fictício | Exemplo fictício |
 
@@ -992,11 +994,11 @@ A representação é uma lista de dois trechos com `text` e `italic`, nunca HTML
 | Descrição | Área de atuação |
 | Tipo | string |
 | Origem | internships.granting_party_snapshot.field_of_activity |
-| Snapshot | Preservar o snapshot histórico indicado; copiar o valor resolvido para generated_documents.snapshot na futura geração. |
+| Snapshot | Preservar o snapshot histórico indicado; copiar o valor resolvido para generated_documents.snapshot na emissão. |
 | Formato | texto |
 | Sensibilidade | pessoal ou empresarial |
 | Condição | Dado preenchido no contexto autorizado. |
-| Vazio | Valor ausente será tratado pela resolução futura, sem exigir presença do marcador e sem presumir zero. |
+| Vazio | Se o marcador estiver presente, valor ausente bloqueia a emissão, salvo as exceções de vazio documentadas no fluxo; não se presume zero. |
 | Disponibilidade | Disponível para template |
 | Exemplo fictício | Exemplo fictício |
 
@@ -1007,11 +1009,11 @@ A representação é uma lista de dois trechos com `text` e `italic`, nunca HTML
 | Descrição | Representante da concedente |
 | Tipo | string |
 | Origem | internships.granting_party_snapshot.representative_name |
-| Snapshot | Preservar o snapshot histórico indicado; copiar o valor resolvido para generated_documents.snapshot na futura geração. |
+| Snapshot | Preservar o snapshot histórico indicado; copiar o valor resolvido para generated_documents.snapshot na emissão. |
 | Formato | texto |
 | Sensibilidade | pessoal ou empresarial |
 | Condição | Dado preenchido no contexto autorizado. |
-| Vazio | Valor ausente será tratado pela resolução futura, sem exigir presença do marcador e sem presumir zero. |
+| Vazio | Se o marcador estiver presente, valor ausente bloqueia a emissão, salvo as exceções de vazio documentadas no fluxo; não se presume zero. |
 | Disponibilidade | Disponível para template |
 | Exemplo fictício | Exemplo fictício |
 
@@ -1022,11 +1024,11 @@ A representação é uma lista de dois trechos com `text` e `italic`, nunca HTML
 | Descrição | Cargo do representante |
 | Tipo | string |
 | Origem | internships.granting_party_snapshot.representative_role |
-| Snapshot | Preservar o snapshot histórico indicado; copiar o valor resolvido para generated_documents.snapshot na futura geração. |
+| Snapshot | Preservar o snapshot histórico indicado; copiar o valor resolvido para generated_documents.snapshot na emissão. |
 | Formato | texto |
 | Sensibilidade | pessoal ou empresarial |
 | Condição | Dado preenchido no contexto autorizado. |
-| Vazio | Valor ausente será tratado pela resolução futura, sem exigir presença do marcador e sem presumir zero. |
+| Vazio | Se o marcador estiver presente, valor ausente bloqueia a emissão, salvo as exceções de vazio documentadas no fluxo; não se presume zero. |
 | Disponibilidade | Disponível para template |
 | Exemplo fictício | Exemplo fictício |
 
@@ -1037,11 +1039,11 @@ A representação é uma lista de dois trechos com `text` e `italic`, nunca HTML
 | Descrição | Conselho profissional |
 | Tipo | string |
 | Origem | internships.granting_party_snapshot.professional_council |
-| Snapshot | Preservar o snapshot histórico indicado; copiar o valor resolvido para generated_documents.snapshot na futura geração. |
+| Snapshot | Preservar o snapshot histórico indicado; copiar o valor resolvido para generated_documents.snapshot na emissão. |
 | Formato | texto |
 | Sensibilidade | pessoal ou empresarial |
 | Condição | Dado preenchido no contexto autorizado. |
-| Vazio | Valor ausente será tratado pela resolução futura, sem exigir presença do marcador e sem presumir zero. |
+| Vazio | Se o marcador estiver presente, valor ausente bloqueia a emissão, salvo as exceções de vazio documentadas no fluxo; não se presume zero. |
 | Disponibilidade | Disponível para template |
 | Exemplo fictício | Exemplo fictício |
 
@@ -1052,11 +1054,11 @@ A representação é uma lista de dois trechos com `text` e `italic`, nunca HTML
 | Descrição | Registro no conselho |
 | Tipo | string |
 | Origem | internships.granting_party_snapshot.council_registration_number |
-| Snapshot | Preservar o snapshot histórico indicado; copiar o valor resolvido para generated_documents.snapshot na futura geração. |
+| Snapshot | Preservar o snapshot histórico indicado; copiar o valor resolvido para generated_documents.snapshot na emissão. |
 | Formato | texto |
 | Sensibilidade | pessoal ou empresarial |
 | Condição | Dado preenchido no contexto autorizado. |
-| Vazio | Valor ausente será tratado pela resolução futura, sem exigir presença do marcador e sem presumir zero. |
+| Vazio | Se o marcador estiver presente, valor ausente bloqueia a emissão, salvo as exceções de vazio documentadas no fluxo; não se presume zero. |
 | Disponibilidade | Disponível para template |
 | Exemplo fictício | Exemplo fictício |
 
@@ -1067,11 +1069,11 @@ A representação é uma lista de dois trechos com `text` e `italic`, nunca HTML
 | Descrição | Processo de credenciamento |
 | Tipo | string |
 | Origem | internships.granting_party_snapshot.credentialing_process_number |
-| Snapshot | Preservar o snapshot histórico indicado; copiar o valor resolvido para generated_documents.snapshot na futura geração. |
+| Snapshot | Preservar o snapshot histórico indicado; copiar o valor resolvido para generated_documents.snapshot na emissão. |
 | Formato | texto |
 | Sensibilidade | pessoal ou empresarial |
 | Condição | Dado preenchido no contexto autorizado. |
-| Vazio | Valor ausente será tratado pela resolução futura, sem exigir presença do marcador e sem presumir zero. |
+| Vazio | Se o marcador estiver presente, valor ausente bloqueia a emissão, salvo as exceções de vazio documentadas no fluxo; não se presume zero. |
 | Disponibilidade | Disponível para template |
 | Exemplo fictício | Exemplo fictício |
 
@@ -1082,11 +1084,11 @@ A representação é uma lista de dois trechos com `text` e `italic`, nunca HTML
 | Descrição | Nome do coordenador emitente do atestado |
 | Tipo | string |
 | Origem | Vínculo ativo de coordenação emitente e seu user.name; courses.primary_coordinator_affiliation_id ou secondary_coordinator_affiliation_id |
-| Snapshot | Na futura geração, congelar nome e identificadores do usuário e vínculo emitente em generated_documents.snapshot. Não substituir pelo coordenador atual ao consultar emissão histórica. |
+| Snapshot | Na emissão, congelar nome e identificadores do usuário e vínculo emitente em generated_documents.snapshot. Não substituir pelo coordenador atual ao consultar emissão histórica. |
 | Formato | texto |
 | Sensibilidade | pessoal |
 | Condição | Emitente autorizado como coordenador titular ou substituto do curso do estágio, no mesmo campus. Não escolher automaticamente o titular nem o responsável do Setor. |
-| Vazio | Valor ausente será tratado na resolução futura. |
+| Vazio | Valor ausente bloqueia a emissão se o marcador estiver presente. |
 | Disponibilidade | Disponível para template |
 | Exemplo fictício | Coordenador Fictício |
 
@@ -1097,11 +1099,11 @@ A representação é uma lista de dois trechos com `text` e `italic`, nunca HTML
 | Descrição | Nome do orientador |
 | Tipo | string |
 | Origem | internships.advisorAffiliation.user.name |
-| Snapshot | Não há advisor_snapshot. Na geração futura, congelar o vínculo referenciado e seus valores; nunca resolver novamente para reproduzir geração histórica. |
+| Snapshot | Não há advisor_snapshot. Congelar os valores resolvidos do orientador referenciado na emissão; não reler seu cadastro para reproduzir o documento. |
 | Formato | texto |
 | Sensibilidade | pessoal |
 | Condição | Dado preenchido no contexto autorizado. |
-| Vazio | Valor ausente será tratado pela resolução futura, sem exigir presença do marcador e sem presumir zero. |
+| Vazio | Se o marcador estiver presente, valor ausente bloqueia a emissão, salvo as exceções de vazio documentadas no fluxo; não se presume zero. |
 | Disponibilidade | Disponível para template |
 | Exemplo fictício | Orientador Fictício |
 
@@ -1112,11 +1114,11 @@ A representação é uma lista de dois trechos com `text` e `italic`, nunca HTML
 | Descrição | E-mail do orientador |
 | Tipo | string |
 | Origem | internships.advisorAffiliation.email |
-| Snapshot | Não há advisor_snapshot. Na geração futura, congelar o vínculo referenciado e seus valores; nunca resolver novamente para reproduzir geração histórica. |
+| Snapshot | Não há advisor_snapshot. Congelar os valores resolvidos do orientador referenciado na emissão; não reler seu cadastro para reproduzir o documento. |
 | Formato | texto |
 | Sensibilidade | pessoal |
 | Condição | Dado preenchido no contexto autorizado. |
-| Vazio | Valor ausente será tratado pela resolução futura, sem exigir presença do marcador e sem presumir zero. |
+| Vazio | Se o marcador estiver presente, valor ausente bloqueia a emissão, salvo as exceções de vazio documentadas no fluxo; não se presume zero. |
 | Disponibilidade | Disponível para template |
 | Exemplo fictício | Exemplo fictício |
 
@@ -1127,11 +1129,11 @@ A representação é uma lista de dois trechos com `text` e `italic`, nunca HTML
 | Descrição | Matrícula do orientador |
 | Tipo | string |
 | Origem | internships.advisorAffiliation.registration_number |
-| Snapshot | Não há advisor_snapshot. Na geração futura, congelar o vínculo referenciado e seus valores; nunca resolver novamente para reproduzir geração histórica. |
+| Snapshot | Não há advisor_snapshot. Congelar os valores resolvidos do orientador referenciado na emissão; não reler seu cadastro para reproduzir o documento. |
 | Formato | texto |
 | Sensibilidade | pessoal |
 | Condição | Dado preenchido no contexto autorizado. |
-| Vazio | Valor ausente será tratado pela resolução futura, sem exigir presença do marcador e sem presumir zero. |
+| Vazio | Se o marcador estiver presente, valor ausente bloqueia a emissão, salvo as exceções de vazio documentadas no fluxo; não se presume zero. |
 | Disponibilidade | Disponível para template |
 | Exemplo fictício | Exemplo fictício |
 
@@ -1142,11 +1144,11 @@ A representação é uma lista de dois trechos com `text` e `italic`, nunca HTML
 | Descrição | Nome do supervisor |
 | Tipo | string |
 | Origem | internships.supervisor_snapshot.name |
-| Snapshot | Preservar o snapshot histórico indicado; copiar o valor resolvido para generated_documents.snapshot na futura geração. |
+| Snapshot | Preservar o snapshot histórico indicado; copiar o valor resolvido para generated_documents.snapshot na emissão. |
 | Formato | texto |
 | Sensibilidade | pessoal |
 | Condição | Qualificação conforme ramo acadêmico/profissional congelado; ramo não aplicável vazio. |
-| Vazio | Valor ausente será tratado pela resolução futura, sem exigir presença do marcador e sem presumir zero. |
+| Vazio | Se o marcador estiver presente, valor ausente bloqueia a emissão, salvo as exceções de vazio documentadas no fluxo; não se presume zero. |
 | Disponibilidade | Disponível para template |
 | Exemplo fictício | Supervisor Fictício |
 
@@ -1157,11 +1159,11 @@ A representação é uma lista de dois trechos com `text` e `italic`, nunca HTML
 | Descrição | E-mail do supervisor |
 | Tipo | string |
 | Origem | internships.supervisor_snapshot.email |
-| Snapshot | Preservar o snapshot histórico indicado; copiar o valor resolvido para generated_documents.snapshot na futura geração. |
+| Snapshot | Preservar o snapshot histórico indicado; copiar o valor resolvido para generated_documents.snapshot na emissão. |
 | Formato | texto |
 | Sensibilidade | pessoal |
 | Condição | Qualificação conforme ramo acadêmico/profissional congelado; ramo não aplicável vazio. |
-| Vazio | Valor ausente será tratado pela resolução futura, sem exigir presença do marcador e sem presumir zero. |
+| Vazio | Se o marcador estiver presente, valor ausente bloqueia a emissão, salvo as exceções de vazio documentadas no fluxo; não se presume zero. |
 | Disponibilidade | Disponível para template |
 | Exemplo fictício | Exemplo fictício |
 
@@ -1172,11 +1174,11 @@ A representação é uma lista de dois trechos com `text` e `italic`, nunca HTML
 | Descrição | Telefone do supervisor |
 | Tipo | string |
 | Origem | internships.supervisor_snapshot.phone |
-| Snapshot | Preservar o snapshot histórico indicado; copiar o valor resolvido para generated_documents.snapshot na futura geração. |
+| Snapshot | Preservar o snapshot histórico indicado; copiar o valor resolvido para generated_documents.snapshot na emissão. |
 | Formato | texto |
 | Sensibilidade | pessoal |
 | Condição | Qualificação conforme ramo acadêmico/profissional congelado; ramo não aplicável vazio. |
-| Vazio | Valor ausente será tratado pela resolução futura, sem exigir presença do marcador e sem presumir zero. |
+| Vazio | Se o marcador estiver presente, valor ausente bloqueia a emissão, salvo as exceções de vazio documentadas no fluxo; não se presume zero. |
 | Disponibilidade | Disponível para template |
 | Exemplo fictício | Exemplo fictício |
 
@@ -1187,11 +1189,11 @@ A representação é uma lista de dois trechos com `text` e `italic`, nunca HTML
 | Descrição | Cargo do supervisor |
 | Tipo | string |
 | Origem | internships.supervisor_snapshot.job_role |
-| Snapshot | Preservar o snapshot histórico indicado; copiar o valor resolvido para generated_documents.snapshot na futura geração. |
+| Snapshot | Preservar o snapshot histórico indicado; copiar o valor resolvido para generated_documents.snapshot na emissão. |
 | Formato | texto |
 | Sensibilidade | pessoal |
 | Condição | Qualificação conforme ramo acadêmico/profissional congelado; ramo não aplicável vazio. |
-| Vazio | Valor ausente será tratado pela resolução futura, sem exigir presença do marcador e sem presumir zero. |
+| Vazio | Se o marcador estiver presente, valor ausente bloqueia a emissão, salvo as exceções de vazio documentadas no fluxo; não se presume zero. |
 | Disponibilidade | Disponível para template |
 | Exemplo fictício | Exemplo fictício |
 
@@ -1202,11 +1204,11 @@ A representação é uma lista de dois trechos com `text` e `italic`, nunca HTML
 | Descrição | Qualificação aprovada |
 | Tipo | string |
 | Origem | internships.supervisor_snapshot.has_academic_background + training_course + education_level + experience_time |
-| Snapshot | Preservar o snapshot histórico indicado; copiar o valor resolvido para generated_documents.snapshot na futura geração. |
+| Snapshot | Preservar o snapshot histórico indicado; copiar o valor resolvido para generated_documents.snapshot na emissão. |
 | Formato | texto |
 | Sensibilidade | pessoal |
 | Condição | Qualificação conforme ramo acadêmico/profissional congelado; ramo não aplicável vazio. |
-| Vazio | Valor ausente será tratado pela resolução futura, sem exigir presença do marcador e sem presumir zero. |
+| Vazio | Se o marcador estiver presente, valor ausente bloqueia a emissão, salvo as exceções de vazio documentadas no fluxo; não se presume zero. |
 | Disponibilidade | Disponível para template |
 | Exemplo fictício | Exemplo fictício |
 
@@ -1217,11 +1219,11 @@ A representação é uma lista de dois trechos com `text` e `italic`, nunca HTML
 | Descrição | Formação aprovada |
 | Tipo | string |
 | Origem | internships.supervisor_snapshot.training_course + education_level |
-| Snapshot | Preservar o snapshot histórico indicado; copiar o valor resolvido para generated_documents.snapshot na futura geração. |
+| Snapshot | Preservar o snapshot histórico indicado; copiar o valor resolvido para generated_documents.snapshot na emissão. |
 | Formato | texto |
 | Sensibilidade | pessoal |
 | Condição | Qualificação conforme ramo acadêmico/profissional congelado; ramo não aplicável vazio. |
-| Vazio | Valor ausente será tratado pela resolução futura, sem exigir presença do marcador e sem presumir zero. |
+| Vazio | Se o marcador estiver presente, valor ausente bloqueia a emissão, salvo as exceções de vazio documentadas no fluxo; não se presume zero. |
 | Disponibilidade | Disponível para template |
 | Exemplo fictício | Exemplo fictício |
 
@@ -1232,11 +1234,11 @@ A representação é uma lista de dois trechos com `text` e `italic`, nunca HTML
 | Descrição | Experiência aprovada |
 | Tipo | string |
 | Origem | internships.supervisor_snapshot.experience_time |
-| Snapshot | Preservar o snapshot histórico indicado; copiar o valor resolvido para generated_documents.snapshot na futura geração. |
+| Snapshot | Preservar o snapshot histórico indicado; copiar o valor resolvido para generated_documents.snapshot na emissão. |
 | Formato | texto |
 | Sensibilidade | pessoal |
 | Condição | Qualificação conforme ramo acadêmico/profissional congelado; ramo não aplicável vazio. |
-| Vazio | Valor ausente será tratado pela resolução futura, sem exigir presença do marcador e sem presumir zero. |
+| Vazio | Se o marcador estiver presente, valor ausente bloqueia a emissão, salvo as exceções de vazio documentadas no fluxo; não se presume zero. |
 | Disponibilidade | Disponível para template |
 | Exemplo fictício | Exemplo fictício |
 
@@ -1247,11 +1249,11 @@ A representação é uma lista de dois trechos com `text` e `italic`, nunca HTML
 | Descrição | Tipo de estágio |
 | Tipo | string |
 | Origem | internships.internship_type_snapshot.name |
-| Snapshot | Preservar internship_type_snapshot; congelar valores operacionais e vigência usada na geração futura. Dinheiro decimal, nunca float. |
+| Snapshot | Preservar internship_type_snapshot; congelar valores operacionais e vigência usada na emissão. Dinheiro decimal, nunca float. |
 | Formato | texto |
 | Sensibilidade | acadêmico |
 | Condição | Usar vigência correspondente ao documento; remuneração somente quando aplicável. Previsão não equivale a término efetivo. |
-| Vazio | Valor ausente será tratado pela resolução futura, sem exigir presença do marcador e sem presumir zero. |
+| Vazio | Se o marcador estiver presente, valor ausente bloqueia a emissão, salvo as exceções de vazio documentadas no fluxo; não se presume zero. |
 | Disponibilidade | Disponível para template |
 | Exemplo fictício | Estágio de Exemplo |
 
@@ -1262,11 +1264,11 @@ A representação é uma lista de dois trechos com `text` e `italic`, nunca HTML
 | Descrição | Setor de realização |
 | Tipo | string |
 | Origem | internships.internship_sector |
-| Snapshot | Preservar internship_type_snapshot; congelar valores operacionais e vigência usada na geração futura. Dinheiro decimal, nunca float. |
+| Snapshot | Preservar internship_type_snapshot; congelar valores operacionais e vigência usada na emissão. Dinheiro decimal, nunca float. |
 | Formato | texto |
 | Sensibilidade | acadêmico |
 | Condição | Usar vigência correspondente ao documento; remuneração somente quando aplicável. Previsão não equivale a término efetivo. |
-| Vazio | Valor ausente será tratado pela resolução futura, sem exigir presença do marcador e sem presumir zero. |
+| Vazio | Se o marcador estiver presente, valor ausente bloqueia a emissão, salvo as exceções de vazio documentadas no fluxo; não se presume zero. |
 | Disponibilidade | Disponível para template |
 | Exemplo fictício | Setor de exemplo |
 
@@ -1277,11 +1279,11 @@ A representação é uma lista de dois trechos com `text` e `italic`, nunca HTML
 | Descrição | Atividades aprovadas |
 | Tipo | text |
 | Origem | internships.activities |
-| Snapshot | Preservar internship_type_snapshot; congelar valores operacionais e vigência usada na geração futura. Dinheiro decimal, nunca float. |
+| Snapshot | Preservar internship_type_snapshot; congelar valores operacionais e vigência usada na emissão. Dinheiro decimal, nunca float. |
 | Formato | texto multilinha |
 | Sensibilidade | acadêmico |
 | Condição | Usar vigência correspondente ao documento; remuneração somente quando aplicável. Previsão não equivale a término efetivo. |
-| Vazio | Valor ausente será tratado pela resolução futura, sem exigir presença do marcador e sem presumir zero. |
+| Vazio | Se o marcador estiver presente, valor ausente bloqueia a emissão, salvo as exceções de vazio documentadas no fluxo; não se presume zero. |
 | Disponibilidade | Disponível para template |
 | Exemplo fictício | Atividade fictícia aprovada. |
 
@@ -1292,11 +1294,11 @@ A representação é uma lista de dois trechos com `text` e `italic`, nunca HTML
 | Descrição | Data de início |
 | Tipo | date |
 | Origem | internships.planned_start_date |
-| Snapshot | Preservar internship_type_snapshot; congelar valores operacionais e vigência usada na geração futura. Dinheiro decimal, nunca float. |
+| Snapshot | Preservar internship_type_snapshot; congelar valores operacionais e vigência usada na emissão. Dinheiro decimal, nunca float. |
 | Formato | dd/mm/aaaa |
 | Sensibilidade | acadêmico |
 | Condição | Usar vigência correspondente ao documento; remuneração somente quando aplicável. Previsão não equivale a término efetivo. |
-| Vazio | Valor ausente será tratado pela resolução futura, sem exigir presença do marcador e sem presumir zero. |
+| Vazio | Se o marcador estiver presente, valor ausente bloqueia a emissão, salvo as exceções de vazio documentadas no fluxo; não se presume zero. |
 | Disponibilidade | Disponível para template |
 | Exemplo fictício | 20/10/2026 |
 
@@ -1307,11 +1309,11 @@ A representação é uma lista de dois trechos com `text` e `italic`, nunca HTML
 | Descrição | Término previsto vigente |
 | Tipo | date |
 | Origem | internships.projected_end_date |
-| Snapshot | Preservar internship_type_snapshot; congelar valores operacionais e vigência usada na geração futura. Dinheiro decimal, nunca float. |
+| Snapshot | Preservar internship_type_snapshot; congelar valores operacionais e vigência usada na emissão. Dinheiro decimal, nunca float. |
 | Formato | dd/mm/aaaa |
 | Sensibilidade | acadêmico |
 | Condição | Usar vigência correspondente ao documento; remuneração somente quando aplicável. Previsão não equivale a término efetivo. |
-| Vazio | Valor ausente será tratado pela resolução futura, sem exigir presença do marcador e sem presumir zero. |
+| Vazio | Se o marcador estiver presente, valor ausente bloqueia a emissão, salvo as exceções de vazio documentadas no fluxo; não se presume zero. |
 | Disponibilidade | Disponível para template |
 | Exemplo fictício | 20/12/2026 |
 
@@ -1322,11 +1324,11 @@ A representação é uma lista de dois trechos com `text` e `italic`, nunca HTML
 | Descrição | Carga total exigida |
 | Tipo | integer |
 | Origem | internships.internship_type_snapshot.rules.required_hours |
-| Snapshot | Preservar internship_type_snapshot; congelar valores operacionais e vigência usada na geração futura. Dinheiro decimal, nunca float. |
+| Snapshot | Preservar internship_type_snapshot; congelar valores operacionais e vigência usada na emissão. Dinheiro decimal, nunca float. |
 | Formato | horas inteiras |
 | Sensibilidade | acadêmico |
 | Condição | Usar vigência correspondente ao documento; remuneração somente quando aplicável. Previsão não equivale a término efetivo. |
-| Vazio | Valor ausente será tratado pela resolução futura, sem exigir presença do marcador e sem presumir zero. |
+| Vazio | Se o marcador estiver presente, valor ausente bloqueia a emissão, salvo as exceções de vazio documentadas no fluxo; não se presume zero. |
 | Disponibilidade | Disponível para template |
 | Exemplo fictício | 200 |
 
@@ -1337,11 +1339,11 @@ A representação é uma lista de dois trechos com `text` e `italic`, nunca HTML
 | Descrição | Carga total por extenso |
 | Tipo | integer |
 | Origem | internships.internship_type_snapshot.rules.required_hours |
-| Snapshot | Preservar internship_type_snapshot; congelar valores operacionais e vigência usada na geração futura. Dinheiro decimal, nunca float. |
+| Snapshot | Preservar internship_type_snapshot; congelar valores operacionais e vigência usada na emissão. Dinheiro decimal, nunca float. |
 | Formato | NumberToWordsHelper |
 | Sensibilidade | acadêmico |
 | Condição | Usar vigência correspondente ao documento; remuneração somente quando aplicável. Previsão não equivale a término efetivo. |
-| Vazio | Valor ausente será tratado pela resolução futura, sem exigir presença do marcador e sem presumir zero. |
+| Vazio | Se o marcador estiver presente, valor ausente bloqueia a emissão, salvo as exceções de vazio documentadas no fluxo; não se presume zero. |
 | Disponibilidade | Disponível para template |
 | Exemplo fictício | duzentas |
 
@@ -1352,11 +1354,11 @@ A representação é uma lista de dois trechos com `text` e `italic`, nunca HTML
 | Descrição | Maior jornada diária vigente |
 | Tipo | integer |
 | Origem | internships.weekly_hours / workSchedules.weekly_hours |
-| Snapshot | Preservar internship_type_snapshot; congelar valores operacionais e vigência usada na geração futura. Dinheiro decimal, nunca float. |
+| Snapshot | Preservar internship_type_snapshot; congelar valores operacionais e vigência usada na emissão. Dinheiro decimal, nunca float. |
 | Formato | horas inteiras |
 | Sensibilidade | acadêmico |
 | Condição | Usar vigência correspondente ao documento; remuneração somente quando aplicável. Previsão não equivale a término efetivo. |
-| Vazio | Valor ausente será tratado pela resolução futura, sem exigir presença do marcador e sem presumir zero. |
+| Vazio | Se o marcador estiver presente, valor ausente bloqueia a emissão, salvo as exceções de vazio documentadas no fluxo; não se presume zero. |
 | Disponibilidade | Disponível para template |
 | Exemplo fictício | 6 |
 
@@ -1367,11 +1369,11 @@ A representação é uma lista de dois trechos com `text` e `italic`, nunca HTML
 | Descrição | Jornada diária por extenso |
 | Tipo | integer |
 | Origem | internships.weekly_hours / workSchedules.weekly_hours |
-| Snapshot | Preservar internship_type_snapshot; congelar valores operacionais e vigência usada na geração futura. Dinheiro decimal, nunca float. |
+| Snapshot | Preservar internship_type_snapshot; congelar valores operacionais e vigência usada na emissão. Dinheiro decimal, nunca float. |
 | Formato | NumberToWordsHelper |
 | Sensibilidade | acadêmico |
 | Condição | Usar vigência correspondente ao documento; remuneração somente quando aplicável. Previsão não equivale a término efetivo. |
-| Vazio | Valor ausente será tratado pela resolução futura, sem exigir presença do marcador e sem presumir zero. |
+| Vazio | Se o marcador estiver presente, valor ausente bloqueia a emissão, salvo as exceções de vazio documentadas no fluxo; não se presume zero. |
 | Disponibilidade | Disponível para template |
 | Exemplo fictício | seis |
 
@@ -1382,11 +1384,11 @@ A representação é uma lista de dois trechos com `text` e `italic`, nunca HTML
 | Descrição | Soma semanal vigente |
 | Tipo | integer |
 | Origem | internships.weekly_hours / workSchedules.weekly_hours |
-| Snapshot | Preservar internship_type_snapshot; congelar valores operacionais e vigência usada na geração futura. Dinheiro decimal, nunca float. |
+| Snapshot | Preservar internship_type_snapshot; congelar valores operacionais e vigência usada na emissão. Dinheiro decimal, nunca float. |
 | Formato | horas inteiras |
 | Sensibilidade | acadêmico |
 | Condição | Usar vigência correspondente ao documento; remuneração somente quando aplicável. Previsão não equivale a término efetivo. |
-| Vazio | Valor ausente será tratado pela resolução futura, sem exigir presença do marcador e sem presumir zero. |
+| Vazio | Se o marcador estiver presente, valor ausente bloqueia a emissão, salvo as exceções de vazio documentadas no fluxo; não se presume zero. |
 | Disponibilidade | Disponível para template |
 | Exemplo fictício | 30 |
 
@@ -1397,11 +1399,11 @@ A representação é uma lista de dois trechos com `text` e `italic`, nunca HTML
 | Descrição | Carga semanal por extenso |
 | Tipo | integer |
 | Origem | internships.weekly_hours / workSchedules.weekly_hours |
-| Snapshot | Preservar internship_type_snapshot; congelar valores operacionais e vigência usada na geração futura. Dinheiro decimal, nunca float. |
+| Snapshot | Preservar internship_type_snapshot; congelar valores operacionais e vigência usada na emissão. Dinheiro decimal, nunca float. |
 | Formato | NumberToWordsHelper |
 | Sensibilidade | acadêmico |
 | Condição | Usar vigência correspondente ao documento; remuneração somente quando aplicável. Previsão não equivale a término efetivo. |
-| Vazio | Valor ausente será tratado pela resolução futura, sem exigir presença do marcador e sem presumir zero. |
+| Vazio | Se o marcador estiver presente, valor ausente bloqueia a emissão, salvo as exceções de vazio documentadas no fluxo; não se presume zero. |
 | Disponibilidade | Disponível para template |
 | Exemplo fictício | trinta |
 
@@ -1412,11 +1414,11 @@ A representação é uma lista de dois trechos com `text` e `italic`, nunca HTML
 | Descrição | Descrição da jornada por dia |
 | Tipo | text |
 | Origem | internships.weekly_hours / workSchedules.weekly_hours |
-| Snapshot | Preservar internship_type_snapshot; congelar valores operacionais e vigência usada na geração futura. Dinheiro decimal, nunca float. |
+| Snapshot | Preservar internship_type_snapshot; congelar valores operacionais e vigência usada na emissão. Dinheiro decimal, nunca float. |
 | Formato | texto por dia |
 | Sensibilidade | acadêmico |
 | Condição | Usar vigência correspondente ao documento; remuneração somente quando aplicável. Previsão não equivale a término efetivo. |
-| Vazio | Valor ausente será tratado pela resolução futura, sem exigir presença do marcador e sem presumir zero. |
+| Vazio | Se o marcador estiver presente, valor ausente bloqueia a emissão, salvo as exceções de vazio documentadas no fluxo; não se presume zero. |
 | Disponibilidade | Disponível para template |
 | Exemplo fictício | Segunda a sexta: seis horas por dia. |
 
@@ -1427,11 +1429,11 @@ A representação é uma lista de dois trechos com `text` e `italic`, nunca HTML
 | Descrição | Existência de remuneração |
 | Tipo | boolean |
 | Origem | internships.is_remunerated |
-| Snapshot | Preservar internship_type_snapshot; congelar valores operacionais e vigência usada na geração futura. Dinheiro decimal, nunca float. |
+| Snapshot | Preservar internship_type_snapshot; congelar valores operacionais e vigência usada na emissão. Dinheiro decimal, nunca float. |
 | Formato | Sim/Não |
 | Sensibilidade | acadêmico |
 | Condição | Usar vigência correspondente ao documento; remuneração somente quando aplicável. Previsão não equivale a término efetivo. |
-| Vazio | Valor ausente será tratado pela resolução futura, sem exigir presença do marcador e sem presumir zero. |
+| Vazio | Se o marcador estiver presente, valor ausente bloqueia a emissão, salvo as exceções de vazio documentadas no fluxo; não se presume zero. |
 | Disponibilidade | Disponível para template |
 | Exemplo fictício | Sim |
 
@@ -1442,11 +1444,11 @@ A representação é uma lista de dois trechos com `text` e `italic`, nunca HTML
 | Descrição | Bolsa de estágio |
 | Tipo | decimal |
 | Origem | internships.grant_value |
-| Snapshot | Preservar internship_type_snapshot; congelar valores operacionais e vigência usada na geração futura. Dinheiro decimal, nunca float. |
+| Snapshot | Preservar internship_type_snapshot; congelar valores operacionais e vigência usada na emissão. Dinheiro decimal, nunca float. |
 | Formato | CurrencyHelper em BRL |
 | Sensibilidade | acadêmico/financeiro |
 | Condição | Usar vigência correspondente ao documento; remuneração somente quando aplicável. Previsão não equivale a término efetivo. |
-| Vazio | Valor ausente será tratado pela resolução futura, sem exigir presença do marcador e sem presumir zero. |
+| Vazio | Se o marcador estiver presente, valor ausente bloqueia a emissão, salvo as exceções de vazio documentadas no fluxo; não se presume zero. |
 | Disponibilidade | Disponível para template |
 | Exemplo fictício | R$ 1.000,00 |
 
@@ -1457,11 +1459,11 @@ A representação é uma lista de dois trechos com `text` e `italic`, nunca HTML
 | Descrição | Bolsa por extenso |
 | Tipo | decimal |
 | Origem | internships.grant_value |
-| Snapshot | Preservar internship_type_snapshot; congelar valores operacionais e vigência usada na geração futura. Dinheiro decimal, nunca float. |
+| Snapshot | Preservar internship_type_snapshot; congelar valores operacionais e vigência usada na emissão. Dinheiro decimal, nunca float. |
 | Formato | NumberToWordsHelper em BRL |
 | Sensibilidade | acadêmico/financeiro |
 | Condição | Usar vigência correspondente ao documento; remuneração somente quando aplicável. Previsão não equivale a término efetivo. |
-| Vazio | Valor ausente será tratado pela resolução futura, sem exigir presença do marcador e sem presumir zero. |
+| Vazio | Se o marcador estiver presente, valor ausente bloqueia a emissão, salvo as exceções de vazio documentadas no fluxo; não se presume zero. |
 | Disponibilidade | Disponível para template |
 | Exemplo fictício | mil reais |
 
@@ -1472,11 +1474,11 @@ A representação é uma lista de dois trechos com `text` e `italic`, nunca HTML
 | Descrição | Auxílio-transporte |
 | Tipo | decimal |
 | Origem | internships.transportation_allowance |
-| Snapshot | Preservar internship_type_snapshot; congelar valores operacionais e vigência usada na geração futura. Dinheiro decimal, nunca float. |
+| Snapshot | Preservar internship_type_snapshot; congelar valores operacionais e vigência usada na emissão. Dinheiro decimal, nunca float. |
 | Formato | CurrencyHelper em BRL |
 | Sensibilidade | acadêmico/financeiro |
 | Condição | Usar vigência correspondente ao documento; remuneração somente quando aplicável. Previsão não equivale a término efetivo. |
-| Vazio | Valor ausente será tratado pela resolução futura, sem exigir presença do marcador e sem presumir zero. |
+| Vazio | Se o marcador estiver presente, valor ausente bloqueia a emissão, salvo as exceções de vazio documentadas no fluxo; não se presume zero. |
 | Disponibilidade | Disponível para template |
 | Exemplo fictício | R$ 100,00 |
 
@@ -1487,11 +1489,11 @@ A representação é uma lista de dois trechos com `text` e `italic`, nunca HTML
 | Descrição | Auxílio por extenso |
 | Tipo | decimal |
 | Origem | internships.transportation_allowance |
-| Snapshot | Preservar internship_type_snapshot; congelar valores operacionais e vigência usada na geração futura. Dinheiro decimal, nunca float. |
+| Snapshot | Preservar internship_type_snapshot; congelar valores operacionais e vigência usada na emissão. Dinheiro decimal, nunca float. |
 | Formato | NumberToWordsHelper em BRL |
 | Sensibilidade | acadêmico/financeiro |
 | Condição | Usar vigência correspondente ao documento; remuneração somente quando aplicável. Previsão não equivale a término efetivo. |
-| Vazio | Valor ausente será tratado pela resolução futura, sem exigir presença do marcador e sem presumir zero. |
+| Vazio | Se o marcador estiver presente, valor ausente bloqueia a emissão, salvo as exceções de vazio documentadas no fluxo; não se presume zero. |
 | Disponibilidade | Disponível para template |
 | Exemplo fictício | cem reais |
 
@@ -1502,11 +1504,11 @@ A representação é uma lista de dois trechos com `text` e `italic`, nunca HTML
 | Descrição | Protocolo do SIGAA |
 | Tipo | string |
 | Origem | internships.protocol_number |
-| Snapshot | Preservar internship_type_snapshot; congelar valores operacionais e vigência usada na geração futura. Dinheiro decimal, nunca float. |
+| Snapshot | Preservar internship_type_snapshot; congelar valores operacionais e vigência usada na emissão. Dinheiro decimal, nunca float. |
 | Formato | texto |
 | Sensibilidade | acadêmico |
 | Condição | Usar vigência correspondente ao documento; remuneração somente quando aplicável. Previsão não equivale a término efetivo. |
-| Vazio | Valor ausente será tratado pela resolução futura, sem exigir presença do marcador e sem presumir zero. |
+| Vazio | Se o marcador estiver presente, valor ausente bloqueia a emissão, salvo as exceções de vazio documentadas no fluxo; não se presume zero. |
 | Disponibilidade | Disponível para template |
 | Exemplo fictício | PROTOCOLO-EXEMPLO |
 
@@ -1517,11 +1519,11 @@ A representação é uma lista de dois trechos com `text` e `italic`, nunca HTML
 | Descrição | Período do estágio |
 | Tipo | string |
 | Origem | internships.planned_start_date + projected_end_date |
-| Snapshot | Preservar internship_type_snapshot; congelar valores operacionais e vigência usada na geração futura. Dinheiro decimal, nunca float. |
+| Snapshot | Preservar internship_type_snapshot; congelar valores operacionais e vigência usada na emissão. Dinheiro decimal, nunca float. |
 | Formato | dd/mm/aaaa a dd/mm/aaaa |
 | Sensibilidade | acadêmico |
 | Condição | Usar vigência correspondente ao documento; remuneração somente quando aplicável. Previsão não equivale a término efetivo. |
-| Vazio | Valor ausente será tratado pela resolução futura, sem exigir presença do marcador e sem presumir zero. |
+| Vazio | Se o marcador estiver presente, valor ausente bloqueia a emissão, salvo as exceções de vazio documentadas no fluxo; não se presume zero. |
 | Disponibilidade | Disponível para template |
 | Exemplo fictício | 20/10/2026 a 20/12/2026 |
 
@@ -1532,11 +1534,11 @@ A representação é uma lista de dois trechos com `text` e `italic`, nunca HTML
 | Descrição | Nota do supervisor |
 | Tipo | decimal |
 | Origem | internships.supervisor_grade |
-| Snapshot | Congelar na futura geração; não existe snapshot deste dado no estágio. Nunca atualizar documento anterior. |
+| Snapshot | Congelar na emissão; não existe snapshot deste dado no estágio. Nunca atualizar documento anterior. |
 | Formato | decimal com uma casa, escala congelada |
 | Sensibilidade | acadêmico |
 | Condição | Somente nota aprovada/lançada; ausente não equivale a zero. |
-| Vazio | Valor ausente será tratado pela resolução futura, sem exigir presença do marcador e sem presumir zero. |
+| Vazio | Se o marcador estiver presente, valor ausente bloqueia a emissão, salvo as exceções de vazio documentadas no fluxo; não se presume zero. |
 | Disponibilidade | Disponível para template |
 | Exemplo fictício | 8,0 |
 
@@ -1547,11 +1549,11 @@ A representação é uma lista de dois trechos com `text` e `italic`, nunca HTML
 | Descrição | Nota do relatório |
 | Tipo | decimal |
 | Origem | internships.report_grade |
-| Snapshot | Congelar na futura geração; não existe snapshot deste dado no estágio. Nunca atualizar documento anterior. |
+| Snapshot | Congelar na emissão; não existe snapshot deste dado no estágio. Nunca atualizar documento anterior. |
 | Formato | decimal com uma casa, escala congelada |
 | Sensibilidade | acadêmico |
 | Condição | Somente nota aprovada/lançada; ausente não equivale a zero. |
-| Vazio | Valor ausente será tratado pela resolução futura, sem exigir presença do marcador e sem presumir zero. |
+| Vazio | Se o marcador estiver presente, valor ausente bloqueia a emissão, salvo as exceções de vazio documentadas no fluxo; não se presume zero. |
 | Disponibilidade | Disponível para template |
 | Exemplo fictício | 8,0 |
 
@@ -1562,11 +1564,11 @@ A representação é uma lista de dois trechos com `text` e `italic`, nunca HTML
 | Descrição | Nota da apresentação |
 | Tipo | decimal |
 | Origem | internships.presentation_grade |
-| Snapshot | Congelar na futura geração; não existe snapshot deste dado no estágio. Nunca atualizar documento anterior. |
+| Snapshot | Congelar na emissão; não existe snapshot deste dado no estágio. Nunca atualizar documento anterior. |
 | Formato | decimal com uma casa, escala congelada |
 | Sensibilidade | acadêmico |
 | Condição | Somente nota aprovada/lançada; ausente não equivale a zero. |
-| Vazio | Valor ausente será tratado pela resolução futura, sem exigir presença do marcador e sem presumir zero. |
+| Vazio | Se o marcador estiver presente, valor ausente bloqueia a emissão, salvo as exceções de vazio documentadas no fluxo; não se presume zero. |
 | Disponibilidade | Disponível para template |
 | Exemplo fictício | 8,0 |
 
@@ -1577,11 +1579,11 @@ A representação é uma lista de dois trechos com `text` e `italic`, nunca HTML
 | Descrição | Nota consolidada |
 | Tipo | decimal |
 | Origem | internships.consolidated_grade |
-| Snapshot | Congelar na futura geração; não existe snapshot deste dado no estágio. Nunca atualizar documento anterior. |
+| Snapshot | Congelar na emissão; não existe snapshot deste dado no estágio. Nunca atualizar documento anterior. |
 | Formato | decimal com uma casa, escala congelada |
 | Sensibilidade | acadêmico |
 | Condição | Somente nota aprovada/lançada; ausente não equivale a zero. |
-| Vazio | Valor ausente será tratado pela resolução futura, sem exigir presença do marcador e sem presumir zero. |
+| Vazio | Se o marcador estiver presente, valor ausente bloqueia a emissão, salvo as exceções de vazio documentadas no fluxo; não se presume zero. |
 | Disponibilidade | Disponível para template |
 | Exemplo fictício | 8,0 |
 
@@ -1690,16 +1692,45 @@ A representação é uma lista de dois trechos com `text` e `italic`, nunca HTML
 | Disponibilidade | Reservada; upload rejeitado |
 | Exemplo fictício | Exemplo fictício |
 
-## Geração posterior (não implementada)
+## Emissão, histórico e reprodução
 
-Uma fase separada implementará builder de snapshots, resolvers, seleção manual de template compatível com a remuneração, geração temporária privada e transmissão com limpeza, idempotência e regras de assinatura. Somente nessa fase se avaliarão bibliotecas documentais e dependências, com autorização. O texto jurídico pertence ao DOCX correspondente à modalidade; não é criado por variável composta nem por dados editáveis do discente. Valores monetários continuam usando CurrencyHelper e NumberToWordsHelper, sem float e sem preencher ausência com zero incidentalmente.
+`GenerateInternshipDocument` revalida vínculo ativo selecionado, campus, curso, estágio, tipo, remuneração e versão vigente dentro de transação com locks. Um token UUID e um advisory lock do PostgreSQL impedem duas emissões para a mesma tentativa. Reutilizar o token com outro contexto é recusado; uma nova emissão recebe outro token.
+
+`GeneratedDocumentSnapshot` resolve somente os marcadores presentes. Um dado ausente bloqueia a emissão com o nome da variável, sem presumir zero. Responsável legal de discente que não necessita dele e a alternativa não aplicável de formação/experiência do supervisor podem ficar vazios. Dados históricos vêm dos snapshots do estágio; campus, curso e orientador são resolvidos na emissão e congelados para aquela ocorrência. Valores monetários usam `CurrencyHelper::formatDecimal()` e `NumberToWordsHelper`, sem float. O espaço inseparável entre R$ e o valor pode aparecer sombreado no editor; não é um fundo de impressão.
+
+O snapshot registra revisão de schema, catálogo e motor, identificação do template, campus e emitente, valores base e trechos transformados por expressão. O registro preserva também versão, hash do original, nome legível do download e instante da emissão; o snapshot guarda o SHA-256 do DOCX preenchido. Dados do snapshot não são copiados para o Activity Log.
+
+Baixar novamente reconstrói o DOCX com a mesma versão e os mesmos valores/revisão, confere seu SHA-256 contra o resultado original e recusa divergências. Não consulta cadastros atuais para atualizar a emissão e não cria outro registro. A imutabilidade de reprodução aplica-se ao DOCX; o PDF é uma conversão sob demanda, sem promessa de identidade binária entre conversões. Manter suporte às revisões antigas e controlar mudanças de dependências é necessário para reproduzir emissões históricas.
+
+O coordenador titular ou substituto só emite atestados de seus cursos no próprio campus. O modal pede apenas o formato. A resolução limita os marcadores ao contexto autorizado: identificação de campus, discente, curso, concedente, orientador, coordenação e período. Marcadores disponíveis no catálogo geral podem ser recusados neste contexto restrito. O Setor emite os demais tipos, mantém os templates e pode consultar o histórico do campus; não emite atestado em nome da coordenação.
+
+Cada atestado também preserva snapshot e versão, pode ser baixado novamente e não participa do fluxo de assinatura. O Setor pode cancelar uma emissão ainda em `generated`, com motivo, preservando seus dados e a possibilidade de consulta/download autorizado. Documentos cancelados ou assinados não têm o ciclo reaberto. Uma devolução para correção cancela os documentos de formalização gerados ou aguardando assinatura, preservando atestados e documentos já assinados.
+
+A consulta do template mostra a quantidade de emissões de todas as versões e a quantidade individual por arquivo, inclusive emissões canceladas. Repetir o download não aumenta essas contagens. Após uso, o template lógico e a versão utilizada não podem ser excluídos, mesmo que a emissão seja cancelada; correções exigem nova versão. As regras existentes de exclusão de versões nunca usadas permanecem.
+
+## Arquivos temporários e PDF
+
+O motor grava em `storage/app/private/generated-documents-tmp`, com diretório privado gravável pelo usuário da aplicação e arquivo com permissão 0600. A geração inicial apaga seu DOCX em `finally`. No download, o sistema reconstrói o DOCX; se solicitado PDF, envia esse arquivo ao conversor privado, apaga o intermediário e transmite o resultado. A transmissão remove o arquivo em `finally`, inclusive em falha ou desconexão. `documents:prune-temporary` remove órfãos DOCX/PDF com mais de uma hora e lock exclusivo disponível, a cada hora pelo scheduler.
+
+A rota autenticada confere a relação documento/estágio e a Policy em cada download. Respostas usam nome legível, MIME e extensão do formato, cache privado sem armazenamento e `nosniff`. A auditoria distingue transmissão concluída e falha, com formato e contexto institucional; transmissão concluída pelo servidor não comprova que o usuário salvou ou abriu o arquivo.
+
+O serviço `gotenberg` usa a imagem `gotenberg/gotenberg:8.38.1-libreoffice`, sem porta publicada e em rede interna compartilhada somente com a aplicação. `config/documents.php` usa `DOCUMENT_PDF_CONVERTER_URL`, com padrão `http://gotenberg:3000`, timeout de conexão de 5 segundos e de requisição de 100 segundos. O serviço limita requisições a 25 MB e 90 segundos. Em produção, disponibilizar um conversor privado equivalente; falha de conversão não elimina a emissão, que pode ser baixada novamente em DOCX ou PDF pelo histórico.
+
+A conversão exporta o DOCX pelo LibreOffice, sem reconstrução por HTML. Fontes ausentes são substituídas pelo conversor; Arial e Times New Roman atualmente usam Liberation Sans e Liberation Serif. Os nove modelos adaptados mantiveram a paginação na conferência, mas foram observadas pequenas diferenças de espaçamento entre versões do LibreOffice. Identidade visual absoluta com qualquer Word/LibreOffice não está garantida. Controlar fontes e versão do conversor e revisar visualmente novos modelos continua necessário.
+
+## Adaptação dos modelos legados
+
+Os modelos de TCE, credenciamento, SEDUC, EMATER, aditivo da cláusula terceira e rescisão foram adaptados ao catálogo canônico; TCE e credenciamento possuem variantes com e sem remuneração. Com o atestado, são nove arquivos no diretório de trabalho `templates`, externo aos repositórios do sistema e da documentação. Os originais de `4.0` foram preservados. Esses arquivos não são importados automaticamente: o Setor deve cadastrar ou enviar a nova versão e conferir a vigência.
+
+Credenciamento teve duplicações removidas; rescisão teve tabelas reconstruídas; o atestado teve quebras manuais de texto corrigidas e mantém a data por extenso. Os marcadores de parágrafo §1º e seguintes usam negrito. Campos sem fonte disponível, como data efetiva/justificativa de rescisão e sequência específica de aditivo, não ganharam variáveis fictícias; permanecem para preenchimento manual quando necessário. Conteúdo jurídico exige revisão institucional.
 
 ## Pendências
 
 - Aprovar o texto jurídico de remuneração e a completude jurídica dos modelos.
 - Definir fontes para as variáveis reservadas, sequência/mudanças de aditivo e contexto de emissão da rescisão antes de disponibilizá-las.
-- Implementar snapshot/resolução/geração em fase posterior; não gerar prévias preenchidas nesta etapa.
-- Verificação desta entrega: formatação, análise estática, compilação de views e build da documentação, sem criar nem executar testes por solicitação do responsável.
+- Implementar assinatura, avisos aos interessados, registro operacional de documentos externos e integração com a liberação do estágio.
+- Revalidar reprodução histórica ao atualizar motor/dependências e conferir fontes/layout de cada novo modelo; fidelidade visual absoluta do PDF permanece uma limitação.
+- Verificações da geração: Pint, sintaxe, análise estática direcionada, compilação/renderização dos modais e conversões reais com dados fictícios. Os nove modelos passaram pelo inspetor sem erros ou avisos. Não foram criados nem executados testes por solicitação do responsável; essas conferências não substituem cobertura funcional de concorrência e autorização.
 
 ## Visualização do original
 

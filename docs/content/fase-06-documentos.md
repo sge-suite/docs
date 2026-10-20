@@ -11,7 +11,7 @@ source_refs:
 ---
 Referências: [fluxo de formalização](doc:fluxos-principais#3-analise-e-formalizacao), [contrato do motor e catálogo](doc:geracao-de-documentos-docx-e-variaveis), [migration de templates](doc:migration-13-document-templates) e [migration de documentos gerados](doc:migration-16-generated-documents).
 
-A entrega atual cobre gestão de templates originais: catálogo e consulta do próprio campus, versões privadas, inspeção OOXML, validação automática no upload e guia de variáveis. Geração, prévias preenchidas, PDFs, assinatura e documentos da concedente pertencem a fases posteriores. Há visualização aproximada do original, sem preencher variáveis. O contrato de ciclo de vida, catálogo e dados indisponíveis está em [Geração de documentos DOCX e variáveis](doc:geracao-de-documentos-docx-e-variaveis). A classificação de remuneração foi consolidada na Migration 13 original e aplicada ao banco existente por migration temporária, sem fresh; não há dependência nova.
+A entrega cobre templates privados, emissão com snapshot e versão imutáveis, reprodução histórica em DOCX e conversão PDF sob demanda. O coordenador titular/substituto emite somente atestados de seus cursos, com template vigente automático; o Setor emite os demais tipos. Ambos escolhem o formato, com DOCX padrão. Cada atestado também possui histórico, sem assinatura. Assinaturas, avisos e registro operacional de documentos externos continuam pendentes. O contrato e as limitações de fontes/layout do PDF estão em [Geração de documentos DOCX e variáveis](doc:geracao-de-documentos-docx-e-variaveis).
 
 ## Checklist
 
@@ -21,22 +21,25 @@ A entrega atual cobre gestão de templates originais: catálogo e consulta do pr
 - [x] Permitir upload DOCX somente ao vínculo autorizado do Setor de Estágio.
 - [x] Definir catálogo fixo com `DISCENTE_*`, modificadores de caixa permitidos e modelos separados por remuneração.
 - [x] Implementar inspeção OOXML e validação de variáveis no upload.
-- [ ] Avaliar dependências somente na fase de geração, com autorização; esta entrega usa ZIP/DOM nativos.
+- [x] Integrar PHPWord 1.4 e Gotenberg 8.38.1/LibreOffice privado no Sail.
 - [x] Validar estrutura e marcadores no upload, sem confirmação posterior; conteúdo jurídico e dados fixos continuam sob responsabilidade do Setor.
-- [ ] Corrigir o template de credenciamento e reconstruir/renderizar a rescisão.
+- [x] Corrigir credenciamento, reconstruir/renderizar rescisão e adaptar os nove modelos legados.
 - [x] Impedir alteração destrutiva e exclusão de versão já utilizada; permitir exclusão física da versão sem documentos gerados.
 - [x] Criar `generated_documents` com tipo, origem, status e snapshot quando gerado pelo SGE.
 - [ ] Registrar documento externo sem receber/armazenar arquivo e com template nulo.
-- [ ] Gerar usando somente dados autorizados pelo contexto do estágio.
-- [ ] Gerar em arquivo privado temporário, transmitir e apagar em `finally`.
-- [ ] Implementar token idempotente e lock para retries/concorrência.
-- [ ] Registrar geração no Activity Log.
+- [x] Gerar usando somente dados autorizados pelo contexto do estágio.
+- [x] Gerar em arquivo privado temporário, transmitir e apagar em `finally`, com limpeza horária de órfãos.
+- [x] Implementar token idempotente e lock para retries/concorrência.
+- [x] Auditar geração e resultado da transmissão, sem copiar o snapshot para logs.
+- [x] Oferecer DOCX/PDF na emissão e no histórico, sem outro registro ao baixar novamente.
+- [x] Conferir o hash da reprodução do DOCX e preservar revisões do motor.
+- [x] Mostrar contagens total e por versão, inclusive emissões canceladas.
 - [ ] Controlar assinatura no documento, não no estágio.
 - [ ] Ao marcar `Aguardando assinatura`, exigir o local genérico onde o documento está disponível, sem citar plataforma fixa.
 - [ ] Exibir checkboxes dos interessados elegíveis e, quando selecionados, criar aviso de assinatura por e-mail e no sistema para quem possui conta.
 - [ ] Acompanhar assinatura externa manualmente.
 - [ ] Armazenar `protocol_number` retornado pelo SIGAA quando houver.
-- [ ] Tratar aditivo como `GeneratedDocumentType::Addendum`.
+- [x] Tratar aditivo como `GeneratedDocumentType::Addendum`; variáveis sem fonte continuam reservadas.
 - [ ] Testar dados completos/opcionais, acentuação e versão ainda não validada.
 - [ ] Testar marcadores em tabelas/cabeçalhos, arquivo malicioso, sobras e revisão visual de todas as páginas.
 
@@ -50,12 +53,12 @@ A entrega atual cobre gestão de templates originais: catálogo e consulta do pr
 - [x] Exclusão individual e do catálogo com senha atual, preservando registros já utilizados e auditoria.
 - [x] Upload recusado preserva a vigente; cada upload aceito já é validado e remoção nunca é permitida após uso.
 
-Não criar nem executar testes nesta etapa; usar verificações não-testes.
+Não criar nem executar testes nesta etapa; usar verificações não-testes. Foram conferidos sintaxe, Pint, análise estática direcionada, Blade, renderização dos modais e nove conversões com dados fictícios; os templates passaram pelo inspetor. A suíte funcional permanece para a preparação para produção. A conversão PDF não garante identidade visual absoluta entre editores/fontes.
 
 ## Critério de saída
 
-- [ ] Templates e versões são imutáveis após uso.
-- [ ] Nenhum arquivo final gerado ou fornecido pela concedente é armazenado pelo SGE.
+- [x] Arquivos de template e versões usadas são preservados; exclusão do catálogo após uso é bloqueada.
+- [x] Nenhum DOCX/PDF final gerado é mantido como acervo; registro operacional de documento externo continua pendente.
 - [ ] O status de cada documento é independente do status do estágio.
 
 ## Próxima fase

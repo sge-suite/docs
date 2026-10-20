@@ -26,8 +26,8 @@ Para a sequência e o andamento atuais, consulte [Fases de desenvolvimento](doc:
 - [Fase 03 — Activity Log](doc:fase-03-activity-log) — **completed** — Eventos Eloquent, autoria por vínculo e auditoria dos campos pessoais e profissionais implementados.
 - [Fase 04 — Integração de e-mail](doc:fase-04-integracao-de-email) — **in-progress** — Pipeline em fila, avisos de solicitação e fluxos administrativos implementados; notificações de documento/execução, escopos para outros vínculos e retenção pendentes.
 - [Fase 05 — Administração hierárquica](doc:fase-05-administracao) — **in-progress** — Gestão global de campi, administração de contas e vínculos e painel global do Administrador do Sistema concluídos; interface local, cursos, tipos e demais operações administrativas pendentes.
-- [Fase 06 — Documentos](doc:fase-06-documentos) — **planned** — Checklist de templates DOCX, versões, geração e acompanhamento de assinatura.
-- [Fase 07 — Abertura do estágio](doc:fase-07-abertura-do-estagio) — **in-progress** — Rascunho, envio, análise, correção, cadastros pendentes e criação do estágio no aceite implementados; geração documental permanece pendente.
+- [Fase 06 — Documentos](doc:fase-06-documentos) — **in-progress** — Templates, emissão e reprodução em DOCX/PDF implementados; assinatura e documentos externos pendentes.
+- [Fase 07 — Abertura do estágio](doc:fase-07-abertura-do-estagio) — **in-progress** — Rascunho, envio, análise, correção, cadastros pendentes e criação do estágio no aceite implementados; emissão documental disponível; assinatura e liberação pendentes.
 - [Fase 08 — Estágio em andamento](doc:fase-08-estagio-em-andamento) — **planned** — Checklist de pausas, substituições, aditivos, cancelamento e histórico do estágio.
 - [Fase 09 — Avaliação e conclusão](doc:fase-09-avaliacao-e-conclusao) — **planned** — Checklist de avaliações, notas, requisitos de encerramento e conclusão do estágio.
 - [Fases de desenvolvimento](doc:fases-de-desenvolvimento) — **in-progress** — Índice das fases executáveis do desenvolvimento do SGE.
@@ -79,7 +79,7 @@ Sequência física dos arquivos em `database/migrations`; os números permanecem
 - [Migration 12A — supervisor_registration_requests](doc:migration-12a-supervisor-registration-requests) — **implemented** — Solicitações tipadas de cadastro de supervisor feitas durante a abertura.
 - [Migration 12B — granting_party_registration_requests](doc:migration-12b-granting-party-registration-requests) — **implemented** — Solicitações tipadas de cadastro de parte concedente feitas durante a abertura.
 - [Migration 13 — document_templates](doc:migration-13-document-templates) — **implemented** — Contrato do catálogo de templates DOCX do SGE.
-- [Migration 14 — template_versions](doc:migration-14-template-versions) — **in-progress** — Versões DOCX privadas, com preservação após uso; validação do upload e integração com geração ainda pendentes.
+- [Migration 14 — template_versions](doc:migration-14-template-versions) — **in-progress** — Versões DOCX privadas, com preservação após uso; validação no upload e integração com emissão disponíveis.
 - [Migration 15 — internships](doc:migration-15-internships) — **in-progress** — Contrato do processo de estágio, referências atuais e snapshots históricos.
 - [Migration 18 — supervisor_evaluations](doc:migration-18-supervisor-evaluations) — **implemented** — Schema, Model e factory da avaliação do supervisor; fluxo funcional pendente.
 - [Migration 19 — internship_requests](doc:migration-19-internship-requests) — **implemented** — Contrato da solicitação única de abertura de estágio preenchida pelo discente.
@@ -127,7 +127,7 @@ Sequência física dos arquivos em `database/migrations`; os números permanecem
 ## Integrações
 
 - [E-mails, notificações e entregas](doc:e-mails-notificacoes-e-entregas) — **in-progress** — Pipeline de e-mail em fila e consulta de mensagens administrativas implementados; notificações de domínio, outros escopos de consulta e retenção pendentes.
-- [Geração de documentos DOCX e variáveis](doc:geracao-de-documentos-docx-e-variaveis) — **defined** — Arquitetura da geração DOCX, validação de templates e catálogo canônico de variáveis.
+- [Geração de documentos DOCX e variáveis](doc:geracao-de-documentos-docx-e-variaveis) — **implemented** — Emissão e reprodução histórica DOCX/PDF, versões imutáveis, autorização e catálogo de variáveis.
 
 ## Decisões
 

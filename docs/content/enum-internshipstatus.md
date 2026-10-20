@@ -26,7 +26,7 @@ diagram: enum-internship-status
 | `Completed`          | `completed`           | Concluído                 |
 | `Cancelled`          | `cancelled`           | Cancelado                 |
 
-Um estágio nasce quando a solicitação é aceita, inicialmente em `PendingFormalization`. A geração e o encaminhamento do documento ainda não estão implementados; por isso, a passagem para `AwaitingSignatures` continua pendente. Se uma correção de uma solicitação já aceita for devolvida ao discente, o estágio relacionado passa a `PendingCorrection` e volta a `PendingFormalization` após a aprovação da correção. Rascunho, envio, análise, pendência e recusa pertencem exclusivamente a [`InternshipRequestStatus`](doc:enum-internshiprequeststatus). O status de cada assinatura pertence a [`GeneratedDocumentStatus`](doc:enum-generateddocumentstatus), não a este enum.
+Um estágio nasce quando a solicitação é aceita, inicialmente em `PendingFormalization`. Geração e download DOCX/PDF estão implementados; encaminhamento para assinatura e passagem para `AwaitingSignatures` continuam pendentes. Se uma correção de uma solicitação já aceita for devolvida ao discente, o estágio relacionado passa a `PendingCorrection` e volta a `PendingFormalization` após a aprovação da correção. Rascunho, envio, análise, pendência e recusa pertencem exclusivamente a [`InternshipRequestStatus`](doc:enum-internshiprequeststatus). O status de cada assinatura pertence a [`GeneratedDocumentStatus`](doc:enum-generateddocumentstatus), não a este enum.
 
 ## Transições iniciais
 

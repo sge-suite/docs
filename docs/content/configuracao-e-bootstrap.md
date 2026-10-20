@@ -92,8 +92,9 @@ O Fortify registra as rotas de autenticação. As views atuais ficam em `resourc
 
 Dependências de domínio:
 
-- `phpoffice/phpword` ainda não está no `composer.json`; será necessário para [geração DOCX](doc:geracao-de-documentos-docx-e-variaveis);
-- [Helper — NumberToWordsHelper](doc:helper-numbertowordshelper) importa classes de `brick/math`, mas o pacote está ausente das dependências diretas do `composer.json`.
+- `phpoffice/phpword` está em `composer.json` (`^1.4`), com 1.4.0 no lock, para a [geração DOCX](doc:geracao-de-documentos-docx-e-variaveis);
+- `brick/math` está instalado como dependência transitiva, usado por [NumberToWordsHelper](doc:helper-numbertowordshelper) e `CurrencyHelper::formatDecimal()`; sua declaração direta continua pendente;
+- `config/documents.php` define o conversor por `DOCUMENT_PDF_CONVERTER_URL` (padrão `http://gotenberg:3000`) e timeout de 100 segundos. O Compose inclui Gotenberg 8.38.1/LibreOffice sem porta publicada, em rede interna com a aplicação. O scheduler executa `documents:prune-temporary` a cada hora. Ver [Ambiente de desenvolvimento](doc:ambiente-de-desenvolvimento).
 
 ## Checklist
 
@@ -107,7 +108,8 @@ Dependências de domínio:
 - [ ] Configurar e monitorar `schedule:run` por minuto em produção; validar lock compartilhado de `onOneServer`.
 - [ ] Confirmar rotas e middleware de cada módulo do SGE.
 - [ ] Criar testes de configuração crítica por ambiente.
-- [ ] Adicionar PHPWord/Brick Math e validar extensões PHP no setup, CI e produção.
+- [x] Adicionar PHPWord e disponibilizar conversão PDF privada no Sail.
+- [ ] Declarar Brick Math diretamente e validar extensões, conversor, fontes e permissões no CI/produção.
 - [ ] Atualizar [Ambiente de desenvolvimento](doc:ambiente-de-desenvolvimento) com qualquer variável nova.
 
 ## Relacionamentos

@@ -141,8 +141,8 @@ source_refs:
 
 ### D-020 — Motor DOCX local e catálogo canônico
 
-- **Status:** definido.
-- **Decisão:** gerar DOCX localmente com PHPWord, usando somente `${NOME_DA_VARIAVEL}` de um catálogo canônico. Uploads são inspecionados, renderizados e versionados; o resultado é temporário e não vira acervo. Cada template passa por revisão antes de ser ativado.
+- **Status:** implementado para emissão/reprodução; assinatura e documentos externos pendentes.
+- **Decisão:** gerar DOCX localmente com PHPWord, usando somente `${NOME_DA_VARIAVEL}` de um catálogo canônico. Uploads são inspecionados e versionados, com visualização aproximada do original; a emissão congela dados e versão e produz arquivo temporário. O download oferece DOCX padrão ou PDF convertido por LibreOffice privado, sem acervo de saídas. Atestados também possuem histórico e somente a coordenação titular/substituta os emite. Revisão jurídica e conferência visual permanecem necessárias.
 - **Motivo:** permite validar os dados usados e preserva rastreabilidade sem armazenar documentos finais.
 - **Referências:** [Geração de documentos DOCX e variáveis](doc:geracao-de-documentos-docx-e-variaveis).
 

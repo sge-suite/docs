@@ -32,7 +32,7 @@ Esta é a referência operacional para implementar as telas, Gates, Policies e t
 | --- | --- | --- | --- | --- |
 | Administrador do Sistema | institucional/global | não, salvo atribuição futura explícita | campi e vínculos administrativos globais | ativação e estrutura institucional |
 | Setor de Estágio | próprio campus | sim | dados do campus, cursos, tipos, concedentes, pendências, templates e gestão local prevista em Policy | administração local, análise, formalização, liberação e avaliação |
-| Coordenador | cursos que o referenciam como coordenador | consulta acadêmica | não | atestado de orientação previsto |
+| Coordenador | cursos que referenciam o vínculo titular/substituto | consulta restrita e histórico de atestados | não | atestado com versão vigente automática, DOCX/PDF e snapshot |
 | Orientador | próprios orientandos | sim, nas notas acadêmicas | não | lançamento de relatório e apresentação |
 | Discente | próprio vínculo/processo | sim, na própria solicitação e pedidos | próprios dados permitidos | envio, correção, desistência e pedido de cancelamento |
 | Supervisor | estágios sob sua supervisão e perfil próprio permitido | sim, na própria avaliação | próprios dados profissionais e telefone | envio ou cancelamento da própria avaliação |
@@ -124,7 +124,8 @@ Consulta o acompanhamento acadêmico do curso vinculado. Não se confunde com o 
 ### Ações permitidas
 
 - consultar estágios e informações acadêmicas autorizadas do próprio curso;
-- emitir o atestado de orientação previsto no processo;
+- emitir o atestado de orientação, exclusivamente como titular/substituto referenciado pelo curso no próprio campus, e baixar novamente suas emissões autorizadas;
+- escolher DOCX (padrão) ou PDF no modal, sem selecionar template; o sistema usa a versão vigente validada disponível;
 - exercer apenas outras ações acadêmicas que sejam atribuídas explicitamente por decisão futura e Policy correspondente.
 
 ### Limites e proibições
@@ -139,7 +140,7 @@ Não possui aviso operacional recorrente definido. A emissão do atestado e even
 
 ### Controles a implementar
 
-`InternshipPolicy::viewCourse` e `OrientationCertificatePolicy` validam curso e campus do vínculo. Testar curso alheio, tentativa de decisão operacional e emissão de atestado sem relação de curso válida.
+`InternshipPolicy::viewAny`, `view` e `generateDocument` validam curso/campus e separam coordenação e Setor. `GeneratedDocumentPolicy` limita a consulta/download da coordenação aos atestados; o resolver limita os marcadores ao contexto autorizado. O Setor mantém templates, emite os demais tipos e cancela emissões ainda geradas. Cenários de curso alheio, decisão operacional e emissão sem relação válida ficam para a futura cobertura funcional, conforme [Testes automatizados](doc:testes-existentes).
 
 ## Orientador
 

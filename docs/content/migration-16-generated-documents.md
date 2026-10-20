@@ -10,7 +10,7 @@ related: migration-15-internships, migration-14-template-versions, enum-generate
 source_refs:
 ---
 > [!success] Estado
-> Migration, Model, factory, relações e validações do registro implementados. A geração/transmissão e a análise de assinaturas continuam no fluxo funcional.
+> Migration, Model, factory, relações, geração, reprodução em DOCX/PDF e cancelamento de emissões geradas estão implementados. Assinaturas, avisos e registro operacional de documentos externos continuam pendentes.
 
 ## Contrato
 
@@ -32,7 +32,7 @@ source_refs:
 
 | timestamps            | auditoria.                                                            |
 
-O SGE registra a geração ou a existência, mas não armazena PDF, DOCX de saída ou documentos assinados. Cada geração pelo SGE referencia a versão vigente selecionada no momento da geração; não cria uma linha em `template_versions`. A FK para a versão deve restringir sua exclusão física após uso, e a versão usada não pode ser alterada de forma destrutiva. Versões nunca usadas podem ser excluídas com sua mídia. O SGE armazena apenas templates, versões e snapshots. Para documento de origem `sge`, a `snapshot` preserva o catálogo/valores resolvidos, os valores monetários, a classificação de remuneração do template e os textos transformados por modificador; as cláusulas fixas são preservadas pela versão imutável do DOCX. Nunca inclui prova de emancipação, token, senha ou log. O status de assinatura é do documento; cancelar o documento não cancela automaticamente o estágio.
+O SGE registra a geração ou a existência, mas não armazena PDF, DOCX de saída ou documentos assinados. Cada geração pelo SGE referencia a versão vigente selecionada no momento da geração; não cria uma linha em `template_versions`. A FK para a versão deve restringir sua exclusão física após uso, e a versão usada não pode ser alterada de forma destrutiva. Versões nunca usadas podem ser excluídas com sua mídia. O SGE armazena apenas templates, versões e snapshots. Para documento de origem `sge`, a `snapshot` preserva o catálogo/valores resolvidos, os valores monetários e os textos transformados por modificador; as cláusulas fixas são preservadas pela versão imutável do DOCX. Nunca inclui prova de emancipação, token, senha ou log. O status de assinatura é do documento; cancelar o documento não cancela automaticamente o estágio.
 
 O arquivo é produzido em diretório privado temporário, transmitido e removido em `finally`. Geração em lote futura poderá manter temporário com expiração curta, sem convertê-lo em acervo. O contrato operacional completo está em [Geração de documentos DOCX e variáveis](doc:geracao-de-documentos-docx-e-variaveis).
 
@@ -46,7 +46,8 @@ Um aditivo é um `generated_documents` com `type = addendum`, versão de templat
 
 - `origin = sge` exige template e snapshot da geração.
 - `origin = granting_party` registra somente a existência do documento, exige `template_version_id = null`, não usa snapshot de geração e não aceita upload ou armazenamento do arquivo externo.
-- `OrientationCertificate` usa `generated` e não passa por assinatura.
+- `OrientationCertificate` registra cada emissão com snapshot e versão, usa `generated` e não passa por assinatura; não admite `awaiting_signature` nem `signed`. Sua emissão é exclusiva do coordenador titular/substituto do curso.
+- Registros cancelados ou assinados não têm o ciclo reaberto ou os dados de cancelamento reescritos. O Setor pode cancelar uma emissão ainda em `generated`, com motivo, preservando o histórico.
 - Os únicos status documentais são `generated`, `awaiting_signature`, `signed` e `cancelled`; `registered` e `released` não existem para documentos.
 - `awaiting_signature` exige `signature_availability_location` para documento que requer assinatura; `generated`, `signed` e `cancelled` podem preservar o valor histórico sem torná-lo uma nova obrigação de preenchimento.
 - Quando a data de início vencer antes da assinatura, não há ação agendada. O documento continua `awaiting_signature` e o estágio continua aguardando assinaturas até que o Setor decida manualmente registrar a assinatura, cancelar o documento com motivo ou abrir uma correção. Somente após decisão, eventual correção e aprovação o término é recalculado e uma nova versão documental pode ser gerada para assinatura.
@@ -59,6 +60,8 @@ Um aditivo é um `generated_documents` com `type = addendum`, versão de templat
 - [x] Criar Model com casts dos três enums e JSONB.
 - [x] Validar combinações de origem, tipo, template e status no Model.
 - [x] Implementar snapshot imutável no Model e Activity Log de criação/alteração.
+- [x] Gerar e reproduzir a emissão com hash do DOCX preenchido, sem outro registro em downloads repetidos.
+- [x] Transmitir DOCX/PDF temporário e limpar o arquivo; auditar formato e resultado sem copiar o snapshot.
 - [x] Exigir local de disponibilização genérico ao marcar `awaiting_signature`, sem nome de plataforma hardcoded.
 - [ ] Exibir interessados elegíveis como checkboxes e enviar o aviso selecionado após o commit da transição.
 - [ ] Implementar acompanhamento manual de assinatura externa quando aplicável.

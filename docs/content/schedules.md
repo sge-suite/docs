@@ -30,6 +30,10 @@ O sincronizador ignora campi desativados na seleção e confere o estado novamen
 
 As três rotinas estão registradas em `routes/console.php`, no fuso institucional, com `onOneServer()` e `withoutOverlapping()`. Em produção, o servidor executa `php artisan schedule:run` a cada minuto; `schedule:work` é a alternativa de desenvolvimento local.
 
+## Limpeza de documentos temporários
+
+`documents:prune-temporary` está registrado a cada hora com `withoutOverlapping()`. Remove DOCX/PDF órfãos com mais de uma hora em `storage/app/private/generated-documents-tmp`, somente quando obtém lock exclusivo não bloqueante no arquivo. A geração e a transmissão já removem seus temporários em `finally`; o comando cobre interrupções abruptas do processo. Não altera emissões, snapshots nem originais dos templates. Essa rotina local de limpeza não usa `onOneServer()`, para atender o diretório de cada instância que executa o scheduler.
+
 ## Rotinas de estágio adiadas
 
 O aviso ao discente de término previsto e o resumo diário dos eventos operacionais do Setor não estão implementados nem registrados no scheduler. A regra de aviso precisa ser revista: em muitos casos, quando faltam sete dias para a previsão, o estágio já terminou na prática. O prazo e o evento que devem disparar o aviso serão definidos antes de criar essa rotina.

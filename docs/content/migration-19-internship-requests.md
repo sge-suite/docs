@@ -21,6 +21,7 @@ source_refs: https://github.com/sge-suite/sge/blob/master/database/migrations/20
 | `course_id` | FK obrigatória fora de `Draft`; o curso deve estar disponível no contexto do vínculo. |
 | `internship_type_id` | FK obrigatória fora de `Draft`; o tipo deve estar ativo e pertencer ao curso selecionado. |
 | `advisor_affiliation_id` | FK nullable no Draft; o Discente escolhe orientador ativo do campus antes do envio. O Setor pode confirmar ou trocar o vínculo no aceite. |
+| `co_advisor_name` | Nome opcional do co-orientador, texto de até 255 caracteres, sem relação com conta ou vínculo. Integra a seção de estágio, a revisão e o comprovante da solicitação. |
 | `granting_party_id` | FK nullable para concedente validada do campus do vínculo discente. |
 | `granting_party_registration_request_id` | FK nullable para solicitação pendente do mesmo campus; é alternativa a `granting_party_id`, nunca texto livre solto. |
 | `supervisor_affiliation_id` | FK nullable para o supervisor já cadastrado. |

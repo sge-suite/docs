@@ -23,6 +23,7 @@ O estágio guarda `student_affiliation_id` como FK direta do vínculo discente a
 | `id`                               | bigint, chave primária.                                                            |
 | `student_affiliation_id`           | FK obrigatória do vínculo discente de origem, vinculada ao curso selecionado.       |
 | `advisor_affiliation_id`           | FK obrigatória para o vínculo de orientador responsável.                          |
+| `co_advisor_name` | Nome opcional do co-orientador, texto de até 255 caracteres, sem FK ou vínculo institucional. |
 | `supervisor_affiliation_id`        | FK obrigatória para o vínculo de supervisor aprovado e responsável.               |
 | `student_address_id`               | FK da cópia do endereço do discente usada na formalização, quando houver.            |
 | `course_id`                       | FK obrigatória para o curso selecionado.                                            |
@@ -61,6 +62,8 @@ Toda informação histórica mantém a FK de origem quando ela existe e também 
 Os snapshots têm contrato fechado: `student_snapshot` inclui nome, e-mail e matrícula do vínculo, período permitido, CPF, RG (com emissor e data), nascimento, telefone e responsável legal quando aplicável; `granting_party_snapshot` contém o cadastro aprovado; `supervisor_snapshot` contém identidade, contato, cargo/função e a qualificação acadêmica ou profissional escolhida pelo Setor, com a referência de origem; `internship_type_snapshot.rules` preserva carga, pesos, conceitos, limites, margem e anos/semestres permitidos a partir do tipo vigente no envio. Os endereços históricos são relações para linhas independentes de `addresses`. Esses dados permanecem disponíveis para o processo sem depender dos cadastros atuais. Cargo/função fica em `user_personal_data`; qualificações atuais ficam em `supervisor_qualifications`. Alterações posteriores não sincronizam os snapshots já formalizados.
 
 As notas de relatório e apresentação são lançadas pelo orientador diretamente na escala do peso correspondente. `supervisor_grade` não é digitada: é a média, com uma casa decimal, dos valores dos dez conceitos da avaliação vigente e aprovada. Para cada componente com peso maior que zero a respectiva nota é obrigatória antes de calcular `consolidated_grade`; peso zero contribui com zero. A nota consolidada é a soma das três contribuições, com uma casa decimal, e permanece nula enquanto faltar componente obrigatório. Alterações posteriores das notas ficam no Activity Log.
+
+O co-orientador é apenas um registro textual opcional. É copiado da solicitação no aceite e nas correções aprovadas da seção de estágio. Pode ser editado pelo Setor nas condições já previstas para o estágio e aparece nas consultas e na auditoria. Não cria conta, vínculo, acesso, atribuição de avaliação ou destinatário de notificações. Vazio é normalizado para nulo.
 
 ## Checklist
 

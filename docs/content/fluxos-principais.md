@@ -72,6 +72,8 @@ A aprovação seleciona em transação a avaliação aprovada mais recente e rec
 
 O Setor também pode concluir manualmente pelo botão “Concluir estágio”, confirmando o cumprimento integral da carga horária. A avaliação e as notas são registros acadêmicos que acompanham o processo, mas não bloqueiam essa conclusão.
 
+O vínculo discente recebe dois avisos acadêmicos separados: no aceite do Setor, a nota da avaliação do supervisor e a confirmação de estágio concluído; quando supervisor, relatório e apresentação estiverem preenchidos e válidos, as três notas e a nota final calculada pelo SGE. O primeiro não espera as notas do Orientador. O segundo é reservado uma única vez por estágio; alterações posteriores não geram novo aviso automático nem modificam o histórico. Os avisos internos e as permissões existentes continuam em vigor, sem envio adicional para endereços institucionais. Veja [gatilhos, conteúdo e destinatários](doc:e-mails-notificacoes-e-entregas#aceite-da-avaliacao-do-supervisor-e-conclusao-da-pratica).
+
 ## Continue a leitura
 
 - [Pessoas e responsabilidades](doc:pessoas-e-responsabilidades) para conhecer os papéis.

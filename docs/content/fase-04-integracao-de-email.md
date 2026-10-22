@@ -45,6 +45,7 @@ Workers de fila mantêm o código carregado em memória. Após alterar templates
 - [x] Manter leitura interna independente da entrega de e-mail; `read_at` permanece separado do histórico de transporte. Automatizar a validação na preparação para produção.
 - [x] Definir o destinatário e os canais dos avisos de decisão e correção da solicitação de estágio.
 - [x] Integrar liberação e revisão da avaliação ao vínculo supervisor e envio da resposta aos vínculos ativos do Setor do campus, com notificação interna e e-mail após commit.
+- [x] Separar o aviso de aceite da avaliação do supervisor/conclusão ao Discente do aviso de nota final, reservado somente com as três notas válidas; manter a entrega única por estágio e o histórico imutável.
 - [x] Integrar avisos de documento disponível, eventos de execução, cancelamento e conclusão, com seleção e canais definidos em cada fluxo.
 - [x] Agrupar solicitações e cancelamentos pendentes em resumo interno diário do Setor; o resumo de eventos temporais do estágio permanece pendente.
 
@@ -72,3 +73,5 @@ Workers de fila mantêm o código carregado em memória. Após alterar templates
 [Fase 05 — Administração hierárquica](doc:fase-05-administracao)
 
 A avaliação usa `DeliverSupervisorEvaluationNotice` e `RequestEmailDelivery::notification`: UUID por aviso preservada nas reexecuções, link nomeado para a avaliação, destinatário pelo vínculo e conteúdo/tentativas imutáveis no pipeline existente. A liberação não depende da entrega de e-mail para aparecer na lista autorizada. Validar consumo da fila e entrega no Mailpit permanece pendente.
+
+O aceite/conclusão ao Discente e o aviso final usam `NotifyInternshipEvaluationResults`, integrado à conclusão por avaliação e ao lançamento das notas. As mensagens são reservadas na transação de domínio e o transporte continua após commit. O aceite usa a notificação interna de conclusão já existente; a nota final tem uma chave determinística única por estágio. Reexecuções de Jobs de avaliação e de decisão da solicitação não reconstroem mensagens já reservadas. Veja o [contrato separado dos dois eventos](doc:e-mails-notificacoes-e-entregas#aceite-da-avaliacao-do-supervisor-e-conclusao-da-pratica) e a [decisão sobre avisos acadêmicos](doc:backlog-e-decisoes#avisos-academicos-de-avaliacao-decisao-de-22-10-2026).

@@ -7,7 +7,7 @@ status: in-progress
 visibility: public
 tags: sge/desenvolvimento, sge/avaliacao, sge/checklist
 related: fluxos-principais, migration-18-supervisor-evaluations, backlog-e-decisoes
-source_refs:
+source_refs: https://github.com/sge-suite/sge/blob/master/app/Actions/ManageSupervisorEvaluation.php, https://github.com/sge-suite/sge/blob/master/app/Actions/UpdateAdvisorGrades.php, https://github.com/sge-suite/sge/blob/master/app/Actions/NotifyInternshipEvaluationResults.php, https://github.com/sge-suite/sge/blob/master/resources/views/emails/internship-evaluation-result.blade.php
 ---
 Base: [avaliação e conclusão](doc:fluxos-principais#6-acompanhamento-academico-e-conclusao). O ciclo de resposta, a origem dos pesos e o contrato do formulário fixo estão definidos na [modelagem final da avaliação](doc:migration-18-supervisor-evaluations).
 
@@ -46,6 +46,10 @@ O formulário de avaliação exibe o e-mail institucional do Setor de Estágio d
 - [x] Manter estágio em andamento enquanto a carga horária integral não estiver confirmada, sem bloqueá-lo por avaliações ou notas pendentes.
 - [x] Concluir preservando notas, documentos, snapshots e histórico.
 - [x] Notificar envolvidos sobre a conclusão.
+- [x] Enviar ao vínculo discente o aceite da avaliação do supervisor com sua nota e a confirmação de conclusão, independentemente das notas acadêmicas.
+- [x] Enviar separadamente a avaliação final ao vínculo discente apenas com as três notas preenchidas e válidas, usando a nota consolidada do sistema e reserva única por estágio.
+- [x] Preservar destinatário/conteúdo nas tentativas e não emitir novo aviso automático por alteração posterior da nota final, conforme decisão do responsável.
+- [ ] Definir, se necessário, política específica para avisos de retificação da nota final.
 
 > [!warning] Nota mínima
 > Não há nota mínima de aprovação configurada. Não criar corte acadêmico enquanto essa regra não for informada no tipo de estágio.
@@ -55,6 +59,10 @@ O formulário de avaliação exibe o e-mail institucional do Setor de Estágio d
 A primeira pergunta confirma a carga horária. “Não” exibe e grava somente horas faltantes positivas, até a carga exigida congelada no estágio; pode ser enviada, mas o Setor deve devolver com justificativa. “Sim” permite confirmar/editar a cópia profissional e preencher os dez critérios com valores do snapshot. A devolução reabre o mesmo registro, que pode ser reenviado como “Sim”. A aprovação com `hours_requirement_met = true` conclui o estágio automaticamente na mesma transação, após selecionar a avaliação vigente e recalcular as notas. Um pedido de cancelamento pendente deve ser decidido antes dessa aprovação. Não foram criados ou executados testes nesta entrega; validar funcionalmente autorização, concorrência e entrega real permanece pendente.
 
 ## Encerramento do roteiro atual
+
+Os dois eventos e seus destinatários estão descritos no [contrato de e-mails](doc:e-mails-notificacoes-e-entregas#aceite-da-avaliacao-do-supervisor-e-conclusao-da-pratica). O legado confirma o aviso de supervisor/conclusão ao discente; a criação do aviso final e a ausência de novo envio automático após alterações foram confirmadas pelo responsável em 22/10/2026. As mensagens usam o nome do tipo de estágio congelado, identificação do estágio e tabelas de resultados, sem observações do supervisor nem ampliação das Policies. O aceite e o lançamento das notas reservam mensagens na transação e despacham o transporte após commit. A conclusão manual mantém seu aviso próprio e não simula aceite da avaliação.
+
+Conferências desta alteração: Pint, análise estática dos PHP afetados e compilação Blade pelo Sail; renderização HTML/texto dos dois avisos com dados fictícios e inspeção visual local; validação de links e build da documentação. Não foram criados nem executados testes, migrations ou envios reais. Essas conferências não comprovam regras funcionais, autorização ou concorrência em execução; a validação operacional permanece pendente.
 
 [Índice das fases de desenvolvimento](doc:fases-de-desenvolvimento)
 

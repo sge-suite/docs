@@ -70,6 +70,14 @@ source_refs:
 - **Autorização:** a análise pertence ao vínculo `AffiliationType::InternshipOffice`; `AffiliationType::Coordinator` continua representando o coordenador de curso.
 - **Referências:** [Enum — EvaluationStatus](doc:enum-evaluationstatus), [Migration de avaliações](doc:migration-18-supervisor-evaluations) e [fluxo de avaliação](doc:fluxos-principais#6-acompanhamento-academico-e-conclusao).
 
+#### Avisos acadêmicos de avaliação — decisão de 22/10/2026
+
+- **Status:** implementado; validação operacional de fila/SMTP e concorrência permanece pendente.
+- **Decisão:** no aceite da avaliação pelo Setor, o vínculo discente elegível recebe a nota do supervisor e a confirmação de conclusão da prática, sem depender das notas do Orientador. A nota final tem aviso separado ao mesmo vínculo, somente depois de supervisor, relatório e apresentação estarem preenchidos e válidos, com o resultado calculado pelo sistema. Preservar os destinatários dos demais avisos, sem fallback para e-mails institucionais.
+- **Confirmação do responsável:** o legado só enviava o aviso do supervisor/conclusão ao discente; o lançamento das notas acadêmicas não tinha e-mail. O responsável autorizou o novo aviso final com as três notas e a consolidada e determinou que alterações posteriores não gerem novo envio automático. Uma eventual política de aviso de retificação continua pendente de decisão específica.
+- **Histórico e acesso:** uma reserva de avaliação final por estágio; corpo e destinatário permanecem imutáveis. Reprocessamento de falha usa a reserva original. Observações do supervisor não são enviadas ao discente e o aviso não abre acesso ao formulário da avaliação. A notificação interna de conclusão é preservada.
+- **Referência:** [Contrato dos dois eventos](doc:e-mails-notificacoes-e-entregas#aceite-da-avaliacao-do-supervisor-e-conclusao-da-pratica).
+
 ### D-010 — Templates DOCX versionados e saída sem arquivo final
 
 - **Status:** definido.

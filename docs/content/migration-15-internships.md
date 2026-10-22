@@ -10,7 +10,7 @@ related: enum-internshipstatus, migration-19-internship-requests, migration-11-i
 source_refs:
 ---
 > [!info] Estado
-> Migration, Model, factory, criação transacional após o aceite e snapshots da abertura estão implementados. O cálculo inicial da data projetada também é aplicado no envio e no aceite. Liberação documental, recálculo após alterações futuras e base historicamente reproduzível continuam pendentes. Depende de vínculos, endereços, cursos, tipos de estágio, partes concedentes e [`InternshipStatus`](doc:enum-internshipstatus).
+> Migration, Model, factory, criação transacional após o aceite e snapshots da abertura estão implementados. Liberação documental e as transições de execução, avaliação e conclusão também estão implementadas. A previsão é recalculada após alterações relevantes do estágio, pausas e exceções; a integração de novas vigências após aditivo assinado e a base historicamente reproduzível continuam pendentes. Depende de vínculos, endereços, cursos, tipos de estágio, partes concedentes e [`InternshipStatus`](doc:enum-internshipstatus).
 
 Um estágio é criado somente após o aceite de uma [solicitação de estágio](doc:migration-19-internship-requests). A Migration 15 vem antes da 19 somente para permitir que a solicitação acrescente sua FK única `internship_id`; no fluxo do produto, a solicitação nasce e é aceita antes de a linha do estágio ser criada.
 
@@ -75,7 +75,7 @@ O co-orientador é apenas um registro textual opcional. É copiado da solicitaç
 - [x] Conferir no fluxo de aceite que `student_affiliation_id = internship_requests.affiliation_id`.
 - [x] Implementar snapshots no envio e sua cópia aprovada na formalização.
 - [x] Validar no envio/aceite regras do tipo, período permitido, jornada, data inicial, capacidade civil e disponibilidade dos feriados aplicáveis ao local.
-- [x] Calcular a previsão inicial no envio/aceite; recálculos por mudanças posteriores e base de cálculo historicamente reproduzível continuam pendentes.
+- [x] Calcular a previsão no envio/aceite e recalcular após alterações relevantes, pausas e exceções; vigências por aditivo e base historicamente reproduzível continuam pendentes.
 - [x] Criar factory para estágio em formalização, remunerado e liberado.
 - [ ] Testar alteração de cadastro após snapshot sem alterar o histórico.
 - [ ] Testar schema PostgreSQL, FKs, casts, validações, snapshots e rollback da 15.
@@ -90,14 +90,14 @@ O co-orientador é apenas um registro textual opcional. É copiado da solicitaç
 
 ## Dependência de calendário
 
-A base local, importação anual e gestão estão implementadas em [Calendário de feriados](doc:calendario-de-feriados). O cálculo inicial da abertura usa o endereço do local de trabalho e exige importações nacionais/estaduais completas, sem pendências, para os anos envolvidos. Não há chamada externa durante o cálculo. Alteração posterior do catálogo não dispara recálculo de estágios. Recálculos por pausas, aditivos e exceções, além de uma base histórica reproduzível, continuam pendentes; Activity Log sozinho não congela as entradas.
+A base local, importação anual e gestão estão implementadas em [Calendário de feriados](doc:calendario-de-feriados). O cálculo usa o endereço do local de trabalho e exige importações nacionais/estaduais completas, sem pendências, para os anos envolvidos. Não há chamada externa durante o cálculo. Alteração posterior do calendário global não dispara recálculo automático de estágios; mudanças de estágio, pausas e exceções recalculam quando salvas. A vigência criada por aditivo e uma base histórica reproduzível continuam pendentes; Activity Log sozinho não congela as entradas.
 
 ## Formalização da abertura — 16/10/2026
 
 `ReviewInternshipRequest` cria o estágio em transação depois do aceite, com orientador/supervisor ativos do campus e ambas as referências de cadastro resolvidas. Preserva o vínculo discente de origem, os dados pessoais/tipo congelados na solicitação, os dados aprovados de concedente/supervisor e a jornada. O endereço aprovado da concedente e o endereço histórico discente recebem novas linhas exclusivas em `addresses`. Endereços atuais e históricos anteriores não são reescritos.
 
-Correções anteriores à liberação deixam o estágio PendingCorrection e preservam seus dados até o novo aceite. A aprovação aplica somente os grupos devolvidos e seus derivados ao mesmo estágio e retorna a PendingFormalization. Documentos não são gerados, liberados ou sobrescritos por esta Action; geração/reemissão e o restante do ciclo ficam pendentes. O cálculo inicial usa o calendário local conferido, sem representar a implementação completa do recálculo posterior de pausas/aditivos ou da base histórica reproduzível de D-019.
+Correções anteriores à liberação deixam o estágio PendingCorrection e preservam seus dados até o novo aceite. A aprovação aplica somente os grupos devolvidos e seus derivados ao mesmo estágio e retorna a PendingFormalization. Esta Action não gera documentos automaticamente; o Setor pode emitir/reemitir pelo fluxo documental implementado. O cálculo usa o calendário local conferido; a integração de novas vigências de jornada e a base histórica reproduzível de D-019 permanecem pendentes.
 
-A devolução manual antes da liberação também atende AwaitingSignatures: documentos Generated/AwaitingSignature são cancelados com o motivo, mantendo seus snapshots e os documentos Signed como histórico. O novo aceite volta a PendingFormalization e exige nova geração documental pela integração posterior.
+A devolução manual antes da liberação também atende AwaitingSignatures: documentos Generated/AwaitingSignature são cancelados com o motivo, mantendo seus snapshots e os documentos Signed como histórico. O novo aceite volta a PendingFormalization; depois dele, o Setor pode emitir os documentos novamente pelo fluxo documental existente.
 
 O número de protocolo pertence a cada documento, não ao estágio. O campo opcional está em `generated_documents.protocol_number`; o número fica disponível no cadastro externo do documento. Não identifica o discente.

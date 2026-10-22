@@ -9,19 +9,19 @@ tags: sge/planejamento, sge/documentacao
 related: backlog-e-decisoes, e-mails-notificacoes-e-entregas, geracao-de-documentos-docx-e-variaveis, fases-de-desenvolvimento, enums, migrations, componentes-tecnicos, convencoes-da-documentacao, matriz-de-autorizacao, perfis-e-responsabilidades-por-vinculo, painel-de-desenvolvimento
 source_refs: https://github.com/sge-suite/sge/blob/master/routes/web.php, https://github.com/sge-suite/sge/blob/master/routes/settings.php, https://github.com/sge-suite/sge/blob/master/config/fortify.php
 ---
-Esta área reúne a execução técnica, as decisões de negócio e os contratos transversais do novo SGE. Ela descreve o estado do planejamento e do código de apoio; não significa que todas as funcionalidades descritas já estejam disponíveis no sistema.
+Esta área reúne o estado atual das implementações, as decisões de negócio e os contratos transversais do SGE. As páginas de fase distinguem comportamentos implementados de lacunas ainda em aberto.
 
 ## Estado geral
 
 | Área | Status | Leitura correta |
 | --- | --- | --- |
 | Preparação do projeto | **Concluída** | Ambiente, qualidade e fluxo de trabalho inicial validados. |
-| Conta e autenticação | **Implementada parcialmente** | Login, recuperação, contexto ativo, configurações próprias de senha/e-mail e `admin:create` estão disponíveis. O Administrador do Sistema também cadastra contas e vínculos administrativos e edita nome, CPF e login; edição própria de perfil pessoal segue pendente. |
-| Componentes técnicos básicos | **Implementados parcialmente** | Helpers, casts, enums, contexto de vínculo, Activity Log e Policies básicas têm código; autorização e ações dos fluxos de estágio ainda precisam ser integradas. |
-| E-mail e documentos | **Implementada parcialmente** | Envio em fila, templates Markdown, avisos administrativos e consulta de mensagens para o Administrador do Sistema estão integrados. Notificações de domínio, escopos de consulta para outros vínculos, retenção e assinatura documental permanecem pendentes. Emissão e reprodução histórica DOCX/PDF estão implementadas. |
-| Domínio de estágios | **Base de dados implementada; fluxos pendentes** | Models e migrations cobrem solicitações, formalização, execução e avaliações; as jornadas completas, autorizações e interfaces ainda não estão disponíveis. |
+| Conta e autenticação | **Implementada parcialmente** | Login, recuperação, contexto ativo, configurações próprias de senha/e-mail e dados pessoais de Discente/Supervisor estão disponíveis. Administração de contas e vínculos também está integrada; validação automatizada permanece pendente. |
+| Componentes técnicos | **Implementados com pendências de validação** | Models, migrations, helpers, casts, enums, Actions, Policies e Activity Log atendem as jornadas implementadas. Validação de produção segue os checklists. |
+| E-mail e documentos | **Implementada parcialmente** | Envio em fila, consulta administrativa e avisos de conta e vínculo, abertura, avaliação, assinatura, execução, cancelamento e conclusão estão integrados. Retenção institucional, validação operacional e escopos adicionais permanecem pendentes; registro de documento externo segue aberto. |
+| Domínio de estágios | **Implementado com pendências específicas** | Abertura, correções, formalização, execução, avaliação, notas e conclusão têm interfaces e autorização. Vigências formais de jornada, reprodução histórica do cálculo, documentos externos, rescisão automática e aviso de término previsto permanecem pendentes. |
 
-Os status individuais ficam nas páginas vinculadas e no [painel de desenvolvimento](doc:painel-de-desenvolvimento). Em páginas de código, **Implementado** significa que o artefato existe; a própria página deve informar se ainda faltam integração, autorização, migration ou testes.
+Os status individuais ficam nas páginas vinculadas e no [painel de desenvolvimento](doc:painel-de-desenvolvimento). Os campos `internship_office_email` no campus e `coordination_email` no curso são contatos institucionais exibidos em detalhes e formulários; não alteram a seleção atual de destinatários das notificações.
 
 ## Pastas
 

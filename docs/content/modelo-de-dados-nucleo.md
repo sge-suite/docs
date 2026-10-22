@@ -46,7 +46,7 @@ Uma pessoa possui uma conta e quantos vínculos forem necessários. O vínculo a
 
 | Conjunto | Regra central |
 | --- | --- |
-| jornadas, pausas, calendário e exceções | determinam a previsão reproduzível de término |
+| jornada inicial, pausas, calendário e exceções | determinam a previsão atualizada; vigências por aditivo e entradas históricas reproduzíveis ainda não estão integradas |
 | templates e versões | preservam o modelo usado em cada geração |
 | documentos | mantêm origem, versão, estado e snapshot; o arquivo final é temporário |
 | avaliação do supervisor | reutiliza o mesmo formulário em `Draft` ou `Returned` |
@@ -56,7 +56,7 @@ Uma pessoa possui uma conta e quantos vínculos forem necessários. O vínculo a
 ## Regras de integridade
 
 - Dados atuais relacionam-se por FK; valores usados em um processo histórico são congelados em snapshots.
-- A jornada é pactuada na abertura; outra vigência só pode nascer de aditivo com assinaturas conferidas e não reescreve dias já cumpridos.
+- A jornada inicial é pactuada na abertura e pode ser ajustada pelo Setor antes da liberação; depois dela, não é reescrita pela edição atual. A integração de uma nova vigência após aditivo assinado, sem reescrever dias já cumpridos, permanece pendente.
 - Templates usados não são alterados; uma mudança cria nova versão.
 - `Submitted` e `Approved` bloqueiam a avaliação; `Returned` reabre o mesmo registro.
 - O Activity Log registra alterações relevantes, mas não substitui tabelas de domínio.

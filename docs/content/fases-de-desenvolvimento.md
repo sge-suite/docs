@@ -9,31 +9,31 @@ tags: sge/desenvolvimento, sge/checklist
 related: fase-00-preparacao, fase-04-integracao-de-email, fase-01-fundacao-de-dados, fase-02-conta-e-contexto, fase-05-administracao, fase-06-documentos, fase-07-abertura-do-estagio, fase-08-estagio-em-andamento, fase-09-avaliacao-e-conclusao, fase-03-activity-log, componentes-tecnicos, enums, migrations
 source_refs:
 ---
-Esta lista registra a sequência e o estado atuais. A fundação de dados está concluída. Contexto de vínculo, criação administrativa por terminal e interface, configurações de senha/e-mail e dados pessoais, auditoria Eloquent, gestão de campi, usuários e vínculos, e as telas locais do Setor estão implementados. A abertura do estágio inclui rascunho, envio, análise, correção e criação do estágio no aceite; documentação, execução, avaliação e conclusão seguem em andamento.
+Esta lista registra a sequência e o estado atuais. A aplicação já implementa administração global e local, solicitação e análise da abertura, documentos e assinaturas, execução e cancelamento do estágio, avaliação do supervisor, notas do orientador e conclusão. As fases continuam em andamento quando ainda há validação, integrações ou funcionalidades específicas pendentes; cada estado usa o mesmo marcador de checklist e um rótulo explícito.
 
 ## Ordem atual
 
-- [x] [00 — Preparação](doc:fase-00-preparacao)
-- [ ] [01 — Fundação de dados](doc:fase-01-fundacao-de-dados) — migrations, Models e factories concluídos; testes automatizados serão retomados antes da produção.
-- **02 — Conta e contexto (em andamento):** contexto ativo, seleção/troca, `admin:create`, gestão de contas/vínculos administrativos, alteração própria de senha/e-mail e avisos correspondentes implementados; edição própria de dados pessoais de Discente e Supervisor, com telefone compartilhado e endereço com busca por CEP, implementada. As verificações pendentes da fase continuam em seu checklist.
-- **[03 — Activity Log](doc:fase-03-activity-log) (concluída):** auditoria Eloquent, autoria por vínculo, registro dos campos pessoais e profissionais de `UserPersonalData` e consulta administrativa com escopo limitado implementados.
-- **[04 — Integração de e-mail](doc:fase-04-integracao-de-email) (em andamento):** backend de reserva, envio em fila, conteúdo renderizado das mensagens administrativas e consulta de e-mails compartilhada por Administrador do Sistema e Setor de Estágio, com escopos distintos, implementados; integração das notificações operacionais de domínio, outros escopos e retenção continuam pendentes.
+- [x] [00 — Preparação](doc:fase-00-preparacao) — **Concluída:** preparação do ambiente e fluxo de trabalho.
+- [ ] [01 — Fundação de dados](doc:fase-01-fundacao-de-dados) — **Em andamento:** schema, Models, relações e factories implementados; validação de produção permanece no checklist.
+- [ ] [02 — Conta e contexto](doc:fase-02-conta-e-contexto) — **Em andamento:** contexto de vínculo, criação e gestão administrativa de contas, segurança e dados pessoais implementados; validações restantes estão no checklist.
+- [x] [03 — Activity Log](doc:fase-03-activity-log) — **Concluída:** autoria por vínculo, registro de mudanças e consultas administrativas com escopo limitado implementados.
+- [ ] [04 — Integração de e-mail](doc:fase-04-integracao-de-email) — **Em andamento:** pipeline em fila, avisos de abertura, avaliação, documentos, execução, cancelamento e conclusão implementados; validação operacional, outros escopos de consulta e retenção institucional seguem pendentes.
 
-- [ ] [05 — Administração](doc:fase-05-administracao) — gestão global de campi, contas/vínculos administrativos e painel do Administrador do Sistema concluídos; Meu campus, cursos, usuários/vínculos locais e consultas locais de Logs implementados para o Setor de Estágio; tipos de estágio e demais operações administrativas pendentes.
-- [ ] [06 — Documentos](doc:fase-06-documentos) — templates e geração/reprodução DOCX/PDF implementados; assinatura e avisos individualizados implementados; concluir documentos externos.
-- [ ] [07 — Abertura do estágio](doc:fase-07-abertura-do-estagio) — envio, análise, correções, cadastros pendentes e aceite estão implementados; falta concluir a integração documental e os requisitos de histórico do cálculo.
-- [ ] [08 — Estágio em andamento](doc:fase-08-estagio-em-andamento) — concluir cálculos, transições, notificações e schedules antes das telas correspondentes.
-- [ ] [09 — Avaliação e conclusão](doc:fase-09-avaliacao-e-conclusao) — autorização, cálculo, avaliação e conclusão implementados; validação funcional permanece pendente.
+- [ ] [05 — Administração](doc:fase-05-administracao) — **Em andamento:** administração global e gestão local de campi, cursos, tipos, usuários, vínculos e cadastros implementadas; validação automatizada permanece pendente.
+- [ ] [06 — Documentos](doc:fase-06-documentos) — **Em andamento:** templates, emissão, reprodução DOCX/PDF, assinatura e avisos individualizados implementados; falta o registro operacional de documentos externos.
+- [ ] [07 — Abertura do estágio](doc:fase-07-abertura-do-estagio) — **Em andamento:** rascunho, envio, análise, correção, cadastros pendentes, aceite e integração documental implementados; falta tornar reproduzível o histórico dos cálculos.
+- [ ] [08 — Estágio em andamento](doc:fase-08-estagio-em-andamento) — **Em andamento:** pausas, calendário, liberação, sincronização, avisos, cancelamento e previsão atualizada implementados; vigências formais de jornada, histórico reproduzível e avisos/resumos pendentes.
+- [ ] [09 — Avaliação e conclusão](doc:fase-09-avaliacao-e-conclusao) — **Em andamento:** avaliação, notas e conclusão implementadas; validação funcional e operacional permanece pendente.
 
 ## Próximas entregas de backend e integração
 
 1. **Implementado:** resolver e validar o vínculo ativo, selecionar ou restaurar o contexto, disponibilizá-lo a Policies/Actions e registrar a autoria nas alterações Eloquent.
 2. **Concluído:** Models de negócio registram autoria pelo vínculo, valores anteriores/novos e exclusão de segredos no Activity Log. A suíte automatizada foi removida e será retomada na preparação para produção.
-3. **Em andamento:** o backend de e-mail com filas, idempotência e reprocessamento atende criação de conta, vínculos administrativos, alterações administrativas e troca de e-mail. A consulta de envios é compartilhada por Administrador do Sistema e Setor de Estágio, limitada ao escopo de cada vínculo ativo selecionado. Os avisos de decisão/correção da abertura estão integrados; notificações de outros eventos, escopos para outros vínculos e política de retenção continuam pendentes.
-4. Completar assinatura, avisos documentais, liberação, recálculos posteriores e reprodução histórica da previsão; geração/reprodução DOCX/PDF, abertura, correções e associações estão implementadas.
-5. Integrar as notificações documentais e concluir os Jobs idempotentes pendentes. Seus testes de concorrência, falhas e efeitos após commit ficam para a preparação para produção.
+3. **Em andamento:** o pipeline com filas, idempotência e histórico atende fluxos administrativos e avisos de abertura, avaliação, assinatura, execução e cancelamento. A consulta operacional do Setor cobre o campus do estágio; retenção institucional e validações operacionais permanecem pendentes.
+4. **Em andamento:** assinatura, liberação, execução, recálculo da previsão ao salvar alterações relevantes, avaliação e conclusão estão implementados. Falta congelar as entradas de cada cálculo para reprodução histórica e integrar a vigência de jornadas após aditivos assinados.
+5. **Em andamento:** geração e reprodução DOCX/PDF e avisos de domínio estão integrados. Permanecem o registro de documentos externos, a decisão sobre avisos de término e resumos operacionais adicionais, além da validação de produção.
 
-A seleção de vínculo estabelece o contexto para cada tela. A próxima sequência prioriza documento, execução do estágio, avaliação e conclusão, completando os fluxos a partir do estágio criado no aceite.
+A seleção de vínculo estabelece o contexto para cada tela. As próximas entregas fecham as pendências listadas nas fases, sem reclassificar como futuras jornadas que já estão implementadas.
 
 ## Navegação
 

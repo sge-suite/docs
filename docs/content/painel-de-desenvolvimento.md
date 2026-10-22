@@ -21,15 +21,15 @@ Este índice é uma fotografia editorial da documentação publicada. Os documen
 Para a sequência e o andamento atuais, consulte [Fases de desenvolvimento](doc:fases-de-desenvolvimento).
 
 - [Fase 00 — Preparação](doc:fase-00-preparacao) — **completed** — Checklist do ambiente, qualidade e fluxo de trabalho do projeto novo.
-- [Fase 01 — Fundação de dados](doc:fase-01-fundacao-de-dados) — **completed** — Migrations, Models e factories da base de dados.
+- [Fase 01 — Fundação de dados](doc:fase-01-fundacao-de-dados) — **in-progress** — Schema, Models, relações e factories implementados; validação de produção permanece pendente.
 - [Fase 02 — Conta e contexto](doc:fase-02-conta-e-contexto) — **in-progress** — Contexto, `admin:create`, administração de contas/vínculos administrativos, troca própria de senha/e-mail e avisos implementados; configuração própria de dados pessoais de Discente e Supervisor implementada, incluindo endereço com busca por CEP; validações restantes da fase seguem pendentes.
 - [Fase 03 — Activity Log](doc:fase-03-activity-log) — **completed** — Eventos Eloquent, autoria por vínculo e auditoria dos campos pessoais e profissionais implementados.
-- [Fase 04 — Integração de e-mail](doc:fase-04-integracao-de-email) — **in-progress** — Pipeline em fila, avisos de solicitação e fluxos administrativos implementados; notificações de documento/execução, escopos para outros vínculos e retenção pendentes.
-- [Fase 05 — Administração hierárquica](doc:fase-05-administracao) — **in-progress** — Gestão global de campi, administração de contas e vínculos e painel global do Administrador do Sistema concluídos; interface local, cursos, tipos e demais operações administrativas pendentes.
-- [Fase 06 — Documentos](doc:fase-06-documentos) — **in-progress** — Templates, emissão e reprodução em DOCX/PDF implementados; assinatura e documentos externos pendentes.
-- [Fase 07 — Abertura do estágio](doc:fase-07-abertura-do-estagio) — **in-progress** — Rascunho, envio, análise, correção, cadastros pendentes e criação do estágio no aceite implementados; emissão documental disponível; assinatura e liberação pendentes.
-- [Fase 08 — Estágio em andamento](doc:fase-08-estagio-em-andamento) — **planned** — Checklist de pausas, substituições, aditivos, cancelamento e histórico do estágio.
-- [Fase 09 — Avaliação e conclusão](doc:fase-09-avaliacao-e-conclusao) — **planned** — Checklist de avaliações, notas, requisitos de encerramento e conclusão do estágio.
+- [Fase 04 — Integração de e-mail](doc:fase-04-integracao-de-email) — **in-progress** — Pipeline em fila e avisos de abertura, avaliação, assinatura, execução, cancelamento e conclusão implementados; validação operacional, escopos de consulta adicionais e retenção institucional pendentes.
+- [Fase 05 — Administração hierárquica](doc:fase-05-administracao) — **in-progress** — Administração global e gestão local de campi, cursos, tipos, usuários, vínculos e cadastros implementadas; validação automatizada pendente.
+- [Fase 06 — Documentos](doc:fase-06-documentos) — **in-progress** — Templates, emissão/reprodução DOCX/PDF, assinatura e avisos implementados; registro operacional de documentos externos pendente.
+- [Fase 07 — Abertura do estágio](doc:fase-07-abertura-do-estagio) — **in-progress** — Rascunho, envio, análise, correção, cadastros pendentes, aceite e integração documental implementados; histórico reproduzível do cálculo pendente.
+- [Fase 08 — Estágio em andamento](doc:fase-08-estagio-em-andamento) — **in-progress** — Pausas, calendário, liberação, sincronização, avisos, cancelamento e atualização da previsão implementados; vigências formais de jornada, histórico reproduzível e avisos/resumos adicionais pendentes.
+- [Fase 09 — Avaliação e conclusão](doc:fase-09-avaliacao-e-conclusao) — **in-progress** — Avaliação, notas e conclusão implementadas; validação funcional e operacional pendente.
 - [Fases de desenvolvimento](doc:fases-de-desenvolvimento) — **in-progress** — Índice das fases executáveis do desenvolvimento do SGE.
 
 ## Enums
@@ -42,14 +42,14 @@ Para a sequência e o andamento atuais, consulte [Fases de desenvolvimento](doc:
 - [Enum — EmancipationEvidenceStatus](doc:enum-emancipationevidencestatus) — **implemented** — Cast e validação do Model `EmancipationEvidence`; upload privado e análise pelo Setor implementados.
 - [Enum — EducationLevel](doc:enum-educationlevel) — **implemented** — Cinco níveis acadêmicos, com “Graduação” como rótulo de `undergraduate`.
 - [Enum — SupervisorQualificationType](doc:enum-supervisorqualificationtype) — **implemented** — Distingue formação acadêmica e experiência profissional do supervisor.
-- [Enum — EvaluationStatus](doc:enum-evaluationstatus) — **implemented** — Cast e validação do Model `SupervisorEvaluation`, com schema da Migration 18; fluxo funcional de análise pendente.
+- [Enum — EvaluationStatus](doc:enum-evaluationstatus) — **implemented** — Cast e validação do Model `SupervisorEvaluation`; fluxo de solicitação, resposta e análise implementado.
 - [Enum — GeneratedDocumentOrigin](doc:enum-generateddocumentorigin) — **implemented** — Origem do documento registrado no processo de estágio.
 - [Enum — GeneratedDocumentStatus](doc:enum-generateddocumentstatus) — **implemented** — Ciclo de vida de cada documento gerado ou registrado no estágio.
 - [Enum — GeneratedDocumentType](doc:enum-generateddocumenttype) — **implemented** — Tipos de documentos registrados no processo de estágio.
-- [Enum — InternshipCancellationRequestStatus](doc:enum-internshipcancellationrequeststatus) — **implemented** — Ciclo do pedido de cancelamento de estágio formalizado; fluxo decisório pendente.
+- [Enum — InternshipCancellationRequestStatus](doc:enum-internshipcancellationrequeststatus) — **implemented** — Ciclo do pedido de cancelamento de estágio formalizado; solicitação, retirada e decisão implementadas.
 - [Enum — InternshipRequestCorrectionStatus](doc:enum-internshiprequestcorrectionstatus) — **implemented** — Ciclo das correções por seção; devolução, resposta e nova análise implementadas.
 - [Enum — InternshipRequestStatus](doc:enum-internshiprequeststatus) — **implemented** — Ciclo de rascunho, envio, análise, aceite, recusa e correção da solicitação de estágio.
-- [Enum — InternshipStatus](doc:enum-internshipstatus) — **implemented** — Cast e validação de status no Model `Internship`; operações funcionais do ciclo de estágio permanecem pendentes.
+- [Enum — InternshipStatus](doc:enum-internshipstatus) — **implemented** — Cast e validação de status no Model `Internship`; transições de liberação, execução, pausa, cancelamento e conclusão implementadas.
 - [Enum — LegalCapacityDeclaration](doc:enum-legalcapacitydeclaration) — **implemented** — Declaração aplicável a menores; maioridade inferida da data de nascimento e evidência de emancipação analisada pelo Setor.
 - [Enum — PartyDocumentType](doc:enum-partydocumenttype) — **implemented** — Tipo de documento de identificação da parte concedente.
 - [Enum — RegistrationRequestStatus](doc:enum-registrationrequeststatus) — **implemented** — Ciclo das solicitações de cadastro de supervisor e parte concedente.
@@ -81,7 +81,7 @@ Sequência física dos arquivos em `database/migrations`; os números permanecem
 - [Migration 13 — document_templates](doc:migration-13-document-templates) — **implemented** — Contrato do catálogo de templates DOCX do SGE.
 - [Migration 14 — template_versions](doc:migration-14-template-versions) — **in-progress** — Versões DOCX privadas, com preservação após uso; validação no upload e integração com emissão disponíveis.
 - [Migration 15 — internships](doc:migration-15-internships) — **in-progress** — Contrato do processo de estágio, referências atuais e snapshots históricos.
-- [Migration 18 — supervisor_evaluations](doc:migration-18-supervisor-evaluations) — **implemented** — Schema, Model e factory da avaliação do supervisor; fluxo funcional pendente.
+- [Migration 18 — supervisor_evaluations](doc:migration-18-supervisor-evaluations) — **implemented** — Schema, Model, factory e fluxo de avaliação do supervisor implementados.
 - [Migration 19 — internship_requests](doc:migration-19-internship-requests) — **implemented** — Contrato da solicitação única de abertura de estágio preenchida pelo discente.
 - [Migration 16 — generated_documents](doc:migration-16-generated-documents) — **implemented** — Contrato dos documentos gerados ou registrados no estágio.
 - [Migration 17 — internship_pauses](doc:migration-17-internship-pauses) — **implemented** — Contrato das pausas de estágio e sua validação temporal.
@@ -118,15 +118,15 @@ Sequência física dos arquivos em `database/migrations`; os números permanecem
 - [Provider — FortifyServiceProvider](doc:provider-fortifyserviceprovider) — **implemented** — Configuração atual de Actions, telas e rate limiting de autenticação do Fortify.
 - [Providers](doc:providers) — **in-progress** — Índice dos Service Providers que configuram autenticação, locale, moeda e comportamento Eloquent.
 - [Desenvolvimento — Checklist de funcionalidade](doc:desenvolvimento-checklist-de-funcionalidade) — **maintained** — Checklist reutilizável para implementar qualquer funcionalidade ou regra do SGE.
-- [Schedules](doc:schedules) — **planned** — Contrato dos comandos agendados que reconciliam a execução do estágio e vencimentos documentais.
-- [Service — InternshipEndDateCalculator](doc:service-internshipenddatecalculator) — **in-progress** — Cálculo inicial no envio e no aceite implementado; recálculos futuros e histórico reproduzível pendentes.
-- [Service — InternshipGradeCalculator](doc:service-internshipgradecalculator) — **planned** — Contrato técnico das notas de supervisor, relatório, apresentação e resultado consolidado.
-- [Services](doc:services) — **planned** — Índice dos serviços de domínio planejados para cálculos, documentos, snapshots e transições.
+- [Schedules](doc:schedules) — **in-progress** — Limpeza temporária, sincronização da execução, preparação do calendário e resumo diário de solicitações implementados; aviso de término e resumo temporal de estágios pendentes.
+- [Service — InternshipEndDateCalculator](doc:service-internshipenddatecalculator) — **in-progress** — Cálculo e recálculo da previsão ao salvar alterações do estágio implementados; histórico reproduzível e vigência formal de jornada pendentes.
+- [Service — InternshipGradeCalculator](doc:service-internshipgradecalculator) — **implemented** — Cálculo das contribuições do supervisor e consolidação das notas.
+- [Services](doc:services) — **in-progress** — Índice dos serviços de domínio existentes; funções ainda sem integração estão identificadas como pendentes.
 - [Testes automatizados](doc:testes-existentes) — **maintained** — A suíte foi removida durante a implementação; a retomada depende de nova decisão do responsável.
 
 ## Integrações
 
-- [E-mails, notificações e entregas](doc:e-mails-notificacoes-e-entregas) — **in-progress** — Pipeline de e-mail em fila e consulta de mensagens administrativas implementados; notificações de domínio, outros escopos de consulta e retenção pendentes.
+- [E-mails, notificações e entregas](doc:e-mails-notificacoes-e-entregas) — **in-progress** — Pipeline e avisos de abertura, avaliação, assinatura, execução, cancelamento e conclusão implementados; validação operacional, escopos adicionais e retenção pendentes.
 - [Geração de documentos DOCX e variáveis](doc:geracao-de-documentos-docx-e-variaveis) — **implemented** — Emissão e reprodução histórica DOCX/PDF, versões imutáveis, autorização e catálogo de variáveis.
 
 ## Decisões

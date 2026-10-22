@@ -1,6 +1,8 @@
 erDiagram
     AFFILIATIONS ||--o{ INTERNSHIP_REQUESTS : submitted_by_affiliation_id
     COURSES ||--o{ INTERNSHIP_REQUESTS : course_id
+    AFFILIATIONS o|--o{ COURSES : primary_coordinator_affiliation_id
+    AFFILIATIONS o|--o{ COURSES : secondary_coordinator_affiliation_id
     INTERNSHIP_TYPES ||--o{ INTERNSHIP_REQUESTS : internship_type_id
     AFFILIATIONS ||--o{ INTERNSHIP_REQUESTS : advisor_affiliation_id
     GRANTING_PARTIES o|--o{ INTERNSHIP_REQUESTS : granting_party_id
@@ -16,7 +18,9 @@ erDiagram
         bigint id PK
         bigint campus_id FK
         varchar name
-        bigint coordinator_affiliation_id FK
+        varchar coordination_email
+        bigint primary_coordinator_affiliation_id FK
+        bigint secondary_coordinator_affiliation_id FK
         timestamp deactivated_at
     }
     INTERNSHIP_TYPES {

@@ -13,6 +13,8 @@ Base: [fluxo de abertura](doc:fluxos-principais#2-solicitacao) e [contrato da so
 
 A abertura usa uma solicitação única por vínculo discente. O Discente pode salvar o rascunho incompleto e retomá-lo; enviar para análise é uma ação separada e exige todos os campos obrigatórios do caminho escolhido, consentimento e validações de domínio. Devoluções alteram a mesma solicitação e liberam somente as seções indicadas pelo Setor.
 
+O formulário exibe o e-mail institucional do Setor de Estágio do campus para dúvidas. O botão copia somente o endereço e confirma a ação por toast; não abre um cliente de e-mail. Esse contato não muda os destinatários das notificações operacionais.
+
 ## Formulário e dados
 
 - A seleção de tipo de estágio é limitada ao curso ativo do vínculo. O tipo informa os anos/semestres permitidos; o Discente escolhe um deles, e o servidor confere a opção contra o JSONB do tipo.
@@ -20,7 +22,7 @@ A abertura usa uma solicitação única por vínculo discente. O Discente pode s
 - O co-orientador é um input de texto opcional, limitado a 255 caracteres, sem vínculo nem permissões. Integra a seção de estágio, a revisão e o comprovante; é copiado no aceite e nas correções aprovadas dessa seção. No estágio, o Setor pode editar o nome, exibido nas consultas e na auditoria. Em 20/10/2026, as colunas `co_advisor_name` foram aplicadas ao banco existente por migration temporária, depois removida; as migrations originais foram atualizadas, sem recriar tabelas.
 - Ao salvar os dados pessoais no formulário, as alterações são gravadas em `user_personal_data` e também ficam no rascunho da solicitação. A tela Configurações → Dados pessoais mostra os mesmos dados atuais. O envio valida nome, CPF, e-mail, matrícula, RG, órgão e data de emissão, nascimento, telefone e endereço; então cria os snapshots do envio. Nome/CPF vêm da conta, enquanto e-mail e matrícula vêm do vínculo discente.
 - A data de nascimento determina automaticamente a maioridade. Para menor de idade, o Discente escolhe entre menor e menor emancipado. Menor exige nome, CPF, parentesco e e-mail do responsável; menor emancipado envia prova privada para análise do Setor.
-- Setor/área e atividades são obrigatórios. Jornada, pausas planejadas, remuneração e data inicial seguem as regras do tipo; a data proposta precisa respeitar sete dias corridos após o envio. A previsão de término usa a carga, jornada, margem configurada e calendário local disponível. A base historicamente reproduzível e recálculos após alterações futuras continuam pendentes.
+- Setor/área e atividades são obrigatórios. Jornada, pausas planejadas, remuneração e data inicial seguem as regras do tipo; a data proposta precisa respeitar sete dias corridos após o envio. A previsão de término usa a carga, jornada, margem configurada e calendário local disponível. Recálculos após alterações relevantes do estágio, pausas e exceções estão implementados; a base historicamente reproduzível e a vigência formal de jornada após aditivo assinado continuam pendentes.
 
 ## Concedente e supervisor
 
@@ -45,8 +47,9 @@ Cada envio de comprovante gera registro próprio e mídia privada; novos arquivo
 
 ## Pendências
 
-- [ ] Recalcular e documentar datas quando pausas ou aditivos futuros forem formalizados, com entradas historicamente reproduzíveis conforme D-019.
-- [ ] Integrar geração, disponibilização, assinatura e reemissão de documentos.
+- [x] Recalcular a previsão após alterações relevantes, pausas e exceções do estágio.
+- [ ] Integrar novas vigências de jornada após aditivos assinados e congelar as entradas para reproduzir cada cálculo, conforme D-019.
+- [x] Integrar geração, disponibilização, assinatura e reemissão de documentos.
 - [ ] Concluir validação automatizada na preparação para produção, conforme [Testes automatizados](doc:testes-existentes).
 
 ## Verificação registrada

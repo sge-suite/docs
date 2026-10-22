@@ -3,14 +3,14 @@ id: ciclos-de-status
 title: Ciclos de status
 description: Situações exibidas pelo SGE ao longo da solicitação, do estágio, dos documentos e da avaliação.
 type: user-guide
-status: defined
+status: observed
 visibility: public
 tags: sge/dominio, sge/status, sge/fluxos
 related: fluxos-principais, pessoas-e-responsabilidades, glossario
 source_refs:
 ---
 > [!info] Estado da página
-> Os ciclos abaixo registram os status do domínio. Hoje, início, pausa e retomada do estágio são sincronizados automaticamente; as operações documentais, liberação, conclusão manual e cancelamento são executadas por botões autorizados. A aprovação da avaliação com carga horária cumprida conclui o estágio na mesma transação.
+> Os ciclos abaixo descrevem os status e as transições implementados. Início, pausa e retomada do estágio são sincronizados automaticamente; as operações documentais, liberação, conclusão manual e cancelamento são executadas por botões autorizados. A aprovação da avaliação com carga horária cumprida conclui o estágio na mesma transação.
 
 Um estado indica em que ponto o processo está, como “Em análise” ou “Em andamento”. Ele não é um julgamento sobre a pessoa: mostra o que já aconteceu, o que ainda falta e quem pode agir em seguida.
 
@@ -51,7 +51,7 @@ O diagrama mostra os caminhos representativos de cancelamento antes e durante a 
 
 | Situação | Significado |
 | --- | --- |
-| Gerado | O documento foi preparado pelo SGE ou registrado quando originado pela parte concedente. |
+| Gerado | O documento foi preparado pelo SGE. O registro operacional de documento externo ainda não está disponível. |
 | Aguardando assinatura | Está disponível ou foi encaminhado para assinatura externa. |
 | Assinado | A assinatura foi concluída e conferida. |
 | Cancelado | O documento foi invalidado ou substituído. Isso não cancela automaticamente o estágio. |

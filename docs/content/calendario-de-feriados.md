@@ -65,7 +65,7 @@ Lixeiras são individuais por tipo de cadastro, sem separação por campus. Seus
 
 ## Uso no cálculo da previsão
 
-`HolidayCalendar::occurrences(city, startsOn, endsOn)` seleciona os escopos nacional, estadual e municipal aplicáveis à cidade do local de execução, sem argumento de campus. `blockedDates` deduplica datas. A listagem administrativa e a consulta do Setor não impõem essa seleção territorial. O serviço usa o calendário local no cálculo de término durante o envio da solicitação e no aceite, sem chamadas externas. Alterações posteriores do calendário não disparam recálculos; histórico reproduzível das entradas e recálculos futuros permanecem pendentes.
+`HolidayCalendar::occurrences(city, startsOn, endsOn)` seleciona os escopos nacional, estadual e municipal aplicáveis à cidade do local de execução, sem argumento de campus. `blockedDates` deduplica datas. A listagem administrativa e a consulta do Setor não impõem essa seleção territorial. O serviço usa o calendário local no cálculo de término durante o envio da solicitação, no aceite e nos recálculos após alterações relevantes do estágio, pausas e exceções, sem chamadas externas. Alterações no catálogo global não recalculam automaticamente estágios; o histórico reproduzível das entradas e vigências de calendário/jornada permanece pendente.
 
 ## Validação
 

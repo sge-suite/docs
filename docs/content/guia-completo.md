@@ -3,7 +3,7 @@ id: guia-completo
 title: Guia completo do SGE
 description: Referência única do Sistema de Gestão de Estágios, preparada para leitura contínua e exportação em PDF.
 type: user-guide
-status: defined
+status: observed
 visibility: public
 tags: sge/guia, sge/produto, sge/pdf
 related: home, visao-geral, pessoas-e-responsabilidades, fluxos-principais, ciclos-de-status, glossario, planejamento, arquitetura-atual
@@ -14,7 +14,7 @@ diagram: guia-completo-jornada
 > Esta é a versão consolidada da documentação do SGE. Ela foi escrita para leitura contínua e impressão em PDF: contém apenas um diagrama compacto, sem Canvas ou mapas grandes. As páginas vinculadas ao final aprofundam cada assunto quando necessário.
 
 > [!info] Estado do produto
-> Este guia combina o comportamento definido para o SGE com o estado atual do código. Uma regra marcada como **definida** é parte do produto planejado, mas pode ainda não estar disponível em uma tela. O estado detalhado aparece em [Planejamento](doc:planejamento).
+> Este guia descreve o comportamento implementado no código. Funcionalidades específicas ainda pendentes aparecem nas fases correspondentes; decisões futuras do produto estão separadas em [Planejamento](doc:planejamento).
 
 ## 1. O que é o SGE
 
@@ -26,11 +26,13 @@ O sistema trabalha com uma conta por pessoa e, quando aplicável, com um **vínc
 
 | Marca | Significado |
 | --- | --- |
-| **Implementado** | O artefato já existe no código atual; ainda pode faltar integração com o domínio. |
+| **Implementado** | O comportamento existe no código; validação automatizada ou operacional ainda pode estar pendente. |
 | **Definido** | A regra foi aprovada para o produto, mas sua implementação completa ainda está pendente. |
 | **Planejado** | O trabalho ainda não começou ou depende de decisão anterior. |
 
-No estado atual, login, recuperação de senha, dashboard, seleção e troca de vínculo, configurações próprias de senha/e-mail e o comando `admin:create` estão disponíveis. Em **Dados pessoais**, o Discente atualiza RG, órgão emissor, emissão, nascimento, telefone e endereço; o Supervisor mantém cargo/função e várias qualificações acadêmicas e profissionais, além do telefone compartilhado. Os campos dependem do vínculo ativo selecionado. No endereço do Discente, **Buscar CEP** apresenta os dados para revisão; o salvamento atualiza o perfil compartilhado e preserva o histórico dos estágios. O fluxo de abertura está disponível: o Discente pode salvar rascunho, selecionar período acadêmico e orientador, enviar os dados completos e acompanhar análise ou correção; o Setor aprova, devolve ou recusa e cria o estágio no aceite. O envio também admite propostas tipadas de concedente e supervisor ainda não cadastrados, que o Setor associa antes do aceite. O Setor pode editar os dados e as regras próprias do estágio, consultar a previsão do calendário e registrar exceções e pausas. Um schedule sincroniza início, pausa e retomada e avisa o discente dessas mudanças. O Administrador do Sistema tem páginas para gerir campi e contas/vínculos administrativos, consultar alterações de auditoria e ver o histórico de e-mails administrativos, inclusive conteúdo salvo e tentativas. As consultas exigem vínculo ativo e selecionado e respeitam escopos próprios. A auditoria exclui estágios, documentos, concedentes e outros registros fora do escopo autorizado. O painel global apresenta totais de usuários, vínculos e campi e gráficos textuais por status de estágios, documentos e solicitações. A administração de contas permite editar nome, CPF e e-mail de login, administrar vínculos administrativos e encerrá-los com os avisos e proteções previstos. A listagem de Usuários mostra contas com vínculo administrativo; o contador do painel considera todas as linhas de `users`. Emissão e reprodução histórica em DOCX/PDF estão disponíveis; assinaturas, liberação, avaliação, conclusão e cancelamento estão disponíveis por ações; mudanças formais de jornada e documentos externos ainda têm etapas pendentes. Consulte [Fase 03 — Activity Log](doc:fase-03-activity-log) e [Fase 04 — Integração de e-mail](doc:fase-04-integracao-de-email).
+No estado atual, login, recuperação de senha, dashboard, seleção e troca de vínculo, configurações próprias de senha/e-mail e `admin:create` estão disponíveis. Em **Dados pessoais**, Discente e Supervisor editam os campos permitidos ao vínculo. A abertura cobre rascunho, envio, análise, correção, cadastros pendentes e aceite; o Setor associa referências aprovadas e cria o estágio. A gestão do estágio cobre documentos DOCX/PDF, assinaturas, liberação, calendário, pausas, sincronização temporal, cancelamento, avaliação, notas e conclusão. O Administrador do Sistema administra campi e vínculos globais; o Setor administra o próprio campus, cursos, tipos, concedentes, usuários/vínculos e operações de estágio. As ações respeitam o vínculo ativo selecionado e Policies por campus/curso/registro. Permanecem pendentes o registro operacional de documentos externos, a vigência de jornada após aditivo assinado, a reprodução integral do cálculo histórico, o aviso de término previsto e resumos temporais adicionais. Consulte [Fases de desenvolvimento](doc:fases-de-desenvolvimento) para a lista atualizada.
+
+Campus e curso guardam, respectivamente, o e-mail institucional do Setor de Estágio e da Coordenação. Os endereços aparecem nos detalhes de campus/curso. O e-mail do Setor também é mostrado como contato para dúvidas nos formulários de abertura e avaliação do supervisor; nesses dois pontos, um botão copia o endereço e confirma por toast. Esses campos não substituem os endereços individuais usados pelas notificações atuais.
 
 ## 3. Quem participa
 
@@ -117,17 +119,17 @@ O supervisor preenche a avaliação quando ela for liberada e o orientador regis
 | --- | --- | --- |
 | Preparação do projeto | **Concluída** | Manter ambiente, qualidade e fluxo de revisão. |
 | Conta e autenticação | **Implementada parcialmente** | Contexto, `admin:create`, administração de contas/vínculos administrativos, alteração própria de senha/e-mail e avisos existem; edição própria de dados pessoais e qualificações também está disponível. |
-| Fundação técnica | **Implementada parcialmente** | Base de domínio, autorizações e Actions da abertura existem; seguem pendentes os fluxos de documentos, execução, avaliação e conclusão. |
-| E-mails e documentos | **Implementada parcialmente** | Pipeline, consultas administrativas e avisos de conta/vínculo e de decisão/correção da solicitação estão integrados; emissão/reprodução DOCX/PDF disponível; avisos individualizados de assinatura, liberação, conclusão e cancelamento estão integrados. |
-| Domínio de estágios | **Abertura e gestão operacional parcial** | Solicitação, análise, correção, gestão de dados e regras do estágio, calendário, pausas e sincronização temporal de status estão disponíveis; emissão/reprodução DOCX/PDF disponível; assinatura, avaliação, conclusão e cancelamento estão disponíveis; mudanças formais de jornada e documentos externos continuam pendentes. |
+| Fundação técnica | **Implementada parcialmente** | Schema, Models, Policies, Actions e interfaces para os fluxos atuais estão disponíveis; ficam pendentes validação de produção e lacunas específicas documentadas nas fases. |
+| E-mails e documentos | **Implementada parcialmente** | Pipeline, consultas administrativas e avisos operacionais de abertura, avaliação, assinatura, execução, cancelamento e conclusão estão integrados; registro de documentos externos, escopos adicionais e retenção institucional pendentes. |
+| Domínio de estágios | **Implementado com pendências** | Solicitação, análise, gestão, calendário, pausas, sincronização, documentos, assinatura, avaliação, conclusão e cancelamento estão disponíveis; vigências formais de jornada, histórico reproduzível, rescisão automática e aviso de término previsto pendentes. |
 
-A sequência é: 00 — preparação; 01 — fundação de dados; 02 — conta e contexto; 03 — Activity Log; 04 — integração de e-mail; 05 — administração; 06 — documentos; 07 — abertura do estágio; 08 — estágio em andamento; e 09 — avaliação e conclusão. As Fases 02–04 têm implementação parcial ou completa, e a Fase 07 já oferece a abertura e sua análise. As fases de documentos, execução, avaliação e conclusão continuam em andamento, conforme seus checklists.
+A sequência é: 00 — preparação; 01 — fundação de dados; 02 — conta e contexto; 03 — Activity Log; 04 — integração de e-mail; 05 — administração; 06 — documentos; 07 — abertura do estágio; 08 — estágio em andamento; e 09 — avaliação e conclusão. As funcionalidades de cada fase e seus itens pendentes estão resumidos no índice de [Fases de desenvolvimento](doc:fases-de-desenvolvimento).
 
 ## 8. Referência técnica resumida
 
 O projeto atual usa Laravel 13, PHP `^8.3` (ambiente atual: PHP 8.5), Livewire 4, Flux UI, Tailwind CSS, Vite, PostgreSQL, Laravel Fortify, Spatie Activitylog, Spatie Medialibrary, Laravel Scout e Meilisearch. A aplicação já possui autenticação, rotas protegidas, configurações de perfil e segurança, filas, cache, auditoria e infraestrutura de mídia.
 
-A base de Models e migrations do domínio de estágio já existe, assim como Actions e Policies para abertura, análise e gestão operacional parcial. Há transporte de e-mail em fila, telas globais de campi e usuários, gestão local de cursos, tipos de estágio, usuários/vínculos e concedentes, além do painel global do Administrador do Sistema. Emissão/reprodução DOCX/PDF estão disponíveis. Assinaturas, liberação, avaliação, conclusão e cancelamento estão implementados. Documentos externos, mudanças formais de jornada, rescisão automática e aviso de término previsto continuam pendentes. `routes/console.php` agenda sincronização de status, preparação do calendário e resumo diário das solicitações pendentes.
+A base de Models, migrations, Actions e Policies cobre os fluxos implementados. Há transporte de e-mail em fila, gestão global e local, emissão/reprodução DOCX/PDF, assinaturas, liberação, execução, avaliação, conclusão e cancelamento. Documentos externos, vigências formais de jornada, reprodução integral do cálculo, rescisão automática e aviso de término previsto continuam pendentes. `routes/console.php` agenda limpeza de temporários, sincronização de status, preparação do calendário e resumo diário das solicitações pendentes.
 
 ## 9. Onde aprofundar
 

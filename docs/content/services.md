@@ -1,46 +1,39 @@
 ---
 id: services
 title: Services
-description: Índice dos serviços de domínio planejados para cálculos, documentos, snapshots e transições.
+description: Índice dos componentes de suporte e cálculo existentes no SGE.
 type: technical-hub
-status: planned
+status: in-progress
 visibility: public
 tags: sge/desenvolvimento, sge/services, sge/arquitetura
 related: service-internshipenddatecalculator, service-internshipgradecalculator, geracao-de-documentos-docx-e-variaveis
-source_refs:
+source_refs: https://github.com/sge-suite/sge/blob/master/app/Support/InternshipEndDateCalculator.php, https://github.com/sge-suite/sge/blob/master/app/Support/InternshipGradeCalculator.php, https://github.com/sge-suite/sge/blob/master/app/Support/GeneratedDocumentSnapshot.php, https://github.com/sge-suite/sge/blob/master/app/Support/TemplateVariableCatalog.php, https://github.com/sge-suite/sge/blob/master/app/Support/HolidayCalendar.php, https://github.com/sge-suite/sge/blob/master/app/Actions/GenerateInternshipDocument.php
 ---
-Services concentram regras que combinam dados, mas não representam por si só um caso de uso com autorização e efeitos colaterais. Actions orquestram transações, Policies autorizam e Jobs executam trabalho assíncrono.
+Services e componentes em `App\Support` concentram cálculos determinísticos, catálogos e preparação de dados. Actions autorizam e orquestram transações e efeitos colaterais; Policies autorizam; Jobs executam trabalho assíncrono.
 
-## Inventário planejado
+## Cálculos
 
-| Serviço | Contrato |
+| Componente | Situação atual |
 | --- | --- |
-| [`InternshipEndDateCalculator`](doc:service-internshipenddatecalculator) | previsão reproduzível de término. |
-| [`InternshipGradeCalculator`](doc:service-internshipgradecalculator) | nota do supervisor e soma consolidada. |
-| `InternshipSnapshotBuilder` | cria snapshots tipados no aceite sem buscar dados atuais depois. |
-| `InternshipStateTransitionService` | guardas puras de transição do estágio. |
-| `InternshipExecutionStatusResolver` | determina o estado de execução para uma data e uma pausa ativa, sem efeitos colaterais. |
-| `EvaluationStateTransitionService` | guardas de edição, envio, retorno, aprovação e cancelamento. |
-| `RegistrationRequestApprovalService` | associa/cria supervisor ou concedente em transação. |
-| `EmancipationReviewService` | aprova/devolve prova sem expor arquivo no log. |
-| `TemplateVariableCatalog` / `TemplateInspector` | catálogo e inspeção de DOCX já implementados. |
-| `DocumentSnapshotBuilder` / `DocumentVariableResolver` | contexto histórico e valores do documento. |
-| `DocxDocumentGenerator` | futura geração temporária com cláusulas definidas em templates por remuneração. |
+| [`InternshipEndDateCalculator`](doc:service-internshipenddatecalculator) | Implementado; cálculo puro usado para projetar a previsão. Actions resolvem calendário e persistem o resultado no envio, aceite e alterações relevantes do estágio. Histórico reproduzível das entradas e novas vigências de jornada por aditivo continuam pendentes. |
+| [`InternshipGradeCalculator`](doc:service-internshipgradecalculator) | Implementado; calcula a contribuição do supervisor e a nota consolidada a partir das regras congeladas e notas acadêmicas. |
+| `HolidayCalendar`, `InternshipPlannedPauses`, `InternshipCalendarOverrides` | Implementados; resolvem dias bloqueados, pausas e exceções locais usadas pelo cálculo da previsão. |
 
-O conjunto documental é detalhado em [Geração de documentos DOCX e variáveis](doc:geracao-de-documentos-docx-e-variaveis). Nenhum desses serviços deve retornar resposta HTTP, ler sessão global ou decidir permissão do usuário.
+## Documentos
 
-## Actions correspondentes
+| Componente | Responsabilidade |
+| --- | --- |
+| `TemplateVariableCatalog` e `TemplateInspector` | Catálogo de variáveis e inspeção/validação de templates DOCX no upload. |
+| `GeneratedDocumentSnapshot` | Congela valores e substituições usados em uma emissão para permitir reprodução do documento. |
+| `DocxRenderer`, `DocxToPdf` e `DocumentTemplatePreview` | Renderizam DOCX, convertem para PDF e preparam a visualização privada do template. |
+| Actions `GenerateInternshipDocument`, `ManageDocumentSignature` e `RebuildGeneratedDocument` | Geram e reproduzem documentos, registram assinatura conferida e administram o ciclo do documento. |
 
-- `AcceptInternshipRequest` — valida cadastros/aceite, cria estágio com snapshots e jornada inicial em uma transação;
-- `RecalculateProjectedEndDate` — bloqueia o estágio, calcula, persiste resultado/base e registra auditoria;
-- `ApproveSupervisorEvaluation` — valida carga, escolhe avaliação vigente e recalcula notas;
-- `UpdateAdvisorGrades` — autoriza o orientador e recalcula a nota consolidada;
-- `GenerateInternshipDocument` — gera e registra documento de forma idempotente;
-- `ReviewInternshipCancellationRequest` — decide, aplica efeitos e inicia a rescisão documental.
-- `SynchronizeInternshipExecutionStatus` — bloqueia o estágio, aplica a transição temporal válida, audita e notifica sem duplicar eventos;
-- `NotifyProjectedInternshipEnd` — cria o único lembrete de sete dias para o discente e o resumo interno diário do Setor, de forma idempotente;
-- `NotifySignatureAvailability` — valida os interessados selecionados, cria os avisos internos/externos adequados e despacha e-mail após o commit.
+O conjunto documental está detalhado em [Geração de documentos DOCX e variáveis](doc:geracao-de-documentos-docx-e-variaveis). O registro de documentos externos sem arquivo ainda não está implementado. A Migration 23 e o Model `InternshipWorkSchedule` existem, mas a integração que cria novas vigências após aditivo assinado também permanece pendente.
 
-## Validação automatizada
+## Actions de domínio
 
-O projeto está sem testes automatizados durante a implementação de funcionalidades. Na preparação para produção, priorizar regras puras dos Services e fluxos críticos das Actions: transação, concorrência, autorização, Activity Log, notificações e rollback. Ver [Testes automatizados](doc:testes-existentes).
+Os casos de uso estão distribuídos em Actions existentes, entre elas `ReviewInternshipRequest`, `ReviewInternshipRegistration`, `ManageInternship`, `ManageInternshipLifecycle`, `ManageSupervisorEvaluation`, `UpdateAdvisorGrades`, `SyncInternshipExecutionStatus` e `ReviewEmancipationEvidence`. O diretório `app/Actions` é a referência para nomes e implementação; este índice não declara serviços planejados como existentes.
+
+## Validação
+
+As regras funcionais e integrações têm implementação; validação automatizada e operacional permanece pendente conforme [Testes automatizados](doc:testes-existentes) e os checklists das fases. Nenhum teste foi criado ou executado nesta revisão documental.

@@ -3,7 +3,7 @@ id: modelo-de-dados-acesso
 title: Modelo de dados — Acesso
 description: Esquema lógico de conta, vínculos institucionais e escopo de acesso.
 type: data-model
-status: defined
+status: observed
 visibility: public
 tags: sge/modelagem, sge/autorizacao, sge/mermaid
 related: pessoas-e-responsabilidades
@@ -31,7 +31,7 @@ A função e o escopo pertencem a `affiliations.type`, convertido para o enum `A
 
 A caixa operacional usa `Affiliation::notifications()` após a Policy validar que o vínculo selecionado está ativo e pertence à conta autenticada. O par polimórfico mantém separadas as caixas de vínculos diferentes da mesma conta. `User` mantém `Notifiable`, mas recuperação de senha, convite inicial e aviso de novo vínculo são enviados por e-mail e não criam linhas na tabela `notifications`.
 
-`email_messages` armazena conteúdo imutável de notificações operacionais e de mensagens administrativas, incluindo conta criada, novo vínculo, alteração de e-mail e alterações administrativas. `email_delivery_attempts` guarda o destinatário, a autoria solicitante, o contexto do registro afetado e o histórico do transporte. `requested_by_affiliation_id` identifica quem pediu o envio; `scope_context` preserva o registro relacionado para definir o escopo mesmo se ele for removido. São papéis distintos: o destinatário pode ser uma pessoa sem conta e não determina o escopo. A consulta atual está disponível somente ao Administrador do Sistema ativo e selecionado, para mensagens relacionadas a contas e vínculos administrativos. Recuperação de senha não cria registros nessas tabelas; registros antigos podem não ter conteúdo persistido.
+`email_messages` armazena conteúdo imutável de notificações operacionais e mensagens administrativas, incluindo conta criada, novo vínculo, alteração de e-mail e alterações administrativas. `email_delivery_attempts` guarda o destinatário, a autoria solicitante, o contexto do registro afetado e o histórico do transporte. `requested_by_affiliation_id` identifica quem pediu o envio; `scope_context` preserva o registro relacionado para definir o escopo mesmo se ele for removido. São papéis distintos: o destinatário pode ser uma pessoa sem conta e não determina o escopo. O Administrador do Sistema consulta mensagens administrativas ligadas a contas e vínculos; o Setor consulta mensagens de cadastro/alterações locais e avisos operacionais associados a estágios do próprio campus, sob as Policies correspondentes. Recuperação de senha não cria registros nessas tabelas; registros antigos podem não ter conteúdo persistido.
 
 > [!warning] Fonte única de autorização
 > `AffiliationType`, vínculo ativo, escopo e estado do registro são os únicos insumos de autorização. Gates e Policies codificam essas regras institucionais de modo determinístico; não há regra de acesso editável em banco.

@@ -10,7 +10,7 @@ related: migration-19a-emancipation-evidences
 source_refs: https://github.com/sge-suite/sge/blob/master/app/Enums/EmancipationEvidenceStatus.php
 ---
 > [!success] Estado
-> A classe existe em `app/Enums/EmancipationEvidenceStatus.php`. O cast em `EmancipationEvidence` e a coleção privada já existem; guardas de transição e autorização do acesso continuam planejadas. Não há testes automatizados no repositório atualmente; a validação fica para a preparação para produção.
+> A classe está integrada ao Model e ao fluxo privado de envio e análise. `EmancipationEvidencePolicy` limita consulta ao Discente proprietário e ao Setor autorizado; a Action de revisão implementa aprovação e devolução com justificativa. A validação funcional fica para a preparação para produção.
 
 | Case | Valor | Rótulo |
 | --- | --- | --- |

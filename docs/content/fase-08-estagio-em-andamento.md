@@ -11,7 +11,7 @@ source_refs: https://github.com/sge-suite/sge/blob/master/routes/console.php, ht
 ---
 Base: [acompanhamento do estágio](doc:fluxos-principais#4-estagio-em-andamento).
 
-As telas do Setor para editar o estágio, consultar a previsão e manter exceções de calendário estão disponíveis. O cálculo considera as regras copiadas para o estágio, pausas, calendário e exceções, e a previsão é atualizada ao salvar mudanças relevantes. A execução completa ainda depende dos fluxos documentais, mudanças formais de jornada, avaliação e conclusão.
+As telas do Setor para editar o estágio, consultar a previsão e manter exceções de calendário estão disponíveis. O cálculo considera as regras copiadas para o estágio, pausas, calendário e exceções, e a previsão é atualizada ao salvar mudanças relevantes. Liberação, execução, cancelamento, avaliação e conclusão também estão implementados. Permanecem pendentes a vigência de jornada criada por aditivo assinado, a reprodução histórica de cálculos e os avisos/resumos adicionais.
 
 ## Checklist
 
@@ -19,17 +19,17 @@ As telas do Setor para editar o estágio, consultar a previsão e manter exceç�
 - [x] Criar `internships:sync-execution-status`, diário e idempotente, para iniciar estágio liberado, pausar execução e retomar pausa encerrada.
 - [ ] Permitir que o Setor decida manualmente se registra a assinatura, cancela o documento ou abre correção da nova data após analisar o vencimento documental.
 - [x] Registrar `internships:sync-execution-status` em `routes/console.php` às 00:05 com `onOneServer` e `withoutOverlapping`.
-- [ ] Implementar pausas com início/fim em data, motivo e validação de sobreposição; novos períodos só podem ser criados em `InProgress`.
+- [x] Implementar pausas com início/fim em data, motivo e validação de sobreposição; novos períodos só podem ser criados em `InProgress`.
 - [x] Sincronizar o status imediatamente ao criar/alterar/remover pausa, além da reconciliação diária.
-- [ ] Usar calendário nacional, estadual e municipal persistido conforme a cidade/UF do endereço histórico do local de trabalho, sem dependência de rede no cálculo.
+- [x] Usar calendário nacional, estadual e municipal persistido conforme a cidade/UF do endereço histórico do local de trabalho, sem dependência de rede no cálculo.
 - [x] Permitir ao Setor de Estágio liberar ou bloquear uma data específica em `internship_calendar_overrides`, com motivo e auditoria; recessos, folgas, pontes e fechamentos devem ser representados por pausas, não por `holidays`.
-- [ ] Gravar a jornada inicial em `internships.weekly_hours` e impedir sua edição ordinária durante o estágio.
+- [x] Gravar a jornada inicial em `internships.weekly_hours`; antes da liberação, a edição do estágio pode alterar a jornada e recalcular a previsão. Depois da liberação, a jornada pactuada fica protegida.
 - [ ] Permitir nova vigência de jornada somente após aditivo com assinaturas conferidas; impedir sobreposição/lacuna e reescrita de dias passados.
 - [x] Recalcular a previsão a partir das regras salvas no estágio, jornada, calendário, exceções, pausas e margem.
 - [x] Persistir `internships.projected_end_date` após alterações relevantes do estágio e pausas; o histórico completo das entradas e do calendário usado ainda não é congelado.
-- [ ] Implementar substituição autorizada de orientador/supervisor.
-- [ ] Preservar pessoa anterior e motivo da substituição.
-- [ ] Gerar aditivo pelo fluxo de documentos.
+- [x] Permitir ao Setor substituir orientador ou supervisor ao editar o estágio, validando tipo, campus e vínculo disponível; a operação exige motivo.
+- [x] Preservar vínculo anterior, novo vínculo e motivo da substituição no Activity Log; não existe tabela de vigências de participantes.
+- [x] Gerar aditivo pelo fluxo documental comum quando houver template de aditivo disponível; sua emissão não cria automaticamente uma nova vigência de jornada.
 - [x] Dar ao aditivo ciclo próprio de assinatura.
 - [x] Implementar cancelamento com permissão, motivo, Activity Log e notificações.
 - [x] Notificar o discente, dentro do sistema e por e-mail após commit, quando o estágio inicia, pausa ou retoma.
@@ -38,7 +38,7 @@ As telas do Setor para editar o estágio, consultar a previsão e manter exceç�
 - [x] Disponibilizar telas do Setor para editar dados e regras congeladas do estágio, consultar o calendário projetado e registrar exceções em conjunto com as alterações salvas.
 - [x] Permitir que o discente solicite cancelamento antes do início ou durante o andamento.
 - [x] Definir a decisão do Setor de Estágio e os efeitos documentais da aprovação do cancelamento.
-- [ ] Preservar histórico de todas as alterações.
+- [x] Registrar alterações do estágio e decisões no Activity Log; a reprodução integral das entradas de cada cálculo continua pendente.
 
 ## Referências
 
@@ -57,4 +57,4 @@ A base local, importação anual e gestão estão implementadas em [Calendário 
 
 ## Liberação e cancelamento implementados
 
-“Liberar estágio” exige todos os documentos principais vigentes assinados, grava data/vínculo e sincroniza imediatamente a execução conforme a data e as pausas. “Concluir estágio” exige confirmação da carga integral. O cancelamento pode partir do Discente ou ser iniciado pelo Setor; revisão, retirada e decisão são botões separados. A decisão exige motivo e data efetiva não futura. Cancela documentos não assinados e avaliações pendentes, preservando assinados, aprovadas, notas e histórico. Os envolvidos recebem avisos internos e e-mails personalizados por papel. A listagem do Setor identifica pedidos pendentes e permite filtrá-los. Pedidos de cancelamento pendentes entram no resumo diário interno do Setor, sem e-mail ao Setor. O resumo de eventos temporais e a geração automática de rescisão permanecem pendentes.
+“Liberar estágio” exige todos os documentos principais vigentes assinados, grava data/vínculo e sincroniza imediatamente a execução conforme a data e as pausas. “Concluir estágio” exige confirmação da carga integral. O cancelamento pode partir do Discente ou ser iniciado pelo Setor; revisão, retirada e decisão são botões separados. A decisão exige motivo e data efetiva não futura. Cancela documentos não assinados e avaliações pendentes, preservando assinados, aprovadas, notas e histórico. Os envolvidos recebem avisos internos e e-mails personalizados por papel. A listagem do Setor identifica pedidos pendentes e permite filtrá-los. Pedidos de cancelamento pendentes entram no resumo diário interno do Setor, sem e-mail ao Setor. O resumo diário de eventos temporais, o aviso de término previsto, a vigência formal de jornada após aditivo e a geração automática de rescisão permanecem pendentes.

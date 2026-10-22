@@ -11,16 +11,16 @@ source_refs: https://github.com/sge-suite/sge/blob/master/app/Actions/PrepareUse
 ---
 Base: [papéis por vínculo](doc:pessoas-e-responsabilidades), [Matriz de autorização](doc:matriz-de-autorizacao) e [Perfis e responsabilidades por vínculo](doc:perfis-e-responsabilidades-por-vinculo).
 
-A estrutura de perfis e o contexto de vínculo existem. O provisionamento inicial ou a inclusão de Administrador do Sistema também pode ser feito por `admin:create`. A gestão global de campi tem backend, Policies, Form Requests e páginas Livewire com Flux. O Administrador do Sistema também dispõe de telas para administrar contas e vínculos administrativos, consultar a auditoria administrativa e ver o histórico de e-mails associados a essas contas e vínculos. A tela Meu campus e a gestão completa de cursos estão implementadas para o Setor de Estágio. A gestão local de usuários e vínculos e as consultas de auditoria e e-mails compartilham as telas administrativas com autorização pelo campus do vínculo ativo selecionado. A gestão de tipos de estágio também está implementada; operações das jornadas de estágio continuam pendentes. Não há suíte automatizada nesta etapa; os fluxos mantêm pendências de validação funcional.
+A estrutura de perfis e o contexto de vínculo existem. O provisionamento inicial ou a inclusão de Administrador do Sistema também pode ser feito por `admin:create`. A gestão global de campi, contas e vínculos administrativos, auditoria e consulta de e-mails está implementada. Para o Setor de Estágio, estão implementadas a tela Meu campus, a gestão de cursos, tipos, concedentes, usuários e vínculos locais, calendário, templates, análise de solicitações, cadastros pendentes, documentos e consultas administrativas. Os formulários incluem o e-mail institucional do Setor no cadastro de campus e o e-mail institucional da Coordenação no cadastro de curso; ambos são exibidos como contatos e não alteram o roteamento de notificações. A validação automatizada permanece pendente.
 
 ## Policies e escopo
 
 - [x] Disponibilizar o contexto único do vínculo ativo para Policies e Actions por `ActiveAffiliationContext`; completar os resolvedores de escopo por recurso junto de cada fluxo.
 - [x] Criar `CampusPolicy` para consulta e gestão de campi, usando somente o vínculo ativo selecionado.
 - [x] Criar `UserPolicy` e ampliar `AffiliationPolicy` para contas e vínculos administrativos, exigindo o vínculo ativo selecionado e distinguindo administração global de gestão local.
-- [ ] Criar CoursePolicy e testar o escopo do Setor de Estágio.
-- [ ] Criar InternshipTypePolicy e testar o campus derivado do curso.
-- [ ] Criar `GrantingPartyPolicy` e testar consulta e gestão local de concedentes; Policies de estágios e documentos continuam pendentes.
+- [x] Criar `CoursePolicy` e aplicar o escopo do Setor de Estágio ao campus do curso.
+- [x] Criar `InternshipTypePolicy` e derivar o campus pelo curso.
+- [x] Criar `GrantingPartyPolicy` e as Policies de estágios, solicitações, avaliações e documentos; aplicar o escopo de campus/curso nos fluxos correspondentes.
 - [x] Revalidar vínculo selecionado, perfil e proteções administrativas dentro das transações de gestão de usuários e vínculos.
 - [x] Manter as permissões de notificações em `AffiliationPolicy`; não há bypass global por `Gate::before`.
 - [ ] Criar testes positivos e negativos para operações de campus e administração de usuários/vínculos.
@@ -29,11 +29,11 @@ A estrutura de perfis e o contexto de vínculo existem. O provisionamento inicia
 - [ ] Cobrir para cada `AffiliationType` as ações, limites, destinatários de notificação e consultas descritos em [Perfis e responsabilidades por vínculo](doc:perfis-e-responsabilidades-por-vinculo).
 - [x] Compartilhar a gestão de usuários entre Administrador do Sistema e Setor de Estágio, com permissões e escopos distintos.
 - [x] Permitir ao Setor de Estágio cadastrar todos os tipos de vínculo, exceto Administrador do Sistema, no campus ativo selecionado.
-- [ ] Aplicar as mesmas regras para edição e criação.
+- [x] Aplicar as mesmas regras de autorização e escopo na criação e edição; a cobertura automatizada permanece pendente.
 
 ## Administrador do Sistema
 
-- [ ] Definir e testar as operações globais permitidas antes de criar suas telas.
+- [x] Definir operações globais permitidas e restringi-las ao vínculo ativo de Administrador do Sistema; validação automatizada permanece pendente.
 - [x] Implementar o backend de cadastro, edição, desativação e reativação de campi por `CampusController`, usando `Campus::create()`, `$campus->update()` e métodos de ciclo de vida do Model.
 - [x] Exigir a senha atual em cada desativação; bloquear alterações no campus inativo e manter os vínculos existentes.
 - [x] Criar as telas Livewire de listagem, cadastro, detalhes e edição de campi para o Administrador do Sistema.
@@ -73,7 +73,7 @@ O dashboard detalhado é exibido somente quando o vínculo ativo selecionado é 
 
 ## Setor de Estágio
 
-- [ ] Limitar e testar a gestão local ao campus do vínculo ativo selecionado.
+- [x] Limitar a gestão local ao campus do vínculo ativo selecionado; validação automatizada permanece pendente.
 - [x] Permitir ao Setor de Estágio editar nome, CNPJ, endereço, telefone, representante legal e dados do seguro do próprio campus; manter o ciclo de ativação restrito ao Administrador do Sistema.
 - [x] Exibir dados e histórico do campus em “Meu campus” e oferecer edição em uma tela separada, com o endereço compartilhado pelo componente Blade `address.form-fields`.
 - [x] Impedir acesso a campus alheio, criação de campus e alteração do ciclo de ativação pelo Setor de Estágio.
@@ -124,18 +124,18 @@ Os índices de `Campus`, `City`, `Holiday` e `HolidayRecurrence` são configurad
 
 A busca de produção depende do serviço Meilisearch e da configuração descritos acima. A validação funcional da busca permanece pendente; não há suíte automatizada nesta etapa.
 
-O botão **Consultar CNPJ**, nos formulários de cadastro e edição, usa `BrasilApiCompanyLookup` para consultar `cnpj/v1/{cnpj}` na BrasilAPI. Valida e normaliza o CNPJ antes da chamada, com conexão limitada a 3 segundos e resposta a 10 segundos. Preenche razão social como nome, telefone, e-mail e endereço quando disponíveis; resolve a cidade por `ibge_code` e UF na tabela local, sem busca textual nem criação de cidades. Uma consulta bem-sucedida reinicializa o seletor com essa cidade; quando não houver correspondência, limpa a seleção anterior e solicita UF/cidade manualmente. Campos ausentes na resposta não apagam valores digitados. Os dados permanecem editáveis e só são gravados pelo envio normal ao controller, com Form Requests e auditoria. A consulta em si não grava dados nem atividades. Falhas, CNPJ não encontrado e respostas inválidas exibem erro e preservam o formulário. A permissão e o estado do campus são revalidados em cada requisição. Representante legal e seguro continuam sob responsabilidade de quem cadastra; não são inferidos do quadro de sócios. A consulta independente por CEP está implementada com revisão antes de aplicar, conforme descrito abaixo.
+O botão **Consultar CNPJ** do formulário de campus usa `BrasilApiCompanyLookup` para consultar `cnpj/v1/{cnpj}` na BrasilAPI. Valida e normaliza o CNPJ antes da chamada, com conexão limitada a 3 segundos e resposta a 10 segundos. Propõe nome, telefone e endereço quando disponíveis; não preenche o e-mail institucional do Setor, que é informado manualmente. Resolve a cidade por `ibge_code` e UF na tabela local, sem busca textual nem criação de cidades. Uma consulta bem-sucedida reinicializa o seletor com essa cidade; quando não houver correspondência, limpa a seleção anterior e solicita UF/cidade manualmente. Campos ausentes na resposta não apagam valores digitados. Os dados permanecem editáveis e só são gravados pelo envio normal ao controller, com Form Requests e auditoria. A consulta em si não grava dados nem atividades. Falhas, CNPJ não encontrado e respostas inválidas exibem erro e preservam o formulário. A permissão e o estado do campus são revalidados em cada requisição. Representante legal e seguro continuam sob responsabilidade de quem cadastra; não são inferidos do quadro de sócios. A consulta independente por CEP está implementada com revisão antes de aplicar, conforme descrito abaixo.
 
 ## Setor de Estágio
 
-- [ ] Implementar autorização e Actions de gestão dos cadastros e análises antes de criar as telas operacionais.
-- [ ] Administrar templates DOCX e versões.
-- [ ] Administrar concedentes e solicitações pendentes no escopo do campus; cadastros e aprovações devem preservar essa associação mesmo quando CPF/CNPJ se repetirem.
+- [x] Implementar autorização, Actions e telas para gestão dos cadastros e análises no escopo de campus.
+- [x] Administrar templates DOCX e versões privadas.
+- [x] Administrar concedentes e solicitações pendentes no escopo do campus; preservar propostas e exigir associação de cadastro ativo antes do aceite.
 - [x] Consultar todos os feriados e recorrências do calendário único, sem escrita ou restrição territorial automática; importação e manutenção global são exclusivas do Administrador do Sistema.
-- [ ] Analisar estágios enviados.
-- [ ] Analisar solicitações de supervisor/concedente.
-- [ ] Validar documentos, avaliações, pendências e liberação.
-- [ ] Consultar o calendário aplicável e registrar exceções por estágio, sem alterar o calendário global.
+- [x] Analisar solicitações de estágio enviadas, com aceite, recusa e devolução por seção.
+- [x] Analisar solicitações tipadas de supervisor e concedente e associar cadastros aprovados.
+- [x] Analisar documentos, avaliações, pendências e liberação do estágio.
+- [x] Consultar o calendário aplicável e registrar exceções por estágio, sem alterar o calendário global.
 
 ## Próxima fase
 

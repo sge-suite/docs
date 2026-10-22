@@ -27,14 +27,14 @@ O comando `php artisan make:notifications-table --no-interaction` produz a base 
 
 O UUID de `notifications.id` é intencional: preserva o schema e a geração de identificadores nativos de Laravel Notifications. As tabelas próprias de e-mail usam IDs `bigint` autoincrementais; somente `email_messages.notification_id` permanece UUID para referenciar esta tabela.
 
-Avisos de decisão e correção da solicitação de estágio usam `notifiable = Affiliation`, entregues junto com o e-mail após o commit. `AffiliationPolicy::viewNotifications` exige que o vínculo exista, esteja ativo e pertença à conta autenticada. A relação polimórfica limita cada consulta ao par `notifiable_type`/`notifiable_id`, inclusive quando a conta possui outros vínculos. Outros avisos de estágio, avaliação e documento ainda dependem da integração de cada fluxo. `User` também aceita notificações pelo Laravel, mas recuperação de senha, convite inicial e novo vínculo são enviados pelo canal de e-mail e não criam linhas em `notifications`.
+Avisos de decisão e correção da solicitação de estágio usam `notifiable = Affiliation`, entregues junto com o e-mail após o commit. `AffiliationPolicy::viewNotifications` exige que o vínculo exista, esteja ativo e pertença à conta autenticada. A relação polimórfica limita cada consulta ao par `notifiable_type`/`notifiable_id`, inclusive quando a conta possui outros vínculos. Avisos de avaliação, assinatura de documentos, execução, cancelamento e conclusão também estão integrados às Actions e Jobs de domínio. `User` aceita notificações pelo Laravel, mas recuperação de senha, convite inicial e novo vínculo são enviados pelo canal de e-mail e não criam linhas em `notifications`.
 
 Deduplicação durável de eventos repetíveis não deve alterar a tabela nativa. A Action que gerar um evento precisa usar a fonte de idempotência do domínio; quando ela ainda não existir, o fluxo deve definir um registro operacional próprio antes de ser ativado.
 
 ## Checklist
 
 - [x] Gerar a migration com `php artisan make:notifications-table --no-interaction` e adaptar `data` para `jsonb`.
-- [x] Integrar avisos internos de decisão e correção da solicitação ao fluxo de abertura; os demais eventos operacionais continuam pendentes.
+- [x] Integrar avisos internos de abertura, avaliação, assinatura de documentos, execução, cancelamento e conclusão nos fluxos correspondentes.
 - [x] Adicionar `Notifiable` a `Affiliation` e consultar a caixa operacional pelo vínculo ativo.
 - [ ] Garantir que `data` não contenha tokens, senhas, códigos ou URLs sensíveis.
 - [ ] Testar criação e leitura/não leitura pelo Model nativo para `Affiliation` e `User`.
@@ -43,4 +43,4 @@ Deduplicação durável de eventos repetíveis não deve alterar a tabela nativa
 
 ## Próxima etapa
 
-[`email_messages`](doc:migration-06-email-messages) e [`email_delivery_attempts`](doc:migration-07-email-delivery-attempts) implementam a persistência relacionada; `RequestEmailDelivery` e `SendEmailDelivery` implementam reserva e transporte em fila. A recuperação de senha do Fortify também usa fila, sem criar registros nessas tabelas. A ligação a outros eventos de domínio ainda será feita conforme [E-mails, notificações e entregas](doc:e-mails-notificacoes-e-entregas).
+[`email_messages`](doc:migration-06-email-messages) e [`email_delivery_attempts`](doc:migration-07-email-delivery-attempts) implementam a persistência relacionada; `RequestEmailDelivery` e `SendEmailDelivery` implementam reserva e transporte em fila. A recuperação de senha do Fortify também usa fila, sem criar registros nessas tabelas. Os eventos de domínio atualmente integrados e as lacunas restantes estão descritos em [E-mails, notificações e entregas](doc:e-mails-notificacoes-e-entregas).

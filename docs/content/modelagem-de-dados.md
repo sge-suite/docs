@@ -3,7 +3,7 @@ id: modelagem-de-dados
 title: Modelagem de dados
 description: Modelo lógico relacional do sistema, com tabelas, colunas, chaves estrangeiras e relações direcionadas.
 type: data-model
-status: defined
+status: observed
 visibility: public
 tags: sge/modelagem, sge/schema, sge/banco-de-dados
 related: dominio-e-modelo-de-dados, modelo-de-dados-nucleo, modelo-de-dados-acesso, modelo-de-dados-historico, ciclos-de-status, migrations
@@ -47,7 +47,7 @@ Detalhes dos contratos: [granting_parties](doc:migration-12-granting-parties), [
 
 ## Execução do estágio
 
-Depois do aceite, o estágio concentra as vigências de jornada, pausas, o cálculo baseado no calendário nacional, estadual e municipal aplicável à cidade/UF do endereço histórico do local de trabalho, pedidos de cancelamento e avaliação do supervisor.
+Depois do aceite, o estágio concentra a jornada inicial, pausas, exceções de calendário, o cálculo baseado no calendário nacional/estadual/municipal aplicável ao endereço histórico do local de trabalho, pedidos de cancelamento e avaliação do supervisor. A tabela para novas vigências de jornada existe, mas sua integração após aditivo assinado permanece pendente.
 
 {{diagram:modelo-nucleo-execucao}}
 

@@ -303,7 +303,7 @@ A representação é uma lista de dois trechos com `text` e `italic`, nunca HTML
 | --- | --- |
 | Descrição | E-mail do campus |
 | Tipo | string |
-| Origem | Campo/configuração inexistente em campuses; não inferir do vínculo operador |
+| Origem | Não existe e-mail geral em `campuses`; `internship_office_email` identifica especificamente o Setor e não é origem deste marcador. Não inferir do vínculo operador. |
 | Snapshot | Congelar na emissão; não existe snapshot deste dado no estágio. Nunca atualizar documento anterior. |
 | Formato | texto |
 | Sensibilidade | institucional |

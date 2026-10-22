@@ -3,7 +3,7 @@ id: visao-geral
 title: Visão geral
 description: Objetivo, escopo e funcionamento do Sistema de Gestão de Estágios.
 type: overview
-status: defined
+status: observed
 visibility: public
 tags: sge/contexto, sge/documentacao
 related: pessoas-e-responsabilidades, fluxos-principais, ciclos-de-status, glossario
@@ -11,7 +11,7 @@ source_refs:
 diagram: visao-geral-processo
 ---
 > [!info] Estado da página
-> Esta página descreve o comportamento-alvo do SGE; nem todas as jornadas estão disponíveis. Hoje há autenticação, contexto e configurações de conta, gestão global de campi, administração de contas e vínculos administrativos e painel global do Administrador do Sistema. As jornadas completas de estágio seguem em desenvolvimento. Consulte o [planejamento](doc:planejamento) e as [fases de desenvolvimento](doc:fases-de-desenvolvimento) para distinguir funcionalidades disponíveis das próximas entregas.
+> Esta página descreve o fluxo que já está disponível no código: abertura e análise da solicitação, formalização documental, assinaturas, acompanhamento, avaliação e conclusão. Funcionalidades específicas ainda pendentes — como registro de documentos externos e avisos adicionais — estão identificadas nas [fases de desenvolvimento](doc:fases-de-desenvolvimento).
 
 ## Em uma frase
 
@@ -54,7 +54,7 @@ Quando a solicitação é aceita, o Setor de Estágio prepara o documento apropr
 
 Depois de liberado, o estágio entra em andamento na data planejada. A previsão de término considera a jornada, a carga horária, os feriados aplicáveis e as pausas registradas.
 
-Durante o estágio, podem existir pausas, substituição autorizada de orientador ou supervisor, aditivos e pedidos de cancelamento. Uma pausa é registrada com período e motivo. Se uma pausa não prevista precisar ser formalizada, o Setor de Estágio providencia o aditivo adequado.
+Durante o estágio, o Setor registra pausas, acompanha a execução e pode tratar pedidos de cancelamento. Antes da liberação, a tela de gestão permite ajustar a jornada e recalcular a previsão; depois da liberação, a jornada pactuada não é reescrita pela edição atual. O controle de novas vigências após aditivo assinado continua pendente.
 
 ### Acompanhamento acadêmico e conclusão
 
@@ -64,7 +64,9 @@ O estágio é concluído quando sua carga horária é integralmente cumprida. A 
 
 ## Avisos e histórico
 
-O sistema avisa as pessoas responsáveis sobre eventos relevantes, como documentos disponíveis, início do estágio, pausas e aproximação do término previsto. A notificação no sistema e o envio de e-mail são acompanhados separadamente, para que uma falha de e-mail não oculte o aviso dentro do SGE.
+O sistema avisa os destinatários previstos em eventos implementados, como documentos disponíveis, decisão/correção da solicitação, avaliação, início, pausa, retomada, cancelamento e conclusão. Notificação interna e entrega por e-mail têm históricos separados. O aviso de aproximação do término previsto ainda não está implementado.
+
+Nos formulários de abertura e avaliação do supervisor, o endereço institucional do Setor de Estágio aparece como contato para dúvidas; ao clicar, a interface copia o endereço e mostra um toast. Os endereços institucionais do Setor e da Coordenação são dados de contato e ainda não substituem os destinatários das notificações por e-mail.
 
 Também é preservado um histórico de alterações e decisões importantes. Informações sensíveis recebem acesso restrito e não são expostas em avisos gerais.
 

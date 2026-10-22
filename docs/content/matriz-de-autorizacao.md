@@ -3,7 +3,7 @@ id: matriz-de-autorizacao
 title: Matriz de autorização
 description: Resumo navegável de responsabilidades por vínculo institucional; o detalhamento operacional fica na referência de perfis.
 type: authorization-reference
-status: defined
+status: observed
 visibility: public
 tags: sge/autorizacao, sge/desenvolvimento, sge/policies
 related: perfis-e-responsabilidades-por-vinculo, enum-affiliationtype, fase-05-administracao, pessoas-e-responsabilidades, backlog-e-decisoes
@@ -15,7 +15,7 @@ source_refs:
 | Vínculo                  | Escopo principal                       | Pode iniciar/editar                                                         | Pode analisar/aprovar                                     | Limites importantes                                                                     |
 | ------------------------ | -------------------------------------- | --------------------------------------------------------------------------- | --------------------------------------------------------- | --------------------------------------------------------------------------------------- |
 | Administrador do Sistema | Global                                 | Todos os campos dos campi e vínculos administrativos previstos em Policy; consulta auditoria e e-mails administrativos. | Administração global prevista em Policy.                  | Histórico exige vínculo ativo selecionado e permanece limitado a campi, contas e vínculos administrativos; não representa operação acadêmica do campus.              |
-| Setor de Estágio | Próprio campus | Dados do próprio campus, cursos, tipos de estágio e gestão local de usuários/vínculos; dados de acesso de contas locais e dados profissionais opcionais de supervisor; auditoria e e-mails de cadastro e alterações dentro do escopo local; demais fluxos previstos em Policy. | Estágios, documentos, avaliações, pendências e liberação. | Não cria campi nem altera seu ciclo de ativação; não gerencia vínculos de Administrador do Sistema, contas externas ou dados de acesso de outros administradores; não consulta logs administrativos gerais. Aprova/devolve avaliação sem editar a resposta. |
+| Setor de Estágio | Próprio campus | Dados do próprio campus, cursos, tipos, concedentes e gestão local de usuários/vínculos; análise de abertura e cadastros pendentes; auditoria administrativa e e-mails do próprio campus; consulta de e-mails operacionais dos estágios do campus. | Estágios, documentos, avaliações, pendências e liberação. | Não cria campi nem altera seu ciclo de ativação; não gerencia vínculos de Administrador do Sistema, contas externas ou dados de acesso de outros administradores; não consulta logs administrativos globais. Aprova/devolve avaliação sem editar a resposta. |
 | Coordenador | Cursos que referenciam o vínculo titular/substituto e próprios orientandos no campus | Consulta acadêmica, consulta de notas como orientador e emissão/download do atestado, com template vigente automático e DOCX/PDF. | Nenhuma decisão operacional do Setor; não lança notas como coordenador. | Não pode emitir os demais tipos, manter templates, cancelar emissões ou acessar dados fora do contexto autorizado. |
 | Orientador               | Próprios orientandos                   | Consulta e lançamento das notas sob sua responsabilidade.                   | Avaliação acadêmica que lhe for atribuída.                | Não opera estágios fora dos próprios orientandos.                                       |
 | Discente                 | Próprio vínculo e processos permitidos | RG, órgão emissor, emissão, nascimento, telefone compartilhado e endereço atual próprios; rascunho e correções do próprio estágio.                  | Não aprova registros.                                     | Não altera CPF, dados alheios ou registros já congelados.                               |
@@ -28,7 +28,7 @@ source_refs:
 - Vínculo desativado preserva consulta histórica autorizada, mas não permite iniciar ou alterar fluxos.
 - Campus desativado preserva consulta e vínculos, mas congela as alterações em seus recursos; configurações pessoais continuam disponíveis.
 - Nenhuma Policy ultrapassa o escopo de campus ou curso do vínculo.
-- Auditoria e e-mails compartilham telas entre Administrador do Sistema e Setor de Estágio. O Setor consulta somente campus, cursos, tipos de estágio, concedentes, endereços dos cadastros, contas e vínculos locais autorizados e e-mails de cadastro e alterações com contexto persistido do campus; não herda consultas globais nem acesso ao histórico de fluxos ainda sem Policy.
+- Auditoria e e-mails compartilham telas entre Administrador do Sistema e Setor de Estágio. A auditoria segue os escopos administrativos próprios; o Setor consulta e-mails de cadastro/alterações do campus e mensagens operacionais de estágios associados ao mesmo campus, conforme Policies. Nenhum dos perfis amplia seu escopo pelo endereço de e-mail do destinatário.
 - A mesma pessoa pode atuar por mais de um vínculo; a sessão escolhe apenas um contexto por vez.
 - Não há permissões/roles editáveis pelo banco ou interface. Exceções exigem mudança explícita de enum, Policy, teste e documentação.
 

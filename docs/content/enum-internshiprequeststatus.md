@@ -11,7 +11,7 @@ source_refs: https://github.com/sge-suite/sge/blob/master/app/Enums/InternshipRe
 diagram: enum-request-status
 ---
 > [!success] Estado
-> A classe, o cast em `InternshipRequest` e a Migration 19 já existem. Guardas de transição, Policies e fluxo de análise ainda estão planejados. O enum separa o formulário da formalização e execução registradas em [`InternshipStatus`](doc:enum-internshipstatus). Não há testes automatizados no repositório atualmente; a validação fica para a preparação para produção.
+> A classe, o cast em `InternshipRequest`, a Migration 19, as Policies e as transições estão integrados ao fluxo Livewire de envio, análise, correção, aceite, recusa e desistência. O enum separa o formulário da formalização e execução registradas em [`InternshipStatus`](doc:enum-internshipstatus). A validação funcional fica para a preparação para produção.
 
 ## Contrato
 
@@ -48,7 +48,7 @@ O discente consulta uma lista das próprias solicitações, com status e última
 - [x] Criar enum string, rótulos, `options()` e `values()`.
 - [x] Adicionar cast em `InternshipRequest`.
 - [x] Usar o valor inicial do enum na [migration de internship_requests](doc:migration-19-internship-requests).
-- [ ] Implementar guardas de transição e Policies do discente e do Setor.
+- [x] Implementar guardas de transição e Policies do discente e do Setor.
 - [ ] Testar cases, valores, rótulos e opções.
 - [ ] Testar primeiro envio, pendência, reenvio, aceite inicial, reaprovação e desistência no fluxo de domínio.
 

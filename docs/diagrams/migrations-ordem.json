@@ -2,7 +2,7 @@
   "id": "migrations-ordem",
   "kind": "flowchart",
   "title": "Dependências principais das migrations",
-  "description": "Dependências principais entre as migrations atuais e planejadas do SGE.",
+  "description": "Dependências físicas entre as migrations atuais do SGE; o estado dos fluxos funcionais é descrito nas referências de cada migration.",
   "summary": "A fundação começa com users e dados pessoais, passa por campi, vínculos, cursos e tipos de estágio, e então chega a solicitações, estágios, documentos, jornadas, pausas e comunicação.",
   "source": {
     "language": "mermaid",

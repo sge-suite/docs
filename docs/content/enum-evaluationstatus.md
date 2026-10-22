@@ -11,7 +11,7 @@ source_refs: https://github.com/sge-suite/sge/blob/master/app/Enums/EvaluationSt
 diagram: enum-evaluation-status
 ---
 > [!success] Estado
-> O enum, a migration e o Model já existem. A liberação funcional e as Policies ainda estão planejadas. A validade para nota depende da carga horária. Não há testes automatizados no repositório atualmente; a validação fica para a preparação para produção.
+> O enum, a migration, o Model, as Policies, as telas e o ciclo funcional estão implementados. A validade para nota depende da carga horária. A validação automatizada fica para a preparação para produção.
 
 ## Contrato implementado
 
@@ -40,12 +40,12 @@ O envio mais recente não substitui imediatamente uma avaliação já vigente. A
 
 - Um novo `Submitted` permanece apenas como candidato enquanto aguarda análise.
 - Um `Returned` nunca é usado no cálculo.
-- A avaliação vigente deverá ser referenciada por `internships.current_supervisor_evaluation_id` ou mecanismo equivalente com garantia de unicidade.
+- A Action seleciona transacionalmente a resposta `Approved` mais recente; não há coluna de referência vigente redundante no estágio.
 - A aprovação com `hours_requirement_met = true` conclui o estágio automaticamente na mesma transação, após selecionar a avaliação vigente e recalcular as notas. Um pedido de cancelamento pendente deve ser decidido antes dessa aprovação. Documentos e notas permanecem como registros próprios do processo.
 
 ## Liberação e notificação
 
-A liberação para preenchimento pertence ao estágio, não ao enum da resposta. O sistema deverá registrar `evaluation_released_at`, notificar o supervisor vinculado e só então permitir a criação ou edição do rascunho.
+A liberação para preenchimento pertence ao estágio, não ao enum da resposta. O sistema registra a liberação, notifica o vínculo supervisor após commit e então permite a criação ou edição do rascunho.
 
 ## Checklist de decisão e implementação
 
@@ -54,9 +54,9 @@ A liberação para preenchimento pertence ao estágio, não ao enum da resposta.
 - [x] Confirmar que a avaliação vigente será a aprovada mais recente, com aprovação condicionada à carga horária cumprida.
 - [x] Definir pesos e valores dos conceitos no snapshot do tipo de estágio.
 - [x] Mapear critérios, escala e regras condicionais do formulário fixo de avaliação.
-- [ ] Criar o enum e seus testes unitários.
+- [x] Criar o enum e seus rótulos; a validação automatizada permanece pendente.
 - [x] Criar migration e campos de liberação/avaliação vigente.
-- [ ] Adicionar cast, transições no Model e testes de histórico; autorização e seleção transacional da vigente continuam pendentes.
+- [x] Adicionar cast, transições, autorização e seleção transacional da avaliação vigente; a validação automatizada permanece pendente.
 - [x] Atualizar [migration de avaliação](doc:migration-18-supervisor-evaluations) e [fase de avaliação](doc:fase-09-avaliacao-e-conclusao).
 
 ## Relacionamentos

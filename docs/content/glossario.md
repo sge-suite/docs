@@ -3,7 +3,7 @@ id: glossario
 title: Glossário
 description: Vocabulário funcional usado na documentação pública do SGE.
 type: glossary
-status: defined
+status: maintained
 visibility: public
 tags: sge/dominio, sge/glossario
 related: pessoas-e-responsabilidades, ciclos-de-status

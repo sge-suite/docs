@@ -3,7 +3,7 @@ id: home
 title: Documentação
 description: Visão pública do Sistema de Gestão de Estágios.
 type: documentation-hub
-status: defined
+status: observed
 visibility: public
 tags: sge/documentacao
 related: guia-completo, visao-geral, pessoas-e-responsabilidades, fluxos-principais, ciclos-de-status, glossario, planejamento
@@ -35,7 +35,7 @@ O [fluxograma do estágio](../diagrams/fluxograma-do-estagio.html) detalha a pri
 
 ## Escopo desta documentação
 
-Esta documentação apresenta o produto e o planejamento do novo SGE. As páginas funcionais descrevem o comportamento definido para o produto; as páginas técnicas registram o que já existe no código e o que ainda está planejado. Consulte o status de cada página antes de tratar uma regra como disponível no sistema.
+Esta documentação apresenta os fluxos disponíveis no SGE e identifica as pendências específicas. As páginas técnicas registram o estado do código; consulte as fases para distinguir funcionalidades implementadas das que ainda aguardam integração.
 
 > [!info] Código-fonte
 > O código do SGE está no [repositório oficial](https://github.com/sge-suite/sge).

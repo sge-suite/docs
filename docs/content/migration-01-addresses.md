@@ -10,7 +10,7 @@ related: migration-01a-cities, actions, concerns, testes-existentes, dominio-e-m
 source_refs: https://github.com/sge-suite/sge/blob/master/database/migrations/2026_09_16_153327_create_addresses_table.php, https://github.com/sge-suite/sge/blob/master/app/Models/Address.php, https://github.com/sge-suite/sge/blob/master/app/Concerns/AddressValidationRules.php, https://github.com/sge-suite/sge/blob/master/app/Actions/CopyAddress.php
 ---
 > [!success] Estado
-> Base backend implementada: migration, model, factories, relacionamentos, validação dos campos obrigatórios, Activity Log e cópia histórica. CEP obrigatório com PT-BR Validator e consulta com revisão estão implementados nos formulários de campus. A configuração própria do Discente também integra o endereço atual e a consulta por CEP com revisão; a formalização continua pendente.
+> Base implementada: migration, model, factories, relacionamentos, validação dos campos obrigatórios, Activity Log e cópia histórica. CEP obrigatório com PT-BR Validator e consulta com revisão estão implementados nos formulários de campus e na configuração própria do Discente. A solicitação e o aceite da abertura criam cópias históricas dos endereços usados no estágio.
 
 ## Contrato implementado
 
@@ -31,9 +31,9 @@ A cidade é obrigatória e selecionada no [catálogo local](doc:migration-01a-ci
 
 ## Propriedade dos endereços
 
-`addresses` centraliza as colunas de endereço, mas suas linhas não são compartilhadas. Cada linha pode pertencer a no máximo um registro proprietário, seja em `user_personal_data`, `campuses`, `granting_parties` ou nos futuros endereços históricos de `internships`. Isso vale também para dois registros da mesma tabela: conteúdo idêntico recebe IDs diferentes. Um novo proprietário recebe uma nova linha, nunca o `address_id` já vinculado a outro registro. A cópia histórica cria outra linha na mesma tabela.
+`addresses` centraliza as colunas de endereço, mas suas linhas não são compartilhadas. Cada linha pertence a um único cadastro proprietário ou a uma referência histórica em `internships`. Isso vale também para dois registros da mesma tabela: conteúdo idêntico recebe IDs diferentes. Um novo proprietário recebe uma nova linha, nunca o `address_id` já vinculado a outro registro. A cópia histórica cria outra linha na mesma tabela.
 
-O schema atual contém FKs nos cadastros proprietários, mas ainda não impõe essa exclusividade entre todas as tabelas. Os futuros fluxos de integração devem respeitar a regra ao criar e trocar endereços; uma garantia no banco exige desenho próprio antes de ser declarada implementada.
+As FKs e as operações atuais respeitam a propriedade exclusiva, mas o schema não impõe uma restrição única global entre todas as tabelas proprietárias. Os fluxos de abertura e aceite criam cópias históricas para as referências do estágio; qualquer nova operação que associe endereços deve continuar criando uma linha própria. Uma garantia global no banco exigiria desenho adicional.
 
 Na gestão de campi, a edição atualiza a mesma linha de endereço e preserva seu ID. Antes da mudança, o controller verifica referências em campi, dados pessoais, concedentes e estágios; se encontrar outro proprietário ou uso histórico, rejeita a operação. A verificação é de aplicação, pois o schema não impõe exclusividade entre as FKs.
 
@@ -55,9 +55,9 @@ O Activity Log registra a identificação do cadastro proprietário em `properti
 
 Uma origem não persistida gera `InvalidArgumentException`; se a linha já foi removida, a releitura gera `ModelNotFoundException`. A criação da cópia também passa pelas regras do model e pelo Activity Log.
 
-O fluxo de campus impede editar seu endereço quando uma referência de outro proprietário ou estágio aponta para a mesma linha. Na configuração própria do Discente, alterações criam nova linha e associam somente o perfil atual. Endereço já associado a outro proprietário ou estágio também recebe uma linha exclusiva ao ser enviado, mesmo com conteúdo igual. Substituição e remoção explícita apagam o endereço anterior somente sem qualquer referência; referências históricas e snapshots permanecem intactos. Campos de endereço omitidos preservam valores e um endereço informado deve estar completo, com cidade do catálogo e CEP válido. Não há edição direta de endereço histórico por esse fluxo. Não há bloqueio genérico de edição/exclusão de endereços históricos para todas as demais operações; essa proteção será implementada junto às futuras FKs e operações de formalização. A cópia existe, mas os outros fluxos ainda precisam integrar seu uso.
+O fluxo de campus impede editar seu endereço quando uma referência de outro proprietário ou estágio aponta para a mesma linha. Na configuração própria do Discente, alterações criam nova linha e associam somente o perfil atual. Endereço já associado a outro proprietário ou estágio também recebe uma linha exclusiva ao ser enviado, mesmo com conteúdo igual. Substituição e remoção explícita apagam o endereço anterior somente sem qualquer referência; referências históricas e snapshots permanecem intactos. Campos de endereço omitidos preservam valores e um endereço informado deve estar completo, com cidade do catálogo e CEP válido. A abertura copia os endereços enviados pelo Discente e da concedente; o aceite copia o endereço aprovado para o estágio. Os fluxos da aplicação não editam diretamente endereços históricos, embora o banco não tenha uma trava global para escritas SQL diretas ou operações futuras que contornem as Actions.
 
-Na formalização futura, `internships.workplace_address_id` deverá apontar para uma cópia do endereço da concedente nesta mesma tabela. `internships.student_address_id` poderá apontar para a cópia do endereço do discente quando necessário. Essas linhas deverão ser preservadas sem alterações retroativas; a mudança do cadastro atual poderá criar outra linha e trocar sua FK.
+No aceite, `internships.workplace_address_id` aponta para uma cópia do endereço aprovado da concedente, e `internships.student_address_id` aponta para a cópia do endereço do Discente. Essas linhas são preservadas sem alterações retroativas; a mudança do cadastro atual poderá criar outra linha e trocar sua FK.
 
 ## Consulta de CEP implementada
 

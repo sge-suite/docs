@@ -64,9 +64,9 @@ Um aditivo é um `generated_documents` com `type = addendum`, versão de templat
 - [x] Gerar e reproduzir a emissão com hash do DOCX preenchido, sem outro registro em downloads repetidos.
 - [x] Transmitir DOCX/PDF temporário e limpar o arquivo; auditar formato e resultado sem copiar o snapshot.
 - [x] Exigir local de disponibilização genérico ao marcar `awaiting_signature`, sem nome de plataforma hardcoded.
-- [ ] Exibir interessados elegíveis como checkboxes e enviar o aviso selecionado após o commit da transição.
-- [ ] Implementar acompanhamento manual de assinatura externa quando aplicável.
-- [ ] Testar geração, assinatura, cancelamento, aditivo e documento da concedente.
+- [x] Exibir interessados elegíveis como checkboxes e enviar o aviso selecionado após o commit da transição.
+- [x] Implementar acompanhamento manual de assinatura externa.
+- [ ] Validar na preparação para produção os fluxos implementados de geração, assinatura, cancelamento e aditivo; registro operacional de documento externo permanece pendente.
 - [ ] Testar que nenhum arquivo final seja armazenado.
 - [ ] Testar migrate/rollback na ordem completa após as migrations dependentes.
 

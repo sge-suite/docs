@@ -3,14 +3,14 @@ id: pessoas-e-responsabilidades
 title: Pessoas e responsabilidades
 description: Explicação em linguagem simples de quem participa do SGE, o que cada pessoa faz e os limites de cada atuação.
 type: user-guide
-status: defined
+status: observed
 visibility: public
 tags: sge/contexto, sge/pessoas, sge/fluxos
 related: visao-geral, fluxos-principais, ciclos-de-status, glossario
 source_refs:
 ---
 > [!info] Estado da página
-> Esta página define os papéis e seus limites no produto. As responsabilidades descritas orientam a implementação; nem todas as telas e ações estão disponíveis no código atual.
+> Esta página descreve as atuações e limites atualmente implementados. Pendências específicas estão anotadas nas [fases de desenvolvimento](doc:fases-de-desenvolvimento).
 
 O SGE não dá a mesma tela e as mesmas ações para todas as pessoas. Cada pessoa usa o sistema em uma função — chamada aqui de **vínculo** — e vê apenas o que precisa para participar do estágio.
 
@@ -41,7 +41,7 @@ O discente pode desistir antes da formalização ou pedir o cancelamento de um e
 
 O Setor de Estágio é responsável por analisar o processo. Confere a solicitação, orienta correções, valida cadastros de parte concedente e supervisor, gera documentos e verifica se as assinaturas necessárias foram concluídas.
 
-É o Setor que libera o estágio para começar, registra pausas, trata pedidos de cancelamento e analisa a avaliação feita pelo supervisor. Quando houver mudança de carga horária, ela não é feita como ajuste simples: exige um aditivo formal e passa a valer somente depois da conferência das assinaturas.
+É o Setor que libera o estágio para começar, registra pausas, trata pedidos de cancelamento e analisa a avaliação feita pelo supervisor. A gestão permite ajustar dados e jornada do estágio; o controle de vigências posteriores formalizadas por aditivo assinado continua pendente.
 
 O Setor não reescreve respostas do discente nem do supervisor. Quando algo estiver errado, devolve o mesmo formulário com uma explicação para que a pessoa responsável corrija.
 
@@ -53,7 +53,7 @@ Ele pode salvar a avaliação como rascunho, enviá-la e corrigir o mesmo formul
 
 ## Orientador
 
-O orientador acompanha academicamente apenas os seus orientandos. Pode consultar o andamento necessário para essa orientação e registra as notas de relatório e apresentação.
+O orientador acompanha academicamente apenas os seus orientandos. Pode consultar o andamento necessário para essa orientação e registra as notas de relatório e apresentação. Se a mesma pessoa também for coordenadora, os avisos referentes a uma orientação continuam ligados ao vínculo de Orientador.
 
 Ele não substitui o supervisor na avaliação, não altera os critérios de nota e não conduz a formalização administrativa. Se precisar assinar um documento ou lançar uma nota, receberá o aviso correspondente.
 

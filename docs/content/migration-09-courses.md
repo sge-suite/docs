@@ -10,7 +10,7 @@ related: migration-03-campuses, migration-04-affiliations, migration-10-course-i
 source_refs: https://github.com/sge-suite/sge/blob/master/database/migrations/2026_09_22_163548_create_courses_table.php, https://github.com/sge-suite/sge/blob/master/app/Models/Course.php, https://github.com/sge-suite/sge/blob/master/database/factories/CourseFactory.php
 ---
 > [!success] Estado
-> Migration, Model, factory, relações, validação, interface Livewire com Flux e CoursePolicy estão implementados para o Setor de Estágio. Não há testes automatizados no repositório atualmente; a validação fica para a preparação para produção.
+> Migration, Model, factory, relações, validação, interface Livewire com Flux e CoursePolicy estão implementados para o Setor de Estágio. A Coordenação tem e-mail institucional próprio, distinto dos e-mails dos vínculos coordenadores; a validação fica para a preparação para produção.
 
 ## Contrato
 
@@ -19,6 +19,7 @@ source_refs: https://github.com/sge-suite/sge/blob/master/database/migrations/20
 | `id` | `bigint` autoincremental, chave primária. |
 | `campus_id` | `bigint` obrigatório, FK para `campuses.id` com `ON DELETE RESTRICT`. |
 | `name` | Nome obrigatório, `varchar(255)`. |
+| `coordination_email` | `varchar(254)`, e-mail institucional da Coordenação do curso, obrigatório, validado e normalizado. |
 | `primary_coordinator_affiliation_id` | `bigint` nullable, FK para `affiliations.id` com `ON DELETE RESTRICT`. |
 | `secondary_coordinator_affiliation_id` | `bigint` nullable, FK para `affiliations.id` com `ON DELETE RESTRICT`. |
 | `deactivated_at` | Timestamp nullable; nulo significa curso ativo. |
@@ -32,7 +33,9 @@ O ciclo do catálogo usa `deactivated_at`, sem `SoftDeletes`; FKs impedem exclus
 
 O vínculo ativo e selecionado de Setor de Estágio autoriza listagem, cadastro, detalhes, edição, desativação, reativação e exclusão de cursos sem referências. O campus vem exclusivamente desse vínculo, sem seletor de campus. A autorização é revalidada nas requisições HTTP e ações Livewire; manipular IDs não permite acessar cursos ou coordenadores de outro campus. O Administrador do Sistema precisa selecionar um vínculo de Setor de Estágio para operar cursos.
 
-Nome é obrigatório e os dois coordenadores são opcionais; a ausência de vínculos elegíveis não impede cadastrar. Desativação e exclusão exigem senha atual e confirmação; reativação exige confirmação. Campus desativado permite somente consulta autorizada. Referências históricas e vínculos discentes por curso impedem exclusão física, sem introduzir unicidade de nome. O Activity Log registra autoria pelo vínculo ativo e não registra senhas.
+Nome e e-mail institucional da Coordenação são obrigatórios; os dois vínculos coordenadores são opcionais e a ausência de vínculos elegíveis não impede cadastrar. O e-mail aceita até 254 caracteres, é validado e normalizado com trim e letras minúsculas. Desativação e exclusão exigem senha atual e confirmação; reativação exige confirmação. Campus desativado permite somente consulta autorizada. Referências históricas e vínculos discentes por curso impedem exclusão física, sem introduzir unicidade de nome. O Activity Log registra autoria pelo vínculo ativo e não registra senhas.
+
+Somente o Setor de Estágio com vínculo ativo selecionado no campus do curso pode consultar ou alterar seus dados. O e-mail aparece nos detalhes do curso como contato institucional; não é usado atualmente como substituto dos e-mails individuais dos vínculos nas notificações.
 
 ## Checklist
 

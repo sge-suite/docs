@@ -29,7 +29,7 @@ As tabelas `notifications`, `email_messages` e `email_delivery_attempts`, seus e
 - [x] Reservar a tentativa de convite com `requested_by_affiliation_id` quando houver vínculo ativo; o Job preserva essa autoria.
 - [ ] Cobrir por renderização os templates de conta criada, novo vínculo e alteração do e-mail, incluindo a distinção entre alteração própria e feita por outra pessoa; testes automatizados não encaminham mensagens ao SMTP.
 - [x] Integrar notificação interna e e-mail pós-commit para decisões e correções da solicitação, incluindo mensagens de correção por seção.
-- [ ] Validar no Mailpit os avisos de solicitação e os demais destinatários dos fluxos que ainda serão ligados.
+- [ ] Validar no Mailpit os destinatários e conteúdos de todos os fluxos atualmente ligados.
 - [ ] Testar idempotência, falha do transporte, reprocessamento e motivo de falha sanitizado.
 - [ ] Validar o comportamento sob concorrência real de workers.
 
@@ -45,8 +45,8 @@ Workers de fila mantêm o código carregado em memória. Após alterar templates
 - [x] Manter leitura interna independente da entrega de e-mail; `read_at` permanece separado do histórico de transporte. Automatizar a validação na preparação para produção.
 - [x] Definir o destinatário e os canais dos avisos de decisão e correção da solicitação de estágio.
 - [x] Integrar liberação e revisão da avaliação ao vínculo supervisor e envio da resposta aos vínculos ativos do Setor do campus, com notificação interna e e-mail após commit.
-- [ ] Integrar avisos de documento disponível e eventos de execução; os avisos administrativos de novo vínculo já estão implementados.
-- [ ] Manter o resumo do Setor de Estágio como notificação agrupada interna quando o contrato assim determinar.
+- [x] Integrar avisos de documento disponível, eventos de execução, cancelamento e conclusão, com seleção e canais definidos em cada fluxo.
+- [x] Agrupar solicitações e cancelamentos pendentes em resumo interno diário do Setor; o resumo de eventos temporais do estágio permanece pendente.
 
 ## Histórico de e-mails por escopo
 
@@ -55,7 +55,7 @@ Workers de fila mantêm o código carregado em memória. Após alterar templates
 - [x] Filtrar por `scope_context` do registro: na visão global, contas e vínculos dos tipos Administrador do Sistema e Setor de Estágio; na visão local, cadastro e alterações de contas e vínculos ligados ao campus selecionado, sem vínculos de Administrador do Sistema. O destinatário e o solicitante não determinam o escopo.
 - [x] Proteger mensagens de vínculos globais na visão do Setor; permitir o aviso de alteração do próprio e-mail de login mesmo quando a conta também possui vínculo global.
 - [x] Preservar a consulta das tentativas após exclusão do vínculo e em campus desativado, usando o contexto persistido do registro afetado.
-- [x] Excluir notificações operacionais, recuperação de senha e mensagens sem contexto administrativo verificável.
+- [x] Manter o escopo global do Administrador do Sistema limitado às mensagens administrativas; disponibilizar ao Setor os avisos operacionais do próprio campus conforme Policy e processo associado.
 - [x] Renderizar HTML em iframe sandboxed com scripts e recursos externos bloqueados; usar texto escapado como fallback e mostrar tentativas sem expor chaves, tokens ou exceções brutas.
 - [ ] Definir autorizações e limites de consulta para outros tipos de vínculo.
 - [ ] Definir uma interface autorizada para solicitar reenvio. O detalhe atual não oferece ação de reenvio.
@@ -63,7 +63,7 @@ Workers de fila mantêm o código carregado em memória. Após alterar templates
 
 ## Critério de saída
 
-- [x] Os fluxos já ligados usam a interface comum e idempotente; os demais fluxos de domínio ainda precisam ser integrados.
+- [x] Os avisos atuais de abertura, avaliação, assinatura, execução, cancelamento e conclusão usam o pipeline comum e idempotente; retenção, escopos adicionais e validação operacional permanecem pendentes.
 - [x] Falhas e tentativas anteriores ficam registradas; o reenvio manual preserva o histórico. Se o SMTP aceitar a mensagem e o worker falhar antes de gravar o resultado, uma nova tentativa pode duplicar a entrega.
 - [x] Senhas, tokens e credenciais não são gravados no Activity Log nem nas tabelas próprias de mensagem/entrega.
 

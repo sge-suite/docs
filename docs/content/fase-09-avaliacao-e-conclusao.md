@@ -13,6 +13,8 @@ Base: [avaliação e conclusão](doc:fluxos-principais#6-acompanhamento-academic
 
 O fluxo do supervisor, o cálculo e a conclusão estão implementados. A aprovação com carga horária cumprida conclui o estágio na mesma transação; o Setor também pode concluir manualmente, confirmando o cumprimento integral.
 
+O formulário de avaliação exibe o e-mail institucional do Setor de Estágio do campus para dúvidas. O botão copia o endereço e confirma a ação por toast; esse contato não altera os destinatários das notificações da avaliação.
+
 ## Decisão antes do código
 
 - [x] O Setor solicita manualmente no estágio liberado (`Released`, `InProgress` ou `Paused`), com curso/campus e supervisor ativos.

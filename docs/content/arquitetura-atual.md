@@ -14,7 +14,7 @@ diagram: arquitetura-atual-diagrama
 
 Esta página mostra como o SGE é montado por dentro. Quem usa o sistema não precisa conhecer estas tecnologias para solicitar, acompanhar ou avaliar um estágio. Em termos simples: há uma tela para as pessoas, regras que conferem cada ação, um banco que guarda as informações e serviços que executam tarefas como calcular datas ou preparar documentos.
 
-Use esta página para saber o que já existe e o que ainda está sendo planejado. Para entender o processo de estágio sem detalhes técnicos, comece por [Visão geral](doc:visao-geral), [Pessoas e responsabilidades](doc:pessoas-e-responsabilidades) e [Fluxos principais](doc:fluxos-principais).
+Use esta página para saber o que já existe e quais lacunas técnicas continuam abertas. Para entender o processo sem detalhes técnicos, comece por [Visão geral](doc:visao-geral), [Pessoas e responsabilidades](doc:pessoas-e-responsabilidades) e [Fluxos principais](doc:fluxos-principais).
 
 ## Stack
 
@@ -32,7 +32,7 @@ A implementação atual utiliza:
 
 ## Dependências do domínio
 
-- O `composer.json` atual não declara PhpOffice/PhpWord, usado apenas quando a geração DOCX for implementada;
+- `phpoffice/phpword` está declarado em `composer.json` e dá suporte à geração DOCX;
 - o helper de valores por extenso importa Brick Math, mas o pacote não está declarado diretamente no `composer.json`.
 
 ## Organização do código
@@ -44,12 +44,12 @@ A implementação atual utiliza:
 | Área                    | Situação    | Evidência                                                                            |
 | ----------------------- | ----------- | ------------------------------------------------------------------------------------ |
 | Autenticação            | ✅          | Fortify, páginas Livewire e rotas protegidas                                         |
-| Usuários                | Parcial     | Administração de contas e vínculos de Administrador do Sistema e Setor de Estágio pela interface; busca, políticas e ciclo de vida implementados. A listagem mostra contas com vínculos administrativos; fluxos de domínio e perfil pessoal seguem parciais. |
-| Autorização             | Parcial     | `UserPolicy`, `AffiliationPolicy` e `CampusPolicy` exigem o vínculo ativo selecionado nos escopos administrativos implementados; políticas e interfaces das jornadas de estágio ainda faltam. |
+| Usuários                | Parcial     | Administração de contas e vínculos por Administrador do Sistema e Setor de Estágio, importação CSV e perfil pessoal de Discente/Supervisor implementados; outros campos e processos permanecem separados por vínculo. |
+| Autorização             | Parcial     | Policies por recurso cobrem administração, cursos, documentos, cadastros, solicitações, estágio, avaliação, feriados e auditoria, sempre conforme vínculo ativo e escopo aplicável; validação automatizada permanece pendente. |
 | Auditoria               | ✅          | Spatie Activitylog, autoria pelo vínculo ativo e campos pessoais/profissionais auditados                  |
-| Infraestrutura de mídia | Parcial     | Spatie Medialibrary disponível; Models e schema de templates/versões existem, mas upload e geração DOCX seguem pendentes |
-| Estágios                | Parcial     | Models, migrations, validações e auditoria existem; faltam Actions, Policies completas e jornadas da aplicação |
-| Administração de campi   | Parcial     | Páginas Livewire para Administrador do Sistema e tela Meu campus para consulta e edição local pelo Setor de Estágio, com campus inativo somente para leitura. |
+| Infraestrutura de mídia | Parcial     | Spatie Medialibrary armazena versões privadas de templates e comprovantes; geração DOCX/PDF usa snapshots e arquivos temporários privados. Registro de documentos externos permanece pendente. |
+| Estágios                | Parcial     | Abertura, correções, formalização, assinaturas, liberação, pausas, sincronização de execução, cancelamento, avaliação, notas e conclusão têm Actions, Policies e interfaces. Vigências formais de jornada e reprodução histórica do cálculo permanecem pendentes. |
+| Administração            | Parcial     | Gestão global e por campus de campi, cursos, tipos de estágio, concedentes, contas/vínculos, calendário, documentos e consultas administrativas implementadas. |
 | Relatórios              | Planejado   | Devem consumir o domínio e respeitar o escopo do vínculo ativo                       |
 
 ## Regras de arquitetura
@@ -61,6 +61,6 @@ A implementação atual utiliza:
 - Autorização deve ser centralizada em Gates e Policies.
 - A autorização é derivada do vínculo ativo, `AffiliationType`, campus/curso e estado do registro; a decisão fica no código. A cobertura automatizada será retomada na preparação para produção.
 - Alterações persistentes devem ser feitas por migrations.
-- Integrações externas devem ser encapsuladas em Services; a validação automatizada isolada fica para a preparação para produção.
+- Integrações externas devem ser encapsuladas em Services/Support; a validação automatizada isolada fica para a preparação para produção.
 - Cálculos determinísticos ficam em Services puros; autorização, transação e efeitos colaterais ficam em Actions/Policies.
 - Decisões que alterem o domínio devem manter os modelos e fluxos correspondentes sincronizados.

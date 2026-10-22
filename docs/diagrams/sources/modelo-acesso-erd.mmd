@@ -16,6 +16,7 @@ erDiagram
     CAMPUSES {
         bigint id PK
         varchar name
+        varchar internship_office_email
         bigint address_id FK
         timestamp deactivated_at
     }
@@ -23,6 +24,7 @@ erDiagram
         bigint id PK
         bigint campus_id FK
         varchar name
+        varchar coordination_email
         bigint primary_coordinator_affiliation_id FK
         bigint secondary_coordinator_affiliation_id FK
         timestamp deactivated_at

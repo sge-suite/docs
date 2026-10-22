@@ -24,7 +24,7 @@ Os feriados nacionais, estaduais e municipais aplicáveis à cidade e à UF do l
 
 ## Recalculo
 
-O cálculo inicial ocorre ao enviar a solicitação e é recalculado no aceite. Recálculo acionado por novas pausas, alterações de calendário, vigência de aditivo ou correção aprovada ainda não está integrado. A previsão histórica não mantém versão do algoritmo nem as entradas completas.
+O cálculo ocorre no envio e no aceite da solicitação. A Action `ProjectInternshipEndDate` também atualiza e persiste a previsão ao salvar alterações relevantes do estágio, pausas ou exceções de calendário. A criação de novas vigências após aditivo assinado ainda não está integrada. A previsão histórica não mantém versão do algoritmo nem as entradas completas.
 
 ## Referências
 
@@ -34,7 +34,7 @@ O cálculo inicial ocorre ao enviar a solicitação e é recalculado no aceite. 
 
 ## Dependência de calendário
 
-A base local, importação anual e gestão estão implementadas em [Calendário de feriados](doc:calendario-de-feriados). O cálculo inicial é usado no envio da abertura e é refeito no aceite. Não há chamada externa durante a consulta e o conjunto de entradas não é congelado como base histórica. Recálculo após mudanças e exceções específicas do estágio continuam pendentes.
+A base local, importação anual e gestão estão implementadas em [Calendário de feriados](doc:calendario-de-feriados). O cálculo é usado no envio da abertura, refeito no aceite e atualizado após mudanças relevantes e exceções específicas do estágio. Não há chamada externa durante o cálculo; o conjunto de entradas não é congelado como base histórica.
 
 ## Calculadora inicial implementada — 16/10/2026
 

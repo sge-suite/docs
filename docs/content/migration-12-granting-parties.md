@@ -10,7 +10,7 @@ related: migration-01-addresses, enum-partydocumenttype
 source_refs: https://github.com/sge-suite/sge/blob/master/database/migrations/2026_09_23_152827_create_granting_parties_table.php, https://github.com/sge-suite/sge/blob/master/app/Models/GrantingParty.php, https://github.com/sge-suite/sge/blob/master/database/factories/GrantingPartyFactory.php
 ---
 > [!info] Estado
-> O cadastro e seu escopo por campus estão implementados na migration, no Model, na factory e nas validações. A gestão direta, sua autorização, as telas e a importação CSV estão implementadas. A aprovação de solicitações continua planejada. Não há testes automatizados no repositório atualmente; a validação fica para a preparação para produção.
+> O cadastro e seu escopo por campus estão implementados na migration, no Model, na factory e nas validações. A gestão direta, sua autorização, as telas, a importação CSV e a análise das propostas de cadastro vinculadas à abertura estão implementadas; as propostas usam a estrutura própria da [Migration 12B](doc:migration-12b-granting-party-registration-requests). A validação funcional fica para a preparação para produção.
 
 ## Contrato
 
@@ -93,7 +93,7 @@ Na branch `dev` do sistema anterior, **Exportar Empresas → Importar no novo SG
 - [ ] Definir índices adicionais de busca em etapa posterior, além do índice de campus, sem impor unicidade indevida.
 - [x] Criar factory para CPF, CNPJ e unidades distintas.
 - [x] Validar documento e normalização.
-- [ ] Criar solicitação de cadastro para análise do Setor de Estágio.
+- [x] Integrar propostas de cadastro à análise do Setor por meio da [Migration 12B](doc:migration-12b-granting-party-registration-requests), mantendo o cadastro direto de concedentes nesta tabela.
 - [x] Definir que o cadastro é suficiente para validar a parte concedente no formulário de estágio.
 - [x] Definir número de processo como dado simples de credenciamento.
 - [ ] Testar endereço alterado e snapshot no estágio.

@@ -3,13 +3,13 @@ id: perfis-e-responsabilidades-por-vinculo
 title: Perfis e responsabilidades por vínculo
 description: Referência operacional das responsabilidades, escopos, limites e controles de cada AffiliationType.
 type: authorization-reference
-status: defined
+status: observed
 visibility: public
 tags: sge/autorizacao, sge/affiliations, sge/policies
 related: matriz-de-autorizacao, pessoas-e-responsabilidades, fase-05-administracao
 source_refs: https://github.com/sge-suite/sge/blob/master/app/Policies/UserPolicy.php, https://github.com/sge-suite/sge/blob/master/app/Policies/AffiliationPolicy.php, https://github.com/sge-suite/sge/blob/master/app/Policies/ActivityPolicy.php, https://github.com/sge-suite/sge/blob/master/app/Policies/EmailDeliveryAttemptPolicy.php, https://github.com/sge-suite/sge/blob/master/app/Support/AdministrativeActivityScope.php, https://github.com/sge-suite/sge/blob/master/app/Support/AdministrativeEmailLogScope.php, https://github.com/sge-suite/sge/blob/master/app/Support/EmailLogAccess.php, https://github.com/sge-suite/sge/blob/master/app/Actions/ManageAdministrativeUser.php, https://github.com/sge-suite/sge/blob/master/app/Actions/UpdateAdministrativeAffiliation.php, https://github.com/sge-suite/sge/blob/master/app/Actions/GetAdministrativeDashboardMetrics.php, https://github.com/sge-suite/sge/blob/master/app/Http/Controllers/UserController.php, https://github.com/sge-suite/sge/blob/master/app/Http/Controllers/AdministrativeAffiliationController.php
 ---
-Esta é a referência operacional para implementar as telas, Gates, Policies e testes de acesso. Ela detalha a [matriz resumida](doc:matriz-de-autorizacao); não cria permissões configuráveis em banco. Para a explicação pública, sem termos de implementação, use [Pessoas e responsabilidades](doc:pessoas-e-responsabilidades).
+Esta é a referência operacional dos escopos e controles implementados para cada vínculo. Ela detalha a [matriz resumida](doc:matriz-de-autorizacao); não cria permissões configuráveis em banco. A validação automatizada e operacional continua indicada como pendente nas fases correspondentes. Para a explicação pública, sem termos de implementação, use [Pessoas e responsabilidades](doc:pessoas-e-responsabilidades).
 
 > [!warning] Regra de interpretação
 > Uma ação só é permitida quando esta referência a atribui ao vínculo **e** a Policy confirma vínculo ativo, escopo, posse do registro e estado do fluxo. Ausência de atribuição significa acesso negado. Pontos marcados como “a confirmar” não devem virar tela ou permissão até decisão institucional.
@@ -23,7 +23,7 @@ Esta é a referência operacional para implementar as telas, Gates, Policies e t
 - Gates e Policies nativos do Laravel são a única camada de autorização. Não existem papéis, permissões ou exceções editáveis por interface.
 - O Activity Log registra alterações relevantes. Discente e supervisor não o consultam; os demais o consultam somente quando a Policy do processo autorizar.
 - A tela de auditoria e o histórico de e-mails são compartilhados por Administrador do Sistema e Setor de Estágio com vínculo ativo selecionado. O Setor consulta somente o histórico dos recursos locais já gerenciados por suas Policies: campus, cursos, contas e vínculos permitidos, além dos e-mails de cadastro e alterações ligados ao campus. Os demais perfis e fluxos operacionais não recebem acesso automaticamente.
-- Notificação interna e e-mail são canais diferentes. Quem possui conta recebe ambos quando for destinatário elegível; o Setor de Estágio recebe seu resumo operacional somente dentro do sistema.
+- Notificação interna e e-mail são canais diferentes. Quem possui conta recebe ambos quando for destinatário elegível; o Setor de Estágio recebe seu resumo operacional somente dentro do sistema. Quando a mesma pessoa atua como Coordenador e Orientador de um estágio, avisos relativos à orientação usam o vínculo de Orientador.
 - Informações privadas, inclusive prova de emancipação, nunca entram em e-mail, documento gerado ou Activity Log detalhado. O acesso depende de necessidade funcional explícita.
 
 ## Resumo de fronteiras
@@ -65,9 +65,9 @@ Mantém a estrutura institucional global. Seu vínculo pode não possuir campus 
 
 Cadastro de conta, novo vínculo, troca de e-mail de login, desativação e exclusão enviam os avisos previstos, com destinatários deduplicados. Edição de matrícula, e-mail do vínculo ou campos profissionais não envia convite; reativação de vínculo exige confirmação e não envia novo convite. Mudanças de conta, vínculo e campus registram autoria do vínculo ativo no Activity Log; senhas não são registradas. O Administrador do Sistema consulta campi, contas com vínculos administrativos e vínculos dos tipos Administrador do Sistema e Setor de Estágio na tela de auditoria. A tela de e-mails usa o contexto do registro afetado, não apenas o endereço destinatário, e mostra conteúdo salvo e tentativas. Ambas exigem o vínculo ativo selecionado e excluem atividades operacionais de estágios, documentos, concedentes e demais registros fora do escopo. Campus desativado só pode ser reativado, sem alterar vínculos ou processos.
 
-### Controles a implementar
+### Controles de autorização implementados
 
-`CampusPolicy` cobre as operações de campus e exige o vínculo ativo selecionado. `UserPolicy` e `AffiliationPolicy` autorizam a administração global pelo Administrador do Sistema e a gestão local pelo Setor de Estágio, sem `Gate::before` global. O vínculo selecionado na sessão não pode ser desativado nem excluído. Outros vínculos da própria conta podem ser geridos dentro das permissões e do escopo correspondentes; operações de encerramento exigem senha e confirmação. As gravações usam controllers, Form Requests e Actions transacionais; as interfaces, CoursePolicy e InternshipTypePolicy estão implementadas para o Setor de Estágio; os demais fluxos operacionais continuam pendentes.
+`CampusPolicy`, `UserPolicy`, `AffiliationPolicy` e as Policies específicas autorizam administração global ou local conforme vínculo ativo, campus, curso e relação com o registro. O vínculo selecionado na sessão não pode ser desativado nem excluído. Outros vínculos da própria conta podem ser geridos dentro das permissões e do escopo correspondentes; operações de encerramento exigem senha e confirmação. Controllers, Form Requests e Actions transacionais protegem gravações administrativas e os fluxos de estágio. A validação automatizada permanece pendente; funcionalidades ainda não implementadas estão indicadas nas fases correspondentes.
 
 ## Setor de Estágio
 
@@ -77,8 +77,8 @@ Cadastro de conta, novo vínculo, troca de e-mail de login, desativação e excl
 
 ### Ações permitidas
 
-- consultar e editar nome, CNPJ, endereço, telefone, representante legal e seguro do próprio campus ativo pela tela Meu campus;
-- listar, cadastrar, consultar, editar, desativar, reativar e excluir cursos sem referências do próprio campus; coordenadores são opcionais, ativos, distintos, do tipo Coordenador e do mesmo campus;
+- consultar e editar nome, CNPJ, endereço, telefone, e-mail institucional do Setor, representante legal e seguro do próprio campus ativo pela tela Meu campus;
+- listar, cadastrar, consultar, editar, desativar, reativar e excluir cursos sem referências do próprio campus; informar o e-mail institucional obrigatório da Coordenação; coordenadores são opcionais, ativos, distintos, do tipo Coordenador e do mesmo campus;
 - listar e consultar contas e vínculos do próprio campus pela área Usuários; identificar contas externas ou sem vínculo apenas por CPF no cadastro;
 - cadastrar vínculos de qualquer tipo exceto Administrador do Sistema no campus ativo, preservando os dados de contas existentes;
 - editar matrícula e e-mail dos vínculos locais, incluindo os próprios, e dados profissionais opcionais de supervisor, que não possui matrícula;
@@ -104,7 +104,7 @@ Cadastro de conta, novo vínculo, troca de e-mail de login, desativação e excl
 - não recebe campus ou escopo livres na gestão de tipos; o campus é derivado do curso, e mudanças do catálogo preservam os snapshots dos estágios formalizados;
 - não edita a resposta enviada pelo discente: devolve e indica as seções que podem ser corrigidas;
 - não edita conteúdo de avaliação do supervisor: somente aprova ou devolve;
-- não altera jornada de modo direto ou temporário. Mudança de carga exige documento de aditivo e nova vigência apenas após assinaturas conferidas;
+- pode editar a jornada atual antes da liberação e a previsão é recalculada; após a liberação, a edição não reescreve a jornada pactuada. A emissão de aditivo existe, mas a criação de uma nova vigência após suas assinaturas ainda não está integrada;
 - não conclui estágio, cancela documento ou abre correção por automação temporal; essas decisões são manuais;
 - não acessa provas privadas de emancipação fora da análise da solicitação nem divulga seus dados em comunicação ou documento.
 
@@ -112,7 +112,9 @@ Cadastro de conta, novo vínculo, troca de e-mail de login, desativação e excl
 
 Recebe no sistema um resumo diário agrupado por campus e destinatário das solicitações pendentes. O resumo diário de eventos operacionais dos estágios ainda está planejado. Suas decisões e mudanças registram vínculo responsável, motivo e efeitos no Activity Log. As telas de Logs aplicam o campus do vínculo ativo a cada requisição, inclusive ao trocar de contexto ou acessar diretamente um evento. Autor e destinatário não concedem acesso a registros externos. Dados de acesso de outros administradores são protegidos; a própria conta pode consultar seus avisos de troca de e-mail mesmo quando também possui vínculo global. Avisos enviados a interessados de assinatura mantêm categorias e quantidade, nunca endereços de e-mail no log.
 
-### Controles a implementar
+### Controles implementados e validação pendente
+
+`CampusPolicy`, `CoursePolicy`, `UserPolicy`, `AffiliationPolicy` e Policies específicas do domínio limitam leitura e escrita ao vínculo ativo, campus e relação com o processo. O Setor informa o e-mail institucional do próprio campus e o e-mail institucional da Coordenação em cursos de seu campus. Actions e Forms validam os dados e registram mudanças cadastrais; avisos operacionais continuam selecionando os vínculos responsáveis. A validação automatizada e operacional permanece pendente.
 
 
 ## Coordenador de Curso
@@ -139,7 +141,7 @@ Consulta o acompanhamento acadêmico do curso vinculado. Não se confunde com o 
 
 Não possui aviso operacional recorrente definido. A emissão do atestado e eventuais consultas sensíveis autorizadas são auditáveis. Inclusão em avisos documentais ou novas responsabilidades depende de decisão explícita.
 
-### Controles a implementar
+### Implementação e validação
 
 `InternshipPolicy::viewAny`, `view` e `generateDocument` validam curso/campus e separam coordenação e Setor. `GeneratedDocumentPolicy` limita a consulta/download da coordenação aos atestados; o resolver limita os marcadores ao contexto autorizado. O Setor mantém templates, emite os demais tipos e cancela emissões ainda geradas. Cenários de curso alheio, decisão operacional e emissão sem relação válida ficam para a futura cobertura funcional, conforme [Testes automatizados](doc:testes-existentes).
 
@@ -168,7 +170,7 @@ Acompanha apenas os discentes para os quais é orientador no estágio. O escopo 
 
 Recebe notificação interna e e-mail quando selecionado para assinatura ou quando tiver ação acadêmica atribuída. Cada lançamento de nota registra autor, vínculo, valor anterior e novo; o sistema recalcula a nota consolidada conforme as regras congeladas.
 
-### Controles a implementar
+### Implementação e validação
 
 `InternshipPolicy::view` e `updateAdvisorGrades` validam a relação de orientação e o vínculo ativo selecionado. A Action revalida o vínculo e o campus em transação, limita as notas aos pesos congelados no estágio e registra a autoria. O Coordenador pode consultar as notas quando também for o orientador daquele estágio, mas não pode lançá-las.
 
@@ -199,7 +201,7 @@ Opera exclusivamente a própria solicitação e o próprio estágio, dentro do c
 
 Recebe notificação interna e e-mail sobre fatos temporais do próprio estágio, devoluções, decisões e assinatura quando selecionado. A evidência de emancipação permanece privada; o histórico registra o evento de envio e análise sem expor arquivo ou metadados.
 
-### Controles a implementar
+### Implementação e validação
 
 `InternshipRequestPolicy`, `InternshipPolicy`, `EmancipationEvidencePolicy` e `InternshipCancellationRequestPolicy` verificam posse pelo `affiliation_id`, curso, estado e seções liberadas. Testar acesso cruzado entre discentes, envio incompleto fora de `Draft`, edição após envio e leitura de Activity Log.
 
@@ -230,7 +232,7 @@ Responde pela avaliação dos estágios em que está formalmente vinculado como 
 
 Quando tiver conta, recebe notificação interna e e-mail pelos fatos que exigirem ação. O Activity Log preserva valores e transições, mas não é exposto na interface do supervisor.
 
-### Controles a implementar
+### Implementação e validação
 
 `SupervisorEvaluationPolicy` valida a relação de supervisão, estado do estágio e transição do formulário. Testar avaliação de estágio alheio, edição em `Submitted` ou `Approved`, aprovação própria, cancelamento fora dos estados permitidos e leitura do log.
 
@@ -256,7 +258,7 @@ Quando tiver conta, recebe notificação interna e e-mail pelos fatos que exigir
 
 Não há notificações operacionais definidas. Consultas a relatórios ou dados sensíveis autorizados devem registrar o vínculo e a finalidade conforme a política de auditoria a ser definida.
 
-### Controles a implementar
+### Implementação e validação
 
 `InternshipPolicy` restringe a consulta ao campus do vínculo ativo e mantém a Direção em modo somente leitura. Relatórios detalhados devem receber escopo e Policy próprios quando forem implementados.
 

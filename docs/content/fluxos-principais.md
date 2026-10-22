@@ -3,7 +3,7 @@ id: fluxos-principais
 title: Fluxos principais
 description: Jornada pública de abertura, formalização, acompanhamento e conclusão de estágios.
 type: functional-flows
-status: defined
+status: observed
 visibility: public
 tags: sge/fluxos
 related: pessoas-e-responsabilidades, ciclos-de-status, glossario
@@ -11,9 +11,9 @@ source_refs:
 diagram: fluxos-principais-jornada
 ---
 > [!info] Estado da página
-> Este é o fluxo funcional definido para o produto. As etapas e automações descritas são o comportamento-alvo; a implementação ainda está em andamento.
+> Esta página descreve os fluxos já implementados. Lacunas específicas, como registro de documentos externos, vigências formais de jornada após aditivo e avisos adicionais, permanecem nas [fases de desenvolvimento](doc:fases-de-desenvolvimento).
 
-A abertura e sua análise estão implementadas; formalização documental, liberação e demais fases continuam em andamento. Esta página apresenta o fluxo-alvo de ponta a ponta. Para saber quem atua em cada etapa, consulte [Pessoas e responsabilidades](doc:pessoas-e-responsabilidades); os status ficam em [Ciclos de status](doc:ciclos-de-status).
+Para saber quem atua em cada etapa, consulte [Pessoas e responsabilidades](doc:pessoas-e-responsabilidades); os status ficam em [Ciclos de status](doc:ciclos-de-status).
 
 ## Visão da jornada
 
@@ -45,14 +45,12 @@ Se uma informação importante precisar mudar antes da liberação, a correção
 
 O estágio inicia na data planejada depois de sua liberação. A previsão de término é calculada a partir da carga horária, da jornada, do calendário aplicável e das pausas registradas.
 
-O processo permite:
+As operações disponíveis incluem:
 
 - registrar uma pausa, com período e motivo;
-- substituir orientador ou supervisor quando autorizado;
-- formalizar alterações por aditivo; e
 - solicitar o cancelamento do estágio.
 
-Uma pausa suspende o cômputo da carga horária e atualiza a previsão de término, mas não altera a jornada. Quando uma pausa não prevista exigir formalização, o Setor de Estágio providencia o aditivo adequado.
+Uma pausa suspende o cômputo da carga horária e atualiza a previsão de término, mas não altera a jornada. O registro de novas vigências de jornada após aditivo assinado ainda não está integrado.
 
 O discente pode solicitar cancelamento, sempre informando o motivo. O Setor de Estágio analisa o pedido e trata seus efeitos sobre documentos e acompanhamentos pendentes.
 
@@ -60,7 +58,7 @@ O discente pode solicitar cancelamento, sempre informando o motivo. O Setor de E
 
 Algumas situações são atualizadas pela passagem do tempo: o SGE inicia o estágio já liberado na data planejada, registra o início de uma pausa válida e retoma o estágio quando ela termina.
 
-O sistema também avisa o discente sobre o início do estágio, pausas e a aproximação do término previsto. Esses avisos não substituem a análise humana: o sistema não confirma assinaturas, não decide cancelamentos e não conclui o estágio apenas pela chegada de uma data.
+O sistema avisa o discente sobre início, pausas e retomada; também envia avisos de domínio para eventos implementados de avaliação, assinatura, cancelamento e conclusão. O aviso de término previsto ainda não está implementado. Esses avisos não substituem a análise humana: o sistema não confirma assinaturas, não decide cancelamentos e não conclui o estágio apenas pela chegada da previsão.
 
 ## 6. Acompanhamento acadêmico e conclusão
 
@@ -85,3 +83,5 @@ O Setor também pode concluir manualmente pelo botão “Concluir estágio”, c
 As mudanças de situação são ações por botões, com confirmação e efeitos próprios; não há seletor de status. O Setor disponibiliza documentos para assinatura, confere assinaturas, libera, conclui ou cancela o estágio. O Discente pode solicitar ou retirar cancelamento; o Setor inicia análise, aprova ou recusa com justificativa. Motivos podem ser digitados ou reaproveitados do histórico autorizado do campus. Cancelar preserva documentos assinados, avaliações aprovadas e notas, encerrando documentos não assinados e avaliações pendentes. A geração automática de rescisão continua pendente do contrato de variáveis.
 
 O aviso de assinatura permite selecionar contatos elegíveis e escrever um complemento individual por destinatário. Pessoas com vínculo recebem aviso interno e e-mail; o contato cadastrado da concedente recebe somente e-mail. Não há destinatário livre. O local de assinatura é informado pelo Setor, sem plataforma fixa.
+
+Nos formulários de abertura do estágio e avaliação do supervisor, o e-mail institucional do Setor de Estágio do campus é exibido para dúvidas e pode ser copiado por um botão com confirmação em toast. O e-mail institucional da Coordenação é exibido nos dados do curso. Esses endereços servem como contatos e não alteram atualmente os destinatários das notificações.

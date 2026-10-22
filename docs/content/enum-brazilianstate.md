@@ -10,7 +10,7 @@ related: migration-01a-cities, migration-01-addresses, migration-03-campuses, mi
 source_refs: https://github.com/sge-suite/sge/blob/master/app/Enums/BrazilianState.php
 ---
 > [!success] Estado
-> A classe existe em `app/Enums/BrazilianState.php`. O cast no model `City` já está implementado; `Address` obtém a UF pelo relacionamento com a cidade, sem coluna ou cast de UF próprios. As integrações com campi e o cálculo do calendário continuam planejadas. Não há testes automatizados no repositório atualmente; a validação fica para a preparação para produção.
+> A classe existe em `app/Enums/BrazilianState.php` e está integrada ao cast de `City`. Endereços de campus, Discente e concedente obtêm a UF pelo relacionamento com a cidade do catálogo; o calendário usa a cidade do endereço histórico do local de trabalho. `Address` não mantém coluna nem cast de UF próprios. A validação funcional fica para a preparação para produção.
 
 Os valores persistidos são as siglas oficiais em maiúsculas. `label()` apresenta o nome da unidade federativa em português e `options()` serve diretamente aos campos de seleção.
 

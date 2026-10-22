@@ -49,8 +49,10 @@ erDiagram
     CAMPUSES {
         bigint id PK
         varchar name
+        varchar internship_office_email
+        varchar legal_representative_name
+        varchar legal_representative_position
         bigint address_id FK
-        bigint legal_representative_affiliation_id FK
         timestamp deactivated_at
     }
     AFFILIATIONS {

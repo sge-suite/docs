@@ -40,6 +40,8 @@ Documente comportamentos de tela quando alterarem regras do domínio, autorizaç
 
 Não marque uma fase como `completed` se seu checklist ainda tiver itens pendentes. Para uma nota de código, `implemented` pode coexistir com pendências de integração; a cobertura direcionada e as pendências de validação devem ficar explícitas.
 
+O índice de fases deve usar marcadores de checklist em todas as linhas (`[x]` para fase concluída, `[ ]` para fase em andamento) e um rótulo textual explícito, `**Concluída:**` ou `**Em andamento:**`, em cada descrição. Não misture checkboxes com títulos em negrito ou estados entre parênteses. O marcador representa o estado da fase, não apenas a existência do código; a descrição resume o que já existe e a pendência concreta.
+
 ## Frontmatter e referências de código
 
 Toda nota Markdown deve possuir `id`, `title`, `description`, `type`, `status` e `visibility`.

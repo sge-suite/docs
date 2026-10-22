@@ -10,7 +10,7 @@ related: migration-15-internships, migration-14-template-versions, enum-generate
 source_refs:
 ---
 > [!success] Estado
-> Migration, Model, factory, relações, geração, reprodução em DOCX/PDF e cancelamento de emissões geradas estão implementados. Assinaturas, avisos e registro operacional de documentos externos continuam pendentes.
+> Migration, Model, factory, relações, geração, reprodução em DOCX/PDF e cancelamento de emissões geradas estão implementados. Assinaturas manuais e avisos individualizados estão implementados; registro operacional de documentos externos continua pendente.
 
 ## Contrato
 
@@ -23,6 +23,7 @@ source_refs:
 | `type`                | [Enum — GeneratedDocumentType](doc:enum-generateddocumenttype) (`GeneratedDocumentType`).     |
 | `status`              | [Enum — GeneratedDocumentStatus](doc:enum-generateddocumentstatus) (`GeneratedDocumentStatus`). |
 | `signature_availability_location` | texto curto nullable; obrigatório ao mover documento assinável para `awaiting_signature`, com o local informado pelo Setor. |
+| `protocol_number` | texto opcional de até 255 caracteres; protocolo gerado no cadastro de cada documento no SIPAC, sem unicidade imposta pelo SGE. |
 | `snapshot`            | JSONB dos dados usados na geração; obrigatório para `sge` e nulo para `granting_party`. |
 | `generation_token`    | UUID idempotente, único para impedir duplicação por retry da mesma ação.        |
 | `output_filename` / `template_sha256` | nome entregue e hash do template usado; não são caminho de arquivo final. |
@@ -74,3 +75,9 @@ Um aditivo é um `generated_documents` com `type = addendum`, versão de templat
 - [GeneratedDocumentType](doc:enum-generateddocumenttype)
 - [GeneratedDocumentStatus](doc:enum-generateddocumentstatus)
 - [GeneratedDocumentOrigin](doc:enum-generateddocumentorigin)
+
+## Número de protocolo por documento
+
+O protocolo é opcional e independente para termo de compromisso, aditivo e demais documentos. Pode ser informado ao disponibilizar para assinatura ou pela ação “Editar protocolo”, sem mudar o status nem enviar avisos. A manutenção exige Setor ativo selecionado do campus e curso/campus ativos, inclusive para documento assinado ou estágio concluído; documento cancelado preserva o protocolo. Alterações ficam no Activity Log. Protocolo não integra o snapshot nem reescreve DOCX/PDF anteriores.
+
+Em 21/10/2026, uma migration temporária adicionou o campo aos documentos e removeu o campo dos estágios; não havia protocolos preenchidos na coluna antiga. A migration foi executada pelo Sail e removida; as migrations originais foram alinhadas, sem recriar tabelas.

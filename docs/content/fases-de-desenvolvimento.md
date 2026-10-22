@@ -20,10 +20,10 @@ Esta lista registra a sequência e o estado atuais. A fundação de dados está 
 - **[04 — Integração de e-mail](doc:fase-04-integracao-de-email) (em andamento):** backend de reserva, envio em fila, conteúdo renderizado das mensagens administrativas e consulta de e-mails compartilhada por Administrador do Sistema e Setor de Estágio, com escopos distintos, implementados; integração das notificações operacionais de domínio, outros escopos e retenção continuam pendentes.
 
 - [ ] [05 — Administração](doc:fase-05-administracao) — gestão global de campi, contas/vínculos administrativos e painel do Administrador do Sistema concluídos; Meu campus, cursos, usuários/vínculos locais e consultas locais de Logs implementados para o Setor de Estágio; tipos de estágio e demais operações administrativas pendentes.
-- [ ] [06 — Documentos](doc:fase-06-documentos) — templates e geração/reprodução DOCX/PDF implementados; concluir assinatura, avisos e documentos externos.
+- [ ] [06 — Documentos](doc:fase-06-documentos) — templates e geração/reprodução DOCX/PDF implementados; assinatura e avisos individualizados implementados; concluir documentos externos.
 - [ ] [07 — Abertura do estágio](doc:fase-07-abertura-do-estagio) — envio, análise, correções, cadastros pendentes e aceite estão implementados; falta concluir a integração documental e os requisitos de histórico do cálculo.
 - [ ] [08 — Estágio em andamento](doc:fase-08-estagio-em-andamento) — concluir cálculos, transições, notificações e schedules antes das telas correspondentes.
-- [ ] [09 — Avaliação e conclusão](doc:fase-09-avaliacao-e-conclusao) — finalizar autorização, cálculo e transições de avaliação e conclusão.
+- [ ] [09 — Avaliação e conclusão](doc:fase-09-avaliacao-e-conclusao) — autorização, cálculo, avaliação e conclusão implementados; validação funcional permanece pendente.
 
 ## Próximas entregas de backend e integração
 

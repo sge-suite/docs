@@ -11,7 +11,7 @@ source_refs: https://github.com/sge-suite/sge/blob/master/app/Enums/InternshipSt
 diagram: enum-internship-status
 ---
 > [!success] Estado
-> O enum está integrado ao Model, à migration e às telas de gestão do estágio. O schedule sincroniza início, pausa e retomada e avisa o discente quando uma dessas transições ocorre. Formalização documental, assinaturas, liberação, conclusão e cancelamento continuam fora das transições automáticas. Os estados da solicitação pertencem a `InternshipRequestStatus`, não a `internships.status`.
+> O enum está integrado ao Model, à migration e às telas de gestão do estágio. O schedule sincroniza início, pausa e retomada e avisa o discente quando uma dessas transições ocorre. Formalização documental, conferência de assinaturas, liberação, conclusão manual e cancelamento são ações por botões. Aprovar a avaliação com carga horária cumprida conclui o estágio na mesma transação. Os estados da solicitação pertencem a `InternshipRequestStatus`, não a `internships.status`.
 
 ## Contrato
 
@@ -26,7 +26,7 @@ diagram: enum-internship-status
 | `Completed`          | `completed`           | Concluído                 |
 | `Cancelled`          | `cancelled`           | Cancelado                 |
 
-Um estágio nasce quando a solicitação é aceita, inicialmente em `PendingFormalization`. Geração e download DOCX/PDF estão implementados; encaminhamento para assinatura e passagem para `AwaitingSignatures` continuam pendentes. Se uma correção de uma solicitação já aceita for devolvida ao discente, o estágio relacionado passa a `PendingCorrection` e volta a `PendingFormalization` após a aprovação da correção. Rascunho, envio, análise, pendência e recusa pertencem exclusivamente a [`InternshipRequestStatus`](doc:enum-internshiprequeststatus). O status de cada assinatura pertence a [`GeneratedDocumentStatus`](doc:enum-generateddocumentstatus), não a este enum.
+Um estágio nasce quando a solicitação é aceita, inicialmente em `PendingFormalization`. Geração e download DOCX/PDF estão implementados; encaminhar um documento principal para assinatura muda a formalização para `AwaitingSignatures`. Se uma correção de uma solicitação já aceita for devolvida ao discente, o estágio relacionado passa a `PendingCorrection` e volta a `PendingFormalization` após a aprovação da correção. Rascunho, envio, análise, pendência e recusa pertencem exclusivamente a [`InternshipRequestStatus`](doc:enum-internshiprequeststatus). O status de cada assinatura pertence a [`GeneratedDocumentStatus`](doc:enum-generateddocumentstatus), não a este enum.
 
 ## Transições iniciais
 
@@ -39,8 +39,8 @@ Um estágio nasce quando a solicitação é aceita, inicialmente em `PendingForm
 - [x] Adicionar cast em `Internship`.
 - [x] Usar o valor inicial do enum na [migration de internships](doc:migration-15-internships).
 - [x] Sincronizar início, pausa e retomada pela mesma Action chamada pelo [schedule](doc:schedules) e pelas alterações operacionais de pausa.
-- [ ] Implementar as transições documentais de formalização, assinatura e liberação.
-- [ ] Implementar as decisões de conclusão e cancelamento.
+- [x] Implementar as transições documentais de formalização, assinatura e liberação.
+- [x] Implementar as decisões de conclusão e cancelamento.
 - [ ] Testar cases, valores, rótulos e opções.
 - [ ] Testar formalização, reemissão após pendência, liberação, pausa, retomada, conclusão e cancelamento no fluxo de domínio.
 - [ ] Atualizar [Fluxos principais](doc:fluxos-principais) se as transições forem alteradas.

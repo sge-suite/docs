@@ -10,7 +10,7 @@ related: enum-internshipcancellationrequeststatus, migration-15-internships, mig
 source_refs:
 ---
 > [!success] Estado
-> Migration, Model, factory, relação e regras dos estados do pedido implementados. Os efeitos transacionais da aprovação permanecem no fluxo funcional.
+> Migration, Model, factory, relação e regras dos estados do pedido implementados. Policy, botões, efeitos transacionais, avisos e auditoria estão integrados. Geração automática de rescisão permanece pendente.
 
 ## Contrato inicial
 
@@ -26,14 +26,14 @@ source_refs:
 | `effective_date` | nullable; data efetiva do cancelamento, quando aprovada. |
 | timestamps | auditoria temporal. |
 
-O discente pode abrir o pedido quando o estágio estiver em formalização, aguardando assinatura, com pendência, liberado, em andamento ou pausado. Não pode haver dois pedidos não finais para o mesmo estágio. A solicitação não muda o estágio automaticamente: o vínculo `InternshipOffice` analisa e decide em transação. Abertura, retirada e decisão são auditadas no `activity_log`, que registra o autor sem duplicar FKs na tabela. Os efeitos serão auditados no fluxo.
+O discente pode abrir o pedido quando o estágio estiver em formalização, aguardando assinatura, com pendência, liberado, em andamento ou pausado. Não pode haver dois pedidos não finais para o mesmo estágio. A solicitação não muda o estágio automaticamente: o vínculo `InternshipOffice` analisa e decide em transação. Abertura, retirada e decisão são auditadas no `activity_log`, que registra o autor sem duplicar FKs na tabela. As alterações e os efeitos documentais são auditados no mesmo fluxo.
 
 ## Efeitos da aprovação
 
 - grava `effective_date` e muda o estágio para `Cancelled`;
 - cancela documentos `Generated` ou `AwaitingSignature`, com motivo e autoria;
 - preserva documentos já `Signed` como histórico; não os reclassifica como cancelados;
-- gera um termo de rescisão versionado quando existir TCE assinado ou quando o Setor indicar necessidade; a data e justificativa vêm deste pedido;
+- requisito pendente: gerar termo de rescisão versionado quando aplicável; `RESCISAO_*` ainda são variáveis reservadas sem contrato implementado;
 - encerra avaliações `Draft`, `Submitted` ou `Returned` como `Cancelled`; avaliações aprovadas e notas já lançadas permanecem históricas, mas não produzem conclusão;
 - preserva jornadas, pausas, snapshots, notas e logs; não calcula nota final faltante nem marca o estágio como concluído;
 - notifica discente, supervisor, orientador e Setor conforme o contexto.
@@ -49,10 +49,14 @@ Estágio `Completed` não é cancelado por este fluxo. Correção administrativa
 - [x] Definir preservação de carga horária, avaliações e notas sem conclusão.
 - [x] Criar migration, Model, factory e relação com estágio.
 - [x] Validar no Model os estados, motivos, datas e ausência de outro pedido em análise.
-- [ ] Criar Policy, efeitos transacionais, notificações e testes do fluxo.
+- [x] Criar Policy, efeitos transacionais e notificações do fluxo.
+- [ ] Implementar geração automática de termo de rescisão.
+- [ ] Validar funcionalmente concorrência, retirada e decisão do fluxo.
 
 ## Dependências
 
 - [internships](doc:migration-15-internships)
 - [affiliations](doc:migration-04-affiliations)
 - [activity_log](doc:migration-base-04-activity-log)
+
+O Setor pode cancelar diretamente com motivo e data efetiva; nesse caso, cria um registro aprovado com a mesma autoria de Activity Log. Pedidos finais são imutáveis. Na recusa há justificativa obrigatória. Motivos anteriores aprovados e cancelamentos documentais do próprio campus aparecem no componente de escolher ou criar; texto novo continua permitido.

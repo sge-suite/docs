@@ -11,7 +11,7 @@ source_refs: https://github.com/sge-suite/sge/blob/master/app/Actions/GenerateIn
 ---
 ## Escopo implementado
 
-A aplicação mantém templates privados e gera documentos dos tipos `main`, `addendum` e `orientation_certificate` a partir da versão vigente validada. Cada emissão, inclusive de atestado, cria um registro com dados congelados e referência à versão usada. O download oferece DOCX, selecionado por padrão, ou PDF convertido diretamente do DOCX. Os arquivos finais são temporários; o acervo contém originais dos templates e registros das emissões. Assinaturas, avisos aos interessados, registro operacional de documentos externos e liberação do estágio continuam pendentes.
+A aplicação mantém templates privados e gera documentos dos tipos `main`, `addendum` e `orientation_certificate` a partir da versão vigente validada. Cada emissão, inclusive de atestado, cria um registro com dados congelados e referência à versão usada. O download oferece DOCX, selecionado por padrão, ou PDF convertido diretamente do DOCX. Os arquivos finais são temporários; o acervo contém originais dos templates e registros das emissões. Assinaturas, avisos aos interessados e liberação do estágio estão implementados por botões; registro operacional de documentos externos continua pendente.
 
 PHPWord 1.4 fornece a escrita dos trechos OOXML preenchidos. O motor preserva o pacote original em vez de reconstruir o documento inteiro. A conversão PDF usa LibreOffice no serviço privado Gotenberg 8.38.1 do Compose. A visualização HTML do original continua separada da geração, aproximada e sem preencher os marcadores.
 
@@ -1499,18 +1499,7 @@ A representação é uma lista de dois trechos com `text` e `italic`, nunca HTML
 
 ### `${ESTAGIO_PROTOCOLO_SIGAA}`
 
-| Atributo | Contrato |
-| --- | --- |
-| Descrição | Protocolo do SIGAA |
-| Tipo | string |
-| Origem | internships.protocol_number |
-| Snapshot | Preservar internship_type_snapshot; congelar valores operacionais e vigência usada na emissão. Dinheiro decimal, nunca float. |
-| Formato | texto |
-| Sensibilidade | acadêmico |
-| Condição | Usar vigência correspondente ao documento; remuneração somente quando aplicável. Previsão não equivale a término efetivo. |
-| Vazio | Se o marcador estiver presente, valor ausente bloqueia a emissão, salvo as exceções de vazio documentadas no fluxo; não se presume zero. |
-| Disponibilidade | Disponível para template |
-| Exemplo fictício | PROTOCOLO-EXEMPLO |
+Marcador antigo, indisponível para novas emissões a partir da revisão 8 do catálogo. O protocolo não pertence ao estágio nem é retornado pelo SIGAA: cada documento recebe seu protocolo no cadastro no SIPAC, depois da geração. O campo opcional `generated_documents.protocol_number` é mantido pelo Setor no registro documental e pode acompanhar o aviso de assinatura. Não há novo marcador de protocolo para a geração inicial. Valores e substituições de snapshots históricos são preservados para reprodução do documento original.
 
 ### `${ESTAGIO_PERIODO}`
 

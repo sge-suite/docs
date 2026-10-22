@@ -44,7 +44,6 @@ O estágio guarda `student_affiliation_id` como FK direta do vínculo discente a
 | `is_remunerated`                   | booleano que indica se o estágio possui remuneração.                                |
 | `grant_value`                      | decimal(10,2) nullable; bolsa mensal quando remunerado.                             |
 | `transportation_allowance`         | decimal(10,2) nullable; auxílio-transporte quando aplicável.                        |
-| `protocol_number`                  | nullable; protocolo retornado pelo SIGAA.                                          |
 | `observations`                     | nullable; informação complementar.                                                 |
 | `supervisor_grade`                 | decimal nullable, calculado a partir da avaliação aprovada e dos conceitos do snapshot. |
 | `report_grade`                     | decimal nullable, nota lançada pelo orientador quando o peso respectivo for maior que zero. |
@@ -100,3 +99,5 @@ A base local, importação anual e gestão estão implementadas em [Calendário 
 Correções anteriores à liberação deixam o estágio PendingCorrection e preservam seus dados até o novo aceite. A aprovação aplica somente os grupos devolvidos e seus derivados ao mesmo estágio e retorna a PendingFormalization. Documentos não são gerados, liberados ou sobrescritos por esta Action; geração/reemissão e o restante do ciclo ficam pendentes. O cálculo inicial usa o calendário local conferido, sem representar a implementação completa do recálculo posterior de pausas/aditivos ou da base histórica reproduzível de D-019.
 
 A devolução manual antes da liberação também atende AwaitingSignatures: documentos Generated/AwaitingSignature são cancelados com o motivo, mantendo seus snapshots e os documentos Signed como histórico. O novo aceite volta a PendingFormalization e exige nova geração documental pela integração posterior.
+
+O número de protocolo pertence a cada documento, não ao estágio. O campo opcional está em `generated_documents.protocol_number`; o número fica disponível no cadastro externo do documento. Não identifica o discente.

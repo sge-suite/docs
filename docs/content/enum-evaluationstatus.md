@@ -30,7 +30,7 @@ diagram: enum-evaluation-status
 - Somente o supervisor vinculado ao estágio pode preencher e salvar o `Draft` ou o `Returned`.
 - `Draft` aceita preenchimento parcial. Nos demais estados, todos os campos obrigatórios para o ramo condicional escolhido devem estar válidos; ramos não selecionados e pareceres opcionais permanecem nulos.
 - Depois da transição para `Submitted`, a resposta fica bloqueada. `Returned` reabre a mesma linha, permitindo ao supervisor editar todos os campos e reenviá-la.
-- A análise pertence ao vínculo `AffiliationType::InternshipOffice`. O vínculo `Coordinator` continua representando o coordenador de curso e não concede essa ação automaticamente. A avaliação não guarda FK do revisor; o Activity Log já registra o vínculo ativo como *causer*. A autorização e a interface do fluxo de revisão ainda estão pendentes.
+- A análise pertence ao vínculo `AffiliationType::InternshipOffice`. O vínculo `Coordinator` continua representando o coordenador de curso e não concede essa ação automaticamente. A avaliação não guarda FK do revisor; o Activity Log já registra o vínculo ativo como *causer*. A autorização e a interface de revisão estão implementadas.
 - O Setor de Estágio aprova ou devolve, mas não altera as respostas fornecidas pelo supervisor. O supervisor pode cancelar um envio `Submitted` ou `Returned`; o cancelamento exige motivo.
 - Não há exclusão física. Ações, valores anteriores/novos e transições são preservados no `activity_log`, que não é exibido ao supervisor.
 
@@ -41,7 +41,7 @@ O envio mais recente não substitui imediatamente uma avaliação já vigente. A
 - Um novo `Submitted` permanece apenas como candidato enquanto aguarda análise.
 - Um `Returned` nunca é usado no cálculo.
 - A avaliação vigente deverá ser referenciada por `internships.current_supervisor_evaluation_id` ou mecanismo equivalente com garantia de unicidade.
-- A aprovação da avaliação, isoladamente, não conclui o estágio; a conclusão ocorre quando a carga horária integral é confirmada. Documentos e notas permanecem como registros próprios do processo.
+- A aprovação com `hours_requirement_met = true` conclui o estágio automaticamente na mesma transação, após selecionar a avaliação vigente e recalcular as notas. Um pedido de cancelamento pendente deve ser decidido antes dessa aprovação. Documentos e notas permanecem como registros próprios do processo.
 
 ## Liberação e notificação
 

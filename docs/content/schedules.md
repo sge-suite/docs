@@ -26,7 +26,7 @@ O sincronizador ignora campi desativados na seleção e confere o estado novamen
 | --- | --- | --- | --- |
 | `internships:sync-execution-status` | diariamente, 00:05 | Em campus ativo, move `Released` para `InProgress` quando a data planejada chegou e ajusta para `Paused` ou `InProgress` conforme pausas vigentes. Notifica o discente quando o status muda. | Não conclui, cancela nem recalcula a previsão. |
 | `holidays:prepare` | diariamente, 03:00 | Importa feriados nacionais e estaduais e gera feriados municipais por recorrência para o ano atual e os dois seguintes. | Não recalcula estágios. |
-| `internship-requests:notify-office` | diariamente, 08:00 | Envia ao Setor o resumo interno das solicitações pendentes, agrupado por campus e destinatário. | Não resume eventos da execução dos estágios nem envia e-mail ao Setor. |
+| `internship-requests:notify-office` | diariamente, 08:00 | Envia ao Setor o resumo interno das solicitações e pedidos de cancelamento pendentes, agrupado por campus e destinatário. | Não resume eventos da execução dos estágios nem envia e-mail ao Setor. |
 
 As três rotinas estão registradas em `routes/console.php`, no fuso institucional, com `onOneServer()` e `withoutOverlapping()`. Em produção, o servidor executa `php artisan schedule:run` a cada minuto; `schedule:work` é a alternativa de desenvolvimento local.
 
@@ -38,7 +38,7 @@ As três rotinas estão registradas em `routes/console.php`, no fuso institucion
 
 O aviso ao discente de término previsto e o resumo diário dos eventos operacionais do Setor não estão implementados nem registrados no scheduler. A regra de aviso precisa ser revista: em muitos casos, quando faltam sete dias para a previsão, o estágio já terminou na prática. O prazo e o evento que devem disparar o aviso serão definidos antes de criar essa rotina.
 
-O resumo diário futuro deverá reunir eventos de início, pausa e retomada e as pendências de execução relevantes para o Setor. O resumo existente de `internship-requests:notify-office` cobre somente solicitações pendentes.
+O resumo diário futuro deverá reunir eventos de início, pausa e retomada e as pendências de execução relevantes para o Setor. O resumo existente de `internship-requests:notify-office` cobre somente solicitações e pedidos de cancelamento pendentes.
 
 ## Regra de sincronização de execução
 

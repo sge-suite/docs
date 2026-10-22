@@ -10,7 +10,7 @@ related: migration-16-generated-documents, fluxos-principais
 source_refs: https://github.com/sge-suite/sge/blob/master/app/Enums/GeneratedDocumentStatus.php
 ---
 > [!success] Estado
-> Implementado em `app/Enums/GeneratedDocumentStatus.php`. O cast em `GeneratedDocument` e a Migration 16 já existem; as guardas de transição do fluxo ainda estão pendentes.
+> Implementado em `app/Enums/GeneratedDocumentStatus.php`. O cast em `GeneratedDocument` e a Migration 16 já existem; as guardas de transição e botões do fluxo estão implementados. Assinados/cancelados são finais.
 
 ## Contrato
 
@@ -36,7 +36,7 @@ Quando a data de início vencer antes da assinatura, o documento continua `Await
 - [ ] Cobrir cases, valores, rótulos e opções com teste unitário.
 - [x] Adicionar cast em `GeneratedDocument`.
 - [x] Usar o valor inicial do enum na [migration de generated_documents](doc:migration-16-generated-documents).
-- [ ] Implementar guardas para transições e documentos já assinados.
-- [ ] Exigir local de disponibilização e validar os interessados selecionados na transição para `AwaitingSignature`.
+- [x] Implementar guardas para transições e documentos já assinados.
+- [x] Exigir local de disponibilização e validar os interessados selecionados na transição para `AwaitingSignature`.
 - [ ] Testar geração, assinatura, cancelamento, reemissão e documento externo na integração documental.
 - [ ] Atualizar [fluxo de documentos](doc:fluxos-principais#3-analise-e-formalizacao).

@@ -15,7 +15,7 @@ As telas do Setor para editar o estágio, consultar a previsão e manter exceç�
 
 ## Checklist
 
-- [ ] Liberar o estágio pelo Setor de Estágio somente após requisitos documentais e assinaturas.
+- [x] Liberar o estágio pelo Setor de Estágio somente após requisitos documentais e assinaturas.
 - [x] Criar `internships:sync-execution-status`, diário e idempotente, para iniciar estágio liberado, pausar execução e retomar pausa encerrada.
 - [ ] Permitir que o Setor decida manualmente se registra a assinatura, cancela o documento ou abre correção da nova data após analisar o vencimento documental.
 - [x] Registrar `internships:sync-execution-status` em `routes/console.php` às 00:05 com `onOneServer` e `withoutOverlapping`.
@@ -30,8 +30,8 @@ As telas do Setor para editar o estágio, consultar a previsão e manter exceç�
 - [ ] Implementar substituição autorizada de orientador/supervisor.
 - [ ] Preservar pessoa anterior e motivo da substituição.
 - [ ] Gerar aditivo pelo fluxo de documentos.
-- [ ] Dar ao aditivo ciclo próprio de assinatura.
-- [ ] Implementar cancelamento com permissão, motivo, Activity Log e notificações.
+- [x] Dar ao aditivo ciclo próprio de assinatura.
+- [x] Implementar cancelamento com permissão, motivo, Activity Log e notificações.
 - [x] Notificar o discente, dentro do sistema e por e-mail após commit, quando o estágio inicia, pausa ou retoma.
 - [ ] Definir e implementar o aviso de término previsto. O prazo anterior de sete dias foi adiado para revisão.
 - [ ] Criar resumo diário interno, por campus e destinatário do Setor de Estágio, agrupando eventos temporais e pendências sem enviar e-mail ao Setor.
@@ -54,3 +54,7 @@ As telas do Setor para editar o estágio, consultar a previsão e manter exceç�
 ## Dependência de calendário
 
 A base local, importação anual e gestão estão implementadas em [Calendário de feriados](doc:calendario-de-feriados). O cálculo da previsão considera feriados persistidos, exceções, pausas e regras copiadas para o estágio, sem chamada externa durante consultas. Alterar o tipo de estágio não muda o snapshot de regras já salvo no estágio. Alterações relevantes do próprio estágio recalculam a data prevista. Ainda falta preservar uma versão reproduzível de todas as entradas e datas consideradas em cada cálculo; o Activity Log sozinho não congela esses dados.
+
+## Liberação e cancelamento implementados
+
+“Liberar estágio” exige todos os documentos principais vigentes assinados, grava data/vínculo e sincroniza imediatamente a execução conforme a data e as pausas. “Concluir estágio” exige confirmação da carga integral. O cancelamento pode partir do Discente ou ser iniciado pelo Setor; revisão, retirada e decisão são botões separados. A decisão exige motivo e data efetiva não futura. Cancela documentos não assinados e avaliações pendentes, preservando assinados, aprovadas, notas e histórico. Os envolvidos recebem avisos internos e e-mails personalizados por papel. A listagem do Setor identifica pedidos pendentes e permite filtrá-los. Pedidos de cancelamento pendentes entram no resumo diário interno do Setor, sem e-mail ao Setor. O resumo de eventos temporais e a geração automática de rescisão permanecem pendentes.

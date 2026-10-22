@@ -124,14 +124,14 @@ Consulta o acompanhamento acadêmico do curso vinculado. Não se confunde com o 
 ### Ações permitidas
 
 - consultar estágios dos cursos que referenciam o vínculo como coordenador titular ou substituto e os estágios de seus próprios orientandos no campus;
-- consultar informações acadêmicas do estágio, sem permissão para editar o processo;
+- consultar informações acadêmicas do estágio, incluindo os dados e as observações da avaliação aprovada vigente; vê os critérios e sugestões à instituição, sem permissão para editar o processo;
 - emitir o atestado de orientação, exclusivamente como titular/substituto referenciado pelo curso no próprio campus, e baixar novamente suas emissões autorizadas;
 - escolher DOCX (padrão) ou PDF no modal, sem selecionar template; o sistema usa a versão vigente validada disponível;
 - exercer apenas outras ações acadêmicas que sejam atribuídas explicitamente por decisão futura e Policy correspondente.
 
 ### Limites e proibições
 
-- não analisa nem aprova solicitações, documentos, assinaturas, cancelamentos ou avaliações do supervisor;
+- não analisa, aprova ou devolve solicitações, documentos, assinaturas, cancelamentos ou avaliações do supervisor; a consulta da avaliação vigente não concede acesso à revisão;
 - não lança notas de relatório ou apresentação, que pertencem ao orientador responsável;
 - não consulta estágio de outro curso pelo simples fato de ser coordenador e não edita vínculo, campus ou tipo sem vínculo administrativo próprio.
 
@@ -152,13 +152,14 @@ Acompanha apenas os discentes para os quais é orientador no estágio. O escopo 
 ### Ações permitidas
 
 - consultar dados e andamento dos próprios orientandos necessários ao acompanhamento;
+- consultar dados de formação e atuação e observações da avaliação aprovada vigente, sem acesso aos critérios ou às sugestões à instituição;
 - lançar ou alterar, quando o status permitir, as notas de relatório e apresentação na escala congelada do tipo de estágio;
 - acompanhar a nota consolidada calculada pelo sistema;
 - receber avisos de documento disponível para assinatura quando selecionado pelo Setor e alertas que exijam ação sua.
 
 ### Limites e proibições
 
-- não aprova nem edita a avaliação respondida pelo supervisor;
+- não aprova nem edita a avaliação respondida pelo supervisor ou seus critérios e sugestões;
 - não altera a nota do supervisor, os pesos, os conceitos ou a fórmula congelada;
 - não conclui, libera, pausa, cancela ou formaliza o estágio;
 - não consulta orientandos de outro vínculo nem o Activity Log fora do necessário e autorizado.
@@ -212,8 +213,8 @@ Responde pela avaliação dos estágios em que está formalmente vinculado como 
 
 - atualizar cargo/função, curso de formação, nível e tempo de experiência na função e telefone compartilhado na aba Dados pessoais, exclusivamente no contexto Supervisor;
 - consultar os próprios estágios e avaliações liberadas;
-- criar ou continuar a avaliação em `Draft`, com salvamento progressivo;
-- enviar a avaliação completa como `Submitted`;
+- continuar a avaliação em `Draft` criada pela solicitação explícita do Setor, com salvamento parcial; não iniciar avaliações por conta própria;
+- enviar como `Submitted`: em “Não”, somente horas faltantes positivas até a carga do snapshot; em “Sim”, qualificação e dez critérios completos, com comentários opcionais;
 - editar integralmente a mesma avaliação quando estiver `Returned` e reenviá-la;
 - cancelar a própria avaliação `Submitted` ou `Returned`, com motivo, preservando o registro;
 - receber aviso para preencher ou corrigir avaliação e, quando selecionado, aviso de documento disponível para assinatura.
@@ -261,7 +262,7 @@ Não há notificações operacionais definidas. Consultas a relatórios ou dados
 
 ## Configuração própria de dados pessoais — implementada
 
-`UserPersonalDataPolicy`, `UpdateOwnPersonalDataRequest` e `UpdateOwnPersonalData` limitam a edição à pessoa autenticada com vínculo ativo selecionado de Discente ou Supervisor. A aba e o seletor de cidade reautorizam requisições Livewire. Vários vínculos não somam permissões: Discente não altera dados profissionais; Supervisor não altera RG, nascimento ou endereço. O perfil é único por conta, o telefone é compartilhado e campus inativo não bloqueia esta configuração. Campos omitidos permanecem; opcionais podem ser limpos explicitamente. RG preenchido exige órgão e emissão; datas futuras, telefone inválido, cidade fora do catálogo e CEP inválido são recusados. Mudanças de endereço preservam propriedade exclusiva e referências históricas; nenhuma snapshot de estágio é editada. Eventos normais dos Models registram mudanças reais com autoria do vínculo, sem evento genérico nem ampliação de consulta ao Activity Log. As exigências de envio dos fluxos de estágio e avaliação continuam pendentes.
+`UserPersonalDataPolicy`, `UpdateOwnPersonalDataRequest` e `UpdateOwnPersonalData` limitam a edição à pessoa autenticada com vínculo ativo selecionado de Discente ou Supervisor. A aba e o seletor de cidade reautorizam requisições Livewire. Vários vínculos não somam permissões: Discente não altera dados profissionais; Supervisor não altera RG, nascimento ou endereço. O perfil é único por conta, o telefone é compartilhado e campus inativo não bloqueia esta configuração. Campos omitidos permanecem; opcionais podem ser limpos explicitamente. RG preenchido exige órgão e emissão; datas futuras, telefone inválido, cidade fora do catálogo e CEP inválido são recusados. Mudanças de endereço preservam propriedade exclusiva e referências históricas; nenhuma snapshot de estágio é editada. Eventos normais dos Models registram mudanças reais com autoria do vínculo, sem evento genérico nem ampliação de consulta ao Activity Log. O envio da avaliação exige os campos do ramo da carga horária escolhido, sem alterar perfil ou snapshots.
 
 ## Mapa de implementação e validação antes da produção
 
@@ -294,3 +295,9 @@ Somente o Administrador do Sistema ativo selecionado cadastra, altera, exclui/re
 ## Entrega da abertura — 16/10/2026
 
 As Policies de solicitação e comprovante e as Actions de envio/análise/correção estão implementadas. Discente usa Minhas solicitações; Setor usa Analisar solicitações do próprio campus e associa os cadastros que criou pela gestão existente. O envio exige dados pessoais completos; salvar pelo formulário atualiza a configuração compartilhada e o envio congela um snapshot. O Discente escolhe um orientador ativo do campus; o Setor pode confirmar ou trocar o vínculo no aceite. Correções e reenvios preservam a mesma solicitação; o estágio fica inalterado até nova aprovação. Não há acesso do Discente ao Activity Log.
+
+## Avaliação do supervisor implementada
+
+A lista e o formulário exigem vínculo ativo selecionado de Supervisor responsável pelo estágio e liberação prévia, ou Setor no campus do estágio. O Setor solicita em estágio formalmente liberado, em `Released`, `InProgress` ou `Paused`, com curso/campus e supervisor ativos; aprova/devolve sem editar respostas. Outros vínculos não herdam formulário/revisão. “Não” não admite aprovação nem grava qualificação, critérios ou comentários. A devolução tem justificativa e reabre o mesmo registro; cancelamento pelo supervisor preserva respostas e exige motivo. Aprovação usa a mais recente por envio/ID, recalcula notas transacionalmente e conclui o estágio quando a carga horária está cumprida. Notificações seguem após commit ao vínculo responsável; envios também avisam o Setor do campus.
+
+No detalhe do estágio, o Setor consulta todas as avaliações e abre sua análise. Coordenação e Orientador consultam apenas a avaliação aprovada vigente dos estágios de seu escopo. A Coordenação também vê os critérios, valores e sugestões à instituição; o Orientador vê dados profissionais e observações, sem critérios ou sugestões. Discente e Direção de Ensino não veem essa avaliação. A consulta não autoriza decisão nem alteração da resposta.

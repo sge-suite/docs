@@ -64,12 +64,24 @@ O sistema também avisa o discente sobre o início do estágio, pausas e a aprox
 
 ## 6. Acompanhamento acadêmico e conclusão
 
-No momento adequado, o supervisor recebe a avaliação do discente. Ele pode preenchê-la aos poucos, enviá-la e corrigi-la se o Setor de Estágio a devolver. O orientador registra as notas acadêmicas sob sua responsabilidade.
+O Setor de Estágio solicita explicitamente a avaliação no detalhe do estágio formalmente liberado, em `Released`, `InProgress` ou `Paused`, com curso/campus e supervisor ativos. A liberação é registrada no estágio e, após commit, o vínculo supervisor recebe aviso interno e e-mail. A avaliação passa a aparecer na lista desse vínculo; o supervisor não inicia uma avaliação por conta própria.
 
-O estágio é concluído quando a carga horária integral é cumprida. A avaliação e as notas são registros acadêmicos que acompanham o processo, mas não bloqueiam essa conclusão.
+A primeira pergunta é “A carga horária exigida para este estágio foi cumprida?”. Em “Não”, o supervisor informa somente quantas horas faltam, com valor positivo até a carga exigida no snapshot. Qualificação, critérios e comentários não são exibidos nem gravados. Essa resposta pode ser enviada, mas o Setor deve devolvê-la com justificativa e não pode aprová-la. A devolução reabre o mesmo formulário; posteriormente ele pode ser reenviado como “Sim”.
+
+Em “Sim”, o supervisor confirma ou edita a cópia dos dados profissionais de referência, sem alterar perfil ou snapshot, e responde aos dez critérios com escala e pesos congelados no estágio. Os comentários são opcionais. O envio congela a resposta. O Setor do campus aprova ou devolve sem editar respostas; o supervisor pode cancelar uma resposta enviada ou devolvida com motivo, preservando seu histórico.
+
+A aprovação seleciona em transação a avaliação aprovada mais recente e recalcula nota do supervisor e consolidada com `InternshipGradeCalculator`. Respostas pendentes, devolvidas e canceladas preservam a vigente anterior. A aprovação com `hours_requirement_met = true` conclui o estágio automaticamente na mesma transação, após selecionar a avaliação vigente e recalcular as notas. Um pedido de cancelamento pendente deve ser decidido antes dessa aprovação. O orientador continua registrando as notas acadêmicas sob sua responsabilidade.
+
+O Setor também pode concluir manualmente pelo botão “Concluir estágio”, confirmando o cumprimento integral da carga horária. A avaliação e as notas são registros acadêmicos que acompanham o processo, mas não bloqueiam essa conclusão.
 
 ## Continue a leitura
 
 - [Pessoas e responsabilidades](doc:pessoas-e-responsabilidades) para conhecer os papéis.
 - [Ciclos de status](doc:ciclos-de-status) para entender as situações do processo.
 - [Glossário](doc:glossario) para consultar termos do SGE.
+
+## Operações disponíveis na gestão
+
+As mudanças de situação são ações por botões, com confirmação e efeitos próprios; não há seletor de status. O Setor disponibiliza documentos para assinatura, confere assinaturas, libera, conclui ou cancela o estágio. O Discente pode solicitar ou retirar cancelamento; o Setor inicia análise, aprova ou recusa com justificativa. Motivos podem ser digitados ou reaproveitados do histórico autorizado do campus. Cancelar preserva documentos assinados, avaliações aprovadas e notas, encerrando documentos não assinados e avaliações pendentes. A geração automática de rescisão continua pendente do contrato de variáveis.
+
+O aviso de assinatura permite selecionar contatos elegíveis e escrever um complemento individual por destinatário. Pessoas com vínculo recebem aviso interno e e-mail; o contato cadastrado da concedente recebe somente e-mail. Não há destinatário livre. O local de assinatura é informado pelo Setor, sem plataforma fixa.

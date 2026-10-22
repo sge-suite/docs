@@ -10,7 +10,7 @@ related: fluxos-principais, pessoas-e-responsabilidades, glossario
 source_refs:
 ---
 > [!info] Estado da página
-> Os ciclos abaixo registram os status do domínio. Hoje, início, pausa e retomada do estágio são sincronizados automaticamente; as demais transições documentais, conclusão e cancelamento ainda dependem de fluxos próprios.
+> Os ciclos abaixo registram os status do domínio. Hoje, início, pausa e retomada do estágio são sincronizados automaticamente; as operações documentais, liberação, conclusão manual e cancelamento são executadas por botões autorizados. A aprovação da avaliação com carga horária cumprida conclui o estágio na mesma transação.
 
 Um estado indica em que ponto o processo está, como “Em análise” ou “Em andamento”. Ele não é um julgamento sobre a pessoa: mostra o que já aconteceu, o que ainda falta e quem pode agir em seguida.
 
@@ -66,10 +66,12 @@ O diagrama mostra os caminhos representativos de cancelamento antes e durante a 
 | Aprovada | A avaliação foi aceita pelo Setor de Estágio. |
 | Cancelada | A avaliação foi encerrada com motivo e permanece no histórico. |
 
-A avaliação do supervisor e as notas do orientador formam o acompanhamento acadêmico do estágio. Elas não definem sua conclusão, que depende do cumprimento integral da carga horária.
+A avaliação do supervisor e as notas do orientador formam o acompanhamento acadêmico do estágio. A aprovação com `hours_requirement_met = true` conclui o estágio automaticamente na mesma transação, após selecionar a avaliação vigente e recalcular as notas. Um pedido de cancelamento pendente deve ser decidido antes dessa aprovação. O Setor também pode confirmar a carga integral pelo botão de conclusão manual.
 
 ## Continue a leitura
 
 - [Fluxos principais](doc:fluxos-principais) para ver a ordem das etapas.
 - [Pessoas e responsabilidades](doc:pessoas-e-responsabilidades) para saber quem atua em cada situação.
 - [Glossário](doc:glossario) para consultar os termos usados aqui.
+
+O documento nasce `Generated`. Disponibilizar para assinatura exige local textual; avisar interessados é opcional e, quando marcado, exige ao menos um contato elegível. Conferir assinaturas muda para `Signed`; cancelar exige motivo. `Signed` e `Cancelled` são finais, e atestados não passam por assinatura.

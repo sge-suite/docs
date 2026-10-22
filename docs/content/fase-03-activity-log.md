@@ -55,3 +55,7 @@ Importações CSV de usuários/vínculos e partes concedentes registram somente 
 ## Auditoria do calendário
 
 Inclui as alterações efetivas de ocorrências e recorrências. `holiday_import_runs` e `holiday_sources` guardam controle técnico da sincronização e revisão, sem `LogsActivity` e sem participação nos filtros ou históricos da auditoria. Ao resolver um item importado, somente as mutações efetivas de feriados geram Activity Log. O Administrador consulta todos esses eventos; a manutenção do calendário é central e sua auditoria é exclusiva do Administrador. O Setor consulta apenas o calendário e as recorrências. Payloads externos permanecem nas tabelas técnicas, não são duplicados no Activity Log. Exclusões e restaurações de ocorrências preservam correspondências de origem.
+
+## Ciclo e assinaturas
+
+Pedidos e decisões de cancelamento integram a consulta do campus e o histórico do estágio, com links autorizados, motivo, data efetiva e estados anteriores/novos. Assinaturas exibem local de disponibilização, categorias e quantidade de avisos; endereços e complementos personalizados ficam somente no pipeline de entrega. Liberação exibe instante/vínculo e conclusão/cancelamento registram o motivo da operação.

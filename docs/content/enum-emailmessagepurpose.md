@@ -18,6 +18,7 @@ Classifica a finalidade da mensagem de notificação ou da tentativa de envio. N
 
 | Case                    | Valor persistido       | Rótulo                         |
 | ----------------------- | ---------------------- | ------------------------------ |
+| `DocumentSignature` | `document_signature` | Documento disponível para assinatura |
 | `Notification`          | `notification`         | Notificação operacional        |
 | `AccountCreated`        | `account_created`      | Conta criada                   |
 | `NewAffiliation`        | `new_affiliation`      | Novo vínculo                   |
@@ -39,7 +40,7 @@ O fluxo de recuperação de senha não inclui confirmação adicional de endere�
 - [x] Criar `App\Enums\EmailMessagePurpose` como enum string.
 - [x] Implementar `label()`, `options()` e `values()`.
 - [x] Adicionar cast em `EmailMessage`.
-- [x] Persistir o conteúdo de novas mensagens das cinco finalidades em [email_messages](doc:migration-06-email-messages), exceto recuperação de senha, que fica fora dessas tabelas.
+- [x] Persistir o conteúdo de novas mensagens das finalidades suportadas em [email_messages](doc:migration-06-email-messages), exceto recuperação de senha, que fica fora dessas tabelas.
 - [ ] Criar testes para cases, conversão e opções.
 - [ ] Testar que senhas, tokens de recuperação, identificadores internos de entrega e exceções brutas não sejam persistidos ou exibidos no histórico administrativo.
 

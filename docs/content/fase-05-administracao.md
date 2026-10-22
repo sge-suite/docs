@@ -246,3 +246,7 @@ As duas importações usam `ImportCsv` para leitura, escrita e correção, `Inte
 ### Importação de partes concedentes
 
 A gestão direta inclui importação CSV pelo Setor de Estágio no campus selecionado, com prévia em memória, paginação de 100 linhas, confirmação individual ou em massa de duplicidades e processamento sequencial em lotes de até 25 linhas. Não há tabelas de importação nem retomada persistida depois de sair da tela. O cadastro aceita CNPJ numérico ou alfanumérico; erros de consulta são exibidos uma única vez no campo. O contrato de arquivo, recuperação por CSV de erros e exportação compatível do sistema anterior estão em [Partes concedentes](doc:migration-12-granting-parties).
+
+## Matrícula ao criar vínculo
+
+Para conta existente, o campo usa o componente de escolher ou criar: permite pesquisar e reaproveitar matrículas autorizadas da pessoa ou digitar uma nova. No Setor, as opções continuam limitadas ao campus selecionado. A criação revalida a matrícula e mantém as regras de titularidade/unicidade; selecionar não grava automaticamente.

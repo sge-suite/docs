@@ -76,3 +76,8 @@ Antes da análise, o Setor cria ou localiza a concedente pela gestão existente.
 A abertura pode ser enviada com propostas completas de concedente e supervisor. A aprovação de ambos é requisito do aceite/formalização, não do primeiro envio.
 
 Os dados ficam nos registros tipados, nunca em uma notificação ou JSON genérico. O Discente confere a própria proposta; o Setor do campus cria ou localiza o cadastro pela gestão existente e, em ação separada, associa o resultado ativo. Não há criação automática de conta, vínculo ou concedente. A associação troca a FK pendente pela referência aprovada; os snapshots conservam a origem histórica do pedido e os registros propostos e suas decisões permanecem preservados. Se uma proposta já enviada precisar de correção, o formulário cria uma nova proposta tipada sem reescrever o pedido analisado, mantendo a mesma solicitação de estágio.
+
+
+### Conferência da unidade pelo Setor
+
+Na associação da concedente, as opções mostram nome, CPF/CNPJ, cidade/UF, endereço e número da unidade. O mesmo rótulo é usado na busca do Discente, com as relações de endereço/cidade carregadas antes da renderização. O Setor pode pesquisar por esses dados e confere um resumo da unidade selecionada antes de aprovar. Selecionar não grava nem aprova o pedido. Se a unidade não estiver disponível entre os cadastros ativos do campus, a tela informa a pendência e impede aprovar a associação até uma escolha disponível; a Action continua revalidando campus, vínculo e cadastro na transação. Propostas e associações históricas não são reescritas.

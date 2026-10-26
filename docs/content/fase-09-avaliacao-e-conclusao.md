@@ -93,3 +93,10 @@ O Supervisor autorizado retoma o rascunho na primeira etapa incompleta das respo
 Em avaliação devolvida, o formulário prioriza a primeira etapa incompleta; se todas têm campos válidos, começa pela carga horária para conferir a devolução, mantendo a orientação do Setor e os estados “Corrigir”. Não há definição artificial de seções específicas para a devolução: a revisão existente usa justificativa livre e o Supervisor continua editando somente o que suas permissões já permitem.
 
 Os componentes compartilhados `form-step-navigation` e `form-step-progress` distinguem posição, preenchimento e revisão, com os mesmos estados no seletor móvel. A barra conta somente etapas obrigatórias editáveis válidas; comentários opcionais e revisão não aumentam essa contagem. A conferência usa `validateStep`, sem gravar ou criar erros visuais antes da tentativa de avançar. A retomada não depende de dados guardados no navegador e não armazena novos campos no banco. Avaliações enviadas, aprovadas ou canceladas permanecem na consulta consolidada e não são revalidadas para edição. O envio e as decisões do Setor continuam sob as Actions e Policies existentes.
+
+
+## Painel do Supervisor
+
+O vínculo ativo de Supervisor recebe um painel próprio com avaliações devolvidas, rascunhos e enviadas ao Setor, com contadores e até cinco registros por situação, ordenados pela atualização mais antiga. Cada cartão identifica discente, matrícula, tipo de estágio congelado, estágio, curso e concedente, com acesso direto à avaliação. “Continuar avaliação” depende da Policy de edição; registros sem edição disponível oferecem consulta. A lista completa mantém o histórico de aprovadas e canceladas.
+
+A consulta exige o vínculo de Supervisor selecionado e limita tanto a avaliação quanto o estágio ao mesmo vínculo, com avaliação liberada. Não mostra respostas, observações ou notas no painel, não amplia acesso e não cria novas notificações. O Setor e os demais papéis conservam seus painéis próprios.

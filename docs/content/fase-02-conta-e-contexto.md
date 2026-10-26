@@ -46,6 +46,14 @@ O contexto de vínculo ativo, a proteção do painel, a seleção e troca de ví
 
 > [!info] Contexto implementado
 
+### Identificação dos vínculos na navegação
+
+A escolha apresenta papel, campus (ou escopo global), curso e matrícula quando informados, e-mail do próprio vínculo e seu número identificador. A busca do seletor considera essa identificação completa, e a opção atualmente selecionada recebe a indicação **Em uso**. O número do vínculo distingue opções mesmo quando os demais dados coincidem; não é usado para ampliar o acesso. O e-mail da conta continua identificado separadamente no menu da pessoa.
+
+O cabeçalho mantém o **Vínculo ativo** visível no computador e no celular, com os mesmos dados de contexto, sem depender da abertura do menu. Quando ainda é necessário escolher um vínculo, informa essa pendência sem apresentar uma opção como ativa. Com exatamente dois vínculos e uma seleção válida, o menu informa **Trocar para [papel]** e mostra a identificação completa do destino; o aviso após a troca também o identifica. Sem seleção válida ou com mais opções, o menu leva à escolha.
+
+Os layouts recebem os vínculos ativos da própria conta por um View Composer, com campus e curso carregados antecipadamente e compartilhados entre cabeçalho e menus. A mudança é de apresentação: seleção, troca por POST com CSRF, revalidação no servidor, escopo das Policies, `last_used_at` e proteção de alterações não salvas permanecem nos fluxos existentes. Não há novas permissões, armazenamento no navegador ou alterações nos destinatários de e-mail.
+
 ## Configurações próprias
 
 - [x] Exibir o e-mail da conta sem edição em Perfil, com link para Segurança. Em Segurança, exigir confirmação de senha para acessar a página e pedir a senha atual e duas entradas iguais do novo e-mail no formulário de troca. Validar formato e unicidade, normalizar o endereço e exigir vínculo ativo da própria conta. A atualização de `users.email` e a reserva de dois avisos na fila ocorrem na mesma transação: um para o endereço anterior e outro para o novo. O novo e-mail passa a ser usado no login e na recuperação de senha; `affiliations.email` permanece igual. O fluxo não exige confirmação pelo novo endereço antes da troca.

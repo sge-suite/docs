@@ -65,4 +65,13 @@ Nesta entrega foram verificados Pint, compilação da cache de views, inspeção
 [Fase 08 — Estágio em andamento](doc:fase-08-estagio-em-andamento)
 
 
-O formulário identifica alterações não salvas, gravação em andamento e a última gravação confirmada. Salvar o rascunho ou avançar com gravação concluída atualiza esse estado; buscar concedentes/supervisores ou sincronizar campos com Livewire não significa que os dados foram gravados. Sair da página, fechar/recarregar a aba ou trocar vínculo com alterações pendentes aciona a proteção de saída. Não há salvamento automático.
+O formulário identifica alterações não salvas, gravação em andamento e a última gravação confirmada. Salvar o rascunho ou avançar com gravação concluída atualiza esse estado; buscar concedentes/supervisores ou sincronizar campos com Livewire não significa que os dados foram gravados. Sair da página, fechar/recarregar a aba ou trocar vínculo com alterações pendentes aciona a proteção de saída. Não há salvamento automático. Ao reabrir um rascunho, a tela inicia na primeira etapa incompleta dos dados salvos; se as etapas estiverem preenchidas, abre a revisão.
+
+
+## Retomada e indicadores de preenchimento
+
+A retomada é calculada a cada abertura, usando as mesmas validações das etapas e os dados disponíveis no servidor; não há coluna de última etapa, preferência de navegador ou cópia de dados pessoais em armazenamento local. A conferência para indicadores não altera os valores nem grava o rascunho e não apresenta erros antes da tentativa de avançar. Cadastros existentes precisam continuar ativos e elegíveis no campus, e a etapa de capacidade civil considera o comprovante exigido e sua situação.
+
+Em rascunho, a primeira etapa editável incompleta recebe o foco inicial; se todas estiverem preenchidas, a revisão é aberta. Em devolução, somente seções liberadas entram na conferência e na contagem; início previsto pertence à etapa de jornada. A primeira correção incompleta tem prioridade e, se todas já têm campos válidos, a primeira seção indicada para correção continua sendo aberta para conferência. As marcações “Corrigir” permanecem até o reenvio, sem presumir que a orientação foi atendida somente porque os campos são válidos. Seções não liberadas continuam em consulta.
+
+`form-step-navigation` reutiliza `x-select` no celular e mostra estados por etapa no desktop: Preenchida, Incompleta, Corrigir, Consulta e Revisar/Aguardando preenchimento. `form-step-progress` conta as etapas obrigatórias editáveis que passaram na validação, sem incluir a revisão. A posição atual permanece identificada separadamente. Os indicadores são atualizados nas interações com o servidor, inclusive ao salvar ou avançar; não significam gravação, envio ou aprovação. A proteção de alterações não salvas permanece independente. Solicitações somente para consulta continuam abrindo na revisão, sem revalidar dados históricos como um rascunho atual.

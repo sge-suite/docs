@@ -84,3 +84,12 @@ No aceite, o e-mail do Supervisor reúne a aprovação e a confirmação de est�
 
 
 O preenchimento e a revisão da avaliação indicam alterações pendentes e gravação confirmada, com proteção ao sair da página ou trocar vínculo. As notas do orientador têm um escopo independente: salvar notas não libera a proteção de outro formulário pendente. O estado de gravação só é atualizado após sucesso da Action, sem confundir sincronização Livewire com persistência. As regras de envio, aprovação, acesso e cálculo permanecem as existentes.
+
+
+## Retomada da avaliação e progresso de preenchimento
+
+O Supervisor autorizado retoma o rascunho na primeira etapa incompleta das respostas salvas. Quando as etapas obrigatórias estão preenchidas, abre a revisão; comentários são opcionais e sua ausência não bloqueia essa retomada. Resposta com carga horária pendente usa somente carga/horas faltantes e revisão, sem contar qualificação, critérios ou comentários ocultos. A validação do preenchimento dessa resposta não significa que a carga horária tenha sido cumprida.
+
+Em avaliação devolvida, o formulário prioriza a primeira etapa incompleta; se todas têm campos válidos, começa pela carga horária para conferir a devolução, mantendo a orientação do Setor e os estados “Corrigir”. Não há definição artificial de seções específicas para a devolução: a revisão existente usa justificativa livre e o Supervisor continua editando somente o que suas permissões já permitem.
+
+Os componentes compartilhados `form-step-navigation` e `form-step-progress` distinguem posição, preenchimento e revisão, com os mesmos estados no seletor móvel. A barra conta somente etapas obrigatórias editáveis válidas; comentários opcionais e revisão não aumentam essa contagem. A conferência usa `validateStep`, sem gravar ou criar erros visuais antes da tentativa de avançar. A retomada não depende de dados guardados no navegador e não armazena novos campos no banco. Avaliações enviadas, aprovadas ou canceladas permanecem na consulta consolidada e não são revalidadas para edição. O envio e as decisões do Setor continuam sob as Actions e Policies existentes.

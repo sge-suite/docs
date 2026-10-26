@@ -60,6 +60,7 @@ Antes da análise, o Setor cria ou localiza a concedente pela gestão existente.
 ## Integridade e interface
 
 - A solicitação de estágio referencia uma concedente **ou** uma solicitação pendente, e um supervisor **ou** uma solicitação pendente; cada par é exclusivo.
+- A interface começa pela busca. No preenchimento de uma proposta, um CPF/CNPJ válido já disponível no campus muda o fluxo para a seleção do cadastro existente, com aviso de conferência. Para Supervisor, é obrigatório haver vínculo ativo desse papel no campus; uma conta com o CPF ou um vínculo de outro tipo não provoca associação. Uma única concedente é selecionada automaticamente; várias unidades exigem escolha explícita. `InternshipRegistrationLookup` compartilha o escopo de elegibilidade entre interface e Action. O salvamento e o envio também impedem propor novamente um cadastro já disponível; pedidos históricos são preservados e apenas deixam de ser referenciados quando o Discente salva a escolha existente.
 - O discente pode enviar a abertura para análise com as duas propostas completas; o aceite/formalização exige referências aprovadas e associadas pelo Setor.
 - O Discente confere a própria proposta, e somente o Setor do campus decide os cadastros pendentes; eles não são logs nem ficam acessíveis a outros discentes ou supervisores.
 - Recusar ou cancelar não apaga o registro. O discente pode escolher um cadastro existente ou criar nova solicitação, preservando o histórico da anterior.

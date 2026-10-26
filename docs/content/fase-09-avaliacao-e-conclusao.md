@@ -81,3 +81,6 @@ O Setor vê no próprio estágio a lista de avaliações e seus estados, respost
 Essa consulta não concede acesso à revisão nem ao formulário. O Coordenador não aprova ou devolve respostas; o Orientador não altera a avaliação nem a nota do supervisor. A tela respeita o vínculo ativo selecionado e a relação do curso ou da orientação com o estágio.
 
 No aceite, o e-mail do Supervisor reúne a aprovação e a confirmação de estágio concluído. O aviso de conclusão ao mesmo vínculo permanece somente interno nessa operação, evitando o segundo e-mail. Discente e Orientador mantêm seus fluxos próprios, e a nota final continua separada. Todos os novos e-mails identificam o nome e o vínculo/contexto destinatário, inclusive quando o endereço é compartilhado por papéis diferentes.
+
+
+O preenchimento e a revisão da avaliação indicam alterações pendentes e gravação confirmada, com proteção ao sair da página ou trocar vínculo. As notas do orientador têm um escopo independente: salvar notas não libera a proteção de outro formulário pendente. O estado de gravação só é atualizado após sucesso da Action, sem confundir sincronização Livewire com persistência. As regras de envio, aprovação, acesso e cálculo permanecem as existentes.

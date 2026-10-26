@@ -63,3 +63,6 @@ Nesta entrega foram verificados Pint, compilação da cache de views, inspeção
 ## Próxima fase
 
 [Fase 08 — Estágio em andamento](doc:fase-08-estagio-em-andamento)
+
+
+O formulário identifica alterações não salvas, gravação em andamento e a última gravação confirmada. Salvar o rascunho ou avançar com gravação concluída atualiza esse estado; buscar concedentes/supervisores ou sincronizar campos com Livewire não significa que os dados foram gravados. Sair da página, fechar/recarregar a aba ou trocar vínculo com alterações pendentes aciona a proteção de saída. Não há salvamento automático.

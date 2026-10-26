@@ -250,3 +250,14 @@ A gestão direta inclui importação CSV pelo Setor de Estágio no campus seleci
 ## Matrícula ao criar vínculo
 
 Para conta existente, o campo usa o componente de escolher ou criar: permite pesquisar e reaproveitar matrículas autorizadas da pessoa ou digitar uma nova. No Setor, as opções continuam limitadas ao campus selecionado. A criação revalida a matrícula e mantém as regras de titularidade/unicidade; selecionar não grava automaticamente.
+
+
+## Proteção do preenchimento e estado de gravação
+
+Os editores usam `form-save-status` e `resources/js/unsaved-changes.js` para diferenciar alterações locais, gravação em andamento e gravação confirmada. A proteção abrange cadastros de campus, curso, concedente, tipo de estágio, conta e vínculo; dados pessoais e segurança; solicitações e sua análise; avaliações; notas; edição do estágio; versões de templates e os editores de documentos, pausas e encerramento em modais. Buscas e filtros de seleção não representam dados pendentes de gravação.
+
+Ao sair de um formulário alterado, navegar por Livewire, trocar vínculo ou sair da conta, o usuário recebe um aviso de possível perda. Fechar ou recarregar a aba usa o aviso nativo do navegador, cujo texto e disponibilidade são controlados por ele. Links para novas abas, downloads e deslocamentos na mesma página não descartam o preenchimento. Cancelar a saída mantém a tela e seus dados. O envio normal do próprio formulário não pede confirmação de descarte; outros formulários pendentes da mesma página continuam protegidos.
+
+Nos editores Livewire, sincronização de propriedades e respostas HTTP bem-sucedidas não confirmam gravação no banco. Somente o evento `form-saved`, emitido após a Action concluir, atualiza a referência do escopo correspondente e o horário formatado pelos helpers de data do SGE. Cada formulário independente tem seu próprio escopo. Erros de validação ou transporte não são tratados como confirmação de gravação. A volta por histórico restaura a proteção; modais acompanham somente a edição aberta, e seu fechamento segue a ação explícita de cancelar/voltar já existente.
+
+A proteção de saída não faz salvamento automático nem recupera alterações não gravadas após o fechamento; também não amplia permissões nem altera regras das Actions. As referências de comparação existem somente na memória da página: não são enviadas a logs nem gravadas em localStorage, sessionStorage ou IndexedDB. Dados pessoais e senhas não ganham armazenamento persistente no navegador. A proteção é uma ajuda de navegação e não garante recuperação após encerramento forçado do navegador ou do dispositivo.

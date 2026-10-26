@@ -62,3 +62,10 @@ A base local, importação anual e gestão estão implementadas em [Calendário 
 ## Integrações de jornada e histórico — 23/10/2026
 
 O Setor informa a nova jornada na emissão/registro do aditivo e a aplica pela conferência das assinaturas, sem reescrever dias passados. A proposta é congelada; divergência da previsão ou de outra vigência exige substituição do documento. O histórico de cálculos oferece reprodução das bases salvas a partir desta integração. As decisões sobre documento principal com data vencida usam a lista de documentos e o fluxo de correção existente. Veja os contratos de [vigências](doc:migration-23-internship-work-schedules), [documentos](doc:migration-16-generated-documents) e [cálculo](doc:service-internshipenddatecalculator). Avisos de término e resumos temporais não foram alterados.
+
+
+## Conferência antes da liberação
+
+O Setor autorizado a liberar vê os documentos principais vigentes, identificados por número, nome e versão quando disponíveis, com a situação individual das assinaturas. Ausência de documento principal e pedido de cancelamento pendente aparecem como impedimentos. A lista usa os mesmos filtros da liberação: documentos principais não cancelados, todos assinados, e nenhum pedido de cancelamento enviado ou em análise. Aditivos e documentos cancelados não entram nessa conferência.
+
+Os atalhos levam à lista de documentos ou ao pedido de cancelamento. “Liberar estágio” fica indisponível enquanto houver impedimentos conhecidos; a lista pode ser atualizada manualmente e é atualizada por eventos de alteração do estágio/documentos. A conferência não assina documentos nem libera o estágio. A Action mantém a checagem final sob transação, e as permissões existentes continuam limitando o acesso.

@@ -7,10 +7,10 @@ status: implemented
 visibility: public
 tags: sge/migrations, sge/jornada, sge/calculos
 related: migration-15-internships, migration-16-generated-documents, migration-17-internship-pauses, migration-22-holidays, migration-22-internship-calendar-overrides, service-internshipenddatecalculator
-source_refs:
+source_refs: https://github.com/sge-suite/sge/blob/master/app/Actions/ApplyInternshipWorkSchedule.php, https://github.com/sge-suite/sge/blob/master/app/Actions/ManageDocumentSignature.php
 ---
 > [!success] Estado
-> Migration, Model, factory e relações implementados. A jornada inicial permanece em `internships.weekly_hours`; a aplicação transacional do aditivo e o recálculo ainda pertencem ao fluxo funcional.
+> Migration, Model, factory e relações implementados. A jornada inicial permanece em `internships.weekly_hours`; a aplicação transacional do aditivo assinado e o recálculo estão integrados ao fluxo funcional.
 
 ## Contrato da tabela
 
@@ -28,7 +28,7 @@ source_refs:
 
 `internships.weekly_hours` vale desde `planned_start_date` até o dia anterior ao primeiro aditivo efetivado. As linhas desta tabela representam apenas vigências posteriores; a aplicação impede sobreposição e lacunas entre elas. Cada nova vigência começa no dia seguinte ao encerramento da anterior.
 
-O Model valida que `ends_on` seja nulo ou maior/igual a `starts_on`, que `weekly_hours` contenha exatamente os dias esperados e que cada valor seja inteiro não negativo dentro dos limites do snapshot. Também verifica a referência a um aditivo assinado do mesmo estágio, sobreposição e continuidade com a vigência anterior. A Action ainda deverá serializar essas mudanças com lock no estágio; não há SQL bruto nem `CHECK` adicional na migration.
+O Model valida que `ends_on` seja nulo ou maior/igual a `starts_on`, que `weekly_hours` contenha exatamente os dias esperados e que cada valor seja inteiro não negativo dentro dos limites do snapshot. Também verifica a referência a um aditivo assinado do mesmo estágio, sobreposição e continuidade com a vigência anterior. As Actions serializam essas mudanças com locks no estágio e no documento; não há SQL bruto nem `CHECK` adicional na migration.
 
 ## Regras de negócio
 
@@ -50,10 +50,10 @@ Uma pausa não é uma jornada e não altera `weekly_hours`. Uma exceção de fer
 - [x] Criar Model com cast de `weekly_hours` e relações para estágio e documento; autoria no Activity Log.
 - [x] Validar exatamente as sete chaves de `weekly_hours` e os limites do snapshot do tipo no Model.
 - [x] Rejeitar sobreposição e lacuna com a vigência anterior no Model.
-- [ ] Garantir serialização concorrente das alterações na Action transacional.
-- [ ] Exigir aditivo e assinaturas conferidas para cada vigência posterior.
+- [x] Garantir serialização concorrente das alterações na Action transacional.
+- [x] Exigir aditivo e assinaturas conferidas para cada vigência posterior.
 - [x] Impedir reescrita da jornada e exclusão física pelo Model; permitir apenas encerramento único da vigência.
-- [ ] Recalcular a previsão somente após a nova vigência ser efetivada.
+- [x] Recalcular a previsão somente após a nova vigência ser efetivada.
 - [ ] Testar jornada inicial em `internships`, aditivo, vigência encerrada, sobreposição, lacuna, pausa e reprocessamento idempotente.
 - [ ] Testar migrate/rollback na ordem completa.
 
@@ -65,3 +65,11 @@ Uma pausa não é uma jornada e não altera `weekly_hours`. Uma exceção de fer
 - [holidays](doc:migration-22-holidays)
 - [internship_calendar_overrides](doc:migration-22-internship-calendar-overrides)
 - [Service — InternshipEndDateCalculator](doc:service-internshipenddatecalculator)
+
+## Aplicação do aditivo — 23/10/2026
+
+`GenerateInternshipDocument` recebe a proposta de início e sete valores de jornada do Setor autorizado em estágio liberado, em andamento ou pausado. A proposta, a vigência anterior e a previsão candidata ficam congeladas no documento. O template pode usar `ADITIVO_DESCRICAO_ALTERACAO`, `ADITIVO_VIGENCIA_INICIO` e `ESTAGIO_JORNADA_DESCRICAO` para apresentar a proposta. Os marcadores continuam opcionais; o Setor confere manualmente se o documento assinado corresponde aos dados exibidos antes de aplicar a jornada. O documento principal continua usando a jornada inicial.
+
+Documentos externos podem registrar a mesma proposta no evento imutável de cadastro, sem snapshot de geração nem arquivo. A proposta não altera a execução. `ManageDocumentSignature` aplica `ApplyInternshipWorkSchedule` somente depois da conferência: encerra a vigência anterior na véspera, cria a nova e recalcula a previsão na mesma transação. Não reescreve a jornada inicial nem cria segunda vigência para o mesmo documento.
+
+A data deve suceder a jornada inicial e a última vigência e não pode estar no passado. Se outra jornada tiver sido formalizada ou a previsão tiver mudado desde a emissão, a aplicação é recusada e a conferência é revertida. O Setor precisa revisar e substituir o documento pendente. A concorrência real permanece pendente de validação operacional.

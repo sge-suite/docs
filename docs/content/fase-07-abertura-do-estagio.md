@@ -22,7 +22,7 @@ O formulário exibe o e-mail institucional do Setor de Estágio do campus para d
 - O co-orientador é um input de texto opcional, limitado a 255 caracteres, sem vínculo nem permissões. Integra a seção de estágio, a revisão e o comprovante; é copiado no aceite e nas correções aprovadas dessa seção. No estágio, o Setor pode editar o nome, exibido nas consultas e na auditoria. Em 20/10/2026, as colunas `co_advisor_name` foram aplicadas ao banco existente por migration temporária, depois removida; as migrations originais foram atualizadas, sem recriar tabelas.
 - Ao salvar os dados pessoais no formulário, as alterações são gravadas em `user_personal_data` e também ficam no rascunho da solicitação. A tela Configurações → Dados pessoais mostra os mesmos dados atuais. O envio valida nome, CPF, e-mail, matrícula, RG, órgão e data de emissão, nascimento, telefone e endereço; então cria os snapshots do envio. Nome/CPF vêm da conta, enquanto e-mail e matrícula vêm do vínculo discente.
 - A data de nascimento determina automaticamente a maioridade. Para menor de idade, o Discente escolhe entre menor e menor emancipado. Menor exige nome, CPF, parentesco e e-mail do responsável; menor emancipado envia prova privada para análise do Setor.
-- Setor/área e atividades são obrigatórios. Jornada, pausas planejadas, remuneração e data inicial seguem as regras do tipo; a data proposta precisa respeitar sete dias corridos após o envio. A previsão de término usa a carga, jornada, margem configurada e calendário local disponível. Recálculos após alterações relevantes do estágio, pausas e exceções estão implementados; a base historicamente reproduzível e a vigência formal de jornada após aditivo assinado continuam pendentes.
+- Setor/área e atividades são obrigatórios. Jornada, pausas planejadas, remuneração e data inicial seguem as regras do tipo; a data proposta precisa respeitar sete dias corridos após o envio. A previsão de término usa a carga, jornada, margem configurada e calendário local disponível. Recálculos após alterações relevantes do estágio, pausas e exceções estão implementados; novos cálculos salvos preservam uma base reproduzível, e aditivos assinados aplicam novas vigências de jornada.
 
 ## Concedente e supervisor
 
@@ -48,7 +48,7 @@ Cada envio de comprovante gera registro próprio e mídia privada; novos arquivo
 ## Pendências
 
 - [x] Recalcular a previsão após alterações relevantes, pausas e exceções do estágio.
-- [ ] Integrar novas vigências de jornada após aditivos assinados e congelar as entradas para reproduzir cada cálculo, conforme D-019.
+- [x] Integrar novas vigências de jornada após aditivos assinados e congelar as entradas para reproduzir cada cálculo, conforme D-019.
 - [x] Integrar geração, disponibilização, assinatura e reemissão de documentos.
 - [ ] Concluir validação automatizada na preparação para produção, conforme [Testes automatizados](doc:testes-existentes).
 

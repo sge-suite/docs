@@ -11,7 +11,7 @@ source_refs:
 ---
 Referências: [fluxo de formalização](doc:fluxos-principais#3-analise-e-formalizacao), [contrato do motor e catálogo](doc:geracao-de-documentos-docx-e-variaveis), [migration de templates](doc:migration-13-document-templates) e [migration de documentos gerados](doc:migration-16-generated-documents).
 
-A entrega cobre templates privados, emissão com snapshot e versão imutáveis, reprodução histórica em DOCX e conversão PDF sob demanda. O coordenador titular/substituto emite somente atestados de seus cursos, com template vigente automático; o Setor emite os demais tipos. Ambos escolhem o formato, com DOCX padrão. Cada atestado também possui histórico, sem assinatura. Assinaturas e avisos individualizados estão implementados; registro operacional de documentos externos continua pendente. O contrato e as limitações de fontes/layout do PDF estão em [Geração de documentos DOCX e variáveis](doc:geracao-de-documentos-docx-e-variaveis).
+A entrega cobre templates privados, emissão com snapshot e versão imutáveis, reprodução histórica em DOCX e conversão PDF sob demanda. O coordenador titular/substituto emite somente atestados de seus cursos, com template vigente automático; o Setor emite os demais tipos. Ambos escolhem o formato, com DOCX padrão. Cada atestado também possui histórico, sem assinatura. Assinaturas e avisos individualizados estão implementados; registro operacional de documentos externos está implementado. O contrato e as limitações de fontes/layout do PDF estão em [Geração de documentos DOCX e variáveis](doc:geracao-de-documentos-docx-e-variaveis).
 
 ## Checklist
 
@@ -26,7 +26,7 @@ A entrega cobre templates privados, emissão com snapshot e versão imutáveis, 
 - [x] Corrigir credenciamento, reconstruir/renderizar rescisão e adaptar os nove modelos legados.
 - [x] Impedir alteração destrutiva e exclusão de versão já utilizada; permitir exclusão física da versão sem documentos gerados.
 - [x] Criar `generated_documents` com tipo, origem, status e snapshot quando gerado pelo SGE.
-- [ ] Registrar documento externo sem receber/armazenar arquivo e com template nulo.
+- [x] Registrar documento externo sem receber/armazenar arquivo e com template nulo.
 - [x] Gerar usando somente dados autorizados pelo contexto do estágio.
 - [x] Gerar em arquivo privado temporário, transmitir e apagar em `finally`, com limpeza horária de órfãos.
 - [x] Implementar token idempotente e lock para retries/concorrência.
@@ -58,7 +58,7 @@ Não criar nem executar testes nesta etapa; usar verificações não-testes. For
 ## Critério de saída
 
 - [x] Arquivos de template e versões usadas são preservados; exclusão do catálogo após uso é bloqueada.
-- [x] Nenhum DOCX/PDF final gerado é mantido como acervo; registro operacional de documento externo continua pendente.
+- [x] Nenhum DOCX/PDF final gerado é mantido como acervo; documentos externos são registrados sem arquivo e sem snapshot de geração.
 - [x] O status de cada documento é independente do status do estágio.
 
 ## Próxima fase
@@ -70,3 +70,5 @@ Não criar nem executar testes nesta etapa; usar verificações não-testes. For
 Cada emissão começa como Gerado. O Setor usa “Disponibilizar para assinatura”, informa o local e escolhe se enviará avisos. Quando enviar, seleciona ao menos um dos contatos elegíveis (Discente, Orientador, Supervisor ou contato cadastrado da concedente) e pode escrever um complemento de até 5.000 caracteres para cada pessoa. O e-mail identifica nome, papel, estágio, documento e local; cada conteúdo/tentativa é preservado no pipeline existente após commit. O Activity Log registra local, categorias e quantidade de avisos, sem endereços nem conteúdo personalizado. Enquanto aguarda assinatura, “Enviar aviso de assinatura” permite avisar novamente ou enviar o primeiro aviso, com seleção e conteúdo próprios e auditoria por operação. “Conferir assinaturas” exige confirmação explícita. Assinados e cancelados não reabrem o ciclo.
 
 Os avisos de assinatura identificam documento, discente, matrícula, curso, campus, concedente, tipo de estágio e período previsto. O número de protocolo é exibido somente quando preenchido; números internos de estágio e documento não aparecem no assunto ou corpo. Complementos continuam individuais por destinatário. O conteúdo de e-mails anteriores permanece imutável.
+
+O registro externo e as decisões sobre data inicial vencida estão descritos no [contrato documental](doc:migration-16-generated-documents#registro-externo-e-data-vencida-23-10-2026). Aditivos com mudança de jornada congelam a proposta e só a aplicam depois da conferência das assinaturas. Nome de documento externo fica no evento de cadastro; não há upload, arquivo ou download desse registro.

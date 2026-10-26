@@ -20,9 +20,9 @@ Esta lista registra a sequência e o estado atuais. A aplicação já implementa
 - [ ] [04 — Integração de e-mail](doc:fase-04-integracao-de-email) — **Em andamento:** pipeline em fila, avisos de abertura, avaliação, documentos, execução, cancelamento e conclusão implementados; validação operacional, outros escopos de consulta e retenção institucional seguem pendentes.
 
 - [ ] [05 — Administração](doc:fase-05-administracao) — **Em andamento:** administração global e gestão local de campi, cursos, tipos, usuários, vínculos e cadastros implementadas; validação automatizada permanece pendente.
-- [ ] [06 — Documentos](doc:fase-06-documentos) — **Em andamento:** templates, emissão, reprodução DOCX/PDF, assinatura e avisos individualizados implementados; falta o registro operacional de documentos externos.
-- [ ] [07 — Abertura do estágio](doc:fase-07-abertura-do-estagio) — **Em andamento:** rascunho, envio, análise, correção, cadastros pendentes, aceite e integração documental implementados; falta tornar reproduzível o histórico dos cálculos.
-- [ ] [08 — Estágio em andamento](doc:fase-08-estagio-em-andamento) — **Em andamento:** pausas, calendário, liberação, sincronização, avisos, cancelamento e previsão atualizada implementados; vigências formais de jornada, histórico reproduzível e avisos/resumos pendentes.
+- [ ] [06 — Documentos](doc:fase-06-documentos) — **Em andamento:** templates, emissão, reprodução DOCX/PDF, assinatura e avisos individualizados implementados; registro operacional de documentos externos implementado; validação operacional pendente.
+- [ ] [07 — Abertura do estágio](doc:fase-07-abertura-do-estagio) — **Em andamento:** rascunho, envio, análise, correção, cadastros pendentes, aceite e integração documental implementados; base reproduzível dos novos cálculos implementada; validação operacional pendente.
+- [ ] [08 — Estágio em andamento](doc:fase-08-estagio-em-andamento) — **Em andamento:** pausas, calendário, liberação, sincronização, avisos, cancelamento e previsão atualizada implementados; vigências formais de jornada e base reproduzível dos novos cálculos implementadas; avisos/resumos pendentes.
 - [ ] [09 — Avaliação e conclusão](doc:fase-09-avaliacao-e-conclusao) — **Em andamento:** avaliação, notas e conclusão implementadas; validação funcional e operacional permanece pendente.
 
 ## Próximas entregas de backend e integração
@@ -30,8 +30,8 @@ Esta lista registra a sequência e o estado atuais. A aplicação já implementa
 1. **Implementado:** resolver e validar o vínculo ativo, selecionar ou restaurar o contexto, disponibilizá-lo a Policies/Actions e registrar a autoria nas alterações Eloquent.
 2. **Concluído:** Models de negócio registram autoria pelo vínculo, valores anteriores/novos e exclusão de segredos no Activity Log. A suíte automatizada foi removida e será retomada na preparação para produção.
 3. **Em andamento:** o pipeline com filas, idempotência e histórico atende fluxos administrativos e avisos de abertura, avaliação, assinatura, execução e cancelamento. A consulta operacional do Setor cobre o campus do estágio; retenção institucional e validações operacionais permanecem pendentes.
-4. **Em andamento:** assinatura, liberação, execução, recálculo da previsão ao salvar alterações relevantes, avaliação e conclusão estão implementados. Falta congelar as entradas de cada cálculo para reprodução histórica e integrar a vigência de jornadas após aditivos assinados.
-5. **Em andamento:** geração e reprodução DOCX/PDF e avisos de domínio estão integrados. Permanecem o registro de documentos externos, a decisão sobre avisos de término e resumos operacionais adicionais, além da validação de produção.
+4. **Em andamento:** assinatura, liberação, execução, recálculo da previsão ao salvar alterações relevantes, avaliação e conclusão estão implementados. Novos cálculos salvos congelam as entradas para reprodução histórica, e aditivos assinados aplicam novas vigências de jornada. Validação operacional permanece pendente.
+5. **Em andamento:** geração e reprodução DOCX/PDF e avisos de domínio estão integrados. O registro de documentos externos está implementado. Permanecem os avisos de término e resumos operacionais adicionais, além da validação de produção.
 
 A seleção de vínculo estabelece o contexto para cada tela. As próximas entregas fecham as pendências listadas nas fases, sem reclassificar como futuras jornadas que já estão implementadas.
 

@@ -25,3 +25,5 @@ diagram: modelo-historico
 
 > [!warning] Não confundir
 > `addresses` é reutilizável para o endereço atual e para cópias históricas. O endereço que aparece em um estágio deve ser lido de `internships.workplace_address_id` ou `student_address_id`; o documento gerado congela a representação usada na geração.
+
+Novos cálculos de término preservam um snapshot explícito das entradas e resultado no evento imutável `end_date_calculated`, com revisão e SHA-256 canônico. O histórico de alterações genérico não substitui essa base. A reprodução pelo Setor utiliza somente os valores congelados, sem consultar o calendário atual; cálculos antigos sem base registrada não recebem histórico artificial. Veja o [contrato de cálculo](doc:service-internshipenddatecalculator#base-reproduzivel-dos-novos-calculos-23-10-2026).

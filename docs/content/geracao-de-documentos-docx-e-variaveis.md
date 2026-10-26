@@ -1597,13 +1597,13 @@ Marcador antigo, indisponível para novas emissões a partir da revisão 8 do ca
 | --- | --- |
 | Descrição | Início do aditivo |
 | Tipo | string |
-| Origem | workSchedules.starts_on só existe após aditivo assinado; falta contexto de emissão aprovado |
-| Snapshot | Congelar na futura geração; não existe snapshot deste dado no estágio. Nunca atualizar documento anterior. |
+| Origem | Data da proposta de jornada confirmada pelo Setor na emissão do aditivo |
+| Snapshot | Proposta e valores congelados no aditivo; aplicação da vigência somente após conferência de assinaturas. |
 | Formato | texto |
 | Sensibilidade | institucional |
-| Condição | Dado preenchido no contexto autorizado. |
-| Vazio | Valor ausente será tratado pela resolução futura, sem exigir presença do marcador e sem presumir zero. |
-| Disponibilidade | Reservada; upload rejeitado |
+| Condição | Aditivo com proposta de alteração de jornada informada pelo Setor autorizado. |
+| Vazio | Sem proposta de jornada, este marcador impede a emissão do template. |
+| Disponibilidade | Disponível na revisão 9 do catálogo |
 | Exemplo fictício | Exemplo fictício |
 
 ### `${ADITIVO_DESCRICAO_ALTERACAO}`
@@ -1612,13 +1612,13 @@ Marcador antigo, indisponível para novas emissões a partir da revisão 8 do ca
 | --- | --- |
 | Descrição | Mudanças do aditivo |
 | Tipo | string |
-| Origem | Sem registro estruturado de mudanças aprovadas para emissão |
-| Snapshot | Congelar na futura geração; não existe snapshot deste dado no estágio. Nunca atualizar documento anterior. |
+| Origem | Descrição da distribuição semanal confirmada pelo Setor na emissão do aditivo |
+| Snapshot | Proposta e valores congelados no aditivo; aplicação da vigência somente após conferência de assinaturas. |
 | Formato | texto |
 | Sensibilidade | institucional |
-| Condição | Dado preenchido no contexto autorizado. |
-| Vazio | Valor ausente será tratado pela resolução futura, sem exigir presença do marcador e sem presumir zero. |
-| Disponibilidade | Reservada; upload rejeitado |
+| Condição | Aditivo com proposta de alteração de jornada informada pelo Setor autorizado. |
+| Vazio | Sem proposta de jornada, este marcador impede a emissão do template. |
+| Disponibilidade | Disponível na revisão 9 do catálogo |
 | Exemplo fictício | Exemplo fictício |
 
 ### `${RESCISAO_DATA_EFETIVA}`

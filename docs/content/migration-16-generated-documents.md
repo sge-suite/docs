@@ -7,10 +7,10 @@ status: implemented
 visibility: public
 tags: sge/migrations, sge/documentos, sge/historico
 related: migration-15-internships, migration-14-template-versions, enum-generateddocumenttype, enum-generateddocumentstatus, geracao-de-documentos-docx-e-variaveis, enum-generateddocumentorigin
-source_refs:
+source_refs: https://github.com/sge-suite/sge/blob/master/app/Actions/RegisterExternalInternshipDocument.php, https://github.com/sge-suite/sge/blob/master/app/Actions/RequestExpiredDocumentCorrection.php
 ---
 > [!success] Estado
-> Migration, Model, factory, relações, geração, reprodução em DOCX/PDF e cancelamento de emissões geradas estão implementados. Assinaturas manuais e avisos individualizados estão implementados; registro operacional de documentos externos continua pendente.
+> Migration, Model, factory, relações, geração, reprodução em DOCX/PDF e cancelamento de emissões geradas estão implementados. Assinaturas manuais e avisos individualizados estão implementados; registro operacional de documentos externos está implementado.
 
 ## Contrato
 
@@ -66,7 +66,9 @@ Um aditivo é um `generated_documents` com `type = addendum`, versão de templat
 - [x] Exigir local de disponibilização genérico ao marcar `awaiting_signature`, sem nome de plataforma hardcoded.
 - [x] Exibir interessados elegíveis como checkboxes e enviar o aviso selecionado após o commit da transição.
 - [x] Implementar acompanhamento manual de assinatura externa.
-- [ ] Validar na preparação para produção os fluxos implementados de geração, assinatura, cancelamento e aditivo; registro operacional de documento externo permanece pendente.
+- [x] Registrar documento externo sem template, snapshot de geração ou arquivo.
+- [x] Disponibilizar decisões manuais para documento com data inicial vencida.
+- [ ] Validar na preparação para produção os fluxos implementados de geração, registro externo, assinatura, cancelamento e aditivo.
 - [ ] Testar que nenhum arquivo final seja armazenado.
 - [ ] Testar migrate/rollback na ordem completa após as migrations dependentes.
 
@@ -81,3 +83,9 @@ Um aditivo é um `generated_documents` com `type = addendum`, versão de templat
 O protocolo é opcional e independente para termo de compromisso, aditivo e demais documentos. Pode ser informado ao disponibilizar para assinatura ou pela ação “Editar protocolo”, sem mudar o status nem enviar avisos. A manutenção exige Setor ativo selecionado do campus e curso/campus ativos, inclusive para documento assinado ou estágio concluído; documento cancelado preserva o protocolo. Alterações ficam no Activity Log. Protocolo não integra o snapshot nem reescreve DOCX/PDF anteriores.
 
 Em 21/10/2026, uma migration temporária adicionou o campo aos documentos e removeu o campo dos estágios; não havia protocolos preenchidos na coluna antiga. A migration foi executada pelo Sail e removida; as migrations originais foram alinhadas, sem recriar tabelas.
+
+## Registro externo e data vencida — 23/10/2026
+
+O Setor do campus registra nome, tipo principal/aditivo e protocolo opcional. `RegisterExternalInternshipDocument` usa origem `granting_party`, estado `generated` e UUID idempotente, sem template, snapshot de geração, hash, saída ou arquivo. Nome e eventual proposta de jornada são preservados no evento imutável `external_document_registered`. `generated_at` fica nulo e a listagem mostra a data do registro. O documento externo não oferece download. Disponibilização, avisos e conferência seguem as mesmas Actions e Policies documentais.
+
+O vencimento da data inicial não altera estados automaticamente. A listagem sinaliza a análise pendente e a conferência exige ciência explícita da data vencida, registrada em auditoria. O Setor também pode cancelar com motivo. Para documento principal de estágio ainda não liberado, pode solicitar correção da data: `RequestExpiredDocumentCorrection` reutiliza a devolução da seção de estágio da solicitação, cancela documentos de formalização pendentes e exige novo envio e aceite. Preserva assinados e atestados. Aditivo com nova jornada vencida deve ser substituído, sem aplicação retroativa.

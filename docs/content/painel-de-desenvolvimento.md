@@ -26,9 +26,9 @@ Para a sequência e o andamento atuais, consulte [Fases de desenvolvimento](doc:
 - [Fase 03 — Activity Log](doc:fase-03-activity-log) — **completed** — Eventos Eloquent, autoria por vínculo e auditoria dos campos pessoais e profissionais implementados.
 - [Fase 04 — Integração de e-mail](doc:fase-04-integracao-de-email) — **in-progress** — Pipeline em fila e avisos de abertura, avaliação, assinatura, execução, cancelamento e conclusão implementados; validação operacional, escopos de consulta adicionais e retenção institucional pendentes.
 - [Fase 05 — Administração hierárquica](doc:fase-05-administracao) — **in-progress** — Administração global e gestão local de campi, cursos, tipos, usuários, vínculos e cadastros implementadas; validação automatizada pendente.
-- [Fase 06 — Documentos](doc:fase-06-documentos) — **in-progress** — Templates, emissão/reprodução DOCX/PDF, assinatura e avisos implementados; registro operacional de documentos externos pendente.
-- [Fase 07 — Abertura do estágio](doc:fase-07-abertura-do-estagio) — **in-progress** — Rascunho, envio, análise, correção, cadastros pendentes, aceite e integração documental implementados; histórico reproduzível do cálculo pendente.
-- [Fase 08 — Estágio em andamento](doc:fase-08-estagio-em-andamento) — **in-progress** — Pausas, calendário, liberação, sincronização, avisos, cancelamento e atualização da previsão implementados; vigências formais de jornada, histórico reproduzível e avisos/resumos adicionais pendentes.
+- [Fase 06 — Documentos](doc:fase-06-documentos) — **in-progress** — Templates, emissão/reprodução DOCX/PDF, assinatura e avisos implementados; registro operacional de documentos externos implementado.
+- [Fase 07 — Abertura do estágio](doc:fase-07-abertura-do-estagio) — **in-progress** — Rascunho, envio, análise, correção, cadastros pendentes, aceite e integração documental implementados; base reproduzível dos novos cálculos implementada; validação operacional pendente.
+- [Fase 08 — Estágio em andamento](doc:fase-08-estagio-em-andamento) — **in-progress** — Pausas, calendário, liberação, sincronização, avisos, cancelamento e atualização da previsão implementados; vigências formais de jornada e base reproduzível dos novos cálculos implementadas; avisos/resumos adicionais pendentes.
 - [Fase 09 — Avaliação e conclusão](doc:fase-09-avaliacao-e-conclusao) — **in-progress** — Avaliação, notas e conclusão implementadas; validação funcional e operacional pendente.
 - [Fases de desenvolvimento](doc:fases-de-desenvolvimento) — **in-progress** — Índice das fases executáveis do desenvolvimento do SGE.
 
@@ -119,7 +119,7 @@ Sequência física dos arquivos em `database/migrations`; os números permanecem
 - [Providers](doc:providers) — **in-progress** — Índice dos Service Providers que configuram autenticação, locale, moeda e comportamento Eloquent.
 - [Desenvolvimento — Checklist de funcionalidade](doc:desenvolvimento-checklist-de-funcionalidade) — **maintained** — Checklist reutilizável para implementar qualquer funcionalidade ou regra do SGE.
 - [Schedules](doc:schedules) — **in-progress** — Limpeza temporária, sincronização da execução, preparação do calendário e resumo diário de solicitações implementados; aviso de término e resumo temporal de estágios pendentes.
-- [Service — InternshipEndDateCalculator](doc:service-internshipenddatecalculator) — **in-progress** — Cálculo e recálculo da previsão ao salvar alterações do estágio implementados; histórico reproduzível e vigência formal de jornada pendentes.
+- [Service — InternshipEndDateCalculator](doc:service-internshipenddatecalculator) — **in-progress** — Cálculo e recálculo da previsão ao salvar alterações do estágio implementados; base reproduzível dos novos cálculos e vigência formal de jornada implementadas; validação operacional pendente.
 - [Service — InternshipGradeCalculator](doc:service-internshipgradecalculator) — **implemented** — Cálculo das contribuições do supervisor e consolidação das notas.
 - [Services](doc:services) — **in-progress** — Índice dos serviços de domínio existentes; funções ainda sem integração estão identificadas como pendentes.
 - [Testes automatizados](doc:testes-existentes) — **maintained** — A suíte foi removida durante a implementação; a retomada depende de nova decisão do responsável.

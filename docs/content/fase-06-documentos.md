@@ -7,7 +7,8 @@ status: in-progress
 visibility: public
 tags: sge/desenvolvimento, sge/documentos, sge/checklist
 related: fluxos-principais, geracao-de-documentos-docx-e-variaveis, migration-13-document-templates, migration-16-generated-documents, fase-07-abertura-do-estagio
-source_refs:
+source_refs: https://github.com/sge-suite/sge/blob/master/resources/views/components/internships/%E2%9A%A1documents.blade.php
+updated: 2026-10-28
 ---
 Referências: [fluxo de formalização](doc:fluxos-principais#3-analise-e-formalizacao), [contrato do motor e catálogo](doc:geracao-de-documentos-docx-e-variaveis), [migration de templates](doc:migration-13-document-templates) e [migration de documentos gerados](doc:migration-16-generated-documents).
 
@@ -72,3 +73,7 @@ Cada emissão começa como Gerado. O Setor usa “Disponibilizar para assinatura
 Os avisos de assinatura identificam documento, discente, matrícula, curso, campus, concedente, tipo de estágio e período previsto. O número de protocolo é exibido somente quando preenchido; números internos de estágio e documento não aparecem no assunto ou corpo. Complementos continuam individuais por destinatário. O conteúdo de e-mails anteriores permanece imutável.
 
 O registro externo e as decisões sobre data inicial vencida estão descritos no [contrato documental](doc:migration-16-generated-documents#registro-externo-e-data-vencida-23-10-2026). Aditivos com mudança de jornada congelam a proposta e só a aplicam depois da conferência das assinaturas. Nome de documento externo fica no evento de cadastro; não há upload, arquivo ou download desse registro.
+
+## Download após gerar um documento
+
+Ao concluir a geração, a tela confirma a gravação do escopo do modal, fecha-o, atualiza o histórico e inicia o download por um link nativo com `download`, após a atualização da interface. O evento não navega a página do estágio nem transporta o arquivo em base64 na resposta Livewire. A URL permanece protegida pela rota e pelas permissões existentes. Baixar novamente uma emissão consulta o registro original, sem criar outro documento ou modificar seus dados congelados. O formato PDF continua dependendo da conversão pelo serviço configurado.

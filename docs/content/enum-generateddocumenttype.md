@@ -8,9 +8,10 @@ visibility: public
 tags: sge/enums, sge/documentos
 related: enum-generateddocumentorigin, enum-generateddocumentstatus, migration-13-document-templates, migration-16-generated-documents
 source_refs: https://github.com/sge-suite/sge/blob/master/app/Enums/GeneratedDocumentType.php
+updated: 2026-10-28
 ---
 > [!info] Decisão
-> O catálogo tem três casos e é usado pelos Models `DocumentTemplate` e `GeneratedDocument`. A emissão, reprodução, conferência de assinaturas e histórico de documentos estão implementados; o registro operacional de documentos externos continua pendente.
+> O catálogo tem três casos e é usado pelos Models `DocumentTemplate` e `GeneratedDocument`. A emissão, reprodução, conferência de assinaturas e histórico de documentos estão implementados; o registro operacional de documentos externos sem upload também está implementado.
 
 ## Contrato
 

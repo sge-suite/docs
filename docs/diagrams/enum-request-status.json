@@ -3,7 +3,7 @@
   "kind": "state",
   "title": "Ciclo da solicitação de estágio",
   "description": "Estados de uma solicitação desde o rascunho até o aceite, recusa ou retirada.",
-  "summary": "A solicitação vai de Draft para Submitted e UnderReview; a análise pode devolvê-la para correção, aceitá-la, recusá-la ou permitir sua retirada antes do encerramento.",
+  "summary": "O envio e cada reenvio passam por Submitted antes de iniciar a análise. Somente UnderReview permite decisões do Setor. Antes da liberação do estágio, Accepted pode voltar a UnderReview; a retirada pelo discente exige que ainda não exista estágio formalizado.",
   "source": {
     "language": "mermaid",
     "path": "diagrams/sources/enum-request-status.mmd"
@@ -24,6 +24,9 @@
       "Withdrawn": { "x": 560, "y": 520, "width": 144 }
     },
     "transitions": [
+      { "from": "Accepted", "to": "UnderReview", "label": "retomar antes da liberação" },
+      { "from": "Submitted", "to": "Withdrawn", "label": "retirar" },
+      { "from": "PendingCorrection", "to": "Withdrawn", "label": "retirar" },
       { "from": "Draft", "to": "Submitted", "label": "enviar", "fromSide": "right", "toSide": "left", "labelPlacement": { "x": 272, "y": 256 } },
       { "from": "Submitted", "to": "UnderReview", "label": "iniciar análise", "fromSide": "right", "toSide": "left", "labelPlacement": { "x": 512, "y": 256 } },
       { "from": "UnderReview", "to": "PendingCorrection", "label": "devolver seções", "fromSide": "top", "toSide": "bottom", "labelPlacement": { "x": 704, "y": 200 } },
@@ -39,6 +42,8 @@
   ],
   "data": {
     "sourceDocument": "enum-internshiprequeststatus",
-    "sourceIndex": 1
+    "sourceIndex": 1,
+    "reviewRequiredForDecisions": true,
+    "acceptedReviewResumption": "Antes da liberação do estágio"
   }
 }

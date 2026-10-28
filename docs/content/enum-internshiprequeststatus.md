@@ -9,6 +9,7 @@ tags: sge/enums, sge/estagio, sge/formularios
 related: enum-internshipstatus, enum-internshiprequestcorrectionstatus, migration-base-04-activity-log, migration-19-internship-requests, migration-20-internship-request-corrections, fluxos-principais
 source_refs: https://github.com/sge-suite/sge/blob/master/app/Enums/InternshipRequestStatus.php
 diagram: enum-request-status
+updated: 2026-10-28
 ---
 > [!success] Estado
 > A classe, o cast em `InternshipRequest`, a Migration 19, as Policies e as transições estão integrados ao fluxo Livewire de envio, análise, correção, aceite, recusa e desistência. O enum separa o formulário da formalização e execução registradas em [`InternshipStatus`](doc:enum-internshipstatus). A validação funcional fica para a preparação para produção.
@@ -19,7 +20,7 @@ diagram: enum-request-status
 | --- | --- | --- | --- |
 | `Draft` | `draft` | Rascunho | O discente pode preencher e salvar, sem enviar ao Setor. |
 | `Submitted` | `submitted` | Enviada | Envio novo ou correção respondida; aguarda o início da análise formal. |
-| `UnderReview` | `under_review` | Em análise | O Setor de Estágio está analisando. |
+| `UnderReview` | `under_review` | Em análise | O Setor iniciou ou retomou a análise; somente neste estado são permitidas decisões sobre a solicitação, seus pedidos de cadastro e o comprovante de emancipação. |
 | `PendingCorrection` | `pending_correction` | Com pendência | Há uma [correção aberta](doc:enum-internshiprequestcorrectionstatus) com seções liberadas ao discente. |
 | `Accepted` | `accepted` | Aceita | O Setor aprovou os dados atuais. Cria o estágio na primeira vez ou atualiza o estágio já vinculado. |
 | `Rejected` | `rejected` | Recusada | O processo foi encerrado pelo Setor antes da formalização. |
@@ -29,7 +30,9 @@ diagram: enum-request-status
 
 {{diagram:enum-request-status}}
 
-`Accepted` não é final: uma correção posterior à criação do estágio pode levar a solicitação novamente a `PendingCorrection`, depois a `Submitted` e `UnderReview`. A nova aprovação mantém a mesma solicitação e o mesmo `internship_id`.
+Toda decisão exige `UnderReview`, validado nas Actions após o bloqueio transacional da solicitação. O envio e cada reenvio ficam em `Submitted` até o Setor clicar em “Iniciar análise”. `PendingCorrection` aguarda a resposta do discente e não admite decisões do Setor durante o preenchimento.
+
+`Accepted` não é final antes da liberação: “Retomar análise” leva a solicitação a `UnderReview`, permitindo uma devolução a `PendingCorrection`. O discente corrige e reenvia a mesma solicitação para `Submitted`; o Setor inicia a análise novamente antes de decidir. A nova aprovação mantém o mesmo `internship_id`.
 
 ## Integração com o estágio já criado
 

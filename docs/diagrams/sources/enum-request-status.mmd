@@ -5,6 +5,9 @@ stateDiagram-v2
     UnderReview --> PendingCorrection: devolver seções
     PendingCorrection --> Submitted: reenviar
     UnderReview --> Accepted: aprovar
+    Accepted --> UnderReview: retomar antes da liberação
     UnderReview --> Rejected: recusar
     Draft --> Withdrawn: retirar
+    Submitted --> Withdrawn: retirar
+    PendingCorrection --> Withdrawn: retirar
     UnderReview --> Withdrawn: retirar

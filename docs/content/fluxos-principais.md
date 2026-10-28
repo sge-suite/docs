@@ -9,6 +9,7 @@ tags: sge/fluxos
 related: pessoas-e-responsabilidades, ciclos-de-status, glossario
 source_refs:
 diagram: fluxos-principais-jornada
+updated: 2026-10-28
 ---
 > [!info] Estado da página
 > Esta página descreve os fluxos já implementados. Lacunas específicas, como registro de documentos externos, vigências formais de jornada após aditivo e avisos adicionais, permanecem nas [fases de desenvolvimento](doc:fases-de-desenvolvimento).
@@ -35,11 +36,11 @@ Se a solicitação precisar de ajuste, o Setor informa o que deve ser corrigido.
 
 ## 3. Análise e formalização
 
-O Setor de Estágio confere a solicitação. Pode aceitá-la, recusá-la ou devolvê-la com pendências. O aceite cria a etapa de formalização.
+O Setor de Estágio clica em “Iniciar análise” para conferir a solicitação enviada. Somente enquanto ela estiver em análise pode decidir sobre os cadastros e o comprovante, aceitá-la, recusá-la ou devolvê-la com pendências. Cada reenvio exige iniciar uma nova análise. O aceite cria a etapa de formalização.
 
 Na formalização, o Setor prepara o documento apropriado, informa onde ele estará disponível para assinatura e avisa os interessados selecionados. A assinatura acontece externamente e é conferida pelo Setor de Estágio. Somente depois dessa conferência o estágio é liberado.
 
-Se uma informação importante precisar mudar antes da liberação, a correção é registrada no processo e o documento necessário pode ser emitido novamente. Um documento já assinado é preservado como histórico.
+Se uma informação importante precisar mudar antes da liberação, o Setor usa “Retomar análise” antes de devolver a solicitação aceita. A correção é registrada no processo e o documento necessário pode ser emitido novamente. Um documento já assinado é preservado como histórico.
 
 ## 4. Estágio em andamento
 

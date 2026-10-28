@@ -8,6 +8,7 @@ visibility: public
 tags: sge/decisoes, sge/backlog
 related: e-mails-notificacoes-e-entregas, enum-evaluationstatus, enum-brazilianstate, enum-holidayscope, migration-01a-cities, migration-01-addresses, migration-18-supervisor-evaluations, fluxos-principais, migration-13-document-templates, migration-14-template-versions, migration-16-generated-documents, migration-12-granting-parties, glossario, modelo-de-dados-acesso, matriz-de-autorizacao, migration-11-internship-types, migration-15-internships, migration-19-internship-requests, migration-20-internship-request-corrections, migration-base-04-activity-log, helper-numbertowordshelper, migration-21-internship-cancellation-requests, migration-22-holidays, migration-22-internship-calendar-overrides, migration-23-internship-work-schedules, geracao-de-documentos-docx-e-variaveis, schedules, ciclos-de-status
 source_refs:
+updated: 2026-10-28
 ---
 ## Próximas definições
 
@@ -16,6 +17,10 @@ source_refs:
 - [ ] Definir política de retenção de documentos e auditoria.
 - [ ] Criar testes de aceitação para os fluxos principais.
 - [ ] Mapear os campos, critérios, escalas e regras condicionais dos formulários nativos de abertura e avaliação.
+
+## Leitura das notas de implementação
+
+As decisões abaixo são preservadas como registro. As notas de pendências de D-019, D-020 e D-027 a D-029 refletem etapas anteriores: aditivos assinados já aplicam vigências de jornada, novos cálculos já preservam uma base reproduzível e documentos externos já podem ser registrados sem upload. O estado atual e os limites de histórico estão em [Cálculo da previsão](doc:service-internshipenddatecalculator), [Fase 08](doc:fase-08-estagio-em-andamento) e [Fase 06](doc:fase-06-documentos). Essa atualização documental não cria decisões novas nem altera as regras aprovadas.
 
 ## Decisões registradas
 

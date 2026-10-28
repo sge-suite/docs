@@ -9,6 +9,7 @@ tags: sge/contexto, sge/documentacao
 related: pessoas-e-responsabilidades, fluxos-principais, ciclos-de-status, glossario
 source_refs:
 diagram: visao-geral-processo
+updated: 2026-10-28
 ---
 > [!info] Estado da página
 > Esta página descreve o fluxo que já está disponível no código: abertura e análise da solicitação, formalização documental, assinaturas, acompanhamento, avaliação e conclusão. Funcionalidades específicas ainda pendentes — como registro de documentos externos e avisos adicionais — estão identificadas nas [fases de desenvolvimento](doc:fases-de-desenvolvimento).
@@ -54,7 +55,7 @@ Quando a solicitação é aceita, o Setor de Estágio prepara o documento apropr
 
 Depois de liberado, o estágio entra em andamento na data planejada. A previsão de término considera a jornada, a carga horária, os feriados aplicáveis e as pausas registradas.
 
-Durante o estágio, o Setor registra pausas, acompanha a execução e pode tratar pedidos de cancelamento. Antes da liberação, a tela de gestão permite ajustar a jornada e recalcular a previsão; depois da liberação, a jornada pactuada não é reescrita pela edição atual. O controle de novas vigências após aditivo assinado continua pendente.
+Durante o estágio, o Setor registra pausas, acompanha a execução e pode tratar pedidos de cancelamento. Antes da liberação, a tela de gestão permite ajustar a jornada e recalcular a previsão; depois da liberação, a jornada pactuada não é reescrita pela edição atual. Novas jornadas formalizadas por aditivo assinado entram em vigor pela conferência das assinaturas, sem reescrever as jornadas dos dias anteriores.
 
 ### Acompanhamento acadêmico e conclusão
 

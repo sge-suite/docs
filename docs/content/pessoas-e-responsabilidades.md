@@ -8,6 +8,7 @@ visibility: public
 tags: sge/contexto, sge/pessoas, sge/fluxos
 related: visao-geral, fluxos-principais, ciclos-de-status, glossario
 source_refs:
+updated: 2026-10-28
 ---
 > [!info] Estado da página
 > Esta página descreve as atuações e limites atualmente implementados. Pendências específicas estão anotadas nas [fases de desenvolvimento](doc:fases-de-desenvolvimento).
@@ -41,7 +42,7 @@ O discente pode desistir antes da formalização ou pedir o cancelamento de um e
 
 O Setor de Estágio é responsável por analisar o processo. Confere a solicitação, orienta correções, valida cadastros de parte concedente e supervisor, gera documentos e verifica se as assinaturas necessárias foram concluídas.
 
-É o Setor que libera o estágio para começar, registra pausas, trata pedidos de cancelamento e analisa a avaliação feita pelo supervisor. A gestão permite ajustar dados e jornada do estágio; o controle de vigências posteriores formalizadas por aditivo assinado continua pendente.
+É o Setor que libera o estágio para começar, registra pausas, trata pedidos de cancelamento e analisa a avaliação feita pelo supervisor. A gestão permite ajustar dados e jornada do estágio; novas vigências formalizadas por aditivo assinado são aplicadas após a conferência das assinaturas, preservando os períodos anteriores.
 
 O Setor não reescreve respostas do discente nem do supervisor. Quando algo estiver errado, devolve o mesmo formulário com uma explicação para que a pessoa responsável corrija.
 

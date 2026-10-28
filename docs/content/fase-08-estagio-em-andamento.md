@@ -8,10 +8,13 @@ visibility: public
 tags: sge/desenvolvimento, sge/estagio, sge/checklist
 related: fluxos-principais, migration-17-internship-pauses, migration-22-holidays, migration-22-internship-calendar-overrides, migration-23-internship-work-schedules, enum-internshipstatus, enum-generateddocumenttype, schedules, fase-09-avaliacao-e-conclusao
 source_refs: https://github.com/sge-suite/sge/blob/master/routes/console.php, https://github.com/sge-suite/sge/blob/master/app/Actions/ProjectInternshipEndDate.php, https://github.com/sge-suite/sge/blob/master/app/Actions/UpdateInternshipData.php, https://github.com/sge-suite/sge/blob/master/app/Console/Commands/SyncInternshipExecutionStatuses.php
+updated: 2026-10-28
 ---
 Base: [acompanhamento do estágio](doc:fluxos-principais#4-estagio-em-andamento).
 
 As telas do Setor para editar o estágio, consultar a previsão e manter exceções de calendário estão disponíveis. O cálculo considera as regras copiadas para o estágio, pausas, calendário e exceções, e a previsão é atualizada ao salvar mudanças relevantes. Liberação, execução, cancelamento, avaliação e conclusão também estão implementados. A vigência de jornada por aditivo assinado e a reprodução de novos cálculos salvos estão implementadas. Permanecem pendentes os avisos/resumos adicionais.
+
+Salvar a edição do estágio redireciona para seus detalhes, inclusive quando há recálculo por mudança de jornada, datas, pausas ou calendário. Quando a gravação cria um registro histórico de cálculo diferente do anterior, a página de detalhes abre uma vez o modal “Reproduzir cálculo” usando exatamente esse registro. O identificador é transmitido temporariamente pela sessão, associado ao estágio e ao vínculo atual, e consumido pelo componente autorizado do histórico. A reprodução usa a base imutável e confere sua integridade; salvar sem novo registro não abre o modal. O calendário da edição continua sendo uma prévia aberta pelo usuário. Erros de validação mantêm o formulário e seus valores para correção.
 
 ## Checklist
 

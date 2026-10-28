@@ -7,7 +7,8 @@ status: in-progress
 visibility: public
 tags: sge/desenvolvimento, sge/avaliacao, sge/checklist
 related: fluxos-principais, migration-18-supervisor-evaluations, backlog-e-decisoes
-source_refs: https://github.com/sge-suite/sge/blob/master/app/Actions/ManageSupervisorEvaluation.php, https://github.com/sge-suite/sge/blob/master/app/Actions/UpdateAdvisorGrades.php, https://github.com/sge-suite/sge/blob/master/app/Actions/NotifyInternshipEvaluationResults.php, https://github.com/sge-suite/sge/blob/master/resources/views/emails/internship-evaluation-result.blade.php
+source_refs: https://github.com/sge-suite/sge/blob/master/app/Actions/ManageSupervisorEvaluation.php, https://github.com/sge-suite/sge/blob/master/app/Actions/UpdateAdvisorGrades.php, https://github.com/sge-suite/sge/blob/master/app/Actions/NotifyInternshipEvaluationResults.php, https://github.com/sge-suite/sge/blob/master/resources/views/emails/internship-evaluation-result.blade.php, https://github.com/sge-suite/sge/blob/master/app/Actions/GetSupervisorDashboard.php, https://github.com/sge-suite/sge/blob/master/resources/views/pages/dashboard/partials/supervisor.blade.php
+updated: 2026-10-28
 ---
 Base: [avaliação e conclusão](doc:fluxos-principais#6-acompanhamento-academico-e-conclusao). O ciclo de resposta, a origem dos pesos e o contrato do formulário fixo estão definidos na [modelagem final da avaliação](doc:migration-18-supervisor-evaluations).
 
@@ -83,7 +84,7 @@ Essa consulta não concede acesso à revisão nem ao formulário. O Coordenador 
 No aceite, o e-mail do Supervisor reúne a aprovação e a confirmação de estágio concluído. O aviso de conclusão ao mesmo vínculo permanece somente interno nessa operação, evitando o segundo e-mail. Discente e Orientador mantêm seus fluxos próprios, e a nota final continua separada. Todos os novos e-mails identificam o nome e o vínculo/contexto destinatário, inclusive quando o endereço é compartilhado por papéis diferentes.
 
 
-O preenchimento e a revisão da avaliação indicam alterações pendentes e gravação confirmada, com proteção ao sair da página ou trocar vínculo. As notas do orientador têm um escopo independente: salvar notas não libera a proteção de outro formulário pendente. O estado de gravação só é atualizado após sucesso da Action, sem confundir sincronização Livewire com persistência. As regras de envio, aprovação, acesso e cálculo permanecem as existentes.
+O preenchimento e a revisão da avaliação mantêm proteção ao sair da página ou trocar vínculo, sem cartões de gravação. As notas do orientador têm um escopo independente: salvar notas não libera a proteção de outro formulário pendente. A referência da proteção só é atualizada após sucesso da Action, sem confundir sincronização Livewire com persistência. As regras de envio, aprovação, acesso e cálculo permanecem as existentes.
 
 
 ## Retomada da avaliação e progresso de preenchimento
@@ -97,6 +98,6 @@ Os componentes compartilhados `form-step-navigation` e `form-step-progress` dist
 
 ## Painel do Supervisor
 
-O vínculo ativo de Supervisor recebe um painel próprio com avaliações devolvidas, rascunhos e enviadas ao Setor, com contadores e até cinco registros por situação, ordenados pela atualização mais antiga. Cada cartão identifica discente, matrícula, tipo de estágio congelado, estágio, curso e concedente, com acesso direto à avaliação. “Continuar avaliação” depende da Policy de edição; registros sem edição disponível oferecem consulta. A lista completa mantém o histórico de aprovadas e canceladas.
+O vínculo ativo de Supervisor recebe o mesmo cabeçalho e os mesmos cartões de indicadores dos [demais painéis](doc:fase-02-conta-e-contexto#painel-conforme-o-vinculo-selecionado). Os indicadores separam avaliações devolvidas, por preencher, enviadas ao Setor e aceitas; canceladas não são contadas como aceitas. Abaixo, tabelas mostram até cinco avaliações por situação pendente, ordenadas pela atualização mais antiga, começando pelas devolvidas para correção. Situações vazias não ocupam seções; sem pendências, há uma mensagem única com acesso à lista completa. Cada linha identifica discente, matrícula, tipo de estágio congelado, estágio, curso, concedente e última atualização. “Continuar avaliação” depende da Policy de edição; registros sem edição disponível oferecem consulta. O atalho “Minhas avaliações” mantém acesso ao histórico completo, inclusive aprovadas e canceladas.
 
 A consulta exige o vínculo de Supervisor selecionado e limita tanto a avaliação quanto o estágio ao mesmo vínculo, com avaliação liberada. Não mostra respostas, observações ou notas no painel, não amplia acesso e não cria novas notificações. O Setor e os demais papéis conservam seus painéis próprios.

@@ -7,7 +7,8 @@ status: in-progress
 visibility: public
 tags: sge/desenvolvimento, sge/autenticacao, sge/checklist
 related: modelo-de-dados-acesso, e-mails-notificacoes-e-entregas, fluxos-principais, fase-03-activity-log, fase-05-administracao
-source_refs: https://github.com/sge-suite/sge/blob/master/app/Support/ActiveAffiliationContext.php, https://github.com/sge-suite/sge/blob/master/app/Http/Middleware/RequireActiveAffiliation.php, https://github.com/sge-suite/sge/blob/master/app/Http/Controllers/AffiliationSelectionController.php, https://github.com/sge-suite/sge/blob/master/app/Console/Commands/CreateAdmin.php, https://github.com/sge-suite/sge/blob/master/resources/views/pages/settings/%E2%9A%A1security.blade.php
+source_refs: https://github.com/sge-suite/sge/blob/master/app/Support/ActiveAffiliationContext.php, https://github.com/sge-suite/sge/blob/master/app/Http/Middleware/RequireActiveAffiliation.php, https://github.com/sge-suite/sge/blob/master/app/Http/Controllers/AffiliationSelectionController.php, https://github.com/sge-suite/sge/blob/master/app/Console/Commands/CreateAdmin.php, https://github.com/sge-suite/sge/blob/master/resources/views/pages/settings/%E2%9A%A1security.blade.php, https://github.com/sge-suite/sge/blob/master/resources/views/pages/%E2%9A%A1dashboard.blade.php, https://github.com/sge-suite/sge/blob/master/resources/views/components/dashboard-header.blade.php, https://github.com/sge-suite/sge/blob/master/resources/views/components/dashboard-metric.blade.php, https://github.com/sge-suite/sge/blob/master/app/Actions/GetSupervisorDashboard.php, https://github.com/sge-suite/sge/blob/master/app/Actions/GetInternshipOfficeDashboard.php
+updated: 2026-10-28
 ---
 Referências: [modelo de acesso](doc:modelo-de-dados-acesso), [E-mails, notificações e entregas](doc:e-mails-notificacoes-e-entregas) e [fluxo de login](doc:fluxos-principais#1-acesso-e-vinculo).
 
@@ -48,11 +49,27 @@ O contexto de vínculo ativo, a proteção do painel, a seleção e troca de ví
 
 ### Identificação dos vínculos na navegação
 
-A escolha apresenta papel, campus (ou escopo global), curso e matrícula quando informados, e-mail do próprio vínculo e seu número identificador. A busca do seletor considera essa identificação completa, e a opção atualmente selecionada recebe a indicação **Em uso**. O número do vínculo distingue opções mesmo quando os demais dados coincidem; não é usado para ampliar o acesso. O e-mail da conta continua identificado separadamente no menu da pessoa.
+A escolha apresenta papel, campus (ou escopo global), curso e matrícula quando informados, e-mail do próprio vínculo e seu número identificador no formato `#ID`, sem o texto “Vínculo”. A busca do seletor considera essa identificação completa, e a opção atualmente selecionada recebe a indicação **Em uso**. O número do vínculo distingue opções mesmo quando os demais dados coincidem; não é usado para ampliar o acesso. O e-mail da conta continua identificado separadamente no menu da pessoa.
 
-O cabeçalho mantém o **Vínculo ativo** visível no computador e no celular, com os mesmos dados de contexto, sem depender da abertura do menu. Quando ainda é necessário escolher um vínculo, informa essa pendência sem apresentar uma opção como ativa. Com exatamente dois vínculos e uma seleção válida, o menu informa **Trocar para [papel]** e mostra a identificação completa do destino; o aviso após a troca também o identifica. Sem seleção válida ou com mais opções, o menu leva à escolha.
+Os dados da atuação ficam em **Contexto atual**, dentro do menu do usuário no computador e no celular. O menu tem largura limitada à tela e apresenta papel, campus, curso, matrícula e e-mail em linhas que podem quebrar; esses dados não ocupam o cabeçalho da página. Quando ainda é necessário escolher um vínculo, informa essa pendência sem apresentar uma opção como ativa. Com exatamente dois vínculos e uma seleção válida, o menu informa **Trocar para [papel]** e mostra a identificação completa do destino; o aviso após a troca também o identifica. Sem seleção válida ou com mais opções, o menu leva à escolha.
 
-Os layouts recebem os vínculos ativos da própria conta por um View Composer, com campus e curso carregados antecipadamente e compartilhados entre cabeçalho e menus. A mudança é de apresentação: seleção, troca por POST com CSRF, revalidação no servidor, escopo das Policies, `last_used_at` e proteção de alterações não salvas permanecem nos fluxos existentes. Não há novas permissões, armazenamento no navegador ou alterações nos destinatários de e-mail.
+Os layouts recebem os vínculos ativos da própria conta por um View Composer, com campus e curso carregados antecipadamente e compartilhados entre os menus. A mudança é de apresentação: seleção, troca por POST com CSRF, revalidação no servidor, escopo das Policies, `last_used_at` e proteção de alterações não salvas permanecem nos fluxos existentes. Não há novas permissões, armazenamento no navegador ou alterações nos destinatários de e-mail.
+
+## Painel conforme o vínculo selecionado
+
+Todos os painéis reutilizam `dashboard-header` e `dashboard-metric`: título “Painel”, contexto e atalhos no topo, indicadores com a mesma apresentação e seções de acompanhamento abaixo. As grades se adaptam à largura da tela e seguem o tema claro ou escuro. Os dados vêm somente do vínculo selecionado; possuir outro vínculo na mesma conta não combina os escopos.
+
+| Vínculo | Informações e ações relevantes |
+| --- | --- |
+| Administrador do Sistema | Totais globais de contas, vínculos e campi; distribuições de vínculos, estágios e documentos; pendências globais; atalhos para usuários e campi. |
+| Setor de Estágios | Solicitações para analisar, formalização, execução, pausas e conclusão no campus; estágios liberados ou aguardando assinatura; fila de solicitações e términos previstos para acompanhar; atalhos para solicitações, estágios e avaliações. |
+| Discente | Rascunhos e correções, solicitações aguardando o Setor, estágios e conclusões do próprio vínculo; últimas atualizações; atalhos para solicitações, estágios e dados pessoais. |
+| Supervisor | Avaliações devolvidas, por preencher, enviadas e aceitas; tabelas das situações pendentes, com correções primeiro e acesso à avaliação conforme a Policy. |
+| Orientador | Totais e últimas atualizações dos estágios sob sua orientação; consulta de notas conforme as permissões existentes. |
+| Coordenador de Curso | Totais e últimas atualizações dos estágios dos cursos coordenados e das orientações já autorizadas pela Policy. |
+| Direção de Ensino | Totais e últimas atualizações dos estágios do campus, para acompanhamento. |
+
+Os painéis de acompanhamento reutilizam as tabelas já usadas nas listagens. O Discente não recebe os dados globais de administração, e o Supervisor não recebe acesso à página de detalhes do estágio: abre a avaliação autorizada. Sem uma consulta de domínio disponível, o painel explica essa condição sem criar contadores ou atalhos sem permissão. Indicadores resumem registros; não representam aprovação nem alteração automática de estado.
 
 ## Configurações próprias
 

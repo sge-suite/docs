@@ -9,6 +9,10 @@ tags: sge/providers, sge/operacao, sge/formatacao
 related: helper-datehelper, helper-currencyhelper
 source_refs: https://github.com/sge-suite/sge/blob/master/app/Providers/AppServiceProvider.php, https://github.com/sge-suite/sge/blob/master/app/Support/AuditInfrastructureModel.php
 ---
+## Registro de serviços
+
+Registra `SearchQuery` com escopo de requisição para classificar e deduplicar diagnósticos sanitizados de falhas de busca. Substitui o singleton de `Meilisearch\Client` de Scout por uma instância com transporte PSR-18 próprio, `MeilisearchHttpClient`, usando limites de conexão e duração total distintos para pesquisas e operações de indexação. Não captura falhas de escrita. As variáveis e os padrões estão em [Configuração e bootstrap — Buscas Meilisearch](doc:configuracao-e-bootstrap#buscas-meilisearch).
+
 ## Boot atual
 
 - Associa `Activity` a `ActivityPolicy`, instala observers Eloquent para `DatabaseNotification` e `Media` e acrescenta ator, conta e vínculo às propriedades de cada evento. O ator vem do vínculo ativo, da conta, de `terminal` ou de `system` conforme o contexto.

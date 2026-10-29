@@ -70,6 +70,27 @@ Os fallbacks de `config/app.php` são `UTC`, `USD`, locale `en`, fallback `en` e
 - `config/queue.php`: default `database`, tabela `jobs`, `retry_after` padrão de 90 segundos, `after_commit = false`. Os envios operacionais que dependem de uma transação despacham seus Jobs explicitamente com `afterCommit()`; isso não altera o default global.
 - [Migration base de Jobs](doc:migration-base-03-jobs) é a infraestrutura; tentativas de e-mail do domínio ficam em `email_delivery_attempts`.
 
+## Buscas Meilisearch
+
+O ambiente inspecionado usa Laravel 13.24.0, Scout 11.5.0, Livewire 4.3.5, Flux 2.15.1 e Meilisearch PHP SDK 1.16.1. O binding original de Scout instancia o SDK sem cliente HTTP; a descoberta PSR-18 resolveu `GuzzleHttp\Client` 7.15.3, sem `timeout` nem `connect_timeout` explícitos. Opções adicionais em `config/scout.php` só têm efeito porque `AppServiceProvider::register()` substitui esse binding por um SDK que recebe `MeilisearchHttpClient`.
+
+| Variável de ambiente | Configuração em `scout.meilisearch` | Padrão em segundos |
+| --- | --- | --- |
+| `MEILISEARCH_SEARCH_CONNECT_TIMEOUT` | `search_connect_timeout` | 1 |
+| `MEILISEARCH_SEARCH_TIMEOUT` | `search_timeout` | 3 |
+| `MEILISEARCH_OPERATIONS_CONNECT_TIMEOUT` | `operations_connect_timeout` | 10 |
+| `MEILISEARCH_OPERATIONS_TIMEOUT` | `operations_timeout` | 300 |
+
+O transporte implementa PSR-18 com Guzzle e seleciona os limites curtos para POST em `/indexes/{uid}/search`, `/indexes/{uid}/facet-search` e `/multi-search`, inclusive com prefixo de URL. As demais operações usam os limites maiores; importações, escrita de documentos e comandos não recebem o limite interativo. Valores menores que 0,1 segundo são ajustados para 0,1 para impedir timeout infinito por valor zero; valores não finitos usam o padrão da respectiva opção. Não há retry síncrono. Ao alterar essas variáveis, atualize o cache de configuração e reinicie workers persistentes conforme a rotina de implantação. Ajuste o limite operacional ao volume de importação e aos limites dos workers.
+
+`SearchQuery::run()` delimita consultas de leitura e captura `ApiException`, `CommunicationException`, `TimeOutException`, `InvalidResponseBodyException`, `JsonDecodingException` e falhas do transporte PSR-18. Erros de encoding de requisição, programação, autorização e validação continuam propagando. As categorias técnicas separam timeout, comunicação/transporte, credenciais/permissões (401/403), servidor/limitação (5xx/429), resposta inválida, índice ausente e configuração da API (incluindo filtros, ordenação e atributos de pesquisa). O usuário recebe mensagem segura e ação de recuperação; detalhes do serviço não são exibidos.
+
+O log `Meilisearch search unavailable` contém somente categoria, classe, status HTTP e códigos/tipos conhecidos por allowlist. Códigos desconhecidos ficam nulos. Não inclui exceção original, mensagem, stack trace, causa anterior, URL, índice, termos, documentos pessoais, e-mails, filtros, chaves nem corpos de resposta. A instância de `SearchQuery` é scoped e deduplica o mesmo diagnóstico dentro da requisição. A exceção interna `SearchUnavailable` não é reportada novamente. O seletor compartilhado usa esse mesmo caminho, substituindo o antigo `report($exception)`.
+
+`HandlesSearchFailures` mantém falhas em memória apenas durante a requisição e oferece `retrySearch()` restrito a uma lista explícita de Computed. Resultados de busca são memorizados pelos Computed durante a renderização; não há polling nem repetição infinita. O seletor remoto mantém debounce e sequência contra respostas antigas. As consultas server-side preservam seus debounces e a ordenação de atualizações do Livewire. O botão de recuperação mantém os dados e invalida somente as dependências autorizadas. Fluxos de escrita/indexação não passam por essa recuperação; não há renderizador global que silencie suas falhas em `bootstrap/app.php`.
+
+Os estados e a cobertura de telas estão descritos na [Fase 05 — Índices e integrações](doc:fase-05-administracao#indices-e-integracoes). Nesta tarefa não foram criados nem executados testes e não houve interrupção do serviço, alteração de credenciais ou índices para simular falhas. A confirmação visual dos estados de erro e recuperação depende de uma sessão autenticada e permanece pendente.
+
 ## Rotas existentes
 
 `routes/web.php` registra a página pública, dashboard, configurações e rotas autenticadas para avaliações, solicitações e estágios, documentos/templates, feriados e recorrências, campus, cursos, tipos de estágio, concedentes e importações, usuários/vínculos, auditoria e consulta de e-mails. Os grupos usam Policies e o vínculo ativo selecionado para limitar campus, curso e registro. A definição completa e os nomes são mantidos no próprio arquivo; não se trata apenas das rotas de configuração.

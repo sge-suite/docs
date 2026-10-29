@@ -7,7 +7,7 @@ status: in-progress
 visibility: public
 tags: sge/planejamento, sge/email, sge/notificacoes, sge/auditoria
 related: enums, migrations, dominio-e-modelo-de-dados, fluxos-principais
-source_refs: https://github.com/sge-suite/sge/blob/master/app/Support/EmailRecipientIdentity.php, https://github.com/sge-suite/sge/blob/master/resources/views/components/email-message.blade.php, https://github.com/sge-suite/sge/blob/master/app/Actions/RequestEmailDelivery.php, https://github.com/sge-suite/sge/blob/master/app/Jobs/SendEmailDelivery.php, https://github.com/sge-suite/sge/blob/master/app/Mail/DeliveryMail.php, https://github.com/sge-suite/sge/blob/master/app/Models/EmailMessage.php, https://github.com/sge-suite/sge/blob/master/app/Models/EmailDeliveryAttempt.php, https://github.com/sge-suite/sge/blob/master/app/Policies/EmailDeliveryAttemptPolicy.php, https://github.com/sge-suite/sge/blob/master/app/Support/AdministrativeEmailLogScope.php, https://github.com/sge-suite/sge/blob/master/app/Support/EmailLogAccess.php, https://github.com/sge-suite/sge/blob/master/app/Support/InternshipRequestReceipt.php, https://github.com/sge-suite/sge/blob/master/resources/views/emails/internship-request-submitted.blade.php
+source_refs: https://github.com/sge-suite/sge/blob/master/app/Support/EmailRecipientIdentity.php, https://github.com/sge-suite/sge/blob/master/resources/views/components/email-message.blade.php, https://github.com/sge-suite/sge/blob/master/app/Actions/RequestEmailDelivery.php, https://github.com/sge-suite/sge/blob/master/app/Jobs/SendEmailDelivery.php, https://github.com/sge-suite/sge/blob/master/app/Mail/DeliveryMail.php, https://github.com/sge-suite/sge/blob/master/app/Models/EmailMessage.php, https://github.com/sge-suite/sge/blob/master/app/Models/EmailDeliveryAttempt.php, https://github.com/sge-suite/sge/blob/master/app/Policies/EmailDeliveryAttemptPolicy.php, https://github.com/sge-suite/sge/blob/master/app/Support/AdministrativeEmailLogScope.php, https://github.com/sge-suite/sge/blob/master/app/Support/EmailLogAccess.php, https://github.com/sge-suite/sge/blob/master/app/Support/InternshipRequestReceipt.php, https://github.com/sge-suite/sge/blob/master/resources/views/emails/internship-request-submitted.blade.php, https://github.com/sge-suite/sge/blob/master/app/Support/NotificationInbox.php, https://github.com/sge-suite/sge/blob/master/app/Support/NotificationDestinations.php, https://github.com/sge-suite/sge/blob/master/app/Actions/UpdateNotificationReadState.php, https://github.com/sge-suite/sge/blob/master/resources/views/pages/notifications/%E2%9A%A1index.blade.php
 diagram: mensageria-fluxo
 updated: 2026-10-29
 ---
@@ -52,6 +52,36 @@ Guarda o conteúdo imutável já renderizado das finalidades que têm histórico
 Cada linha representa uma tentativa de transporte. `recipient_email` registra o destinatário efetivo, que pode não pertencer a uma conta do SGE. `purpose` identifica a finalidade. Novos envios das finalidades administrativas têm `email_message_id` ligado ao conteúdo imutável; tentativas antigas de conta criada ou novo vínculo podem permanecer sem mensagem. `scope_context` guarda um snapshot de `user_id`, `affiliation_ids`, `affiliation_types` e `campus_ids` do registro afetado; não representa o último vínculo selecionado. `delivery_key` é uma chave UUID estável do envio; ela permite idempotência e até três tentativas com números únicos. `requested_by_affiliation_id` registra o vínculo solicitante, quando houver; para envio automático, fica nulo. A tentativa mantém número, estado `queued`, `sent` ou `failed`, provedor, identificador do provedor, marcos temporais e motivo técnico sanitizado de falha.
 
 O Model bloqueia exclusão e mudança de uma tentativa finalizada. `RequestEmailDelivery` reserva a tentativa e despacha `SendEmailDelivery` depois do commit; o Job envia com o mailer nativo e registra o resultado. O reprocessamento explícito usa a mesma Action. Mensagens e tentativas não usam `LogsActivity`: são o histórico técnico de entrega. O acesso ao banco deve impedir alterações diretas que contornem essas regras.
+
+## Central de notificações internas
+
+A página **Notificações** (`notifications.index`, `/notifications`) é a caixa do vínculo ativo selecionado. A navegação compartilhada no computador e no celular mostra o contador de não lidas, obtido por `COUNT` na relação `Affiliation::notifications()`. O Administrador consulta somente sua própria caixa. Outros vínculos da mesma conta, nomes ou e-mails iguais e avisos antigos destinados diretamente a `User` não se misturam à lista.
+
+`NotificationInbox` aplica `AffiliationPolicy::viewNotifications` em cada consulta. A central e o contador fixam o ID do vínculo em propriedade Livewire bloqueada; requisições de componentes abertos antes de uma troca de vínculo são recusadas. A navegação monta um novo contador para o contexto selecionado. Campus desativado não impede consultar ou alterar a leitura da própria caixa quando a Policy permite, sem liberar operações de domínio.
+
+A lista oferece **Todas**, **Não lidas** e **Lidas**, ordena por `created_at DESC, id DESC` e pagina com `PageSize::PER_PAGE`. Título e mensagem são texto escapado; formatos antigos incompletos usam apresentação neutra sem mostrar a classe PHP de `type`. A indicação textual **Não lida**, o ícone e o destaque visual identificam os avisos pendentes. Caixa vazia e filtro sem resultados têm mensagens distintas. Não há busca textual, exclusão de histórico, WebSockets ou polling.
+
+Abrir a central e acessar um destino não altera `read_at`. **Marcar como lida**, **Marcar como não lida** e **Marcar todas como lidas** são ações explícitas pelo Livewire autenticado. A confirmação de “todas” informa que inclui outras páginas: são processadas as não lidas recebidas até o início da operação. `UpdateNotificationReadState` revalida Policy e contexto, busca o UUID somente pela relação autorizada e usa transações com locks de registros. A ação coletiva percorre lotes de até 100 com cursor por UUID e transação por lote, sem carregar todo o histórico. Se houver falha entre lotes, os lotes já concluídos permanecem lidos; a operação pode ser repetida.
+
+Os métodos nativos `markAsRead()` e `markAsUnread()` preservam UUID, destinatário, tipo, conteúdo e `created_at`. Repetir o mesmo estado não salva novamente nem altera o `read_at` existente. Os eventos individuais continuam passando por `AuditInfrastructureModel`, com autoria do vínculo ativo e sem copiar `data` para o Activity Log; não há atualização em massa nem trilha duplicada. Após ações e atualização explícita, lista e contador são atualizados; a paginação recua para a última página válida quando necessário. Essas ações não criam mensagem, tentativa, reenvio ou leitura de e-mail.
+
+### Destinos autorizados
+
+`NotificationDestinations` aceita somente a lista abaixo. Os recursos da página são consultados em conjunto pelas consultas de leitura compartilhadas com as Policies, evitando consultas por aviso. As páginas de destino continuam aplicando sua própria autorização ao abrir o link.
+
+| Rota persistida | Parâmetro aceito | Condição de acesso |
+| --- | --- | --- |
+| `supervisor-evaluations.show` | `supervisor_evaluation_id`, inteiro positivo | Avaliação existente e autorizada por `SupervisorEvaluationPolicy::viewableQuery`, também usada por `view`: liberação, supervisor responsável ou Setor do campus. |
+| `internship-requests.show` | `internship_request_id`, inteiro positivo | Solicitação existente e autorizada por `InternshipRequestPolicy::viewableQuery`, também usada por `view`: vínculo discente proprietário. |
+| `internship-review.index` | Nenhum | `InternshipRequestPolicy::viewReviewList`. |
+| `internships.index` | Nenhum | `InternshipPolicy::viewAny`. |
+| `dashboard` | Nenhum | Vínculo ativo autorizado para sua caixa. |
+
+Nenhuma URL, domínio ou rota livre do JSON é utilizado; somente o parâmetro conhecido entra em `route()`. `internship_id` não promove um aviso de `dashboard` para detalhes de estágio. Recurso removido, acesso perdido, rota desconhecida ou identificador ausente/inválido deixam o aviso legível com **Destino não disponível**, sem reescrever mensagens antigas.
+
+### Limites de verificação desta entrega
+
+A revisão estática cobre escopo por relação, troca de contexto, UUID alheio, idempotência de leitura, processamento limitado, paginação e destinos. A entrega usa verificações de sintaxe, Pint, PHPStan, compilação Blade e build pelo Sail, sem criar ou executar testes, popular notificações ou marcar avisos reais. A navegação autenticada e a concorrência real permanecem pendentes; compilação e análise estática não comprovam esses comportamentos.
 
 ## Regras por finalidade
 

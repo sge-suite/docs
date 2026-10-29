@@ -7,7 +7,7 @@ status: in-progress
 visibility: public
 tags: sge/desenvolvimento, sge/email, sge/checklist
 related: enums, e-mails-notificacoes-e-entregas, enum-emailmessagepurpose, enum-emaildeliveryattemptstatus, migration-05-notifications, migration-06-email-messages, migration-07-email-delivery-attempts, fase-03-activity-log
-source_refs: https://github.com/sge-suite/sge/blob/master/app/Actions/RequestEmailDelivery.php, https://github.com/sge-suite/sge/blob/master/app/Jobs/SendEmailDelivery.php, https://github.com/sge-suite/sge/blob/master/app/Mail/DeliveryMail.php, https://github.com/sge-suite/sge/blob/master/app/Policies/EmailDeliveryAttemptPolicy.php, https://github.com/sge-suite/sge/blob/master/app/Support/AdministrativeEmailLogScope.php, https://github.com/sge-suite/sge/blob/master/app/Support/EmailLogAccess.php, https://github.com/sge-suite/sge/blob/master/resources/views/pages/email-logs/%E2%9A%A1index.blade.php, https://github.com/sge-suite/sge/blob/master/resources/views/pages/email-logs/%E2%9A%A1show.blade.php, https://github.com/sge-suite/sge/blob/master/app/Support/CampusEmailLogScope.php
+source_refs: https://github.com/sge-suite/sge/blob/master/app/Actions/RequestEmailDelivery.php, https://github.com/sge-suite/sge/blob/master/app/Jobs/SendEmailDelivery.php, https://github.com/sge-suite/sge/blob/master/app/Mail/DeliveryMail.php, https://github.com/sge-suite/sge/blob/master/app/Policies/EmailDeliveryAttemptPolicy.php, https://github.com/sge-suite/sge/blob/master/app/Support/AdministrativeEmailLogScope.php, https://github.com/sge-suite/sge/blob/master/app/Support/EmailLogAccess.php, https://github.com/sge-suite/sge/blob/master/resources/views/pages/email-logs/%E2%9A%A1index.blade.php, https://github.com/sge-suite/sge/blob/master/resources/views/pages/email-logs/%E2%9A%A1show.blade.php, https://github.com/sge-suite/sge/blob/master/app/Support/CampusEmailLogScope.php, https://github.com/sge-suite/sge/blob/master/resources/views/pages/notifications/%E2%9A%A1index.blade.php
 ---
 As tabelas `notifications`, `email_messages` e `email_delivery_attempts`, seus enums, Models, validações e telas de consulta administrativa existem. `RequestEmailDelivery` grava snapshots e reserva tentativas, depois despacha `SendEmailDelivery` após o commit. Os fluxos administrativos de criação de conta, criação ou encerramento de vínculo, exclusão de conta e alteração do e-mail registram o conteúdo renderizado. A troca de e-mail da conta gera avisos aos endereços anterior e novo. Quando a própria pessoa altera o e-mail, o aviso identifica que a mudança foi feita na própria conta e usa a assinatura do sistema; quando outra pessoa faz a alteração, o aviso mantém o nome e o tipo de vínculo de quem solicitou. Templates Markdown do Laravel produzem HTML e texto, preservados no snapshot. A recuperação de senha usa a Notification enfileirada do Fortify e não cria linhas nas tabelas próprias de entrega. O fluxo de solicitação de estágio envia aviso interno e e-mail ao Discente após decisão; correções incluem mensagens por etapa e orientação geral do Setor. As avaliações do supervisor também usam aviso interno e e-mail pós-commit; avisos de documento, liberação, conclusão, cancelamento e execução estão integrados ao pipeline. O transporte vem de `config/mail.php`.
 
@@ -41,6 +41,10 @@ Workers de fila mantêm o código carregado em memória. Após alterar templates
 
 ## Notificações
 
+- [x] Disponibilizar a central **Notificações** e contador na navegação compartilhada, isolados pelo vínculo ativo autorizado, com filtros de leitura e paginação padrão.
+- [x] Permitir marcar como lida/não lida e marcar todas como lidas por ações explícitas; preservar observer e autoria, revalidar contexto e ajustar página vazia após alterações.
+- [x] Resolver somente destinos conhecidos e autorizados, com consulta dos recursos por página e indicação de destino indisponível para registros antigos ou acesso perdido. Abrir um link não marca leitura.
+- [ ] Validar navegação autenticada, isolamento e concorrência real da central antes da preparação para produção. Esta entrega não cria nem executa testes ou altera notificações reais para verificação.
 - [x] Direcionar as notificações de decisão e correção da solicitação ao vínculo discente proprietário, com autorização por vínculo.
 - [x] Manter leitura interna independente da entrega de e-mail; `read_at` permanece separado do histórico de transporte. Automatizar a validação na preparação para produção.
 - [x] Definir o destinatário e os canais dos avisos de decisão e correção da solicitação de estágio.
@@ -50,6 +54,8 @@ Workers de fila mantêm o código carregado em memória. Após alterar templates
 - [x] Agrupar solicitações e cancelamentos pendentes em resumo interno diário do Setor; o resumo de eventos temporais do estágio permanece pendente.
 
 ## Histórico de e-mails por escopo
+
+A central operacional tem contrato próprio em [Central de notificações internas](doc:e-mails-notificacoes-e-entregas#central-de-notificacoes-internas). A leitura no SGE não interfere nas mensagens e tentativas de transporte listadas abaixo.
 
 - [x] Disponibilizar índice com filtros de finalidade e estado, e detalhes com conteúdo armazenado e todas as tentativas.
 - [x] Compartilhar as telas e o grupo Logs com Administrador do Sistema e Setor de Estágio, revalidando o vínculo ativo selecionado e seu escopo em cada requisição; não há bypass de autorização.

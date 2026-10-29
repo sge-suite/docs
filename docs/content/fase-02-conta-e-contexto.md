@@ -7,8 +7,8 @@ status: in-progress
 visibility: public
 tags: sge/desenvolvimento, sge/autenticacao, sge/checklist
 related: modelo-de-dados-acesso, e-mails-notificacoes-e-entregas, fluxos-principais, fase-03-activity-log, fase-05-administracao
-source_refs: https://github.com/sge-suite/sge/blob/master/app/Support/ActiveAffiliationContext.php, https://github.com/sge-suite/sge/blob/master/app/Http/Middleware/RequireActiveAffiliation.php, https://github.com/sge-suite/sge/blob/master/app/Http/Controllers/AffiliationSelectionController.php, https://github.com/sge-suite/sge/blob/master/app/Console/Commands/CreateAdmin.php, https://github.com/sge-suite/sge/blob/master/resources/views/pages/settings/%E2%9A%A1security.blade.php, https://github.com/sge-suite/sge/blob/master/resources/views/pages/%E2%9A%A1dashboard.blade.php, https://github.com/sge-suite/sge/blob/master/resources/views/components/dashboard-header.blade.php, https://github.com/sge-suite/sge/blob/master/resources/views/components/dashboard-metric.blade.php, https://github.com/sge-suite/sge/blob/master/app/Actions/GetSupervisorDashboard.php, https://github.com/sge-suite/sge/blob/master/app/Actions/GetInternshipOfficeDashboard.php
-updated: 2026-10-28
+source_refs: https://github.com/sge-suite/sge/blob/master/app/Support/ActiveAffiliationContext.php, https://github.com/sge-suite/sge/blob/master/app/Http/Middleware/RequireActiveAffiliation.php, https://github.com/sge-suite/sge/blob/master/app/Http/Controllers/AffiliationSelectionController.php, https://github.com/sge-suite/sge/blob/master/app/Console/Commands/CreateAdmin.php, https://github.com/sge-suite/sge/blob/master/resources/views/pages/settings/%E2%9A%A1security.blade.php, https://github.com/sge-suite/sge/blob/master/resources/views/pages/%E2%9A%A1dashboard.blade.php, https://github.com/sge-suite/sge/blob/master/resources/views/components/dashboard-header.blade.php, https://github.com/sge-suite/sge/blob/master/resources/views/components/dashboard-metric.blade.php, https://github.com/sge-suite/sge/blob/master/app/Actions/GetSupervisorDashboard.php, https://github.com/sge-suite/sge/blob/master/app/Actions/GetInternshipOfficeDashboard.php, https://github.com/sge-suite/sge/blob/master/app/Support/NotificationInbox.php, https://github.com/sge-suite/sge/blob/master/resources/views/components/notifications/%E2%9A%A1navigation.blade.php
+updated: 2026-10-29
 ---
 Referências: [modelo de acesso](doc:modelo-de-dados-acesso), [E-mails, notificações e entregas](doc:e-mails-notificacoes-e-entregas) e [fluxo de login](doc:fluxos-principais#1-acesso-e-vinculo).
 
@@ -54,6 +54,12 @@ A escolha apresenta papel, campus (ou escopo global), curso e matrícula quando 
 Os dados da atuação ficam em **Contexto atual**, dentro do menu do usuário no computador e no celular. O menu tem largura limitada à tela e apresenta papel, campus, curso, matrícula e e-mail em linhas que podem quebrar; esses dados não ocupam o cabeçalho da página. Quando ainda é necessário escolher um vínculo, informa essa pendência sem apresentar uma opção como ativa. Com exatamente dois vínculos e uma seleção válida, o menu informa **Trocar para [papel]** e mostra a identificação completa do destino; o aviso após a troca também o identifica. Sem seleção válida ou com mais opções, o menu leva à escolha.
 
 Os layouts recebem os vínculos ativos da própria conta por um View Composer, com campus e curso carregados antecipadamente e compartilhados entre os menus. A mudança é de apresentação: seleção, troca por POST com CSRF, revalidação no servidor, escopo das Policies, `last_used_at` e proteção de alterações não salvas permanecem nos fluxos existentes. Não há novas permissões, armazenamento no navegador ou alterações nos destinatários de e-mail.
+
+## Caixa de notificações do contexto
+
+A navegação no computador e no celular inclui **Notificações**, com contagem das não lidas somente do vínculo selecionado. A central fixa esse contexto ao abrir e recusa ações de um componente antigo após troca de vínculo; a navegação monta um contador novo para o vínculo escolhido. Filtros, paginação e avisos não combinam outros vínculos da mesma conta nem destinatários `User`. Administrador não pode consultar caixas alheias. Campus desativado mantém a leitura da própria caixa conforme `AffiliationPolicy::viewNotifications`.
+
+As ações explícitas de leitura preservam o histórico e a autoria pelo vínculo, sem afetar envio ou leitura de e-mail. A central mostra apenas links conhecidos com recurso e Policy autorizados; receber um aviso não concede acesso ao destino. Veja [Central de notificações internas](doc:e-mails-notificacoes-e-entregas#central-de-notificacoes-internas).
 
 ## Painel conforme o vínculo selecionado
 

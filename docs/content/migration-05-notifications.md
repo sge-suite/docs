@@ -7,7 +7,7 @@ status: implemented
 visibility: public
 tags: sge/migrations, sge/notificacoes, sge/email
 related: migration-04-affiliations, migration-06-email-messages, e-mails-notificacoes-e-entregas
-source_refs: https://github.com/sge-suite/sge/blob/master/database/migrations/2026_09_22_124656_create_notifications_table.php, https://github.com/sge-suite/sge/blob/master/app/Models/Affiliation.php, https://github.com/sge-suite/sge/blob/master/app/Policies/AffiliationPolicy.php
+source_refs: https://github.com/sge-suite/sge/blob/master/database/migrations/2026_09_22_124656_create_notifications_table.php, https://github.com/sge-suite/sge/blob/master/app/Models/Affiliation.php, https://github.com/sge-suite/sge/blob/master/app/Policies/AffiliationPolicy.php, https://github.com/sge-suite/sge/blob/master/app/Support/NotificationInbox.php, https://github.com/sge-suite/sge/blob/master/app/Actions/UpdateNotificationReadState.php
 ---
 > [!success] Estado
 > Implementada e verificada no PostgreSQL via Sail. A migration foi gerada pelo Laravel 13 e altera somente `data` para `jsonb`. Os destinatários polimórficos não criam FKs para `users` ou `affiliations`; a migration é executada depois da Migration 04 para que os dois tipos de destinatário estejam disponíveis no sistema.
@@ -32,6 +32,8 @@ Avisos de decisão e correção da solicitação de estágio usam `notifiable = 
 Deduplicação durável de eventos repetíveis não deve alterar a tabela nativa. A Action que gerar um evento precisa usar a fonte de idempotência do domínio; quando ela ainda não existir, o fluxo deve definir um registro operacional próprio antes de ser ativado.
 
 ## Checklist
+
+A interface operacional está disponível em **Notificações**, com contador de não lidas na navegação, filtros e paginação por vínculo selecionado. As ações de leitura usam o Model nativo e seu observer, preservando autoria e auditoria de `read_at`, sem registrar `data` nem alterar e-mails. A ação coletiva usa lotes com eventos individuais, e o acesso aos destinos respeita as Policies existentes. Consulte o contrato completo em [Central de notificações internas](doc:e-mails-notificacoes-e-entregas#central-de-notificacoes-internas). Nenhuma migration foi alterada para essa interface.
 
 - [x] Gerar a migration com `php artisan make:notifications-table --no-interaction` e adaptar `data` para `jsonb`.
 - [x] Integrar avisos internos de abertura, avaliação, assinatura de documentos, execução, cancelamento e conclusão nos fluxos correspondentes.

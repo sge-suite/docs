@@ -8,7 +8,7 @@ visibility: public
 tags: sge/desenvolvimento, sge/avaliacao, sge/checklist
 related: fluxos-principais, migration-18-supervisor-evaluations, backlog-e-decisoes
 source_refs: https://github.com/sge-suite/sge/blob/master/app/Actions/ManageSupervisorEvaluation.php, https://github.com/sge-suite/sge/blob/master/app/Actions/UpdateAdvisorGrades.php, https://github.com/sge-suite/sge/blob/master/app/Actions/NotifyInternshipEvaluationResults.php, https://github.com/sge-suite/sge/blob/master/resources/views/emails/internship-evaluation-result.blade.php, https://github.com/sge-suite/sge/blob/master/app/Actions/GetSupervisorDashboard.php, https://github.com/sge-suite/sge/blob/master/resources/views/pages/dashboard/partials/supervisor.blade.php
-updated: 2026-10-28
+updated: 2026-10-29
 ---
 Base: [avaliação e conclusão](doc:fluxos-principais#6-acompanhamento-academico-e-conclusao). O ciclo de resposta, a origem dos pesos e o contrato do formulário fixo estão definidos na [modelagem final da avaliação](doc:migration-18-supervisor-evaluations).
 
@@ -42,6 +42,7 @@ O formulário de avaliação exibe o e-mail institucional do Setor de Estágio d
 - [x] Selecionar em transação a avaliação aprovada mais recente.
 - [x] Calcular nota do supervisor usando snapshot do tipo.
 - [x] Implementar o lançamento, pelo Orientador, das notas de relatório e apresentação.
+- [x] Permitir ao Setor consultar supervisor, relatório, apresentação e consolidada dos estágios autorizados do próprio campus, sem lançamento ou edição.
 - [x] Calcular nota consolidada conforme pesos congelados.
 - [x] Verificar carga horária e requisitos de encerramento.
 - [x] Manter estágio em andamento enquanto a carga horária integral não estiver confirmada, sem bloqueá-lo por avaliações ou notas pendentes.
@@ -74,6 +75,12 @@ A solicitação da avaliação permanece no detalhe do estágio, com atualizaç�
 O formulário segue o padrão visual da solicitação do Discente: progresso, navegação lateral no desktop e seletor de etapa no celular, campos Flux e seletores personalizados `x-select`, rodapé com ações e revisão final com atalhos de edição. Carga horária cumprida usa cinco etapas (carga, qualificação, critérios, comentários e revisão); carga pendente usa somente carga e revisão. Avançar valida as etapas anteriores e salva o rascunho; o botão de rascunho permite salvar preenchimento parcial. Erros levam à etapa correspondente, com foco e rolagem respeitando redução de movimento. O envio continua sujeito às validações e permissões da Action. Respostas enviadas iniciam na consulta consolidada; o cancelamento permitido exige motivo em modal.
 
 A listagem segue o padrão de linhas clicáveis com link real no identificador, sem botão separado de consulta. No contexto do Setor, a página da avaliação é uma consulta consolidada no padrão da análise da solicitação: dados do estágio e do supervisor, carga horária, qualificação, critérios, comentários, decisão e histórico de auditoria. O Setor não recebe navegação por etapas nem campos de resposta. O formulário por etapas permanece exclusivo da experiência do Supervisor autorizado.
+
+## Consulta das notas acadêmicas
+
+O Setor de Estágio com vínculo ativo selecionado consulta as notas do supervisor, relatório, apresentação e consolidada dos estágios que já está autorizado a visualizar no próprio campus. Os componentes aparecem no detalhe e no resumo da listagem, inclusive na apresentação responsiva e na tabela compartilhada do painel do Setor. A consulta usa os valores e pesos registrados no estágio, sem novo cálculo; notas ausentes aparecem como “Pendente” e zero permanece válido. Se os pesos não estiverem configurados, o detalhe mantém os valores disponíveis para leitura e informa a ausência dos pesos.
+
+A leitura histórica permanece disponível em campus ou curso desativado e em estágios concluídos ou cancelados, conforme a autorização de consulta existente. O Setor não recebe campos editáveis nem botão para salvar; chamadas diretas a `saveGrades` ou `UpdateAdvisorGrades` continuam negadas. Somente o vínculo selecionado de Orientador autorizado, exatamente associado ao estágio e sujeito às restrições de edição existentes, lança relatório e apresentação. Ter outro vínculo de Orientador na conta não concede edição enquanto o Setor estiver selecionado. As permissões dos demais vínculos e o acesso às respostas, critérios e observações do supervisor permanecem iguais; cálculo, gravação e notificações não são alterados por essa consulta.
 
 ## Consulta da avaliação no detalhe do estágio
 

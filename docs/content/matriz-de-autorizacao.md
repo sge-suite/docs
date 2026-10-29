@@ -83,6 +83,12 @@ No detalhe do estágio, Setor consulta todas as avaliações, incluindo estado e
 
 Ações relêem e bloqueiam vínculo, estágio, curso, campus, supervisor e resposta e revalidam estado/escopo. Curso/campus inativo e estágio fora de `Released`, `InProgress` ou `Paused` bloqueiam mutações. “Não” grava somente horas faltantes até a carga exigida no snapshot e deve ser devolvido com justificativa; aprovação é proibida. Setor não altera respostas. Cancelamento de `Submitted`/`Returned` pelo proprietário exige motivo. A aprovação com `hours_requirement_met = true` conclui o estágio automaticamente na mesma transação, após selecionar a avaliação vigente e recalcular as notas. Um pedido de cancelamento pendente deve ser decidido antes dessa aprovação.
 
+## Consulta e lançamento de notas
+
+O Setor de Estágio ativo selecionado consulta supervisor, relatório, apresentação e nota consolidada dos estágios autorizados do próprio campus, no detalhe e nos resumos da listagem e do painel, inclusive responsivos. Não lança nem altera notas. A consulta usa valores e pesos já registrados, mostra “Pendente” para ausências e preserva zero; permanece disponível no histórico de campus/curso desativado e de estágios concluídos ou cancelados conforme a permissão de visualizar o estágio. Outro campus continua negado.
+
+Somente o vínculo selecionado de Orientador exatamente associado ao estágio continua autorizado a lançar relatório e apresentação, observadas as restrições de edição existentes. Um vínculo adicional de Orientador na mesma conta não permite ao Setor editar pela tela ou por chamada direta a `saveGrades`/`UpdateAdvisorGrades`. Coordenador, Orientador, Discente, Supervisor e Direção de Ensino mantêm suas permissões atuais. A consulta de notas não amplia acesso às respostas, critérios ou observações da avaliação do supervisor e não altera cálculo ou notificações.
+
 ## Operações de ciclo e assinatura
 
 Somente o Setor ativo selecionado do campus pode disponibilizar documentos, conferir assinaturas, liberar, concluir ou cancelar o estágio. Toda gravação relê e bloqueia vínculo, estágio, curso e campus, revalida a Policy e registra autoria. Liberação exige documentos principais vigentes assinados; conclusão manual exige confirmação da carga horária. Discente só solicita/retira cancelamento do próprio estágio não encerrado. Assinados, cancelados e pedidos finais não são reabertos por este fluxo.

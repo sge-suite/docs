@@ -94,6 +94,7 @@ Cadastro de conta, novo vínculo, troca de e-mail de login, desativação e excl
 - registrar pausa, tratar substituição autorizada de orientador ou supervisor e gerar aditivo quando houver mudança contratual;
 - aprovar ou recusar pedido de cancelamento, preservando documentos e histórico conforme o fluxo;
 - liberar a avaliação do supervisor, aprovar ou devolver a resposta com motivo e validar a carga horária exigida;
+- consultar supervisor, relatório, apresentação e nota consolidada dos estágios autorizados do próprio campus, no detalhe e nos resumos da listagem e do painel, inclusive responsivos; valores e pesos são os registrados no estágio, sem novo cálculo, com “Pendente” para ausências e zero válido;
 - consultar o histórico operacional autorizado e emitir o resumo interno agrupado de pendências.
 
 ### Limites e proibições
@@ -104,6 +105,7 @@ Cadastro de conta, novo vínculo, troca de e-mail de login, desativação e excl
 - não recebe campus ou escopo livres na gestão de tipos; o campus é derivado do curso, e mudanças do catálogo preservam os snapshots dos estágios formalizados;
 - não edita a resposta enviada pelo discente: devolve e indica as seções que podem ser corrigidas;
 - não edita conteúdo de avaliação do supervisor: somente aprova ou devolve;
+- não lança nem altera notas acadêmicas, inclusive por chamadas diretas a `saveGrades`/`UpdateAdvisorGrades`; possuir outro vínculo de Orientador na conta não concede edição enquanto o vínculo selecionado for Setor;
 - pode editar a jornada atual antes da liberação e a previsão é recalculada; após a liberação, a edição não reescreve a jornada pactuada. A emissão de aditivo existe, mas a criação de uma nova vigência após suas assinaturas ainda não está integrada;
 - não conclui estágio, cancela documento ou abre correção por automação temporal; essas decisões são manuais;
 - não acessa provas privadas de emancipação fora da análise da solicitação nem divulga seus dados em comunicação ou documento.
@@ -113,6 +115,8 @@ Cadastro de conta, novo vínculo, troca de e-mail de login, desativação e excl
 Recebe no sistema um resumo diário agrupado por campus e destinatário das solicitações pendentes. O resumo diário de eventos operacionais dos estágios ainda está planejado. Suas decisões e mudanças registram vínculo responsável, motivo e efeitos no Activity Log. As telas de Logs aplicam o campus do vínculo ativo a cada requisição, inclusive ao trocar de contexto ou acessar diretamente um evento. Autor e destinatário não concedem acesso a registros externos. Dados de acesso de outros administradores são protegidos; a própria conta pode consultar seus avisos de troca de e-mail mesmo quando também possui vínculo global. Avisos enviados a interessados de assinatura mantêm categorias e quantidade, nunca endereços de e-mail no log.
 
 ### Controles implementados e validação pendente
+
+`InternshipPolicy::viewAdvisorGrades` permite ao Setor consultar componentes somente quando `view` autoriza aquele estágio. A leitura histórica inclui campus/curso desativado e estágios concluídos ou cancelados, sem acesso a outro campus. `updateAdvisorGrades` mantém o vínculo selecionado de Orientador exatamente associado ao estágio e suas demais restrições de edição; somente esse Orientador autorizado continua lançando relatório e apresentação. A consulta de notas não amplia acesso às respostas, critérios ou observações do supervisor, nem altera as permissões dos demais vínculos, cálculo, gravação ou notificações.
 
 `CampusPolicy`, `CoursePolicy`, `UserPolicy`, `AffiliationPolicy` e Policies específicas do domínio limitam leitura e escrita ao vínculo ativo, campus e relação com o processo. O Setor informa o e-mail institucional do próprio campus e o e-mail institucional da Coordenação em cursos de seu campus. Actions e Forms validam os dados e registram mudanças cadastrais; avisos operacionais continuam selecionando os vínculos responsáveis. A validação automatizada e operacional permanece pendente.
 
@@ -274,7 +278,7 @@ Não há notificações operacionais definidas. Consultas a relatórios ou dados
 | solicitação e evidência de emancipação | `InternshipRequestPolicy`, `EmancipationEvidencePolicy` | posse do discente ou análise pelo Setor |
 | estágio, pausa, aditivo e cancelamento | `InternshipPolicy`, `InternshipPausePolicy`, `InternshipCancellationRequestPolicy` | relação com estágio, estado e fluxo documental |
 | documentos e assinaturas | `GeneratedDocumentPolicy`, `TemplatePolicy` | Setor no escopo; destinatário apenas visualiza o que lhe foi disponibilizado |
-| avaliação e notas | `SupervisorEvaluationPolicy`, `InternshipGradePolicy` | supervisor, Setor ou orientador correto; estado e relação válidos |
+| avaliação e notas | `SupervisorEvaluationPolicy`, `InternshipPolicy` | supervisor, Setor ou orientador correto; estado e relação válidos; Setor consulta notas do próprio campus e somente Orientador autorizado lança notas acadêmicas |
 | relatórios institucionais | Policy específica de relatório | somente quando o vínculo e o escopo tiverem sido definidos |
 
 Antes da produção, validar cada ação em cenários positivos e negativos: vínculo correto, tipo errado, campus/curso errado, relação inexistente, vínculo desativado e status inválido. A [Fase 05](doc:fase-05-administracao) implementa primeiro a base de contexto e as Policies administrativas; as fases de estágio, documentos e avaliação acrescentam as Policies de domínio acima. Atualmente não há testes automatizados.

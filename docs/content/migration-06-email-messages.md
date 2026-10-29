@@ -29,6 +29,8 @@ O Model permite as cinco finalidades. `Notification` pode estar vinculada a uma 
 
 O conteúdo é acessível ao Administrador do Sistema pela tela de e-mails somente quando a tentativa tem contexto administrativo verificável. A prévia é HTML sandboxed, com scripts e recursos externos bloqueados; o texto simples é escapado.
 
+A repetição de transporte exige este snapshot, da mesma finalidade e com assunto e ao menos um corpo utilizável. Reutiliza o mesmo `email_message_id`, assunto e partes persistidas, sem reconstruir templates ou atualizar nomes, notas, assinatura ou destinatário. Mensagens antigas sem conteúdo permanecem apenas consultáveis. A nova autoria pertence à tentativa, sem modificar o snapshot. A autorização específica e o limite de três tentativas totais estão descritos em [E-mails, notificações e entregas](doc:e-mails-notificacoes-e-entregas#nova-tentativa-de-transporte-29-10-2026).
+
 ## Limites
 
 

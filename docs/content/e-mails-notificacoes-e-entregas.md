@@ -9,10 +9,10 @@ tags: sge/planejamento, sge/email, sge/notificacoes, sge/auditoria
 related: enums, migrations, dominio-e-modelo-de-dados, fluxos-principais
 source_refs: https://github.com/sge-suite/sge/blob/master/app/Support/EmailRecipientIdentity.php, https://github.com/sge-suite/sge/blob/master/resources/views/components/email-message.blade.php, https://github.com/sge-suite/sge/blob/master/app/Actions/RequestEmailDelivery.php, https://github.com/sge-suite/sge/blob/master/app/Jobs/SendEmailDelivery.php, https://github.com/sge-suite/sge/blob/master/app/Mail/DeliveryMail.php, https://github.com/sge-suite/sge/blob/master/app/Models/EmailMessage.php, https://github.com/sge-suite/sge/blob/master/app/Models/EmailDeliveryAttempt.php, https://github.com/sge-suite/sge/blob/master/app/Policies/EmailDeliveryAttemptPolicy.php, https://github.com/sge-suite/sge/blob/master/app/Support/AdministrativeEmailLogScope.php, https://github.com/sge-suite/sge/blob/master/app/Support/EmailLogAccess.php, https://github.com/sge-suite/sge/blob/master/app/Support/InternshipRequestReceipt.php, https://github.com/sge-suite/sge/blob/master/resources/views/emails/internship-request-submitted.blade.php
 diagram: mensageria-fluxo
-updated: 2026-10-28
+updated: 2026-10-29
 ---
 > [!abstract] Estado atual
-> As Migrations 05–07, o backend em fila e as telas administrativas estão implementados. Há avisos para decisões/correções da abertura, avaliação do supervisor, assinatura de documentos, liberação, início/pausa/retomada, cancelamento e conclusão. O Administrador do Sistema consulta mensagens ligadas a contas e vínculos administrativos; o Setor consulta mensagens operacionais do campus. As telas mostram conteúdo salvo e tentativas, sem ação de reenvio. Permanecem a validação operacional, escopos de consulta para outros vínculos e a definição institucional de retenção.
+> As Migrations 05–07, o backend em fila e as telas administrativas estão implementados. Há avisos para decisões/correções da abertura, avaliação do supervisor, assinatura de documentos, liberação, início/pausa/retomada, cancelamento e conclusão. O Administrador do Sistema consulta mensagens ligadas a contas e vínculos administrativos; o Setor consulta mensagens administrativas e operacionais do campus. O detalhe permite solicitar outra tentativa de transporte para a última falha elegível, preservando o conteúdo salvo e o destinatário. Permanecem a validação operacional, escopos de consulta para outros vínculos e a definição institucional de retenção.
 
 ## Objetivo e limites
 
@@ -94,12 +94,26 @@ As estruturas e o pipeline abaixo já existem; esta lista mostra o que está imp
 5. [x] Manter o envio de recuperação do Fortify fora das tabelas de mensagens e tentativas.
 6. [x] Definir o convite inicial sem envio de senha; o link abre a tela de recuperação com o e-mail preenchido.
 7. [x] Criar o backend comum de reserva e envio em fila, com conteúdo persistido apenas nas finalidades que o exigem.
-8. [x] Configurar Jobs, timeout, reprocessamento explícito e motivo de falha sanitizado. O reprocessamento é pela Action; a interface de consulta não oferece reenvio.
+8. [x] Configurar Jobs, timeout, reprocessamento explícito e motivo de falha sanitizado. A interface de confirmação usa a mesma Action e o mesmo Job de transporte.
 9. [ ] Validar os fluxos implementados, idempotência, reenvio, renderização e proteção de segredos na preparação para produção, sem integração real com Meilisearch.
 10. [x] Disponibilizar índice e detalhes de envios para o Administrador do Sistema, revalidando o vínculo ativo e selecionado pela Policy em cada requisição.
 11. [x] Filtrar por registro afetado via `scope_context`, incluindo contas e vínculos administrativos sem inferir escopo pelo destinatário ou solicitante.
-12. [x] Mostrar o conteúdo persistido e as tentativas em visualização isolada; não expor segredos nem permitir reenvio na interface.
+12. [x] Mostrar o conteúdo persistido e as tentativas em visualização isolada, sem expor segredos; permitir nova tentativa somente com autorização específica e mensagem histórica utilizável.
 13. [ ] Definir escopos de consulta para outros tipos de vínculo e a política institucional de retenção.
+
+## Nova tentativa de transporte — 29/10/2026
+
+No detalhe do envio, **Tentar enviar novamente** abre uma confirmação com destinatário histórico, assunto/finalidade e próxima tentativa. A ability `EmailDeliveryAttemptPolicy::retry` é separada de `view`: exige conta autenticada e vínculo ativo selecionado. Administrador do Sistema atua somente no escopo de `AdministrativeEmailLogScope`; Setor de Estágio atua no escopo atual de `CampusEmailLogScope`, exigindo campus ativo. Outros tipos não recebem a operação. Campus desativado mantém a consulta histórica do Setor, mas bloqueia nova tentativa. Destinatário atual e autoria anterior não concedem autorização nem ampliam os escopos.
+
+Somente a última tentativa `failed` da `delivery_key`, com número menor que três, pode originar outra. O limite é de **três tentativas no total**, incluindo a original; `queued`, `sent` e limite atingido bloqueiam a ação. É obrigatória uma `EmailMessage` da mesma finalidade, com assunto e texto ou HTML utilizáveis. Registros antigos sem esse conteúdo continuam consultáveis, com explicação de que não podem ser reproduzidos fielmente. Os fallbacks legados de conteúdo não são usados na repetição; mensagens com somente texto ou HTML reutilizam apenas as partes persistidas.
+
+`RequestEmailDelivery::retry` recebe o ator, o vínculo que abriu o detalhe e o ID da última tentativa confirmada. Na transação, usa o lock compartilhado com a gestão de contas/vínculos, bloqueia o vínculo e seu campus e revalida a autorização. Bloqueia a primeira tentativa da sequência e a mais recente antes de decidir e reservar. Se outra confirmação já criou a próxima tentativa, devolve o estado existente, mesmo que o worker já tenha registrado outra falha. Uma confirmação antiga não avança novamente a sequência. As duas constraints únicas de chave/número e mensagem/número permanecem.
+
+A reserva conserva exatamente `delivery_key`, `email_message_id`, finalidade, `recipient_email` e `scope_context`. O Model compara a identidade da nova tentativa com a primeira e a imediatamente anterior, exige a próxima numeração e falha elegível anterior. Somente nessa sequência verificável dispensa a comparação com o e-mail atual do notifiable; a validação dos envios originais permanece. Não há alteração de tentativas finalizadas nem redirecionamento para o novo endereço cadastrado. `CauserResolver` registra o vínculo humano na nova tentativa; solicitantes anteriores e assinatura do conteúdo congelado permanecem. Nenhum conteúdo, destinatário ou segredo é acrescentado ao Activity Log.
+
+O formulário mantém os IDs de contexto e confirmação bloqueados no servidor. Trocar o vínculo exige reabrir o detalhe. A interface desabilita a confirmação durante a requisição, mantém erros no contexto e atualiza a situação e o histórico após a operação, identificando a tentativa solicitada. Enquanto a última estiver na fila, consulta a situação a cada dez segundos. Abrir uma tentativa antiga mantém sua autoria e seu conteúdo em exibição, mas a elegibilidade usa sempre a última da sequência.
+
+O transporte permanece em `SendEmailDelivery`, despachado após commit na fila configurada; não reexecuta Jobs de domínio, avaliação, decisão, assinatura ou notificação interna. Repetir o aviso final não recalcula notas nem constitui retificação. Não cria outra mensagem, chave de entrega ou destinatário institucional, nem acrescenta tentativas automáticas. A interface informa **Tentativa solicitada** e **Na fila**, sem prometer entrega. O SMTP pode aceitar a mensagem antes de uma falha impedir o registro do resultado: a confirmação alerta que a nova tentativa pode gerar entrega duplicada. Não existe garantia absoluta de entrega única nesse cenário.
 
 ## Pendência de retenção
 

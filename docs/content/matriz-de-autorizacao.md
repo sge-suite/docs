@@ -29,6 +29,7 @@ source_refs:
 - Campus desativado preserva consulta e vínculos, mas congela as alterações em seus recursos; configurações pessoais continuam disponíveis.
 - Nenhuma Policy ultrapassa o escopo de campus ou curso do vínculo.
 - Auditoria e e-mails compartilham telas entre Administrador do Sistema e Setor de Estágio. A auditoria segue os escopos administrativos próprios; o Setor consulta e-mails de cadastro/alterações do campus e mensagens operacionais de estágios associados ao mesmo campus, conforme Policies. Nenhum dos perfis amplia seu escopo pelo endereço de e-mail do destinatário.
+- Nova tentativa de e-mail exige `EmailDeliveryAttemptPolicy::retry`, separada de `view`: Administrador somente no escopo administrativo existente; Setor somente no escopo do próprio campus ativo. Ambos exigem vínculo ativo selecionado e preservado desde a abertura da tela. Outros vínculos não recebem a ação. Campus desativado mantém apenas consulta histórica pelo Setor. A operação exige última falha, menos de três tentativas totais e snapshot utilizável; preserva destinatário/conteúdo e registra o vínculo do novo solicitante. Ver [repetição de transporte](doc:e-mails-notificacoes-e-entregas#nova-tentativa-de-transporte-29-10-2026).
 - A mesma pessoa pode atuar por mais de um vínculo; a sessão escolhe apenas um contexto por vez.
 - Não há permissões/roles editáveis pelo banco ou interface. Exceções exigem mudança explícita de enum, Policy, teste e documentação.
 

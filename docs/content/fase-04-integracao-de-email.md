@@ -19,7 +19,7 @@ As tabelas `notifications`, `email_messages` e `email_delivery_attempts`, seus e
 - [x] Despachar envio somente depois do commit da transação de domínio.
 - [x] Registrar `queued`, `sent` e `failed` com provedor e motivo sanitizado.
 - [x] Configurar timeout SMTP de 10 segundos, Job de 60 segundos e limite de três tentativas. A nova tentativa é explícita; o Job não repete automaticamente um SMTP de resultado incerto.
-- [x] Reprocessar falhas pela Action, preservando tentativas anteriores e o conteúdo imutável.
+- [x] Reprocessar falhas pela Action com ator e confirmação da tentativa observada, preservando tentativas anteriores, conteúdo, destinatário e contexto imutáveis; limite total de três tentativas.
 - [x] Manter a recuperação de senha fora de `email_messages` e `email_delivery_attempts`; a Notification do Fortify é enfileirada após o commit.
 - [x] Enviar um único e-mail de conta criada ao login, incluindo tipo do primeiro vínculo, campus/escopo, matrícula, curso e contato quando aplicáveis, sem aviso separado para esse primeiro vínculo e levando à recuperação com o e-mail preenchido para solicitar a definição da senha; armazenar assunto, HTML e texto já renderizados.
 - [x] Ao criar vínculo em conta existente, avisar `users.email` e `affiliations.email` com link de login; deduplicar quando forem iguais e armazenar um snapshot imutável por envio.
@@ -35,7 +35,7 @@ As tabelas `notifications`, `email_messages` e `email_delivery_attempts`, seus e
 
 A API exige uma chave UUID estável por envio. Chamadas repetidas com a mesma chave e os mesmos dados devolvem a tentativa existente. Reutilizar uma chave com destinatário ou conteúdo diferente falha. O envio operacional recebe uma `DatabaseNotification` já criada e guarda um snapshot imutável de assunto e corpo. Os avisos de conta criada, novo vínculo, alteração do e-mail e alteração administrativa também guardam o conteúdo renderizado em `email_messages`; registros antigos de conta criada ou novo vínculo podem não ter esse conteúdo. O primeiro leva à solicitação de definição de senha e o aviso de novo vínculo ao login. A tela de Segurança reserva dois avisos com chaves distintas, um para o endereço anterior e outro para o novo, na mesma transação que atualiza `users.email`. Cada tentativa referencia o snapshot utilizado. Os e-mails usam os componentes Markdown nativos do Laravel, também documentados para Mail Notifications; o Job próprio mantém o histórico de tentativas e o resultado do transporte.
 
-O Job usa bloqueio transacional da tentativa. Se o worker morrer depois de o SMTP aceitar a mensagem e antes de gravar `sent`, o resultado é incerto; um reenvio manual pode gerar uma segunda entrega. Esse limite do SMTP precisa ser considerado na futura interface de reprocessamento. Não há endpoint administrativo de reenvio nesta fase.
+O Job usa bloqueio transacional da tentativa. Se o worker morrer depois de o SMTP aceitar a mensagem e antes de gravar `sent`, o resultado é incerto; uma nova tentativa manual pode gerar uma segunda entrega. O modal do detalhe informa esse risco. A ação Livewire usa `RequestEmailDelivery::retry`, com autorização específica revalidada na transação e comparação sob lock com o ID da última tentativa confirmada; uma confirmação antiga apenas devolve o estado atual. Não reexecuta eventos de domínio nem notificação interna.
 
 Workers de fila mantêm o código carregado em memória. Após alterar templates de e-mail, Mailables ou Jobs, execute `php artisan queue:restart` e confirme que há um worker novo em execução. Se `queue:work` foi iniciado manualmente, inicie-o outra vez após a saída; `queue:restart` não o relança. Mensagens já entregues no Mailpit mantêm o conteúdo original.
 
@@ -59,7 +59,7 @@ Workers de fila mantêm o código carregado em memória. Após alterar templates
 - [x] Manter o escopo global do Administrador do Sistema limitado às mensagens administrativas; disponibilizar ao Setor os avisos operacionais do próprio campus conforme Policy e processo associado.
 - [x] Renderizar HTML em iframe sandboxed com scripts e recursos externos bloqueados; usar texto escapado como fallback e mostrar tentativas sem expor chaves, tokens ou exceções brutas.
 - [ ] Definir autorizações e limites de consulta para outros tipos de vínculo.
-- [ ] Definir uma interface autorizada para solicitar reenvio. O detalhe atual não oferece ação de reenvio.
+- [x] Oferecer confirmação de nova tentativa no detalhe: somente a última falha, abaixo de três tentativas totais, com mensagem persistida utilizável e da mesma finalidade. Exigir `retry` e o vínculo que abriu a tela; Administrador limitado ao escopo administrativo, Setor ao próprio campus ativo. Preservar mensagem, destinatário histórico e autoria anterior, registrando o novo solicitante por `CauserResolver`. Registros sem conteúdo permanecem apenas consultáveis.
 
 
 ## Critério de saída

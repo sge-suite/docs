@@ -68,14 +68,39 @@ Todos os painéis reutilizam `dashboard-header` e `dashboard-metric`: título �
 | Vínculo | Informações e ações relevantes |
 | --- | --- |
 | Administrador do Sistema | Totais globais de contas, vínculos e campi; distribuições de vínculos, estágios e documentos; pendências globais; atalhos para usuários e campi. |
-| Setor de Estágios | Solicitações para analisar, formalização, execução, pausas e conclusão no campus; estágios liberados ou aguardando assinatura; fila de solicitações e términos previstos para acompanhar; atalhos para solicitações, estágios e avaliações. |
-| Discente | Rascunhos e correções, solicitações aguardando o Setor, estágios e conclusões do próprio vínculo; últimas atualizações; atalhos para solicitações, estágios e dados pessoais. |
+| Setor de Estágios | Indicadores do campus; filas de documentos aguardando assinatura, início previsto já passado sem liberação, solicitações para analisar e términos previstos; atalhos para solicitações, estágios e avaliações. |
+| Discente | Correções e rascunhos antes das últimas atualizações, com próxima ação por registro; solicitações aguardando o Setor, estágios e conclusões do próprio vínculo. |
 | Supervisor | Avaliações devolvidas, por preencher, enviadas e aceitas; tabelas das situações pendentes, com correções primeiro e acesso à avaliação conforme a Policy. |
-| Orientador | Totais e últimas atualizações dos estágios sob sua orientação; consulta de notas conforme as permissões existentes. |
+| Orientador | Notas acadêmicas pendentes com acesso ao lançamento; totais e últimas atualizações dos estágios sob sua orientação. |
 | Coordenador de Curso | Totais e últimas atualizações dos estágios dos cursos coordenados e das orientações já autorizadas pela Policy. |
 | Direção de Ensino | Totais e últimas atualizações dos estágios do campus, para acompanhamento. |
 
 Os painéis de acompanhamento reutilizam as tabelas já usadas nas listagens. O Discente não recebe os dados globais de administração, e o Supervisor não recebe acesso à página de detalhes do estágio: abre a avaliação autorizada. Sem uma consulta de domínio disponível, o painel explica essa condição sem criar contadores ou atalhos sem permissão. Indicadores resumem registros; não representam aprovação nem alteração automática de estado.
+
+### Notas pendentes do Orientador
+
+Antes das últimas atualizações, o painel apresenta até cinco estágios autorizados por `InternshipPolicy::updatableAdvisorGradesQuery`, a mesma consulta usada por `updateAdvisorGrades`: vínculo selecionado de Orientador exatamente associado ao estágio, campus e curso ativos, orientação ativa e estágio não cancelado. Coordenação e Direção não recebem essa fila, mesmo que a conta possua outro vínculo de Orientador. Estágios concluídos continuam elegíveis, pois a regra atual permite lançar suas notas.
+
+Uma pendência exige relatório ou apresentação `null` com peso maior que zero no snapshot. Zero é nota válida; componentes de peso zero não exigem lançamento. Os três pesos precisam ser inteiros entre zero e dez e somar dez; snapshots sem essa configuração ficam fora da fila e continuam consultáveis na listagem geral. A consulta usa o JSON do PostgreSQL, sem recalcular notas.
+
+A ordenação usa término previsto crescente e número do estágio crescente como desempate: não há prazo específico de lançamento acadêmico registrado. São exibidos discente, número, tipo, término previsto e componentes faltantes. **Lançar notas** abre `internships.show#grades-heading`. O total e a quantidade excedente informam se há mais resultados; **Ver todos os estágios** abre a listagem geral paginada existente, sem filtro novo. A seção fica oculta quando não há pendências; totais e acompanhamento geral permanecem.
+
+### Filas do Setor
+
+As duas filas consultam somente estágios de cursos do campus selecionado, limitam a cinco estágios cada e mostram total e excedente. Os links **Ver todos os estágios** abrem a listagem geral paginada existente, sem novo filtro. Número, discente, tipo, situação do estágio e data de referência identificam cada pendência. Campus desativado mantém consulta e aviso de somente leitura; nenhum botão dessas filas grava dados ou amplia as permissões das telas de destino.
+
+- **Documentos aguardando assinatura:** inclui estágios com ao menos um documento em `AwaitingSignature`, inclusive aditivos. Documento apenas `Generated`, assinado ou cancelado não basta; o status `AwaitingSignatures` do estágio também não basta sem documento pendente. A linha diferencia a situação do documento da situação do estágio. O modelo registra conferência documental conjunta, sem assinatura individual por pessoa. A ordenação usa a menor `updated_at` entre os documentos pendentes, com desempate pelo número do estágio; essa atualização não é apresentada como data de disponibilização ou prazo. **Ver documentos** abre `internships.show#internship-documents`.
+- **Início previsto já passou:** exige `planned_start_date` anterior a hoje no fuso `app.timezone`, `released_at` ausente e situação `PendingFormalization`, `AwaitingSignatures` ou `PendingCorrection`. Exclui início previsto para hoje e estágios já liberados, em execução, pausados, concluídos ou cancelados. Ordena pelo início previsto crescente e número crescente. **Consultar estágio** abre `internships.show`, onde permanecem os fluxos existentes de formalização, correção e liberação.
+
+As filas não alteram situações por tempo, não enviam avisos e ficam ocultas quando vazias. O acompanhamento de solicitações e términos permanece. O antigo botão com a contagem de estágios em `AwaitingSignatures` foi substituído pela fila documental para evitar confundir as duas situações; o acesso aos liberados permanece.
+
+### Próximas ações do Discente
+
+Antes das últimas atualizações, **Suas próximas ações** apresenta até três solicitações do vínculo discente selecionado em `PendingCorrection` ou `Draft`. As devolvidas vêm primeiro; dentro de cada grupo, ordena por `updated_at` crescente e número crescente. O total do indicador e a mensagem de excedente mostram quando há outras solicitações; a listagem geral **Minhas solicitações** permanece paginada.
+
+A tabela compartilhada apresenta situação e botão por registro: **Corrigir solicitação** ou **Continuar preenchimento**, com acesso a `internship-requests.show`. Os IDs editáveis são consultados em lote pela mesma `InternshipRequestPolicy::updatableQuery` usada por `update`, sem autorização genérica de criação como único critério e sem consulta por linha. Campus ou curso desativado mantém a consulta com **Consultar solicitação**, sem oferecer edição.
+
+Os três registros destacados são excluídos da consulta das últimas atualizações; outras solicitações, inclusive pendências além do limite, podem aparecer ali pela atualização decrescente. Os três estágios mais recentes e os indicadores de espera pelo Setor e conclusão permanecem. Sem rascunhos ou correções, a seção de ações não é renderizada. Datas usam os helpers do SGE e nenhuma solicitação muda de situação ao abrir o painel.
 
 ## Configurações próprias
 

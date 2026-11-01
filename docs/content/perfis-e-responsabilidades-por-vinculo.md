@@ -75,6 +75,8 @@ Cadastro de conta, novo vínculo, troca de e-mail de login, desativação e excl
 
 É o vínculo de administração local e operação dos estágios, restrito ao campus do vínculo ativo e selecionado. Concentra análise humana, formalização e decisões administrativas do processo; não altera livremente respostas de outras pessoas.
 
+O painel mostra até cinco estágios por fila: documentos efetivamente em `AwaitingSignature`, pela atualização documental mais antiga, e início previsto anterior a hoje ainda sem liberação, pelo início mais antigo. O número desempata ambas. A primeira fila distingue situação documental e situação do estágio e abre os documentos; não identifica signatários individuais nem trata toda emissão como espera de assinatura. A segunda exige ausência de `released_at` e situação de formalização, assinaturas ou correção, excluindo estágios já liberados ou em execução e encerrados. Totais, excedentes e acesso à listagem geral completa acompanham as filas, inclusive em somente leitura. Veja os [critérios do painel](doc:fase-02-conta-e-contexto#filas-do-setor).
+
 ### Ações permitidas
 
 - consultar e editar nome, CNPJ, endereço, telefone, e-mail institucional do Setor, representante legal e seguro do próprio campus ativo pela tela Meu campus;
@@ -176,13 +178,17 @@ Recebe notificação interna e e-mail quando selecionado para assinatura ou quan
 
 ### Implementação e validação
 
-`InternshipPolicy::view` e `updateAdvisorGrades` validam a relação de orientação e o vínculo ativo selecionado. A Action revalida o vínculo e o campus em transação, limita as notas aos pesos congelados no estágio e registra a autoria. O Coordenador pode consultar as notas quando também for o orientador daquele estágio, mas não pode lançá-las.
+`InternshipPolicy::view` e `updateAdvisorGrades` validam a relação de orientação e o vínculo ativo selecionado. A consulta `updatableAdvisorGradesQuery` é compartilhada pela autorização de edição e pela fila do painel. A Action revalida o vínculo e o campus em transação, limita as notas aos pesos congelados no estágio e registra a autoria. O Coordenador pode consultar as notas quando também for o orientador daquele estágio, mas não pode lançá-las.
+
+O painel destaca até cinco estágios com relatório ou apresentação ausentes (`null`) e peso positivo, apenas com pesos válidos e edição autorizada. Prioriza o término previsto mais antigo, com desempate pelo número, mostra os componentes faltantes e abre a seção de notas existente. Zero e componentes de peso zero não são pendências. O total e o excedente acompanham o acesso à listagem geral completa; Coordenação e Direção não recebem essa responsabilidade. Veja os [critérios do painel](doc:fase-02-conta-e-contexto#notas-pendentes-do-orientador).
 
 ## Discente
 
 ### Finalidade e escopo
 
 Opera exclusivamente a própria solicitação e o próprio estágio, dentro do curso do vínculo ativo. A Migration 10 associa o curso ao vínculo de discente; uma pessoa com dois cursos usa vínculos separados e não mistura os processos.
+
+O painel destaca até três solicitações do vínculo selecionado, primeiro devolvidas para correção e depois rascunhos, pela atualização mais antiga e número dentro de cada grupo. Mostra a situação e a próxima ação de cada registro conforme `InternshipRequestPolicy::updatableQuery`, compartilhada com `update`: corrigir, continuar ou somente consultar quando a edição estiver bloqueada. Os destacados não se repetem nas últimas atualizações. O excedente mantém acesso à listagem geral completa, e o acompanhamento dos estágios e da espera pelo Setor permanece. Sem pendências, não há seção de ações vazia. Veja os [critérios do painel](doc:fase-02-conta-e-contexto#proximas-acoes-do-discente).
 
 ### Ações permitidas
 

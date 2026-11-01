@@ -34,6 +34,8 @@ Copie este bloco para a nota da fase ou da funcionalidade. Marque somente o que 
 - [ ] Gate/Policy e matriz de vínculo implementados; sem permissões persistidas.
 - [ ] Escopo por usuário, vínculo e campus validado.
 - [ ] Interface implementada no contexto correto.
+- [ ] Dicas contextuais usam exclusivamente `flux:tooltip` ou a propriedade `tooltip` quando disponível no componente Flux; não usar `title` nativo nem implementações próprias.
+- [ ] Botões apenas com ícone mantêm um nome acessível, por exemplo com `aria-label`.
 - [ ] Activity Log e notificações avaliados.
 - [ ] Jobs, filas, idempotência e reprocessamento avaliados.
 - [ ] Concerns, Actions e Providers afetados foram documentados.

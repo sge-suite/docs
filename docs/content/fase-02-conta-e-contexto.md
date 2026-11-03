@@ -57,7 +57,7 @@ Os layouts recebem os vínculos ativos da própria conta por um View Composer, c
 
 ## Caixa de notificações do contexto
 
-A navegação no computador e no celular inclui **Notificações**, com contagem das não lidas somente do vínculo selecionado. A central fixa esse contexto ao abrir e recusa ações de um componente antigo após troca de vínculo; a navegação monta um contador novo para o vínculo escolhido. Filtros, paginação e avisos não combinam outros vínculos da mesma conta nem destinatários `User`. Administrador não pode consultar caixas alheias. Campus desativado mantém a leitura da própria caixa conforme `AffiliationPolicy::viewNotifications`.
+A navegação no computador e no celular inclui **Notificações** e o contador de não lidas somente quando o vínculo selecionado é um vínculo ativo e autorizado do Setor de Estágios. A central fixa esse contexto ao abrir e recusa ações de um componente antigo após troca de vínculo; a navegação monta um contador novo para o vínculo escolhido. Filtros, paginação e avisos não combinam outros vínculos da mesma conta nem destinatários `User`. Os demais vínculos, inclusive Administrador, não acessam a central nem seus avisos antigos. Campus desativado mantém a leitura da própria caixa conforme `AffiliationPolicy::viewNotifications`.
 
 As ações explícitas de leitura preservam o histórico e a autoria pelo vínculo, sem afetar envio ou leitura de e-mail. A central mostra apenas links conhecidos com recurso e Policy autorizados; receber um aviso não concede acesso ao destino. Veja [Central de notificações internas](doc:e-mails-notificacoes-e-entregas#central-de-notificacoes-internas).
 

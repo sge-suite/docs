@@ -33,7 +33,7 @@ Deduplicação durável de eventos repetíveis não deve alterar a tabela nativa
 
 ## Checklist
 
-A interface operacional está disponível em **Notificações**, com contador de não lidas na navegação, filtros e paginação por vínculo selecionado. As ações de leitura usam o Model nativo e seu observer, preservando autoria e auditoria de `read_at`, sem registrar `data` nem alterar e-mails. A ação coletiva usa lotes com eventos individuais, e o acesso aos destinos respeita as Policies existentes. Consulte o contrato completo em [Central de notificações internas](doc:e-mails-notificacoes-e-entregas#central-de-notificacoes-internas). Nenhuma migration foi alterada para essa interface.
+A interface operacional está disponível em **Notificações** somente para o vínculo ativo e autorizado do Setor de Estágios, com contador de não lidas na navegação, filtros e paginação por vínculo selecionado. As ações de leitura usam o Model nativo e seu observer, preservando autoria e auditoria de `read_at`, sem registrar `data` nem alterar e-mails. A ação coletiva usa lotes com eventos individuais, e o acesso aos destinos respeita as Policies existentes. Consulte o contrato completo em [Central de notificações internas](doc:e-mails-notificacoes-e-entregas#central-de-notificacoes-internas). Nenhuma migration foi alterada para essa interface.
 
 - [x] Gerar a migration com `php artisan make:notifications-table --no-interaction` e adaptar `data` para `jsonb`.
 - [x] Integrar avisos internos de abertura, avaliação, assinatura de documentos, execução, cancelamento e conclusão nos fluxos correspondentes.

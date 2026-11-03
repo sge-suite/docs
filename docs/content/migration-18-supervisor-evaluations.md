@@ -10,7 +10,7 @@ related: migration-02-user-personal-data, enum-evaluationstatus, backlog-e-decis
 source_refs:
 ---
 > [!info] Estado
-> Fluxo implementado com Policy, Action transacional, telas Livewire/Flux, aviso interno e e-mail após commit. O Setor solicita a avaliação; o supervisor não cria o pedido. Formatação, compilação e análise estática são verificações técnicas; a validação funcional e de concorrência permanece pendente, sem criação ou execução de testes nesta entrega.
+> Fluxo implementado com Policy, Action transacional, telas Livewire/Flux, e-mail após commit e aviso interno ao Setor no envio da resposta. O Setor solicita a avaliação; o supervisor não cria o pedido. Formatação, compilação e análise estática são verificações técnicas; a validação funcional e de concorrência permanece pendente, sem criação ou execução de testes nesta entrega.
 
 ## Escopo
 
@@ -122,4 +122,4 @@ A ação “Solicitar avaliação do supervisor” no detalhe do estágio regist
 
 `ManageSupervisorEvaluation` bloqueia vínculo, estágio, curso, campus, supervisor e resposta nas mutações, reautoriza a operação e atribui a auditoria ao vínculo. Aprovação seleciona `Approved` por `submitted_at DESC, id DESC` e usa `InternshipGradeCalculator` na mesma transação. Outros estados preservam a vigente anterior e as notas. A aprovação com `hours_requirement_met = true` conclui o estágio automaticamente na mesma transação, após selecionar a avaliação vigente e recalcular as notas. Um pedido de cancelamento pendente deve ser decidido antes dessa aprovação. O histórico das avaliações integra a auditoria do estágio/campus, sem expô-la ao supervisor.
 
-`DeliverSupervisorEvaluationNotice` é despachado após commit para liberação e revisão ao supervisor e para envio aos vínculos ativos do Setor do campus. Usa UUID estável por aviso, notificação interna por vínculo e `RequestEmailDelivery::notification`, com conteúdo e tentativas preservados. Reexecuções do job reutilizam a mesma notificação e reserva de e-mail.
+`DeliverSupervisorEvaluationNotice` é despachado após commit para liberação e revisão ao supervisor e para envio aos vínculos ativos do Setor do campus. Usa UUID estável por aviso e `RequestEmailDelivery::operationalNotice`, com conteúdo e tentativas preservados. O envio da resposta também cria aviso interno para cada vínculo ativo do Setor no campus. Reexecuções não duplicam os registros.

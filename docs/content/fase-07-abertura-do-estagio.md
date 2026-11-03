@@ -54,7 +54,7 @@ O e-mail de confirmação mantém uma cópia dos dados do envio, organizada em t
 - Salvar uma correção mantém a pendência aberta; somente o reenvio explícito e completo a devolve à fila de análise. O Setor aprova novamente antes de aplicar dados corrigidos ao estágio.
 - No primeiro aceite, o sistema cria o estágio na mesma transação, associa-o à solicitação e copia os dados aprovados, as qualificações selecionadas e os endereços históricos. Um novo aceite após correção atualiza apenas os grupos aprovados do estágio ainda não liberado. Após o aceite bem-sucedido, o Setor é direcionado aos detalhes do estágio, com a confirmação da operação. Erros de validação mantêm a tela de análise para correção.
 - Devolução antes da liberação cancela documentos de formalização gerados ou aguardando assinatura, com o motivo da correção; atestados e documentos assinados permanecem no histórico. Após novo aceite, o Setor pode emitir novamente com os dados atuais; baixar uma emissão anterior preserva seus dados originais. Assinatura e liberação são feitas por botões no detalhe do estágio, após as conferências.
-- Avisos individuais de decisão e correção usam notificação interna e e-mail em fila após commit. O Setor recebe um resumo interno diário das solicitações que aguardam análise.
+- Avisos individuais de decisão e correção usam e-mail em fila após commit, com registro no histórico de entregas. O Setor recebe um resumo interno diário das solicitações que aguardam análise.
 
 ## Evidência de emancipação
 

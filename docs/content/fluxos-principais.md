@@ -63,7 +63,7 @@ O sistema avisa o discente sobre início, pausas e retomada; também envia aviso
 
 ## 6. Acompanhamento acadêmico e conclusão
 
-O Setor de Estágio solicita explicitamente a avaliação no detalhe do estágio formalmente liberado, em `Released`, `InProgress` ou `Paused`, com curso/campus e supervisor ativos. A liberação é registrada no estágio e, após commit, o vínculo supervisor recebe aviso interno e e-mail. A avaliação passa a aparecer na lista desse vínculo; o supervisor não inicia uma avaliação por conta própria.
+O Setor de Estágio solicita explicitamente a avaliação no detalhe do estágio formalmente liberado, em `Released`, `InProgress` ou `Paused`, com curso/campus e supervisor ativos. A liberação é registrada no estágio e, após commit, o vínculo supervisor recebe e-mail. A avaliação passa a aparecer na lista desse vínculo; o supervisor não inicia uma avaliação por conta própria.
 
 A primeira pergunta é “A carga horária exigida para este estágio foi cumprida?”. Em “Não”, o supervisor informa somente quantas horas faltam, com valor positivo até a carga exigida no snapshot. Qualificação, critérios e comentários não são exibidos nem gravados. Essa resposta pode ser enviada, mas o Setor deve devolvê-la com justificativa e não pode aprová-la. A devolução reabre o mesmo formulário; posteriormente ele pode ser reenviado como “Sim”.
 
@@ -85,6 +85,6 @@ O vínculo discente recebe dois avisos acadêmicos separados: no aceite do Setor
 
 As mudanças de situação são ações por botões, com confirmação e efeitos próprios; não há seletor de status. O Setor disponibiliza documentos para assinatura, confere assinaturas, libera, conclui ou cancela o estágio. O Discente pode solicitar ou retirar cancelamento; o Setor inicia análise, aprova ou recusa com justificativa. Motivos podem ser digitados ou reaproveitados do histórico autorizado do campus. Cancelar preserva documentos assinados, avaliações aprovadas e notas, encerrando documentos não assinados e avaliações pendentes. A geração automática de rescisão continua pendente do contrato de variáveis.
 
-O aviso de assinatura permite selecionar contatos elegíveis e escrever um complemento individual por destinatário. Pessoas com vínculo recebem aviso interno e e-mail; o contato cadastrado da concedente recebe somente e-mail. Não há destinatário livre. O local de assinatura é informado pelo Setor, sem plataforma fixa.
+O aviso de assinatura permite selecionar contatos elegíveis e escrever um complemento individual por destinatário. Os contatos selecionados recebem e-mail, incluindo o contato cadastrado da concedente quando selecionado. Não há destinatário livre. O local de assinatura é informado pelo Setor, sem plataforma fixa.
 
 Nos formulários de abertura do estágio e avaliação do supervisor, o e-mail institucional do Setor de Estágio do campus é exibido para dúvidas e pode ser copiado por um botão com confirmação em toast. O e-mail institucional da Coordenação é exibido nos dados do curso. Esses endereços servem como contatos e não alteram atualmente os destinatários das notificações.

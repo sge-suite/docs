@@ -35,7 +35,7 @@ Salvar a edição do estágio redireciona para seus detalhes, inclusive quando h
 - [x] Gerar aditivo pelo fluxo documental comum quando houver template de aditivo disponível; sua emissão não cria automaticamente uma nova vigência de jornada.
 - [x] Dar ao aditivo ciclo próprio de assinatura.
 - [x] Implementar cancelamento com permissão, motivo, Activity Log e notificações.
-- [x] Notificar o discente, dentro do sistema e por e-mail após commit, quando o estágio inicia, pausa ou retoma.
+- [x] Notificar o discente por e-mail após commit, quando o estágio inicia, pausa ou retoma.
 - [ ] Definir e implementar o aviso de término previsto. O prazo anterior de sete dias foi adiado para revisão.
 - [ ] Criar resumo diário interno, por campus e destinatário do Setor de Estágio, agrupando eventos temporais e pendências sem enviar e-mail ao Setor.
 - [x] Disponibilizar telas do Setor para editar dados e regras congeladas do estágio, consultar o calendário projetado e registrar exceções em conjunto com as alterações salvas.
@@ -60,7 +60,7 @@ A base local, importação anual e gestão estão implementadas em [Calendário 
 
 ## Liberação e cancelamento implementados
 
-“Liberar estágio” exige todos os documentos principais vigentes assinados, grava data/vínculo e sincroniza imediatamente a execução conforme a data e as pausas. “Concluir estágio” exige confirmação da carga integral. O cancelamento pode partir do Discente ou ser iniciado pelo Setor; revisão, retirada e decisão são botões separados. A decisão exige motivo e data efetiva não futura. Cancela documentos não assinados e avaliações pendentes, preservando assinados, aprovadas, notas e histórico. Os envolvidos recebem avisos internos e e-mails personalizados por papel. A listagem do Setor identifica pedidos pendentes e permite filtrá-los. Pedidos de cancelamento pendentes entram no resumo diário interno do Setor, sem e-mail ao Setor. O resumo diário de eventos temporais, o aviso de término previsto e a geração automática de rescisão permanecem pendentes.
+“Liberar estágio” exige todos os documentos principais vigentes assinados, grava data/vínculo e sincroniza imediatamente a execução conforme a data e as pausas. “Concluir estágio” exige confirmação da carga integral. O cancelamento pode partir do Discente ou ser iniciado pelo Setor; revisão, retirada e decisão são botões separados. A decisão exige motivo e data efetiva não futura. Cancela documentos não assinados e avaliações pendentes, preservando assinados, aprovadas, notas e histórico. Os envolvidos recebem e-mails personalizados por papel, com registro no histórico de entregas. A listagem do Setor identifica pedidos pendentes e permite filtrá-los. Pedidos de cancelamento pendentes entram no resumo diário interno do Setor, sem e-mail ao Setor. O resumo diário de eventos temporais, o aviso de término previsto e a geração automática de rescisão permanecem pendentes.
 
 ## Integrações de jornada e histórico — 23/10/2026
 

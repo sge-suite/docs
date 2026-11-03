@@ -3,7 +3,7 @@
   "kind": "flowchart",
   "title": "Fluxo da notificação operacional",
   "description": "Decisão de destinatário, persistência e entrega de um aviso de domínio.",
-  "summary": "Após um evento autorizado, o sistema verifica se há conta, cria a notificação interna quando aplicável e prepara a mensagem depois do commit; a entrega passa por uma tentativa rastreável.",
+  "summary": "O fluxo registra avisos internos previstos para o Setor e reserva os e-mails de cada destinatário em histórico próprio. O transporte é despachado após commit.",
   "source": {
     "language": "mermaid",
     "path": "diagrams/sources/notificacao-operacional-fluxo.mmd"

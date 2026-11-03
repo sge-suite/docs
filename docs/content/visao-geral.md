@@ -65,7 +65,7 @@ O estágio é concluído quando sua carga horária é integralmente cumprida. A 
 
 ## Avisos e histórico
 
-O sistema avisa os destinatários previstos em eventos implementados, como documentos disponíveis, decisão/correção da solicitação, avaliação, início, pausa, retomada, cancelamento e conclusão. Notificação interna e entrega por e-mail têm históricos separados. O aviso de aproximação do término previsto ainda não está implementado.
+O sistema avisa os destinatários previstos em eventos implementados, como documentos disponíveis, decisão/correção da solicitação, avaliação, início, pausa, retomada, cancelamento e conclusão. A central é exclusiva do vínculo ativo do Setor de Estágios. A entrega por e-mail tem histórico próprio, inclusive para vínculos sem acesso à central. O aviso de aproximação do término previsto ainda não está implementado.
 
 Nos formulários de abertura e avaliação do supervisor, o endereço institucional do Setor de Estágio aparece como contato para dúvidas; ao clicar, a interface copia o endereço e mostra um toast. Os endereços institucionais do Setor e da Coordenação são dados de contato e ainda não substituem os destinatários das notificações por e-mail.
 

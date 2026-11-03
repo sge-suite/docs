@@ -69,12 +69,12 @@ O lock distribuído de `onOneServer()` depende do cache compartilhado já previs
 
 ## Notificações das transições implementadas
 
-A Action cria a notificação interna na mesma transação da mudança de status e registra a entrega de e-mail para o discente. O Job é despachado após o commit; uma falha de e-mail não remove a notificação interna. A fila trata tentativas, backoff e falhas conforme [E-mails, notificações e entregas](doc:e-mails-notificacoes-e-entregas). O Setor não recebe um aviso por estágio nesse fluxo.
+A Action registra a mensagem e a tentativa de entrega ao discente na mesma transação da mudança de status. O Job é despachado após o commit. A fila trata tentativas, backoff e falhas conforme [E-mails, notificações e entregas](doc:e-mails-notificacoes-e-entregas). O Setor não recebe um aviso por estágio nesse fluxo.
 
 | Evento | Discente | Setor de Estágio |
 | --- | --- | --- |
-| entrada automática em andamento | notificação interna e e-mail | sem resumo operacional de estágio implementado. |
-| início ou término de pausa | notificação interna e e-mail | sem resumo operacional de estágio implementado. |
+| entrada automática em andamento | e-mail com histórico de entrega | sem resumo operacional de estágio implementado. |
+| início ou término de pausa | e-mail com histórico de entrega | sem resumo operacional de estágio implementado. |
 
 O aviso de término previsto e o resumo diário dos estágios continuam pendentes de definição e implementação. O critério de sete dias descrito em versões anteriores não foi adotado.
 

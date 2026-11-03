@@ -25,7 +25,7 @@ Classifica a finalidade da mensagem de notificação ou da tentativa de envio. N
 | `AccountEmailChanged`   | `account_email_changed` | Alteração de e-mail da conta   |
 | `AdministrativeChange`  | `administrative_change` | Alteração administrativa       |
 
-As finalidades `AccountCreated`, `NewAffiliation`, `AccountEmailChanged` e `AdministrativeChange` representam mensagens administrativas com conteúdo renderizado persistido em `email_messages` e tentativas associadas. `AccountCreated` leva à solicitação de definição da senha sem guardar token ou URL assinada; `NewAffiliation` leva ao login. Registros antigos de conta criada ou novo vínculo podem não ter `email_message`. `AdministrativeChange` cobre avisos ligados a desativação/exclusão de vínculo ou exclusão de conta. `Notification` identifica conteúdo operacional associado a uma notificação interna. Recuperação de senha não usa esse enum porque não é registrada nessas tabelas.
+As finalidades `AccountCreated`, `NewAffiliation`, `AccountEmailChanged` e `AdministrativeChange` representam mensagens administrativas com conteúdo renderizado persistido em `email_messages` e tentativas associadas. `AccountCreated` leva à solicitação de definição da senha sem guardar token ou URL assinada; `NewAffiliation` leva ao login. Registros antigos de conta criada ou novo vínculo podem não ter `email_message`. `AdministrativeChange` cobre avisos ligados a desativação/exclusão de vínculo ou exclusão de conta. `Notification` identifica conteúdo de um e-mail operacional, com associação opcional a uma notificação interna. Recuperação de senha não usa esse enum porque não é registrada nessas tabelas.
 
 ## Decisões de segurança
 

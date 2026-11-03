@@ -23,7 +23,7 @@ Esta é a referência operacional dos escopos e controles implementados para cad
 - Gates e Policies nativos do Laravel são a única camada de autorização. Não existem papéis, permissões ou exceções editáveis por interface.
 - O Activity Log registra alterações relevantes. Discente e supervisor não o consultam; os demais o consultam somente quando a Policy do processo autorizar.
 - A tela de auditoria e o histórico de e-mails são compartilhados por Administrador do Sistema e Setor de Estágio com vínculo ativo selecionado. O Setor consulta somente o histórico dos recursos locais já gerenciados por suas Policies: campus, cursos, contas e vínculos permitidos, além dos e-mails de cadastro e alterações ligados ao campus. Os demais perfis e fluxos operacionais não recebem acesso automaticamente.
-- Notificação interna e e-mail são canais diferentes. Quem possui conta recebe ambos quando for destinatário elegível; o Setor de Estágio recebe seu resumo operacional somente dentro do sistema. Quando a mesma pessoa atua como Coordenador e Orientador de um estágio, avisos relativos à orientação usam o vínculo de Orientador.
+- Notificação interna e e-mail são canais diferentes. A central é exclusiva do vínculo ativo e autorizado do Setor de Estágios. O Setor recebe ali os resumos de pendências e o aviso de avaliação enviada; os e-mails previstos para cada papel seguem com histórico próprio. Quando a mesma pessoa atua como Coordenador e Orientador de um estágio, avisos relativos à orientação usam o vínculo de Orientador.
 - Informações privadas, inclusive prova de emancipação, nunca entram em e-mail, documento gerado ou Activity Log detalhado. O acesso depende de necessidade funcional explícita.
 
 ## Resumo de fronteiras
@@ -174,7 +174,7 @@ Acompanha apenas os discentes para os quais é orientador no estágio. O escopo 
 
 ### Notificações e auditoria
 
-Recebe notificação interna e e-mail quando selecionado para assinatura ou quando tiver ação acadêmica atribuída. Cada lançamento de nota registra autor, vínculo, valor anterior e novo; o sistema recalcula a nota consolidada conforme as regras congeladas.
+Recebe e-mail quando selecionado para assinatura ou quando tiver ação acadêmica atribuída. Cada lançamento de nota registra autor, vínculo, valor anterior e novo; o sistema recalcula a nota consolidada conforme as regras congeladas.
 
 ### Implementação e validação
 
@@ -209,7 +209,7 @@ O painel destaca até três solicitações do vínculo selecionado, primeiro dev
 
 ### Notificações e auditoria
 
-Recebe notificação interna e e-mail sobre fatos temporais do próprio estágio, devoluções, decisões e assinatura quando selecionado. A evidência de emancipação permanece privada; o histórico registra o evento de envio e análise sem expor arquivo ou metadados.
+Recebe e-mail sobre fatos temporais do próprio estágio, devoluções, decisões e assinatura quando selecionado. A evidência de emancipação permanece privada; o histórico registra o evento de envio e análise sem expor arquivo ou metadados.
 
 ### Implementação e validação
 
@@ -240,7 +240,7 @@ Responde pela avaliação dos estágios em que está formalmente vinculado como 
 
 ### Notificações e auditoria
 
-Quando tiver conta, recebe notificação interna e e-mail pelos fatos que exigirem ação. O Activity Log preserva valores e transições, mas não é exposto na interface do supervisor.
+Quando tiver conta, recebe e-mail pelos fatos que exigirem ação. O Activity Log preserva valores e transições, mas não é exposto na interface do supervisor.
 
 ### Implementação e validação
 

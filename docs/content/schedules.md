@@ -11,7 +11,7 @@ source_refs: https://github.com/sge-suite/sge/blob/master/routes/console.php, ht
 ---
 ## Objetivo e limite
 
-Os schedules tratam fatos que passam a valer com o tempo, mesmo sem alguém abrir o sistema. O sincronizador da execução do estágio já está ativo e reconcilia o estado persistido com a data institucional por uma Action. As rotinas de aviso de término previsto e resumo diário operacional do Setor continuam planejadas.
+Os schedules tratam fatos que passam a valer com o tempo, mesmo sem alguém abrir o sistema. O sincronizador reconcilia a execução do estágio com a data institucional. Uma rotina separada reserva o aviso de término previsto ao Discente. O resumo diário dos eventos de execução para o Setor continua planejado.
 
 O horário de referência usa `app.timezone`, atualmente `America/Sao_Paulo`. Não há fuso por campus. `internships:sync-execution-status` aceita `--date=AAAA-MM-DD` para reprocessamento controlado e investigação; sem a opção, usa a data corrente nesse fuso.
 
@@ -27,16 +27,23 @@ O sincronizador ignora campi desativados na seleção e confere o estado novamen
 | `internships:sync-execution-status` | diariamente, 00:05 | Em campus ativo, move `Released` para `InProgress` quando a data planejada chegou e ajusta para `Paused` ou `InProgress` conforme pausas vigentes. Notifica o discente quando o status muda. | Não conclui, cancela nem recalcula a previsão. |
 | `holidays:prepare` | diariamente, 03:00 | Importa feriados nacionais e estaduais e gera feriados municipais por recorrência para o ano atual e os dois seguintes. | Não recalcula estágios. |
 | `internship-requests:notify-office` | diariamente, 08:00 | Envia ao Setor o resumo interno das solicitações e pedidos de cancelamento pendentes, agrupado por campus e destinatário. | Não resume eventos da execução dos estágios nem envia e-mail ao Setor. |
+| `internships:notify-projected-end` | diariamente, 08:05 | Reserva o e-mail ao Discente de estágio elegível cuja previsão persistida esteja entre amanhã e sete dias à frente. | Não recalcula a previsão, muda o status ou cria notificação interna. |
 
-As três rotinas estão registradas em `routes/console.php`, no fuso institucional, com `onOneServer()` e `withoutOverlapping()`. Em produção, o servidor executa `php artisan schedule:run` a cada minuto; `schedule:work` é a alternativa de desenvolvimento local.
+As quatro rotinas diárias estão registradas em `routes/console.php`, no fuso institucional, com `onOneServer()` e `withoutOverlapping()`. Em produção, o servidor executa `php artisan schedule:run` a cada minuto; `schedule:work` é a alternativa de desenvolvimento local.
 
 ## Limpeza de documentos temporários
 
 `documents:prune-temporary` está registrado a cada hora com `withoutOverlapping()`. Remove DOCX/PDF órfãos com mais de uma hora em `storage/app/private/generated-documents-tmp`, somente quando obtém lock exclusivo não bloqueante no arquivo. A geração e a transmissão já removem seus temporários em `finally`; o comando cobre interrupções abruptas do processo. Não altera emissões, snapshots nem originais dos templates. Essa rotina local de limpeza não usa `onOneServer()`, para atender o diretório de cada instância que executa o scheduler.
 
-## Rotinas de estágio adiadas
+## Aviso de término previsto ao Discente
 
-O aviso ao discente de término previsto e o resumo diário dos eventos operacionais do Setor não estão implementados nem registrados no scheduler. A regra de aviso precisa ser revista: em muitos casos, quando faltam sete dias para a previsão, o estágio já terminou na prática. O prazo e o evento que devem disparar o aviso serão definidos antes de criar essa rotina.
+`internships:notify-projected-end` usa a data institucional corrente e lê `internships.projected_end_date`, que já inclui a margem. A janela inclui os próximos sete dias corridos. Uma previsão que entre diretamente a um a seis dias do término pode gerar o aviso na próxima execução. Datas de hoje ou passadas ficam fora da janela.
+
+A rotina percorre estágios em lotes e só reserva para `Released`, `InProgress` ou `Paused` em campus ativo. Revalida campus, situação, previsão e vínculo Discente sob bloqueio na transação de reserva. O vínculo precisa estar ativo, pertencer ao campus do estágio e ter e-mail válido.
+
+A chave de reserva combina estágio e data prevista. Uma nova data pode gerar seu próprio e-mail quando entrar na janela. Manter ou voltar a uma data já reservada não cria novo aviso, mesmo se a tentativa falhou. A fila e o reenvio usam o [histórico de entregas](doc:e-mails-notificacoes-e-entregas).
+
+## Resumo de eventos de estágio pendente
 
 O resumo diário futuro deverá reunir eventos de início, pausa e retomada e as pendências de execução relevantes para o Setor. O resumo existente de `internship-requests:notify-office` cobre somente solicitações e pedidos de cancelamento pendentes.
 
@@ -75,8 +82,6 @@ A Action registra a mensagem e a tentativa de entrega ao discente na mesma trans
 | --- | --- | --- |
 | entrada automática em andamento | e-mail com histórico de entrega | sem resumo operacional de estágio implementado. |
 | início ou término de pausa | e-mail com histórico de entrega | sem resumo operacional de estágio implementado. |
-
-O aviso de término previsto e o resumo diário dos estágios continuam pendentes de definição e implementação. O critério de sete dias descrito em versões anteriores não foi adotado.
 
 Uma execução repetida não duplica o aviso de uma transição já aplicada: o estado é relido dentro do lock e a Action não envia notificação quando não há mudança.
 

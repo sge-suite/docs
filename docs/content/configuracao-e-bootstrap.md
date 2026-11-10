@@ -23,7 +23,7 @@ Este mapa descreve os pontos de entrada que não são Models, Helpers ou migrati
 
 ### `routes/console.php`
 
-Registra `documents:prune-temporary` a cada hora e três rotinas diárias no fuso de `app.timezone`: `internships:sync-execution-status` às 00:05, `holidays:prepare` às 03:00 e `internship-requests:notify-office` às 08:00. O aviso de término previsto e o resumo diário dos eventos de execução do estágio ainda estão pendentes; veja [Schedules](doc:schedules). Em produção, `php artisan schedule:run` deve ser chamado a cada minuto pelo cron.
+Registra `documents:prune-temporary` a cada hora e quatro rotinas diárias no fuso de `app.timezone`. A sincronização da execução roda às 00:05, a preparação do calendário às 03:00, o resumo de solicitações às 08:00 e `internships:notify-projected-end` às 08:05. O resumo diário dos eventos de execução do estágio continua pendente. Em produção, `php artisan schedule:run` deve ser chamado a cada minuto pelo cron. Veja [Schedules](doc:schedules).
 
 ### `bootstrap/providers.php`
 

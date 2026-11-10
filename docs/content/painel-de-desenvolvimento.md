@@ -28,7 +28,7 @@ Para a sequência e o andamento atuais, consulte [Fases de desenvolvimento](doc:
 - [Fase 05 — Administração hierárquica](doc:fase-05-administracao) — **in-progress** — Administração global e gestão local de campi, cursos, tipos, usuários, vínculos e cadastros implementadas; validação automatizada pendente.
 - [Fase 06 — Documentos](doc:fase-06-documentos) — **in-progress** — Templates, emissão/reprodução DOCX/PDF, assinatura e avisos implementados; registro operacional de documentos externos implementado.
 - [Fase 07 — Abertura do estágio](doc:fase-07-abertura-do-estagio) — **in-progress** — Rascunho, envio, análise, correção, cadastros pendentes, aceite e integração documental implementados; base reproduzível dos novos cálculos implementada; validação operacional pendente.
-- [Fase 08 — Estágio em andamento](doc:fase-08-estagio-em-andamento) — **in-progress** — Pausas, calendário, liberação, sincronização, avisos, cancelamento e atualização da previsão implementados; vigências formais de jornada e base reproduzível dos novos cálculos implementadas; avisos/resumos adicionais pendentes.
+- [Fase 08 — Estágio em andamento](doc:fase-08-estagio-em-andamento) — **in-progress** — Pausas, calendário, liberação, sincronização, cancelamento, atualização da previsão e aviso de término implementados. Vigências formais de jornada e base reproduzível dos novos cálculos implementadas. Resumo temporal do Setor pendente.
 - [Fase 09 — Avaliação e conclusão](doc:fase-09-avaliacao-e-conclusao) — **in-progress** — Avaliação, notas e conclusão implementadas; validação funcional e operacional pendente.
 - [Fases de desenvolvimento](doc:fases-de-desenvolvimento) — **in-progress** — Índice das fases executáveis do desenvolvimento do SGE.
 
@@ -118,7 +118,7 @@ Sequência física dos arquivos em `database/migrations`; os números permanecem
 - [Provider — FortifyServiceProvider](doc:provider-fortifyserviceprovider) — **implemented** — Configuração atual de Actions, telas e rate limiting de autenticação do Fortify.
 - [Providers](doc:providers) — **in-progress** — Índice dos Service Providers que configuram autenticação, locale, moeda e comportamento Eloquent.
 - [Desenvolvimento — Checklist de funcionalidade](doc:desenvolvimento-checklist-de-funcionalidade) — **maintained** — Checklist reutilizável para implementar qualquer funcionalidade ou regra do SGE.
-- [Schedules](doc:schedules) — **in-progress** — Limpeza temporária, sincronização da execução, preparação do calendário e resumo diário de solicitações implementados; aviso de término e resumo temporal de estágios pendentes.
+- [Schedules](doc:schedules) — **in-progress** — Limpeza temporária, sincronização da execução, preparação do calendário, resumo diário de solicitações e aviso de término implementados. Resumo temporal de estágios para o Setor pendente.
 - [Service — InternshipEndDateCalculator](doc:service-internshipenddatecalculator) — **in-progress** — Cálculo e recálculo da previsão ao salvar alterações do estágio implementados; base reproduzível dos novos cálculos e vigência formal de jornada implementadas; validação operacional pendente.
 - [Service — InternshipGradeCalculator](doc:service-internshipgradecalculator) — **implemented** — Cálculo das contribuições do supervisor e consolidação das notas.
 - [Services](doc:services) — **in-progress** — Índice dos serviços de domínio existentes; funções ainda sem integração estão identificadas como pendentes.
@@ -126,7 +126,7 @@ Sequência física dos arquivos em `database/migrations`; os números permanecem
 
 ## Integrações
 
-- [E-mails, notificações e entregas](doc:e-mails-notificacoes-e-entregas) — **in-progress** — Pipeline e avisos de abertura, avaliação, assinatura, execução, cancelamento e conclusão implementados; validação operacional, escopos adicionais e retenção pendentes.
+- [E-mails, notificações e entregas](doc:e-mails-notificacoes-e-entregas) — **in-progress** — Pipeline e avisos de abertura, avaliação, assinatura, execução, término previsto, cancelamento e conclusão implementados. Validação operacional, escopos adicionais e retenção pendentes.
 - [Geração de documentos DOCX e variáveis](doc:geracao-de-documentos-docx-e-variaveis) — **implemented** — Emissão e reprodução histórica DOCX/PDF, versões imutáveis, autorização e catálogo de variáveis.
 
 ## Decisões

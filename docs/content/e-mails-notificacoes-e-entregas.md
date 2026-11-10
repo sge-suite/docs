@@ -159,6 +159,12 @@ Devolução, recusa e aceite da abertura enfileiram `DeliverInternshipRequestNot
 
 `internship-requests:notify-office`, agendado às 08h no fuso institucional, cria somente um resumo interno diário por vínculo ativo do Setor e campus, agrupando solicitações e pedidos de cancelamento em `Submitted` ou `UnderReview` em avisos separados. A identidade determinística por destinatário/data e a PK da notificação impedem duplicidade. Não envia e-mail ao Setor nem distribui a mesma pendência em mensagens individuais. O aviso de solicitações aponta para **Analisar solicitações**; o de cancelamentos, para **Estágios**. Os avisos documentais e a escolha dos interessados são feitos pelo Setor no fluxo de documentos, sem aviso automático ao Setor por e-mail.
 
+## Aviso de término previsto ao Discente
+
+`internships:notify-projected-end` reserva o e-mail somente para o vínculo Discente elegível do estágio. O assunto identifica o estágio e o conteúdo HTML/texto registra a previsão vigente no momento da reserva, com link para o detalhe acessível ao Discente. A janela e a elegibilidade estão descritas em [Schedules](doc:schedules).
+
+`NotifyInternshipProjectedEndDate` usa uma chave determinística por estágio e data prevista. O pipeline guarda a mensagem em `email_messages` e cada tentativa em `email_delivery_attempts`, com o campus do estágio em `scope_context`. O job de transporte é despachado após commit. Uma tentativa que falhe permanece no histórico e pode ser tratada pelo reenvio normal, que usa o conteúdo e o destinatário originais. A reserva automática e o reenvio são exclusivos do canal e-mail.
+
 ## Integração da avaliação do supervisor
 
 `ManageSupervisorEvaluation` despacha `DeliverSupervisorEvaluationNotice` somente após commit. Cada aviso leva uma UUID estável ao job, usada como chave da reserva de e-mail. No envio da resposta, o job também usa a UUID como ID do aviso interno para cada vínculo ativo do Setor do campus. A reexecução não duplica os registros. O job usa o e-mail do vínculo destinatário e o pipeline operacional existente. Leitura interna não confirma entrega SMTP. Avisos de avaliação integram os logs de e-mail do Setor no campus do estágio; o escopo global do Administrador continua restrito a mensagens administrativas. Se a mesma pessoa também for Coordenadora, avisos referentes à sua atuação como Orientador continuam endereçados ao vínculo de Orientador. Workers precisam carregar a nova versão; consumo da fila, Mailpit e concorrência permanecem pendentes de validação operacional.

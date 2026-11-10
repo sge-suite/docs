@@ -59,7 +59,7 @@ O discente pode solicitar cancelamento, sempre informando o motivo. O Setor de E
 
 Algumas situações são atualizadas pela passagem do tempo: o SGE inicia o estágio já liberado na data planejada, registra o início de uma pausa válida e retoma o estágio quando ela termina.
 
-O sistema avisa o discente sobre início, pausas e retomada; também envia avisos de domínio para eventos implementados de avaliação, assinatura, cancelamento e conclusão. O aviso de término previsto ainda não está implementado. Esses avisos não substituem a análise humana: o sistema não confirma assinaturas, não decide cancelamentos e não conclui o estágio apenas pela chegada da previsão.
+O sistema avisa o Discente sobre início, pausas, retomada e aproximação do término previsto. O aviso de término é um e-mail por estágio e data prevista, reservado entre um e sete dias antes da previsão vigente. Há também avisos de avaliação, assinatura, cancelamento e conclusão. Esses avisos não substituem a análise humana: o sistema não confirma assinaturas, não decide cancelamentos e não conclui o estágio apenas pela chegada da previsão.
 
 ## 6. Acompanhamento acadêmico e conclusão
 

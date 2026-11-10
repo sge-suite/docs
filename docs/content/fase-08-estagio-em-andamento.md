@@ -36,7 +36,7 @@ Salvar a edição do estágio redireciona para seus detalhes, inclusive quando h
 - [x] Dar ao aditivo ciclo próprio de assinatura.
 - [x] Implementar cancelamento com permissão, motivo, Activity Log e notificações.
 - [x] Notificar o discente por e-mail após commit, quando o estágio inicia, pausa ou retoma.
-- [ ] Definir e implementar o aviso de término previsto. O prazo anterior de sete dias foi adiado para revisão.
+- [x] Enviar ao Discente o aviso de término previsto por e-mail quando faltarem de um a sete dias corridos para a previsão persistida. Cada estágio e data prevista têm uma única reserva automática.
 - [ ] Criar resumo diário interno, por campus e destinatário do Setor de Estágio, agrupando eventos temporais e pendências sem enviar e-mail ao Setor.
 - [x] Disponibilizar telas do Setor para editar dados e regras congeladas do estágio, consultar o calendário projetado e registrar exceções em conjunto com as alterações salvas.
 - [x] Permitir que o discente solicite cancelamento antes do início ou durante o andamento.
@@ -60,11 +60,13 @@ A base local, importação anual e gestão estão implementadas em [Calendário 
 
 ## Liberação e cancelamento implementados
 
-“Liberar estágio” exige todos os documentos principais vigentes assinados, grava data/vínculo e sincroniza imediatamente a execução conforme a data e as pausas. “Concluir estágio” exige confirmação da carga integral. O cancelamento pode partir do Discente ou ser iniciado pelo Setor; revisão, retirada e decisão são botões separados. A decisão exige motivo e data efetiva não futura. Cancela documentos não assinados e avaliações pendentes, preservando assinados, aprovadas, notas e histórico. Os envolvidos recebem e-mails personalizados por papel, com registro no histórico de entregas. A listagem do Setor identifica pedidos pendentes e permite filtrá-los. Pedidos de cancelamento pendentes entram no resumo diário interno do Setor, sem e-mail ao Setor. O resumo diário de eventos temporais, o aviso de término previsto e a geração automática de rescisão permanecem pendentes.
+“Liberar estágio” exige todos os documentos principais vigentes assinados, grava data/vínculo e sincroniza imediatamente a execução conforme a data e as pausas. “Concluir estágio” exige confirmação da carga integral. O cancelamento pode partir do Discente ou ser iniciado pelo Setor; revisão, retirada e decisão são botões separados. A decisão exige motivo e data efetiva não futura. Cancela documentos não assinados e avaliações pendentes, preservando assinados, aprovadas, notas e histórico. Os envolvidos recebem e-mails personalizados por papel, com registro no histórico de entregas. A listagem do Setor identifica pedidos pendentes e permite filtrá-los. Pedidos de cancelamento pendentes entram no resumo diário interno do Setor, sem e-mail ao Setor. O resumo diário de eventos temporais e a geração automática de rescisão permanecem pendentes.
+
+O aviso de término usa `projected_end_date`, com a margem já incorporada. A rotina diária considera estágios liberados, em andamento ou pausados, em campus ativo, com vínculo Discente ativo do mesmo campus e e-mail válido. Uma nova previsão pode gerar um aviso ao entrar na janela, inclusive quando já faltarem de um a seis dias. Uma data já reservada conserva seu histórico de entrega. O e-mail leva ao detalhe do próprio estágio e não gera notificação interna. Veja [Schedules](doc:schedules) e [E-mails, notificações e entregas](doc:e-mails-notificacoes-e-entregas).
 
 ## Integrações de jornada e histórico — 23/10/2026
 
-O Setor informa a nova jornada na emissão/registro do aditivo e a aplica pela conferência das assinaturas, sem reescrever dias passados. A proposta é congelada; divergência da previsão ou de outra vigência exige substituição do documento. O histórico de cálculos oferece reprodução das bases salvas a partir desta integração. As decisões sobre documento principal com data vencida usam a lista de documentos e o fluxo de correção existente. Veja os contratos de [vigências](doc:migration-23-internship-work-schedules), [documentos](doc:migration-16-generated-documents) e [cálculo](doc:service-internshipenddatecalculator). Avisos de término e resumos temporais não foram alterados.
+O Setor informa a nova jornada na emissão/registro do aditivo e a aplica pela conferência das assinaturas, sem reescrever dias passados. A proposta é congelada; divergência da previsão ou de outra vigência exige substituição do documento. O histórico de cálculos oferece reprodução das bases salvas a partir desta integração. As decisões sobre documento principal com data vencida usam a lista de documentos e o fluxo de correção existente. Veja os contratos de [vigências](doc:migration-23-internship-work-schedules), [documentos](doc:migration-16-generated-documents) e [cálculo](doc:service-internshipenddatecalculator).
 
 
 ## Conferência antes da liberação

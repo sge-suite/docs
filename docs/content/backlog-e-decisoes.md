@@ -162,16 +162,17 @@ As decisões abaixo são preservadas como registro. As notas de pendências de D
 ### D-021 — Reconciliação temporal por schedules idempotentes
 
 - **Status:** parcialmente implementado.
-- **Implementação atual:** `internships:sync-execution-status` reconcilia início, pausa e retomada; `holidays:prepare` mantém o calendário; `internship-requests:notify-office` resume solicitações e cancelamentos pendentes. Todos estão descritos em [Schedules](doc:schedules).
-- **Pendências:** aviso ao discente sobre o término previsto e resumo diário dos eventos temporais do estágio ainda não estão implementados. O critério de sete dias continua em revisão.
+- **Implementação atual:** `internships:sync-execution-status` reconcilia início, pausa e retomada. `holidays:prepare` mantém o calendário. `internship-requests:notify-office` resume solicitações e cancelamentos pendentes. `internships:notify-projected-end` reserva o e-mail de término previsto. As rotinas estão descritas em [Schedules](doc:schedules).
+- **Pendência:** resumo diário dos eventos temporais do estágio para o Setor.
 - **Decisão:** a passagem do tempo não conclui ou cancela estágio/documento nem abre automaticamente correções. A aprovação da avaliação com carga horária cumprida pode concluir em transação; assinatura, cancelamento documental e reemissão continuam sob ação do Setor.
 - **Motivo:** a passagem do tempo não pode depender de alguém acessar o sistema, mas decisões de conclusão, correção e reenvio ainda exigem regras e análise humanas. Restringir o escopo aos fatos temporais evita efeitos duplicados e processamento desnecessário.
 - **Referências:** [Schedules](doc:schedules), [Ciclos de status](doc:ciclos-de-status) e [E-mails, notificações e entregas](doc:e-mails-notificacoes-e-entregas).
 
 ### D-022 — Avisos de assinatura e término por canal adequado
 
-- **Status:** avisos de assinatura e eventos de domínio implementados; lembrete de término e resumo temporal do Setor pendentes.
-- **Decisão:** ao colocar um documento assinável em `awaiting_signature`, o Setor informa onde ele está disponível e escolhe os interessados elegíveis por checkboxes. Os contatos selecionados recebem e-mail com registro de entrega, incluindo o contato externo da concedente quando selecionado. Não há destinatário digitado livremente nem nome de plataforma fixa. Os avisos atuais de fatos temporais cobrem início, pausa e retomada. O Setor recebe o resumo interno de solicitações e cancelamentos pendentes; um resumo de eventos temporais do estágio ainda depende de implementação. O aviso único de término previsto permanece pendente de decisão final.
+- **Status:** avisos de assinatura, eventos de domínio e término previsto implementados. Resumo temporal do Setor pendente.
+- **Decisão:** ao colocar um documento assinável em `awaiting_signature`, o Setor informa onde ele está disponível e escolhe os interessados elegíveis por checkboxes. Os contatos selecionados recebem e-mail com registro de entrega, incluindo o contato externo da concedente quando selecionado. Não há destinatário digitado livremente nem nome de plataforma fixa. Os avisos temporais cobrem início, pausa, retomada e aproximação do término previsto. O Setor recebe o resumo interno de solicitações e cancelamentos pendentes.
+- **Término previsto:** o Discente recebe um e-mail por estágio e data prevista. A rotina usa `projected_end_date`, que já incorpora a margem, e reserva o aviso quando faltam sete dias corridos. Se a previsão entrar diretamente na janela de um a seis dias, a próxima execução diária pode reservá-lo. Alterar a previsão permite um aviso para a nova data quando elegível. Voltar a uma data já avisada preserva a reserva original. A elegibilidade e o histórico estão em [Schedules](doc:schedules) e [E-mails, notificações e entregas](doc:e-mails-notificacoes-e-entregas).
 - **Motivo:** a assinatura exige que o Setor comunique o local efetivo, que pode mudar de plataforma, sem transformar uma ferramenta externa em dependência do domínio. A separação de canais mantém o discente informado e evita que o Setor receba e-mails ou avisos fragmentados em excesso.
 - **Referências:** [Migration 16 — generated_documents](doc:migration-16-generated-documents), [Schedules](doc:schedules) e [E-mails, notificações e entregas](doc:e-mails-notificacoes-e-entregas).
 

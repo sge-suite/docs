@@ -12,6 +12,8 @@ updated: 2026-10-28
 ---
 `InternshipEndDateCalculator` é um serviço puro, sem Eloquent nem relógio global. Recebe início, carga exigida, jornada semanal, datas bloqueadas e margem em dias corridos; devolve a data de conclusão da carga, data projetada e horas creditadas. No fluxo atual, `ProjectInternshipRequestEndDate` resolve o calendário para o endereço e prepara essa chamada no envio e no aceite da solicitação. `internships.projected_end_date` guarda o resultado, enquanto o evento imutável de cálculo preserva as entradas resolvidas e a revisão do algoritmo.
 
+O aviso de término lê a previsão de encerramento persistida em `internships.projected_end_date`, com a margem incorporada. A estimativa de cumprimento da carga horária é um resultado separado. A rotina de aviso usa a data salva sem invocar o calculador. Veja [Schedules](doc:schedules).
+
 ## Invariantes
 
 - datas são `CarbonImmutable` no timezone institucional;

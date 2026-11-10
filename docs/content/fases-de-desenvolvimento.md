@@ -31,7 +31,7 @@ Esta lista registra a sequência e o estado atuais. A aplicação já implementa
 2. **Concluído:** Models de negócio registram autoria pelo vínculo, valores anteriores/novos e exclusão de segredos no Activity Log. A suíte automatizada foi removida e será retomada na preparação para produção.
 3. **Em andamento:** o pipeline com filas, idempotência e histórico atende fluxos administrativos e avisos de abertura, avaliação, assinatura, execução e cancelamento. A consulta operacional do Setor cobre o campus do estágio; retenção institucional e validações operacionais permanecem pendentes.
 4. **Em andamento:** assinatura, liberação, execução, recálculo da previsão ao salvar alterações relevantes, avaliação e conclusão estão implementados. Novos cálculos salvos congelam as entradas para reprodução histórica, e aditivos assinados aplicam novas vigências de jornada. Validação operacional permanece pendente.
-5. **Em andamento:** geração e reprodução DOCX/PDF e avisos de domínio estão integrados. O registro de documentos externos está implementado. Permanecem os avisos de término e resumos operacionais adicionais, além da validação de produção.
+5. **Em andamento:** geração e reprodução DOCX/PDF, registro de documentos externos e avisos de domínio, incluindo o e-mail de término previsto, estão integrados. O resumo temporal do Setor e a validação de produção seguem pendentes.
 
 A seleção de vínculo estabelece o contexto para cada tela. As próximas entregas fecham as pendências listadas nas fases, sem reclassificar como futuras jornadas que já estão implementadas.
 

@@ -55,6 +55,8 @@ Os dados da atuação ficam em **Contexto atual**, dentro do menu do usuário no
 
 Os layouts recebem os vínculos ativos da própria conta por um View Composer, com campus e curso carregados antecipadamente e compartilhados entre os menus. A mudança é de apresentação: seleção, troca por POST com CSRF, revalidação no servidor, escopo das Policies, `last_used_at` e proteção de alterações não salvas permanecem nos fluxos existentes. Não há novas permissões, armazenamento no navegador ou alterações nos destinatários de e-mail.
 
+No contexto Discente ativo, o menu inclui **Locais de estágio** junto de **Minhas solicitações** e **Meus estágios**. O item abre a [consulta de concedentes ativas do campus](doc:matriz-de-autorizacao#consulta-de-locais-de-estagio).
+
 ## Caixa de notificações do contexto
 
 A navegação no computador e no celular inclui **Notificações** e o contador de não lidas somente quando o vínculo selecionado é um vínculo ativo e autorizado do Setor de Estágios. A central fixa esse contexto ao abrir e recusa ações de um componente antigo após troca de vínculo; a navegação monta um contador novo para o vínculo escolhido. Filtros, paginação e avisos não combinam outros vínculos da mesma conta nem destinatários `User`. Os demais vínculos, inclusive Administrador, não acessam a central nem seus avisos antigos. Campus desativado mantém a leitura da própria caixa conforme `AffiliationPolicy::viewNotifications`.

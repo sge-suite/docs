@@ -34,7 +34,7 @@ Esta é a referência operacional dos escopos e controles implementados para cad
 | Setor de Estágio | próprio campus | sim | dados do campus, cursos, tipos, concedentes, pendências, templates e gestão local prevista em Policy | administração local, análise, formalização, liberação e avaliação |
 | Coordenador | cursos que referenciam o vínculo titular/substituto, mais estágios de seus próprios orientandos no campus | consulta acadêmica e histórico de atestados | não | atestado com versão vigente automática, DOCX/PDF e snapshot |
 | Orientador | próprios orientandos | sim, nas notas acadêmicas | não | lançamento de relatório e apresentação |
-| Discente | próprio vínculo/processo | sim, na própria solicitação e pedidos | próprios dados permitidos | envio, correção, desistência e pedido de cancelamento |
+| Discente | próprio vínculo e processos, com consulta a locais de estágio do campus | sim, na própria solicitação e pedidos | próprios dados permitidos | envio, correção, desistência e pedido de cancelamento |
 | Supervisor | estágios sob sua supervisão e perfil próprio permitido | sim, na própria avaliação | próprios dados profissionais e telefone | envio ou cancelamento da própria avaliação |
 | Direção de Ensino | estágios do campus do vínculo ativo | consulta e painel resumido | não | somente leitura; relatórios detalhados ainda serão definidos |
 
@@ -186,7 +186,7 @@ O painel destaca até cinco estágios com relatório ou apresentação ausentes 
 
 ### Finalidade e escopo
 
-Opera exclusivamente a própria solicitação e o próprio estágio, dentro do curso do vínculo ativo. A Migration 10 associa o curso ao vínculo de discente; uma pessoa com dois cursos usa vínculos separados e não mistura os processos.
+Opera a própria solicitação e o próprio estágio dentro do curso do vínculo ativo. A Migration 10 associa o curso ao vínculo de discente; uma pessoa com dois cursos usa vínculos separados e não mistura os processos. A consulta **Locais de estágio** tem escopo do campus do vínculo Discente ativo selecionado.
 
 O painel destaca até três solicitações do vínculo selecionado, primeiro devolvidas para correção e depois rascunhos, pela atualização mais antiga e número dentro de cada grupo. Mostra a situação e a próxima ação de cada registro conforme `InternshipRequestPolicy::updatableQuery`, compartilhada com `update`: corrigir, continuar ou somente consultar quando a edição estiver bloqueada. Os destacados não se repetem nas últimas atualizações. O excedente mantém acesso à listagem geral completa, e o acompanhamento dos estágios e da espera pelo Setor permanece. Sem pendências, não há seção de ações vazia. Veja os [critérios do painel](doc:fase-02-conta-e-contexto#proximas-acoes-do-discente).
 
@@ -197,6 +197,7 @@ O painel destaca até três solicitações do vínculo selecionado, primeiro dev
 - enviar a solicitação, responder uma devolução nas seções liberadas e acompanhar o resultado da análise;
 - registrar a capacidade civil, informar responsável quando necessário e enviar comprovante privado de emancipação pelo SGE;
 - consultar seus estágios, notificações, documentos que lhe forem disponibilizados e a previsão de término;
+- consultar **Locais de estágio** no menu, junto de **Minhas solicitações** e **Meus estágios**. A lista exibe nome e município com UF das concedentes ativas do campus, com busca por nome e filtros de município e de estágio iniciado no próprio curso. O detalhe mostra os cursos do campus com estágios em andamento, pausados ou concluídos naquela concedente. A presença na lista indica cadastro no SGE, sem indicar oferta de vaga;
 - desistir da solicitação não formalizada ou solicitar cancelamento do estágio com motivo, nos estados permitidos.
 
 ### Limites e proibições
@@ -214,6 +215,8 @@ Recebe e-mail sobre fatos temporais do próprio estágio, devoluções, decisõe
 ### Implementação e validação
 
 `InternshipRequestPolicy`, `InternshipPolicy`, `EmancipationEvidencePolicy` e `InternshipCancellationRequestPolicy` verificam posse pelo `affiliation_id`, curso, estado e seções liberadas. Testar acesso cruzado entre discentes, envio incompleto fora de `Draft`, edição após envio e leitura de Activity Log.
+
+`GrantingPartyPolicy::viewStudentLocations` autoriza a consulta de locais pelo vínculo ativo selecionado. A troca de vínculo invalida novas requisições Livewire da página aberta no contexto anterior. A consulta usa o cadastro oficial e fica separada da gestão do Setor e da seleção de concedentes na solicitação. Propostas pendentes e detalhes administrativos ficam fora da tela.
 
 ## Supervisor
 

@@ -58,6 +58,8 @@ Solicitações e estágios indexam somente nome e matrícula dos snapshots, núm
 
 Ao disponibilizar os índices em um ambiente, execute pelo Sail `artisan scout:sync-index-settings --no-interaction` e `artisan scout:import 'App\Models\NomeDoModelo' --no-interaction` para cada modelo já existente no banco. Os índices usados são `affiliations`, `users`, `campuses`, `cities`, `courses`, `internship_types`, `granting_parties`, `document_templates`, `internship_requests`, `internships`, `holidays` e `holiday_recurrences` (com o prefixo de Scout, quando configurado). A sincronização posterior segue a fila configurada em Scout, com despacho após o commit; o worker deve estar ativo. A normalização de acentos fica a cargo do Meilisearch, sem duplicar nomes em atributos auxiliares. Documentos, matrículas e protocolos não recebem tolerância a erros de digitação.
 
+O filtro de concedente na busca de estágios usa `granting_party_id` no índice `internships`. Ao publicar esse filtro em um ambiente existente, sincronize as configurações dos índices e reimporte `App\Models\Internship` para atualizar os documentos já indexados.
+
 ## Organização do código
 
 {{diagram:arquitetura-atual-diagrama}}

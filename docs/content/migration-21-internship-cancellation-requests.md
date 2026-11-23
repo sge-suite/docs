@@ -19,7 +19,8 @@ source_refs:
 | `id` | bigint, chave primária. |
 | `internship_id` | FK obrigatória para o estágio que se pretende cancelar. |
 
-| `reason` | texto obrigatório informado pelo discente. |
+| `reason` | texto obrigatório informado pelo discente (preservado como histórico imutável). |
+| `report_reason` | nullable, string(255); motivo consolidado pelo Setor para agrupamento nos indicadores sem alterar `reason`. |
 | `status` | [`InternshipCancellationRequestStatus`](doc:enum-internshipcancellationrequeststatus). |
 | `reviewed_at` | data da decisão, nula até análise; a autoria fica no Activity Log. |
 | `decision_reason` | obrigatório na recusa; opcional na aprovação. |

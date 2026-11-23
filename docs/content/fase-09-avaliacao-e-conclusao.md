@@ -76,6 +76,10 @@ O formulário segue o padrão visual da solicitação do Discente: progresso, na
 
 A listagem segue o padrão de linhas clicáveis com link real no identificador, sem botão separado de consulta. No contexto do Setor, a página da avaliação é uma consulta consolidada no padrão da análise da solicitação: dados do estágio e do supervisor, carga horária, qualificação, critérios, comentários, decisão e histórico de auditoria. O Setor não recebe navegação por etapas nem campos de resposta. O formulário por etapas permanece exclusivo da experiência do Supervisor autorizado.
 
+## Triagem da carga horária informada
+
+O Setor de Estágios pode combinar a leitura da situação da avaliação com o filtro **Carga horária informada** da lista. **Cumprida** e **Não cumprida** representam respostas afirmativas e negativas. **Sem resposta** identifica o campo vazio, inclusive em rascunhos. O filtro reflete a resposta salva, enquanto a situação indica o andamento da avaliação. O vínculo de Supervisor continua limitado às próprias avaliações.
+
 ## Consulta das notas acadêmicas
 
 O Setor de Estágio com vínculo ativo selecionado consulta as notas do supervisor, relatório, apresentação e consolidada dos estágios que já está autorizado a visualizar no próprio campus. Os componentes aparecem no detalhe e no resumo da listagem, inclusive na apresentação responsiva e na tabela compartilhada do painel do Setor. A consulta usa os valores e pesos registrados no estágio, sem novo cálculo; notas ausentes aparecem como “Pendente” e zero permanece válido. Se os pesos não estiverem configurados, o detalhe mantém os valores disponíveis para leitura e informa a ausência dos pesos.

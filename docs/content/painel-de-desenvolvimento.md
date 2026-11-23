@@ -32,6 +32,14 @@ Para a sequência e o andamento atuais, consulte [Fases de desenvolvimento](doc:
 - [Fase 09 — Avaliação e conclusão](doc:fase-09-avaliacao-e-conclusao) — **in-progress** — Avaliação, notas e conclusão implementadas; validação funcional e operacional pendente.
 - [Fases de desenvolvimento](doc:fases-de-desenvolvimento) — **in-progress** — Índice das fases executáveis do desenvolvimento do SGE.
 
+## Filtros, exportações e relatórios
+
+- **Etapa 1 · Estágios** — **implemented** — Intervalo inclusivo e ordenação por término previsto, combinados com busca e filtros do vínculo. [Consulta por término previsto](doc:fase-08-estagio-em-andamento#consulta-por-termino-previsto-e-csv-da-coordenacao).
+- **Etapa 2 · CSV da Coordenação** — **implemented** — Exportação dos cursos coordenados com o recorte da listagem e estrutura de 14 colunas. CSV de contatos, migração e compatibilidade de recorte legado são decisões separadas. [Consulta e CSV da Coordenação](doc:fase-08-estagio-em-andamento#consulta-por-termino-previsto-e-csv-da-coordenacao).
+- **Etapa 3 · Filtros complementares** — **implemented** — Carga horária informada em Avaliações do Supervisor e busca de destino em E-mails. [Comparação das listagens](doc:fase-08-estagio-em-andamento#filtros-complementares-comparados-com-o-legado).
+- **Etapa 4 · Curso e Desempenho** — **implemented** — Indicadores, detalhamento e CSV com escopo por vínculo. PDF depende de necessidade de impressão. [Relatórios de estágio](doc:fase-08-estagio-em-andamento#relatorios-de-estagio).
+- **Etapa 5 · Fluxo documental e Acompanhamento** — **in-progress** — Situação, aditivos, cancelamentos, tramitação e prazo de liberação disponíveis para o Setor. Prazo de assinatura efetiva e de conclusão da prática dependem de marcos confiáveis. [Prazo e cobertura histórica](doc:fase-08-estagio-em-andamento#prazo-da-liberacao-e-cobertura-historica).
+
 ## Enums
 
 - [Enum — AffiliationType](doc:enum-affiliationtype) — **implemented** — Tipos funcionais permitidos para um vínculo institucional do SGE.

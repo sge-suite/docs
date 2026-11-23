@@ -209,6 +209,10 @@ O Setor consulta avisos de assinatura, avaliações, liberação, conclusão, ca
 
 “Solicitar avaliação do supervisor” mantém a página do estágio, atualiza os dados e mostra um toast confirmando a solicitação e o enfileiramento do aviso. A interface não confirma entrega SMTP antes do worker.
 
+## Busca por endereço de destino
+
+**E-mails** permite buscar um endereço completo ou trecho do endereço registrado em `recipient_email`, sem distinção de maiúsculas e minúsculas. O filtro combina com finalidade e situação na última tentativa de cada entrega dentro do escopo já autorizado pelo vínculo. Endereços institucionais, compartilhados e históricos podem identificar destinatários diferentes ao longo do tempo. O nome do discente associado ao estágio, usado pelo legado, não identifica de forma confiável o destinatário de avisos administrativos e de vários papéis.
+
 ## Identificação do destinatário e organização das mensagens — 26/10/2026
 
 Todos os novos e-mails identificam o nome de quem recebe e o vínculo ou contexto da conta. `EmailRecipientIdentity` usa o registro destinatário conhecido, nunca deduz um vínculo pelo endereço de e-mail. Mensagens operacionais destacam o papel, campus, curso e matrícula quando aplicáveis; contatos externos são identificados pelo nome, papel de representante e concedente. Nome do destinatário e assinatura de quem solicitou o envio são elementos separados.

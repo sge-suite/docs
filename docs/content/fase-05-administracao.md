@@ -267,6 +267,8 @@ Os editores em telas separadas retornam aos detalhes do registro após uma grava
 
 As barras de rolagem da interface são definidas em `resources/css/app.css` para a página, modais, tabelas, campos e listas. Usam as cores do tema, fundo transparente e indicador arredondado; em navegadores com pseudo-elementos WebKit, têm 4 px e não exibem setas. Nos demais, usam o tamanho nativo `thin`. O recuo nas extremidades respeita os cantos dos modais. Os selects reutilizam essa definição global.
 
+O componente personalizado `<x-select>` (`resources/views/components/select.blade.php`) é o padrão da interface para seleções, com busca opcional, suporte a opções agrupadas (`:groups`) e rolagem automática para centralizar a opção atualmente selecionada ao abrir a lista (sem deslocar a rolagem da página).
+
 Os formulários de modais usam uma coluna flexível com `gap` entre os elementos, evitando margem residual quando os indicadores de carregamento estão ocultos após os botões. O indicador de envio continua disponível durante a operação.
 
 Os editores usam `resources/js/unsaved-changes.js` para proteger alterações locais e gravações em andamento. Os cartões com estado e horário de gravação foram removidos de todas as telas e modais. A proteção abrange cadastros de campus, curso, concedente, tipo de estágio, conta e vínculo; dados pessoais e segurança; solicitações e sua análise; avaliações; notas; edição do estágio; versões de templates e os editores de documentos, pausas e encerramento em modais. Buscas e filtros de seleção não representam dados pendentes de gravação.

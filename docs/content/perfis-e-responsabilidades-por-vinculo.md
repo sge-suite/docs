@@ -71,6 +71,8 @@ Cadastro de conta, novo vínculo, troca de e-mail de login, desativação e excl
 
 ## Setor de Estágio
 
+No menu **Indicadores**, o Setor consulta *Cursos e desempenho* e *Fluxo documental e acompanhamento* no campus do vínculo selecionado, podendo consultar registros detalhados, exportar CSV (detalhado ou resumido), ver a metodologia de cálculo e unificar motivos de cancelamento. Veja [Relatórios de estágio](doc:fase-08-estagio-em-andamento#relatorios-de-estagio).
+
 ### Finalidade e escopo
 
 É o vínculo de administração local e operação dos estágios, restrito ao campus do vínculo ativo e selecionado. Concentra análise humana, formalização e decisões administrativas do processo; não altera livremente respostas de outras pessoas.
@@ -131,7 +133,7 @@ Consulta o acompanhamento acadêmico do curso vinculado. Não se confunde com o 
 
 ### Ações permitidas
 
-- consultar estágios dos cursos que referenciam o vínculo como coordenador titular ou substituto e os estágios de seus próprios orientandos no campus;
+- consultar estágios dos cursos que referenciam o vínculo como coordenador titular ou substituto e incluir os estágios de seus próprios orientandos no campus por filtro; exportar o CSV e consultar os relatórios de Curso e Desempenho no recorte dos cursos coordenados;
 - consultar informações acadêmicas do estágio, incluindo os dados e as observações da avaliação aprovada vigente; vê os critérios e sugestões à instituição, sem permissão para editar o processo;
 - emitir o atestado de orientação, exclusivamente como titular/substituto referenciado pelo curso no próprio campus, e baixar novamente suas emissões autorizadas;
 - escolher DOCX (padrão) ou PDF no modal, sem selecionar template; o sistema usa a versão vigente validada disponível;

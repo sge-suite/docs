@@ -69,6 +69,13 @@ Somente o vínculo ativo selecionado de Setor de Estágio acessa a listagem admi
 
 Na gestão de concedentes, o Setor pode selecionar qualquer curso do próprio campus para consultar onde já houve estágio iniciado. O detalhe da concedente mostra esses cursos e oferece um atalho para **Estágios** com o filtro de concedente aplicado. A listagem de estágios e as opções do seletor respeitam o escopo do vínculo ativo.
 
+## Exportações e indicadores de estágio
+
+- `InternshipPolicy::exportCsv` autoriza o CSV da lista ao vínculo ativo selecionado de Coordenação, nos cursos que o vinculam como titular ou substituto. A visão ampliada de próprios orientandos serve à consulta.
+- `InternshipPolicy::viewIndicators` autoriza a tela **Indicadores** e suas exportações CSV (detalhada ou resumida) ao Setor no próprio campus e à Coordenação nos cursos coordenados. A seção *Fluxo documental e acompanhamento* exige vínculo do Setor. Administrador do Sistema, Direção, Orientador, Discente e Supervisor não recebem acesso a essas rotas pelo próprio perfil.
+- `InternshipPolicy::unifyCancellationReasons` autoriza exclusivamente o vínculo ativo selecionado do Setor de Estágio a consolidar motivos repetidos de cancelamento em `report_reason` no próprio campus, preservando o texto original `reason`.
+- A tela fixa o vínculo selecionado ao abrir. Consultas reativas e rotas de download revalidam o vínculo. Filtros e parâmetros de URL somente reduzem o conjunto autorizado. [Filtros, CSV e indicadores](doc:fase-08-estagio-em-andamento#consulta-por-termino-previsto-e-csv-da-coordenacao).
+
 ## Consulta de locais de estágio
 
 **Locais de estágio** é uma tela de leitura exclusiva do vínculo Discente ativo selecionado. A rota e as requisições Livewire revalidam o contexto, e a página aberta antes de uma troca de vínculo deixa de aceitar consultas. O campus vem da sessão. A lista usa apenas concedentes ativas do cadastro oficial desse campus e exibe nome e município com UF. O Discente pode filtrar por município e restringir a lista aos locais com estágio iniciado no curso do vínculo selecionado. Ao abrir uma concedente, o detalhe mostra os nomes dos cursos do campus com estágio em andamento, pausado ou concluído naquele local, sem identificar estudantes, listar estágios ou exibir quantidades.

@@ -1,7 +1,7 @@
 ---
 id: guia-para-desenvolvedores
 title: Guia para desenvolvedores
-description: Manual de manutenção para docentes e desenvolvedores com stack, mapa de pastas, origem dos dados e uso de agentes de IA no SGE.
+description: Manual técnico com stack, mapa de pastas, origem dos dados e recomendações de uso de agentes de IA na manutenção do SGE.
 type: development-guide
 status: maintained
 visibility: public
@@ -10,11 +10,6 @@ related: ambiente-de-desenvolvimento, arquitetura-atual, dominio-e-modelo-de-dad
 source_refs: https://github.com/sge-suite/sge/blob/master/composer.json, https://github.com/sge-suite/sge/blob/master/package.json, https://github.com/sge-suite/sge/blob/master/compose.yaml, https://github.com/sge-suite/sge/blob/master/AGENTS.md, https://github.com/sge-suite/sge/blob/master/routes/web.php
 updated: 2026-11-23
 ---
-> [!abstract] Para quem é este guia
-> Este documento foi preparado para **professores de programação e desenvolvedores** que precisarem dar suporte, corrigir problemas ou evoluir o SGE. Ele reúne, em um único lugar, as tecnologias adotadas com links para as documentações oficiais, o papel de cada pasta do projeto, o caminho completo dos dados (de onde vêm, onde são validados e onde são salvos) e como utilizar **agentes de IA** já configurados no repositório para acelerar a compreensão e a manutenção.
-
----
-
 ## 1. Como rodar o projeto (Docker, Sail e Sistemas Operacionais)
 
 > [!important] Por que sempre usar o Laravel Sail (Docker)?
@@ -212,28 +207,30 @@ O SGE foi estruturado desde o início para trabalhar em conjunto com **agentes d
    - `fluxui-development`, `livewire-development` e `tailwindcss-development`: padrões visuais e reativos usados nas telas;
    - `laravel-best-practices`, `medialibrary-development`, `scout-development` e `pt-br-validator`.
 
-### 5.2. Como usar esta documentação junto com a IA
+### 5.2. Recomendações práticas ao usar IA no SGE
 
-Esta documentação funciona como a **memória de domínio** do projeto:
+Para que o agente de IA mantenha exatamente o mesmo padrão visual, arquitetural e de código do restante do sistema:
 
-- O site publicado disponibiliza também `llms.txt`, `llms-full.txt` e versões Markdown de cada página, que qualquer agente de IA consegue consultar rapidamente. Caso você também tenha clonado o repositório da documentação (`docs`), os arquivos-fonte ficam em `docs/content/*.md`.
-- **Dica prática:** ao pedir uma alteração para um agente de IA, indique a página correspondente da documentação (por exemplo, [Matriz de autorização](doc:matriz-de-autorizacao) ou [Fase 8 — Estágio em andamento](doc:fase-08-estagio-em-andamento)) para que ele siga todas as regras de negócio antes de editar o código.
+- **Peça sempre para a IA ativar as skills necessárias (`.agents/skills/`):** oriente o agente a ler e seguir as skills do domínio da tarefa antes de escrever código — por exemplo, `fluxui-development`, `livewire-development` e `tailwindcss-development` ao mexer em telas, modais ou tabelas; `laravel-best-practices` ao mexer em Actions, Models e queries; e `sge-date-helper`, `sge-currency-helper` ou `pt-br-validator` ao lidar com datas, valores monetários ou documentos brasileiros.
+- **Peça para comparar com arquivos vizinhos:** instrua a IA a inspecionar telas e classes irmãs na mesma pasta para reaproveitar componentes já existentes (como `<x-select>`, `<x-file-upload>`, `<x-loading-overlay>`) e manter o layout idêntico ao padrão do sistema.
+- **Use a documentação como contexto:** o site de documentação disponibiliza `llms.txt`, `llms-full.txt` e versões Markdown de cada página. Indique a página relevante da documentação (como [Matriz de autorização](doc:matriz-de-autorizacao) ou [Fase 8 — Estágio em andamento](doc:fase-08-estagio-em-andamento)) para que a IA respeite todas as regras de negócio.
+- **Exija execução via Sail e verificação ao final:** peça que todo comando (`artisan make:`, `tinker`, `pint`, `types:check`) seja executado via `./vendor/bin/sail`.
 
-### 5.3. Exemplos de prompts úteis para manutenção
+### 5.3. Exemplos de prompts recomendados
 
-Você pode copiar e adaptar os comandos abaixo ao conversar com o agente de IA na raiz do projeto:
+Você pode copiar e adaptar os prompts abaixo ao trabalhar com o agente de IA na raiz do projeto:
 
 - **Para entender um fluxo ou localizar onde algo acontece:**
-  > *"Preciso entender como funciona a liberação de um estágio após a assinatura dos documentos. Consulte os arquivos em `app/Actions/` e `resources/views/pages/internships/`, e me explique quais classes, validações e tabelas estão envolvidas."*
+  > *"Preciso entender como funciona a liberação de um estágio após a assinatura dos documentos. Consulte os arquivos em `app/Actions/` e `resources/views/pages/internships/`, siga as convenções do `AGENTS.md` e me explique quais classes, Policies, validações de Model e tabelas estão envolvidas."*
 
-- **Para investigar um erro relatado por um usuário:**
-  > *"Um usuário com vínculo de Coordenação relatou erro ao filtrar estágios por data de término previsto. Verifique a página Livewire correspondente em `resources/views/pages/internships/`, a classe `app/Support/InternshipListing.php` e a `InternshipPolicy`, reproduza via `./vendor/bin/sail artisan tinker` e proponha a correção."*
+- **Para investigar e corrigir um bug mantendo o padrão do projeto:**
+  > *"Um usuário com vínculo de Coordenação relatou um problema ao filtrar estágios por data de término previsto. Ative as skills necessárias em `.agents/skills/` (`livewire-development`, `laravel-best-practices`, `sge-date-helper`), verifique a página em `resources/views/pages/internships/`, `app/Support/InternshipListing.php` e `InternshipPolicy`, reproduza via `./vendor/bin/sail artisan tinker` e aplique a correção mantendo o estilo de código e layout existentes."*
 
-- **Para criar ou ajustar uma funcionalidade respeitando as regras do projeto:**
-  > *"Seguindo o `AGENTS.md`, adicione [descreva a mudança]. Crie novos arquivos usando `./vendor/bin/sail artisan make:... --no-interaction`, reutilize os componentes existentes (`<x-select>`, helpers de data/moeda) e valide ao final com `./vendor/bin/sail bin pint --dirty`."*
+- **Para criar ou ajustar uma tela ou funcionalidade:**
+  > *"Seguindo o `AGENTS.md` e ativando as skills necessárias em `.agents/skills/` (`fluxui-development`, `livewire-development`, `tailwindcss-development`, `laravel-best-practices`), implemente [descreva a mudança]. Inspecione os arquivos vizinhos para manter exatamente o mesmo layout e estilo de código, crie novos arquivos com `./vendor/bin/sail artisan make:... --no-interaction`, use os componentes e helpers do projeto (`<x-select>`, helpers de data/moeda) e finalize rodando `./vendor/bin/sail bin pint --dirty` e `./vendor/bin/sail composer run types:check`."*
 
 - **Para inspecionar ou popular dados de teste no banco local via Sail:**
-  > *"Usando `./vendor/bin/sail artisan tinker`, consulte quantos estágios existem hoje no campus 1 por situação e crie registros de teste válidos respeitando as validações dos Models."*
+  > *"Usando `./vendor/bin/sail artisan tinker`, consulte quantos estágios existem hoje no campus 1 por situação e crie registros de teste válidos respeitando as regras e validações dos Models."*
 
 ---
 

@@ -62,7 +62,7 @@ No Windows, o Laravel Sail **não roda diretamente no CMD ou PowerShell tradicio
    - Em *Settings → General*, marque **Use the WSL 2 based engine**.
    - Em *Settings → Resources → WSL Integration*, ative a chave da sua distribuição **Ubuntu** e clique em *Apply & Restart*.
 3. **Regra fundamental no Windows — clone o projeto dentro do Linux (WSL 2):**
-   - Abra o terminal do **Ubuntu (WSL)** e guarde o projeto dentro da sua pasta do Linux (por exemplo, `~/code/sge-suite`):
+   - Abra o terminal do **Ubuntu (WSL)** e guarde o projeto dentro da sua pasta do Linux (por exemplo, `~/code/sge`):
      ```bash
      mkdir -p ~/code
      cd ~/code

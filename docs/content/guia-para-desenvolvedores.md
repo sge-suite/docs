@@ -82,15 +82,11 @@ Antes de alterar código relativo a um pacote, consulte a versão instalada em `
 
 ---
 
-## 3. Mapa de pastas da suíte e da aplicação
+## 3. Mapa de pastas do projeto
 
-O espaço de trabalho (`sge-suite`) é dividido em repositórios complementares:
+Ao clonar o repositório da aplicação (`sge`), você encontrará a seguinte estrutura de diretórios:
 
-- **`sge/`** — código-fonte da aplicação Laravel.
-- **`docs/`** — este site de documentação (construído com **Aurelius** em `docs/docs/content/*.md` e `docs/docs/diagrams/*.json`).
-- **`templates/`** — modelos `.docx` institucionais de referência com as variáveis do sistema.
-
-### Dentro de `sge/app/` (lógica de negócio e domínio)
+### Dentro de `app/` (lógica de negócio e domínio)
 
 | Pasta / Arquivo | O que representa e quando mexer |
 | --- | --- |
@@ -106,7 +102,7 @@ O espaço de trabalho (`sge-suite`) é dividido em repositórios complementares:
 | `app/Console/Commands/` | Comandos Artisan agendados ou administrativos (ex.: sincronização de status de execução de estágios, avisos de término próximo e importação de feriados). Veja [Schedules](doc:schedules). |
 | `app/Jobs/`, `app/Mail/`, `app/Notifications/` | Entrega assíncrona de e-mails (`SendEmailDelivery` com registro em `email_messages` e `email_delivery_attempts`) e notificações internas na interface. Veja [E-mails, notificações e entregas](doc:e-mails-notificacoes-e-entregas). |
 
-### Fora de `sge/app/` (interface, rotas, banco e configuração)
+### Fora de `app/` (interface, rotas, banco e configuração)
 
 | Pasta / Arquivo | O que representa |
 | --- | --- |
@@ -118,6 +114,38 @@ O espaço de trabalho (`sge-suite`) é dividido em repositórios complementares:
 | `database/migrations/` | Histórico completo de criação e evolução das tabelas do PostgreSQL. Veja [Migrations](doc:migrations). |
 | `database/factories/` e `database/seeders/` | Fábricas de modelos para testes/população local e seeders básicos (`CitySeeder`, `HolidaySeeder`). |
 | `config/` | Configurações do Laravel, Fortify (`config/fortify.php`), Scout/Meilisearch (`config/scout.php`) e Activitylog (`config/activitylog.php`). |
+
+### Como criar novos arquivos (sempre via Artisan no Sail)
+
+Seguindo as convenções do Laravel adotadas no projeto, **sempre utilize os comandos `make:` do Artisan via Sail** para criar novos arquivos (em vez de criar arquivos PHP em branco manualmente). Isso garante namespaces, imports, estrutura e registro corretos:
+
+```bash
+# Descobrir todos os comandos disponíveis e ver opções de um comando específico
+./vendor/bin/sail artisan list
+./vendor/bin/sail artisan make:model --help
+
+# Criar um novo Model já com migration, factory e seeder
+./vendor/bin/sail artisan make:model NomeDoModelo -mfs --no-interaction
+
+# Criar uma migration avulsa
+./vendor/bin/sail artisan make:migration add_campo_to_tabela_table --no-interaction
+
+# Criar uma Action, classe de suporte ou Enum
+./vendor/bin/sail artisan make:class Actions/MinhaNovaAction --no-interaction
+./vendor/bin/sail artisan make:class Support/MeuNovoServico --no-interaction
+./vendor/bin/sail artisan make:enum MeuNovoEnum --String --no-interaction
+
+# Criar Policy, Job, Comando Artisan ou Controller
+./vendor/bin/sail artisan make:policy NomePolicy --model=NomeDoModelo --no-interaction
+./vendor/bin/sail artisan make:job NomeDoJob --no-interaction
+./vendor/bin/sail artisan make:command NomeDoComando --no-interaction
+./vendor/bin/sail artisan make:controller NomeController --invokable --no-interaction
+
+# Criar uma nova página ou componente Livewire
+./vendor/bin/sail artisan make:livewire pages::modulo.nome-da-pagina --no-interaction
+```
+
+Ao editar ou criar qualquer arquivo, consulte sempre os arquivos vizinhos da mesma pasta para seguir exatamente a mesma estrutura, tipagem explícita (parâmetros e retorno) e nomenclatura.
 
 ---
 
@@ -175,36 +203,34 @@ Ao formalizar um estágio (quando a solicitação `InternshipRequest` é aceita 
 
 O SGE foi estruturado desde o início para trabalhar em conjunto com **agentes de IA de programação** (como Claude Code, Cursor, GitHub Copilot, Codex, Antigravity, Gemini CLI, etc.). Se você assumir a manutenção, usar um agente conectado ao repositório reduz drasticamente o tempo para localizar arquivos e validar regras.
 
-### 5.1. O que já está configurado para a IA no repositório `sge/`
+### 5.1. O que já está configurado para a IA no repositório
 
-1. **`AGENTS.md` (na raiz de `sge/`):** arquivo lido automaticamente pelos agentes com as convenções do projeto (uso de PHP 8.5, Livewire 4, Flux UI, Pint, regras do Activitylog e Medialibrary).
+1. **`AGENTS.md` (na raiz do projeto):** arquivo lido automaticamente pelos agentes com as convenções do projeto (uso de PHP 8.5, Livewire 4, Flux UI, criação de arquivos via `artisan make:`, formatação com Pint, regras do Activitylog e Medialibrary).
 2. **`.mcp.json` e `boost.json` (Laravel Boost MCP):** configura o servidor MCP do Laravel Boost. Ferramentas compatíveis com MCP conseguem consultar diretamente as rotas, o schema do banco de dados, configurações e logs da aplicação.
-3. **`.agents/skills/` (em `sge/` e em `docs/`):** pastas de instruções especializadas que ensinam à IA as particularidades do projeto:
+3. **`.agents/skills/`:** pastas de instruções especializadas que ensinam à IA as particularidades do projeto:
    - `sge-date-helper` e `sge-currency-helper`: garantem que a IA use os helpers de data e moeda do SGE;
    - `fluxui-development`, `livewire-development` e `tailwindcss-development`: padrões visuais e reativos usados nas telas;
-   - `laravel-best-practices`, `medialibrary-development`, `scout-development` e `pt-br-validator`;
-   - `aurelius-documentation` (em `../docs/.agents/skills/`): regras para editar e validar esta documentação.
+   - `laravel-best-practices`, `medialibrary-development`, `scout-development` e `pt-br-validator`.
 
-### 5.2. Como usar esta documentação (`../docs`) junto com a IA
+### 5.2. Como usar esta documentação junto com a IA
 
-Esta documentação em `../docs` funciona como a **memória de domínio** do projeto:
+Esta documentação funciona como a **memória de domínio** do projeto:
 
-- Os arquivos-fonte ficam em `../docs/docs/content/*.md`. Cada arquivo tem tamanho enxuto, frontmatter com `related` (documentos relacionados) e `source_refs` (arquivos reais do código).
-- Quando o site de documentação é compilado (`cd ../docs && npm run build`), o Aurelius gera automaticamente `dist/llms.txt`, `dist/llms-full.txt` e `dist/markdown/*.md`, que qualquer IA consegue ler rapidamente.
-- **Dica prática:** ao pedir uma alteração para um agente de IA, peça para ele ler primeiro a nota correspondente em `../docs/docs/content/` (por exemplo, `matriz-de-autorizacao.md` ou `fase-08-estagio-em-andamento.md`) antes de editar o código.
+- O site publicado disponibiliza também `llms.txt`, `llms-full.txt` e versões Markdown de cada página, que qualquer agente de IA consegue consultar rapidamente. Caso você também tenha clonado o repositório da documentação (`docs`), os arquivos-fonte ficam em `docs/content/*.md`.
+- **Dica prática:** ao pedir uma alteração para um agente de IA, indique a página correspondente da documentação (por exemplo, [Matriz de autorização](doc:matriz-de-autorizacao) ou [Fase 8 — Estágio em andamento](doc:fase-08-estagio-em-andamento)) para que ele siga todas as regras de negócio antes de editar o código.
 
 ### 5.3. Exemplos de prompts úteis para manutenção
 
-Você pode copiar e adaptar os comandos abaixo ao conversar com o agente de IA na pasta `sge/`:
+Você pode copiar e adaptar os comandos abaixo ao conversar com o agente de IA na raiz do projeto:
 
 - **Para entender um fluxo ou localizar onde algo acontece:**
-  > *"Preciso entender como funciona a liberação de um estágio após a assinatura dos documentos. Consulte `../docs/docs/content/` e os arquivos em `app/Actions/` e `resources/views/pages/internships/`, e me explique quais classes, validações e tabelas estão envolvidas."*
+  > *"Preciso entender como funciona a liberação de um estágio após a assinatura dos documentos. Consulte os arquivos em `app/Actions/` e `resources/views/pages/internships/`, e me explique quais classes, validações e tabelas estão envolvidas."*
 
 - **Para investigar um erro relatado por um usuário:**
   > *"Um usuário com vínculo de Coordenação relatou erro ao filtrar estágios por data de término previsto. Verifique a página Livewire correspondente em `resources/views/pages/internships/`, a classe `app/Support/InternshipListing.php` e a `InternshipPolicy`, reproduza via `./vendor/bin/sail artisan tinker` e proponha a correção."*
 
 - **Para criar ou ajustar uma funcionalidade respeitando as regras do projeto:**
-  > *"Seguindo o `AGENTS.md` e a documentação em `../docs/docs/content/`, adicione [descreva a mudança]. Use os componentes existentes (`<x-select>`, helpers de data/moeda), valide com `./vendor/bin/sail bin pint --dirty` e atualize a nota correspondente em `../docs/docs/content/`."*
+  > *"Seguindo o `AGENTS.md`, adicione [descreva a mudança]. Crie novos arquivos usando `./vendor/bin/sail artisan make:... --no-interaction`, reutilize os componentes existentes (`<x-select>`, helpers de data/moeda) e valide ao final com `./vendor/bin/sail bin pint --dirty`."*
 
 - **Para inspecionar ou popular dados de teste no banco local via Sail:**
   > *"Usando `./vendor/bin/sail artisan tinker`, consulte quantos estágios existem hoje no campus 1 por situação e crie registros de teste válidos respeitando as validações dos Models."*
@@ -213,21 +239,18 @@ Você pode copiar e adaptar os comandos abaixo ao conversar com o agente de IA n
 
 ## 6. Checklist rápido antes de concluir uma manutenção
 
-Sempre que fizer uma alteração no código do `sge/` ou na documentação em `docs/`, execute os comandos abaixo para garantir que tudo continua íntegro:
+Sempre que fizer uma alteração no código, execute os comandos abaixo na raiz do projeto para garantir que tudo continua íntegro:
 
 ```bash
-# 1. No diretório sge/: formatar o código PHP alterado com o Laravel Pint
+# 1. Formatar o código PHP alterado com o Laravel Pint
 ./vendor/bin/sail bin pint --dirty
 
-# 2. No diretório sge/: rodar a análise estática de tipos (PHPStan / Larastan)
+# 2. Rodar a análise estática de tipos (PHPStan / Larastan)
 ./vendor/bin/sail composer run types:check
 
 # 3. Se alterou views Blade ou CSS/JS: limpar views compiladas e compilar assets
 ./vendor/bin/sail artisan view:clear
 ./vendor/bin/sail npm run build
-
-# 4. Se alterou a documentação em ../docs/: validar links, âncoras e frontmatter
-cd ../docs && npm run check
 ```
 
 ## Onde continuar a leitura

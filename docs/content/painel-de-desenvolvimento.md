@@ -34,8 +34,8 @@ Para a sequência e o andamento atuais, consulte [Fases de desenvolvimento](doc:
 
 ## Filtros, exportações e relatórios
 
-- **Etapa 1 · Estágios** — **implemented** — Intervalo inclusivo e ordenação por término previsto, combinados com busca e filtros do vínculo. [Consulta por término previsto](doc:fase-08-estagio-em-andamento#consulta-por-termino-previsto-e-csv-da-coordenacao).
-- **Etapa 2 · CSV da Coordenação** — **implemented** — Exportação dos cursos coordenados com o recorte da listagem e estrutura de 14 colunas. CSV de contatos, migração e compatibilidade de recorte legado são decisões separadas. [Consulta e CSV da Coordenação](doc:fase-08-estagio-em-andamento#consulta-por-termino-previsto-e-csv-da-coordenacao).
+- **Etapa 1 · Estágios** — **implemented** — Intervalo inclusivo e ordenação por término previsto, combinados com busca e filtros do vínculo. [Consulta por término previsto](doc:fase-08-estagio-em-andamento#consulta-por-termino-previsto-e-exportacao-csv-de-estagios-e-concedentes).
+- **Etapa 2 · Exportações CSV (Estágios e Concedentes)** — **implemented** — Exportação de 14 colunas em Estágios para Setor, Coordenação (incluindo orientandos) e Orientador, e exportação de 4 colunas de contatos em Partes concedentes para o Setor. [Consulta e exportação CSV](doc:fase-08-estagio-em-andamento#consulta-por-termino-previsto-e-exportacao-csv-de-estagios-e-concedentes).
 - **Etapa 3 · Filtros complementares** — **implemented** — Carga horária informada em Avaliações do Supervisor e busca de destino em E-mails. [Comparação das listagens](doc:fase-08-estagio-em-andamento#filtros-complementares-comparados-com-o-legado).
 - **Etapa 4 · Curso e Desempenho** — **implemented** — Indicadores, detalhamento e CSV com escopo por vínculo. PDF depende de necessidade de impressão. [Relatórios de estágio](doc:fase-08-estagio-em-andamento#relatorios-de-estagio).
 - **Etapa 5 · Fluxo documental e Acompanhamento** — **implemented** — Situação, aditivos, cancelamentos (com unificação de motivos), tramitação mensal, prazo de liberação (incluindo aditivos) e prazo de conclusão disponíveis para o Setor. [Prazo e cobertura histórica](doc:fase-08-estagio-em-andamento#prazo-da-liberacao-e-cobertura-historica).
@@ -142,4 +142,4 @@ Sequência física dos arquivos em `database/migrations`; os números permanecem
 - [Backlog e decisões](doc:backlog-e-decisoes) — **in-progress** — Decisões aprovadas e assuntos ainda pendentes no planejamento do SGE.
 - [Cadastros pendentes de supervisor e concedente](doc:cadastros-pendentes-de-supervisor-e-concedente) — **implemented** — Propostas e análise pelo Setor integradas à abertura; associação é exigida antes do aceite.
 
-- [Calendário de feriados](doc:calendario-de-feriados) — **implemented** — Importação anual automática nacional/27 UFs, recorrências municipais fixas, cadastro manual, autorização, auditoria e busca por nome.
+- [Calendário de feriados](doc:calendario-de-feriados) — **implemented** — Importação anual automática nacional/27 UFs, recorrências municipais fixas, cadastro manual, solicitação de cadastro de feriado/recorrência municipal pelo Setor de Estágio ao Administrador do Sistema, autorização, auditoria e busca por nome.

@@ -133,7 +133,7 @@ Consulta o acompanhamento acadêmico do curso vinculado. Não se confunde com o 
 
 ### Ações permitidas
 
-- consultar estágios dos cursos que referenciam o vínculo como coordenador titular ou substituto e incluir os estágios de seus próprios orientandos no campus por filtro; exportar o CSV e consultar os relatórios de Curso e Desempenho no recorte dos cursos coordenados;
+- consultar estágios dos cursos que referenciam o vínculo como coordenador titular ou substituto e os estágios de seus próprios orientandos no campus (filtráveis pelo seletor de curso); exportar o CSV da listagem e consultar os relatórios de Curso e Desempenho no recorte dos cursos coordenados;
 - consultar informações acadêmicas do estágio, incluindo os dados e as observações da avaliação aprovada vigente; vê os critérios e sugestões à instituição, sem permissão para editar o processo;
 - emitir o atestado de orientação, exclusivamente como titular/substituto referenciado pelo curso no próprio campus, e baixar novamente suas emissões autorizadas;
 - escolher DOCX (padrão) ou PDF no modal, sem selecionar template; o sistema usa a versão vigente validada disponível;
@@ -307,7 +307,7 @@ Somente o vínculo ativo selecionado de Setor de Estágio lista, consulta, cadas
 
 ## Calendário de feriados
 
-Somente o Administrador do Sistema ativo selecionado cadastra, altera, exclui/restaura feriados e recorrências, mantém importações, revisa pendências e consulta a auditoria do calendário. Setor de Estágio ativo selecionado tem somente leitura de todos os feriados e recorrências, sem restrição automática por UF, município ou campus. Não há propriedade de calendário por campus. Os filtros são opcionais; o cálculo inicial da abertura usa os feriados da cidade do endereço histórico do local de trabalho. Outros perfis não recebem acesso. Ver [Calendário de feriados](doc:calendario-de-feriados).
+Somente o Administrador do Sistema ativo selecionado cadastra, altera, exclui/restaura feriados e recorrências, mantém importações, revisa pendências, aprova ou recusa solicitações de feriado municipal enviadas pelo Setor de Estágio e consulta a auditoria do calendário. O Setor de Estágio ativo selecionado consulta todos os feriados e recorrências (sem restrição automática por UF, município ou campus) e, em campus ativo, pode solicitar ao Administrador do Sistema o cadastro de feriado municipal móvel/único ou recorrência municipal anual (`HolidayPolicy::requestRegistration`). Não há propriedade de calendário por campus. Os filtros são opcionais; o cálculo inicial da abertura usa os feriados da cidade do endereço histórico do local de trabalho. Outros perfis não recebem acesso. Ver [Calendário de feriados](doc:calendario-de-feriados).
 
 ## Entrega da abertura — 16/10/2026
 

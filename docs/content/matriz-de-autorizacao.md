@@ -71,10 +71,11 @@ Na gestão de concedentes, o Setor pode selecionar qualquer curso do próprio ca
 
 ## Exportações e indicadores de estágio
 
-- `InternshipPolicy::exportCsv` autoriza o CSV da lista ao vínculo ativo selecionado de Coordenação, nos cursos que o vinculam como titular ou substituto. A visão ampliada de próprios orientandos serve à consulta.
+- `InternshipPolicy::exportCsv` autoriza a exportação CSV de 14 colunas da lista de estágios (`InternshipCsvController`) aos vínculos ativos selecionados de **Setor de Estágio** (no próprio campus), **Coordenador** (nos cursos coordenados como titular/substituto e nos próprios orientandos no campus, filtráveis pelo seletor de curso) e **Orientador** (nos próprios orientandos), mantendo os limites do legado.
+- `GrantingPartyPolicy::viewAny` autoriza exclusivamente ao vínculo ativo selecionado de **Setor de Estágio** a exportação CSV de 4 colunas de contatos das partes concedentes do campus (`GrantingPartyCsvController`: `Nome/Razão Social`, `Cidade`, `Telefone`, `Email`).
 - `InternshipPolicy::viewIndicators` autoriza a tela **Indicadores** e suas exportações CSV (detalhada ou resumida) ao Setor no próprio campus e à Coordenação nos cursos coordenados. A seção *Fluxo documental e acompanhamento* exige vínculo do Setor. Administrador do Sistema, Direção, Orientador, Discente e Supervisor não recebem acesso a essas rotas pelo próprio perfil.
 - `InternshipPolicy::unifyCancellationReasons` autoriza exclusivamente o vínculo ativo selecionado do Setor de Estágio a consolidar motivos repetidos de cancelamento em `report_reason` no próprio campus, preservando o texto original `reason`.
-- A tela fixa o vínculo selecionado ao abrir. Consultas reativas e rotas de download revalidam o vínculo. Filtros e parâmetros de URL somente reduzem o conjunto autorizado. [Filtros, CSV e indicadores](doc:fase-08-estagio-em-andamento#consulta-por-termino-previsto-e-csv-da-coordenacao).
+- A tela fixa o vínculo selecionado ao abrir. Consultas reativas e rotas de download revalidam o vínculo. Filtros e parâmetros de URL somente reduzem o conjunto autorizado. [Filtros, CSV e indicadores](doc:fase-08-estagio-em-andamento#consulta-por-termino-previsto-e-exportacao-csv-de-estagios-e-concedentes).
 
 ## Consulta de locais de estágio
 
@@ -84,7 +85,7 @@ A consulta é independente da solicitação de estágio e da gestão do Setor. P
 
 ## Calendário de feriados
 
-Somente o Administrador do Sistema ativo selecionado cadastra, altera, exclui/restaura feriados e recorrências, mantém importações, revisa pendências e consulta a auditoria do calendário. Setor de Estágio ativo selecionado tem somente leitura de todos os feriados e recorrências, sem restrição automática por UF, município ou campus. Não há propriedade de calendário por campus. Os filtros são opcionais; o cálculo inicial do estágio usa feriados nacionais, estaduais e municipais aplicáveis à cidade do endereço histórico do local de trabalho. Outros perfis não recebem acesso. Ver [Calendário de feriados](doc:calendario-de-feriados).
+Somente o Administrador do Sistema ativo selecionado cadastra, altera, exclui/restaura feriados e recorrências, mantém importações, revisa pendências, analisa solicitações de feriados municipais enviadas pelos campi e consulta a auditoria do calendário. O Setor de Estágio ativo selecionado tem leitura de todos os feriados e recorrências (sem restrição automática por UF, município ou campus) e, quando seu campus está ativo, pode enviar solicitações de cadastro de feriado ou recorrência municipal (`HolidayPolicy::requestRegistration`) ao Administrador do Sistema. Não há propriedade de calendário por campus. Os filtros são opcionais; o cálculo inicial do estágio usa feriados nacionais, estaduais e municipais aplicáveis à cidade do endereço histórico do local de trabalho. Outros perfis não recebem acesso. Ver [Calendário de feriados](doc:calendario-de-feriados).
 
 ## Abertura de estágio implementada — 16/10/2026
 

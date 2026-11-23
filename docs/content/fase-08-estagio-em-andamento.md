@@ -76,15 +76,23 @@ O Setor autorizado a liberar vê os documentos principais vigentes, identificado
 Os atalhos levam à lista de documentos ou ao pedido de cancelamento. “Liberar estágio” fica indisponível enquanto houver impedimentos conhecidos; a lista pode ser atualizada manualmente e é atualizada por eventos de alteração do estágio/documentos. A conferência não assina documentos nem libera o estágio. A Action mantém a checagem final sob transação, e as permissões existentes continuam limitando o acesso.
 
 
-## Consulta por término previsto e CSV da Coordenação
+## Consulta por término previsto e exportação CSV de estágios e concedentes
 
 Em **Estágios**, use **Término previsto de** e **Término previsto até** isoladamente ou em conjunto. Os extremos são inclusivos e o fim do recorte deve ser igual ou posterior ao início. O recorte usa a previsão vigente (`projected_end_date`), recalculável durante o estágio. **Início previsto** é a data planejada de execução. **Liberação** é a confirmação do Setor para que a execução possa começar. **Conclusão registrada** é a transição para Concluído, após confirmação da carga, e seu horário depende da cobertura da auditoria.
 
 A ordem inicial é por atualização mais recente. Ao ordenar por término previsto, a interface mostra primeiro as datas mais próximas ou mais distantes em ordem cronológica, com desempate pelo maior número do estágio. Os filtros e a busca podem ser combinados e constam na URL. Alterar ou limpar os filtros volta à primeira página. A busca por discente, matrícula e número permanece unificada. O Setor também pode buscar por protocolo e filtrar pedidos de cancelamento pendentes.
 
-A lista do vínculo de Coordenação começa pelos cursos em que o vínculo está designado como titular ou substituto. **Incluir meus orientandos de outros cursos** amplia a consulta para os próprios orientandos no campus. **Baixar CSV dos cursos coordenados** está disponível na visão dos cursos coordenados. O arquivo usa os filtros, a busca e a ordem da lista em todas as páginas. O download revalida o vínculo selecionado e só consulta os cursos coordenados por ele.
+A lista do vínculo de Coordenação exibe os estágios dos cursos em que o vínculo está designado como titular ou substituto e os estágios dos seus próprios orientandos no campus, permitindo filtrar diretamente pelo seletor de **Curso** (*Todos os cursos* ou um curso específico) e de **Orientador**.
 
-O CSV mantém as 14 colunas do legado, nesta ordem.
+Seguindo os limites do SGE legado, o botão **Exportar CSV** (`InternshipCsvController`, autorizado por `InternshipPolicy::exportCsv`) está disponível para:
+
+- **Setor de Estágio:** exporta os estágios do campus selecionado conforme os filtros, a busca e a ordenação ativos.
+- **Coordenador de Curso:** exporta os estágios visíveis ao vínculo (cursos coordenados e próprios orientandos no campus) conforme os filtros ativos.
+- **Orientador:** exporta os estágios dos próprios orientandos conforme os filtros ativos.
+
+Além disso, em **Partes concedentes**, o **Setor de Estágio** dispõe do botão **Exportar CSV** (`GrantingPartyCsvController`, rota `granting-parties.export`), que exporta `partes-concedentes.csv` com as 4 colunas de contato do legado (**Nome/Razão Social**, **Cidade**, **Telefone**, **Email**), respeitando todos os filtros ativos da listagem (`GrantingPartyListing`).
+
+O CSV de estágios mantém as 14 colunas do legado, nesta ordem.
 
 | Colunas | Fonte no SGE |
 | --- | --- |

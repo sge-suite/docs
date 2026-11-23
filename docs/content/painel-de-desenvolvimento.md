@@ -38,7 +38,7 @@ Para a sequência e o andamento atuais, consulte [Fases de desenvolvimento](doc:
 - **Etapa 2 · CSV da Coordenação** — **implemented** — Exportação dos cursos coordenados com o recorte da listagem e estrutura de 14 colunas. CSV de contatos, migração e compatibilidade de recorte legado são decisões separadas. [Consulta e CSV da Coordenação](doc:fase-08-estagio-em-andamento#consulta-por-termino-previsto-e-csv-da-coordenacao).
 - **Etapa 3 · Filtros complementares** — **implemented** — Carga horária informada em Avaliações do Supervisor e busca de destino em E-mails. [Comparação das listagens](doc:fase-08-estagio-em-andamento#filtros-complementares-comparados-com-o-legado).
 - **Etapa 4 · Curso e Desempenho** — **implemented** — Indicadores, detalhamento e CSV com escopo por vínculo. PDF depende de necessidade de impressão. [Relatórios de estágio](doc:fase-08-estagio-em-andamento#relatorios-de-estagio).
-- **Etapa 5 · Fluxo documental e Acompanhamento** — **in-progress** — Situação, aditivos, cancelamentos, tramitação e prazo de liberação disponíveis para o Setor. Prazo de assinatura efetiva e de conclusão da prática dependem de marcos confiáveis. [Prazo e cobertura histórica](doc:fase-08-estagio-em-andamento#prazo-da-liberacao-e-cobertura-historica).
+- **Etapa 5 · Fluxo documental e Acompanhamento** — **implemented** — Situação, aditivos, cancelamentos (com unificação de motivos), tramitação mensal, prazo de liberação (incluindo aditivos) e prazo de conclusão disponíveis para o Setor. [Prazo e cobertura histórica](doc:fase-08-estagio-em-andamento#prazo-da-liberacao-e-cobertura-historica).
 
 ## Enums
 

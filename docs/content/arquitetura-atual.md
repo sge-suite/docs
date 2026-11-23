@@ -75,7 +75,7 @@ O filtro de concedente na busca de estágios usa `granting_party_id` no índice 
 | Infraestrutura de mídia | Parcial     | Spatie Medialibrary armazena versões privadas de templates e comprovantes; geração DOCX/PDF usa snapshots e arquivos temporários privados. Documentos externos podem ser registrados sem upload do arquivo, com disponibilização e conferência de assinaturas pelo fluxo de documentos. |
 | Estágios                | Parcial     | Abertura, correções, formalização, assinaturas, liberação, pausas, sincronização de execução, cancelamento, avaliação, notas e conclusão têm Actions, Policies e interfaces. Aditivos assinados aplicam vigências formais de jornada; novos cálculos salvos mantêm bases históricas reproduzíveis. Avisos temporais adicionais permanecem pendentes. |
 | Administração            | Parcial     | Gestão global e por campus de campi, cursos, tipos de estágio, concedentes, contas/vínculos, calendário, documentos e consultas administrativas implementadas. |
-| Relatórios              | Planejado   | Devem consumir o domínio e respeitar o escopo do vínculo ativo                       |
+| Indicadores e relatórios | ✅          | 13 indicadores com gráficos SVG/Alpine, detalhamento paginado, metodologia de cálculo, unificação de motivos de cancelamento e exportação CSV (detalhada e resumida) respeitando o escopo do vínculo ativo. |
 
 ## Regras de arquitetura
 

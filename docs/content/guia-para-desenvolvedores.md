@@ -7,7 +7,7 @@ status: maintained
 visibility: public
 tags: sge/desenvolvimento, sge/arquitetura, sge/manutencao
 related: ambiente-de-desenvolvimento, arquitetura-atual, dominio-e-modelo-de-dados, modelagem-de-dados, matriz-de-autorizacao, componentes-tecnicos, helpers
-source_refs: ../../sge/composer.json, ../../sge/package.json, ../../sge/compose.yaml, ../../sge/AGENTS.md, ../../sge/routes/web.php
+source_refs: https://github.com/sge-suite/sge/blob/master/composer.json, https://github.com/sge-suite/sge/blob/master/package.json, https://github.com/sge-suite/sge/blob/master/compose.yaml, https://github.com/sge-suite/sge/blob/master/AGENTS.md, https://github.com/sge-suite/sge/blob/master/routes/web.php
 updated: 2026-11-23
 ---
 > [!abstract] Para quem é este guia

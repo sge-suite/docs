@@ -6,39 +6,122 @@ type: development-guide
 status: maintained
 visibility: public
 tags: sge/desenvolvimento, sge/operacao
-related: visao-geral, pessoas-e-responsabilidades
+related: visao-geral, pessoas-e-responsabilidades, guia-para-desenvolvedores
 source_refs:
 ---
 ## Para quem esta página serve
 
-Esta página é destinada a quem prepara o ambiente de desenvolvimento do SGE. Pessoas que apenas usam o sistema não precisam executar estes comandos: para entender o processo, devem começar em [Visão geral](doc:visao-geral) ou [Pessoas e responsabilidades](doc:pessoas-e-responsabilidades).
+Esta página é destinada a quem prepara o ambiente de desenvolvimento do SGE. Para entender a arquitetura, o papel de cada pasta, a origem dos dados e como usar agentes de IA na manutenção, consulte também o [Guia para desenvolvedores](doc:guia-para-desenvolvedores). Pessoas que apenas usam o sistema não precisam executar estes comandos: para entender o processo, devem começar em [Visão geral](doc:visao-geral) ou [Pessoas e responsabilidades](doc:pessoas-e-responsabilidades).
 
 Os comandos abaixo criam uma cópia local do sistema para desenvolvimento; eles não devem ser executados em um computador institucional de produção sem orientação da equipe técnica. Não há suíte automatizada nesta etapa; veja [Testes automatizados](doc:testes-existentes).
 
-## Requisitos
+## Por que usar Docker e Laravel Sail é indispensável
 
-- Docker Engine ou Docker Desktop com Docker Compose v2.
-- Git.
-- Composer e PHP 8.3+ apenas para o bootstrap local; a execução principal ocorre pelo Sail.
+O SGE não depende apenas de PHP e banco de dados: o funcionamento completo exige **5 serviços integrados** definidos no arquivo `compose.yaml`:
 
-O `compose.yaml` utiliza Laravel Sail com runtime PHP 8.5, PostgreSQL 18, Meilisearch, Mailpit e Gotenberg 8.38.1/LibreOffice para PDF.
+1. **Aplicação (`laravel.test`):** runtime **PHP 8.5**, Node.js/NPM e extensões necessárias.
+2. **PostgreSQL 18 (`pgsql`):** banco de dados principal.
+3. **Meilisearch (`meilisearch`):** motor de busca obrigatório para listagens e para os seletores `<x-select>` do sistema (não há fallback SQL `LIKE`).
+4. **Gotenberg + LibreOffice (`gotenberg`):** serviço interno (`http://gotenberg:3000`) que converte os documentos `.docx` gerados pelo PHPWord em `.pdf`.
+5. **Mailpit (`mailpit`):** servidor SMTP local com painel web para inspecionar todos os e-mails disparados pelo sistema sem enviá-los para fora.
 
-## Primeira configuração
+Tentar rodar o projeto diretamente no sistema operacional sem o **Laravel Sail** exige instalar, configurar portas, permissões e versões exatas de todos esses serviços manualmente. Com o **Docker** e o **Sail**, um único comando (`./vendor/bin/sail up -d`) sobe toda a infraestrutura pronta.
+
+---
+
+## Sistema operacional recomendado e preparo por plataforma
+
+> [!tip] Recomendação: utilize Linux
+> **Recomendamos fortemente utilizar uma distribuição Linux** (Ubuntu, Debian, Fedora, Arch, etc.) para desenvolver e dar manutenção no SGE. No Linux o Docker roda nativamente, o acesso a arquivos é imediato e as permissões Unix (`0700`/`0600`) exigidas pela geração privada de documentos funcionam sem camadas intermediárias.
+
+Caso o computador de trabalho utilize **Windows**, o projeto também funciona perfeitamente, desde que executado **dentro do WSL 2 (Subsistema Windows para Linux)** com Docker Desktop, seguindo as instruções abaixo.
+
+### Opção A — Linux (Recomendado)
+
+1. Instale o **Git**, o **Docker Engine** e o plugin **Docker Compose v2** pelos pacotes oficiais da sua distribuição ([guia oficial do Docker Engine](https://docs.docker.com/engine/install/)).
+2. Adicione seu usuário ao grupo `docker` para executar containers sem `sudo` e reinicie a sessão:
+   ```bash
+   sudo usermod -aG docker $USER
+   ```
+3. Confirme que o Docker está ativo:
+   ```bash
+   docker info
+   docker compose version
+   ```
+
+### Opção B — Windows 10 ou Windows 11 (via WSL 2 + Docker Desktop)
+
+No Windows, o Laravel Sail **não roda diretamente no CMD ou PowerShell tradicional**; ele precisa de um ambiente Linux via **WSL 2**:
+
+1. **Instale o WSL 2 com Ubuntu:** abra o PowerShell como **Administrador** e execute:
+   ```powershell
+   wsl --install -d Ubuntu
+   ```
+   Reinicie o computador se solicitado e, ao abrir o aplicativo **Ubuntu**, defina seu usuário e senha Linux.
+2. **Instale o Docker Desktop para Windows:** baixe em [docker.com/products/docker-desktop](https://www.docker.com/products/docker-desktop/).
+   - Em *Settings → General*, marque **Use the WSL 2 based engine**.
+   - Em *Settings → Resources → WSL Integration*, ative a chave da sua distribuição **Ubuntu** e clique em *Apply & Restart*.
+3. **Regra fundamental no Windows — clone o projeto dentro do Linux (WSL 2):**
+   - Abra o terminal do **Ubuntu (WSL)** e guarde o projeto dentro da sua pasta do Linux (por exemplo, `~/code/sge-suite`):
+     ```bash
+     mkdir -p ~/code
+     cd ~/code
+     ```
+   - **Nunca clone o projeto em `/mnt/c/...` (pastas do `C:\` do Windows).** Rodar containers Docker lendo arquivos do `/mnt/c/` deixa o sistema muito lento, pode converter quebras de linha para `CRLF` (impedindo a execução do `./vendor/bin/sail`) e quebra as permissões privadas `0700` do diretório temporário de geração de PDFs.
+   - Para editar no **VS Code**, instale a extensão oficial **WSL** no VS Code do Windows e, dentro da pasta do projeto no terminal do Ubuntu, digite `code .`.
+
+### Opção C — macOS
+
+1. Instale o [Docker Desktop para Mac](https://www.docker.com/products/docker-desktop/) (ou [OrbStack](https://orbstack.dev/)) e o **Git**.
+2. Execute todos os comandos abaixo normalmente pelo terminal do macOS.
+
+---
+
+## Primeira configuração (passo a passo)
+
+Abra o terminal (no Linux, macOS ou no Ubuntu do WSL 2 no Windows) dentro da pasta `sge/`:
 
 ```bash
 cd /caminho/para/o/projeto/sge
-composer install
 cp .env.example .env
+```
+
+### 1. Instalar as dependências do PHP (`vendor/`)
+
+Se você **já tiver PHP 8.3+ e Composer** instalados na máquina local:
+
+```bash
+composer install
+```
+
+Se você **não tiver PHP ou Composer instalados na máquina** (apenas o Docker), rode este comando oficial do Laravel para baixar a pasta `vendor/` usando um container descartável:
+
+```bash
+docker run --rm \
+    -u "$(id -u):$(id -g)" \
+    -v "$(pwd):/var/www/html" \
+    -w /var/www/html \
+    laravelsail/php85-composer:latest \
+    composer install --ignore-platform-reqs
+```
+
+### 2. Subir os containers e preparar o banco, índices e assets
+
+Com a pasta `vendor/` criada, o comando `./vendor/bin/sail` já estará disponível:
+
+```bash
 ./vendor/bin/sail up -d
 ./vendor/bin/sail artisan key:generate
 ./vendor/bin/sail artisan migrate
+./vendor/bin/sail artisan scout:sync-index-settings --no-interaction
 ./vendor/bin/sail npm install
 ./vendor/bin/sail npm run build
 ```
 
-Se o arquivo `.env` não existir, ele deve ser criado antes de iniciar os serviços. O Sail executa PHP, Artisan, Composer, NPM e os serviços definidos em `compose.yaml` dentro do ambiente Docker.
+> [!info] Regra de ouro com o Sail
+> Nunca execute `php artisan ...`, `composer ...` ou `npm ...` diretamente fora do Sail, pois no sistema hospedeiro o PHP pode ser de outra versão e não enxergará os hosts internos do Docker (`pgsql`, `meilisearch`, `gotenberg`, `mailpit`). Use sempre o prefixo `./vendor/bin/sail` (ex.: `./vendor/bin/sail artisan migrate`).
 
-Para facilitar os comandos, pode-se criar um alias na sessão do terminal:
+Para facilitar a digitação, você pode criar um alias no seu `~/.bashrc` ou `~/.zshrc`:
 
 ```bash
 alias sail='./vendor/bin/sail'

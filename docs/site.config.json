@@ -24,6 +24,7 @@
       "visao-geral",
       "fluxos-principais",
       "modelagem-de-dados",
+      "guia-para-desenvolvedores",
       "ambiente-de-desenvolvimento"
     ],
     "sections": [
@@ -193,6 +194,7 @@
       {
         "label": "Operação e migração",
         "items": [
+          "guia-para-desenvolvedores",
           "ambiente-de-desenvolvimento"
         ]
       }

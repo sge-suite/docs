@@ -6,7 +6,7 @@ type: documentation-hub
 status: observed
 visibility: public
 tags: sge/documentacao
-related: guia-completo, visao-geral, pessoas-e-responsabilidades, fluxos-principais, ciclos-de-status, glossario, planejamento
+related: guia-completo, visao-geral, pessoas-e-responsabilidades, fluxos-principais, ciclos-de-status, glossario, planejamento, guia-para-desenvolvedores
 source_refs:
 diagram: jornada-do-estagio
 ---
@@ -24,6 +24,7 @@ diagram: jornada-do-estagio
 | entender uma situação exibida pelo sistema | [Ciclos de status](doc:ciclos-de-status) | [Glossário](doc:glossario) |
 | consultar um termo | [Glossário](doc:glossario) | [Visão geral](doc:visao-geral) |
 | acompanhar o desenvolvimento do novo SGE | [Planejamento](doc:planejamento) | [Painel de desenvolvimento](doc:painel-de-desenvolvimento) |
+| dar suporte técnico ou manutenção no código | [Guia para desenvolvedores](doc:guia-para-desenvolvedores) | [Ambiente de desenvolvimento](doc:ambiente-de-desenvolvimento) |
 
 ## Jornada do estágio
 

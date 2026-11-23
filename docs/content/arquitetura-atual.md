@@ -6,7 +6,7 @@ type: architecture
 status: observed
 visibility: public
 tags: sge/arquitetura, sge/implementacao
-related: visao-geral, pessoas-e-responsabilidades, fluxos-principais, dominio-e-modelo-de-dados
+related: visao-geral, pessoas-e-responsabilidades, fluxos-principais, dominio-e-modelo-de-dados, guia-para-desenvolvedores
 source_refs: https://github.com/sge-suite/sge/blob/master/composer.json, https://github.com/sge-suite/sge/blob/master/compose.yaml, https://github.com/sge-suite/sge/blob/master/app/Providers/AppServiceProvider.php, https://github.com/sge-suite/sge/blob/master/app/Providers/FortifyServiceProvider.php, https://github.com/sge-suite/sge/blob/master/app/Models/User.php, https://github.com/sge-suite/sge/blob/master/config/scout.php, https://github.com/sge-suite/sge/blob/master/app/Models/GrantingParty.php, https://github.com/sge-suite/sge/blob/master/app/Models/Internship.php, https://github.com/sge-suite/sge/blob/master/app/Models/InternshipRequest.php, https://github.com/sge-suite/sge/blob/master/app/Support/UserManagementScope.php
 diagram: arquitetura-atual-diagrama
 updated: 2026-10-28

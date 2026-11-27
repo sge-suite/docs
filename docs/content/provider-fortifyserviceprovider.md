@@ -15,7 +15,7 @@ source_refs: https://github.com/sge-suite/sge/blob/master/app/Providers/FortifyS
 | ------------ | ------------------------------------------------------------------------------------------------ |
 | Action       | `ResetUserPassword` é usada para redefinição.                                                    |
 | Views        | login, confirmação de senha, redefinição e solicitação de link usam views `pages::auth.*`.       |
-| Rate limit   | `login` permite 5 tentativas por minuto por combinação de e-mail transliterado/normalizado e IP. |
+| Rate limit   | `login` permite 5 tentativas por minuto por combinação de e-mail transliterado/normalizado e IP, além de um teto global de 30 tentativas por minuto por IP. |
 | Fortify      | username/e-mail são configurados em `config/fortify.php`; reset usa broker `users`.              |
 
 ## Checklist

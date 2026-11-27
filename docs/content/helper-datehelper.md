@@ -17,11 +17,12 @@ Classe final para apresentação de `string|DateTimeInterface|null`. Toda data n
 | ----------------------- | --------------------------------------------------------- |
 | `format()`              | `D de MMMM de YYYY`, por exemplo `10 de janeiro de 2024`. |
 | `formatShort()`         | `DD/MM/YYYY`.                                             |
+| `formatWeekday()`       | Dia da semana por extenso com inicial maiúscula.          |
 | `formatRelative()`      | `diffForHumans()`, relativo ao momento atual.             |
 | `formatDateTime()`      | `d/m/Y às H:i`.                                           |
 | `formatMonthYear()`     | `MM/YYYY`.                                                |
 | `formatMonthYearFull()` | `MMMM YYYY` com título em português.                      |
-| entrada `null`          | `-` em todos os métodos.                                  |
+| entrada `null` ou em branco (`blank()`) | `-` em todos os métodos (evitando que strings vazias ou só de espaços sejam interpretadas como `now()`). |
 
 ## Cuidados
 

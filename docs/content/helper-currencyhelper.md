@@ -11,11 +11,12 @@ source_refs: https://github.com/sge-suite/sge/blob/master/app/Helpers/CurrencyHe
 ---
 ## Responsabilidade
 
-Classe final com um método estático para formatar moeda usando `Illuminate\Support\Number::currency`.
+Classe final com métodos estáticos para formatar moeda usando `Illuminate\Support\Number::currency` e `Brick\Math\BigDecimal`.
 
 | Método      | Entrada | Saída                                                              |
 | ----------- | ------- | ------------------------------------------------------------------ |
-| `format(int | float   | null $value, string $currency = 'BRL', ?string $locale = 'pt_BR')` | número, `null`, código ISO e locale | string formatada; `null` vira zero e falha do formatter vira string vazia. |
+| `format(int \| float \| null $value, string $currency = 'BRL', ?string $locale = 'pt_BR')` | número, `null`, código ISO e locale | string formatada; `null` vira zero e falha do formatter vira string vazia. |
+| `formatDecimal(string $value)` | string decimal arbitrária | string `R$\u{00A0}X.XXX,XX` usando `BigDecimal::toScale(2, RoundingMode::HalfUp)` (sem lançar exceção para >2 casas decimais). |
 
 Exemplo esperado em `pt_BR`: `formatCurrency(1234.5)` → `R$ 1.234,50`, conforme o formatter do Laravel.
 

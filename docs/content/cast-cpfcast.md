@@ -19,7 +19,7 @@ Implementa `CastsAttributes<string, string>` para controlar a fronteira entre o 
 | Operação                   | Comportamento                                                                                                  |
 | -------------------------- | -------------------------------------------------------------------------------------------------------------- |
 | `get()`                    | Retorna `null` para `null`; para os demais valores, retorna string sem alterar o valor.                        |
-| `set()` com `null` ou `''` | Persiste `null`.                                                                                               |
+| `set()` com `null`, `''` ou espaços (`blank()`) | Persiste `null`.                                                                                               |
 | `set()` com valor          | Usa o helper global `unmask()`, valida com `LaravelLegends\PtBrValidator\Rules\Cpf` e retorna somente dígitos. |
 | CPF inválido               | Lança `InvalidArgumentException` com mensagem em português.                                                    |
 
@@ -41,7 +41,7 @@ $user->save();
 - [x] Implementar `get()` e `set()`.
 - [x] Remover máscara antes da persistência.
 - [x] Rejeitar CPF inválido.
-- [ ] Definir comportamento para string composta apenas por espaços.
+- [x] Definir comportamento para string composta apenas por espaços (`blank($value)` normaliza para `null`).
 - [x] Manter o cast em `User`, sem duplicar CPF no Model de dados pessoais.
 - [ ] Confirmar que CPF não é editável pela configuração do usuário.
 - [ ] Garantir que consultas e snapshots usem o formato canônico.

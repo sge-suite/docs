@@ -63,11 +63,14 @@ Os fallbacks de `config/app.php` são `UTC`, `USD`, locale `en`, fallback `en` e
 > [!warning] Valores de fallback
 > Se essas variáveis não forem configuradas no ambiente, Laravel usará os fallbacks internacionais de `config/app.php`. Preserve os valores brasileiros declarados em `.env.example` nos ambientes institucionais.
 
-## Cache, sessão e filas
+## Cache, sessão, filas, mídia e backup
 
+- `config/database.php`: conexão padrão `pgsql` (`DB_CONNECTION`), alinhada à exigência de PostgreSQL.
 - `config/cache.php`: default `database`, usando `cache`/`cache_locks` da [migration base de cache](doc:migration-base-02-cache).
-- `config/session.php`: default `database`, tabela `sessions`, lifetime padrão de 120 minutos, serialização JSON.
-- `config/queue.php`: default `database`, tabela `jobs`, `retry_after` padrão de 90 segundos, `after_commit = false`. Os envios operacionais que dependem de uma transação despacham seus Jobs explicitamente com `afterCommit()`; isso não altera o default global.
+- `config/session.php`: default `database`, tabela `sessions`, lifetime padrão de 120 minutos, serialização JSON, criptografia ativada por padrão (`SESSION_ENCRYPT=true`) e cookie `secure` ativado automaticamente quando `APP_ENV === 'production'` (sobrescrevível por `SESSION_SECURE_COOKIE`).
+- `config/queue.php`: default `database`, tabela `jobs`, `retry_after` padrão de 90 segundos, `after_commit = false`; `batching` e `failed` usam `DB_CONNECTION` com fallback `pgsql`. Os envios operacionais que dependem de uma transação despacham seus Jobs explicitamente com `afterCommit()`; isso não altera o default global.
+- `config/media-library.php`: `disk_name` usa fallback privado `local` (`MEDIA_DISK`).
+- `config/backup.php`: inclui apenas `storage_path('app/private')` (excluindo `.env`, `.git`, `vendor`, `node_modules`, `storage/app/backup-temp`, `storage/framework` e `storage/logs`), usa `databases` com fallback `pgsql`, `verify_backup => true`, e `notifications.mail.to` via `BACKUP_NOTIFICATION_EMAIL` com fallback para `MAIL_FROM_ADDRESS`.
 - [Migration base de Jobs](doc:migration-base-03-jobs) é a infraestrutura; tentativas de e-mail do domínio ficam em `email_delivery_attempts`.
 
 ## Buscas Meilisearch
@@ -95,7 +98,7 @@ Os estados e a cobertura de telas estão descritos na [Fase 05 — Índices e in
 
 ## Rotas existentes
 
-`routes/web.php` registra a página pública, dashboard, configurações e rotas autenticadas para avaliações, solicitações e estágios, documentos/templates, feriados e recorrências, campus, cursos, tipos de estágio, concedentes e importações, usuários/vínculos, auditoria e consulta de e-mails. Os grupos usam Policies e o vínculo ativo selecionado para limitar campus, curso e registro. A definição completa e os nomes são mantidos no próprio arquivo; não se trata apenas das rotas de configuração.
+`routes/web.php` registra a página pública, dashboard, configurações e rotas autenticadas para avaliações, solicitações e estágios, documentos/templates, feriados e recorrências, campus (incluindo middleware `can:` por ação nas rotas HTTP de `campuses.*`), cursos, tipos de estágio, concedentes e importações, usuários/vínculos, auditoria e consulta de e-mails. Os grupos usam Policies e o vínculo ativo selecionado para limitar campus, curso e registro. A definição completa e os nomes são mantidos no próprio arquivo; não se trata apenas das rotas de configuração.
 
 O Fortify registra as rotas de autenticação. As views atuais ficam em `resources/views/pages/auth/`.
 
@@ -107,7 +110,7 @@ O Fortify registra as rotas de autenticação. As views atuais ficam em `resourc
 - factories e seeders com namespaces próprios;
 - testes em `autoload-dev`;
 - `app/helpers.php` carregado como arquivo global;
-- scripts `lint:check`, `types:check`, `test`, `dev` e `setup`.
+- scripts `lint:check`, `types:check` (`phpstan analyse --memory-limit=1G`), `test`, `dev` e `setup`.
 
 Dependências de domínio:
 

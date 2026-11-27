@@ -97,7 +97,7 @@ As duas solicitações pendentes de cadastro são estruturas de domínio própri
 - [x] Fechar os critérios de validação da parte concedente e do supervisor pendentes.
 - [x] Especificar as migrations tipadas das solicitações de cadastro pendente antes desta migration.
 - [x] Definir o histórico privado de evidências e o aceite das normas por data e hora.
-- [x] Criar migration, Model, factory, relações, índice por vínculo/status e FK única para o estágio.
+- [x] Criar migration, Model, factory, relações, índices por vínculo/status, FKs principais (`course_id`, `advisor_affiliation_id`, `supervisor_affiliation_id`, `granting_party_id`, `student_address_id`, `workplace_address_id`, `status`) e FK única para o estágio.
 - [x] Criar Policies e fluxos de envio, análise, aceite e reenvio.
 - [ ] Testar no Model a compatibilidade de curso/tipo, os limites de carga horária e os ramos condicionais.
 - [x] Implementar seleção, previsão inicial e análise privada da evidência com autorização por vínculo.

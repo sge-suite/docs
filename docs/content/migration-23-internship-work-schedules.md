@@ -21,7 +21,7 @@ source_refs: https://github.com/sge-suite/sge/blob/master/app/Actions/ApplyInter
 | `starts_on` | `date` | não | índice composto | Primeiro dia inclusivo desta distribuição de horas. |
 | `ends_on` | `date` | sim | índice composto | Último dia inclusivo; nulo apenas na vigência atual. |
 | `weekly_hours` | `jsonb` | não | — | Objeto com as sete chaves de dia da semana e inteiros não negativos em horas. |
-| `generated_document_id` | `bigint` | não | `FK`, índice | Referencia o aditivo formalizado em `generated_documents.id`. |
+| `generated_document_id` | `bigint` | não | `FK`, `UNIQUE` | Referencia o aditivo formalizado em `generated_documents.id` (no máximo uma vigência por aditivo). |
 
 | `created_at` | `timestamp(0)` | não | — | Instante de criação. |
 | `updated_at` | `timestamp(0)` | não | — | Instante da última alteração técnica permitida. |

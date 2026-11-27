@@ -54,7 +54,7 @@ As cláusulas de remuneração são fixas em DOCXs distintos. `remuneration` per
 
 `orientation_certificate` admite somente um registro lógico em todo o sistema, considerando todos os campi, o escopo global e registros desativados. Um segundo cadastro ou a conversão de outro tipo é recusado. O registro existente pode ter seus metadados editados e ser reativado dentro da autorização atual; seu tipo não pode ser trocado para liberar outro cadastro. Os demais tipos continuam admitindo vários templates.
 
-A Action serializa as gravações do catálogo com lock transacional PostgreSQL antes de verificar/gravar; o Model valida a unicidade na persistência. A classificação de remuneração é independente da unicidade institucional. A interface deixa de oferecer atestado no cadastro ou na conversão quando já existir outro, e indica a edição do existente quando autorizada.
+A Action serializa as gravações do catálogo com lock transacional PostgreSQL antes de verificar/gravar; o Model valida a unicidade na persistência e o banco reforça a invariante com o índice único parcial `document_templates_one_orientation_certificate_unique` em `(document_type) WHERE document_type = 'orientation_certificate'`. A classificação de remuneração é independente da unicidade institucional. A interface deixa de oferecer atestado no cadastro ou na conversão quando já existir outro, e indica a edição do existente quando autorizada.
 
 O template único continua relacionado a `template_versions`: editar nome/descrição não cria versão; mudar o DOCX cria nova versão sem substituir o arquivo anterior. Unicidade não amplia as permissões entre campi ou a manutenção global. Consulte [GeneratedDocumentType](doc:enum-generateddocumenttype).
 

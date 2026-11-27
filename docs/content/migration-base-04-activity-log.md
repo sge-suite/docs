@@ -20,7 +20,7 @@ source_refs: https://github.com/sge-suite/sge/blob/master/database/migrations/20
 | `log_name`                    | nullable e indexado.                           |
 | `description`                 | texto obrigatório.                             |
 | `subject_type` / `subject_id` | morph nullable/indexado para entidade afetada. |
-| `event`                       | nullable.                                      |
+| `event`                       | nullable; compõe o índice composto `activity_log_subject_event_id_idx` em `(subject_type, event, subject_id)`. |
 | `causer_type` / `causer_id`   | morph nullable/indexado para autor.            |
 | `attribute_changes`           | JSON nullable; alterações de atributos.        |
 | `properties`                  | JSON nullable; contexto adicional.             |

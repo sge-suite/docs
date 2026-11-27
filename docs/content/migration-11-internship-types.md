@@ -44,7 +44,7 @@ As regras são aplicadas pela validação Laravel no Model ao salvar. A migratio
 - `max_daily_hours` e `max_weekly_hours` são inteiros. O formulário começa preenchido com `6` e `30`; esses valores são limites mínimos e não podem ser reduzidos. O máximo configurável é de `24` horas por dia e `40` por semana, e o limite diário não pode superar o semanal. O teto de 40 horas semanais corresponde à exceção do art. 10, § 1º da [Lei nº 11.788/2008](https://www.planalto.gov.br/ccivil_03/_ato2007-2010/2008/lei/l11788.htm), aplicável a cursos que alternam teoria e prática, em períodos sem aulas presenciais, quando previsto no projeto pedagógico. A jornada informada deve respeitar os limites configurados para cada dia e para a soma semanal.
 - `safety_margin_days` é inteiro não negativo, inicialmente `7`, e será congelado no estágio. O cálculo automático usa essa margem e grava somente a previsão em `internships.projected_end_date`; não persiste fórmula, versão de algoritmo ou entradas. A regra completa está definida por este contrato e pelo [serviço de cálculo de término](doc:service-internshipenddatecalculator).
 
-A validação também exige curso ativo na criação, troca de curso ou reativação. Uma desativação posterior do curso não bloqueia a edição de um tipo já existente enquanto sua associação não mudar. `active()` filtra tipos não desativados; esta migration não cria índices secundários explícitos.
+A validação também exige curso ativo na criação, troca de curso ou reativação. Uma desativação posterior do curso não bloqueia a edição de um tipo já existente enquanto sua associação não mudar. `active()` filtra tipos não desativados; a migration cria índice secundário em `course_id`.
 
 `allowed_academic_periods` é uma lista configurada pelo Setor junto ao tipo. A abertura oferece somente esses valores e valida a escolha no servidor; o snapshot do tipo preserva a lista que estava vigente no envio. O ano/semestre não é texto livre.
 
@@ -54,7 +54,7 @@ Os pesos e os valores dos conceitos são configurados no tipo de estágio, nunca
 
 - [x] Definir que pesos, valores dos conceitos e períodos acadêmicos permitidos pertencem ao tipo de estágio.
 - [x] Definir campos escalares, precisão dos pesos e conceitos, limites de jornada e margem do cálculo de término.
-- [x] Criar migration sem constraints `CHECK` de regras de negócio e sem índice secundário explícito.
+- [x] Criar migration sem constraints `CHECK` de regras de negócio, com índice em `course_id`.
 - [x] Criar Model com casts e validação Laravel em PHP.
 - [x] Criar factory com regras completas.
 - [x] Implementar validação da carga horária obrigatória, períodos distintos no formato permitido, pesos, conceitos e limites diário e semanal da jornada.

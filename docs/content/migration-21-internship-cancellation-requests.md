@@ -27,7 +27,7 @@ source_refs:
 | `effective_date` | nullable; data efetiva do cancelamento, quando aprovada. |
 | timestamps | auditoria temporal. |
 
-O discente pode abrir o pedido quando o estágio estiver em formalização, aguardando assinatura, com pendência, liberado, em andamento ou pausado. Não pode haver dois pedidos não finais para o mesmo estágio. A solicitação não muda o estágio automaticamente: o vínculo `InternshipOffice` analisa e decide em transação. Abertura, retirada e decisão são auditadas no `activity_log`, que registra o autor sem duplicar FKs na tabela. As alterações e os efeitos documentais são auditados no mesmo fluxo.
+O discente pode abrir o pedido quando o estágio estiver em formalização, aguardando assinatura, com pendência, liberado, em andamento ou pausado. Não pode haver dois pedidos não finais para o mesmo estágio — regra validada no Model e reforçada no banco pelo índice único parcial `internship_cancellation_requests_one_pending_unique` em `(internship_id) WHERE status IN ('submitted', 'under_review')`. A solicitação não muda o estágio automaticamente: o vínculo `InternshipOffice` analisa e decide em transação. Abertura, retirada e decisão são auditadas no `activity_log`, que registra o autor sem duplicar FKs na tabela. As alterações e os efeitos documentais são auditados no mesmo fluxo.
 
 ## Efeitos da aprovação
 

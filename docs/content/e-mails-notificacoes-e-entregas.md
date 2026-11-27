@@ -51,7 +51,7 @@ Guarda o conteúdo imutável já renderizado das finalidades que têm histórico
 
 Cada linha representa uma tentativa de transporte. `recipient_email` registra o destinatário efetivo, que pode não pertencer a uma conta do SGE. `purpose` identifica a finalidade. Novos envios das finalidades administrativas têm `email_message_id` ligado ao conteúdo imutável; tentativas antigas de conta criada ou novo vínculo podem permanecer sem mensagem. `scope_context` guarda um snapshot de `user_id`, `affiliation_ids`, `affiliation_types` e `campus_ids` do registro afetado; não representa o último vínculo selecionado. `delivery_key` é uma chave UUID estável do envio; ela permite idempotência e até três tentativas com números únicos. `requested_by_affiliation_id` registra o vínculo solicitante, quando houver; para envio automático, fica nulo. A tentativa mantém número, estado `queued`, `sent` ou `failed`, provedor, identificador do provedor, marcos temporais e motivo técnico sanitizado de falha.
 
-O Model bloqueia exclusão e mudança de uma tentativa finalizada. `RequestEmailDelivery` reserva a tentativa e despacha `SendEmailDelivery` depois do commit; o Job envia com o mailer nativo e registra o resultado. O reprocessamento explícito usa a mesma Action. Mensagens e tentativas não usam `LogsActivity`: são o histórico técnico de entrega. O acesso ao banco deve impedir alterações diretas que contornem essas regras.
+O Model bloqueia exclusão e mudança de uma tentativa finalizada. `RequestEmailDelivery` reserva a tentativa e despacha `SendEmailDelivery` depois do commit; o Job consulta/trava o registro em transação curta, executa `Mail::send()` fora de `DB::transaction()` (evitando segurar locks e conexões durante a latência SMTP) e atualiza o estado em nova transação curta, registrando `exception_class` e `error` no log em caso de falha. `DeliveryMail` valida a presença da mensagem e de assunto/HTML/texto preenchidos antes de montar o e-mail. O reprocessamento explícito usa a mesma Action. Mensagens e tentativas não usam `LogsActivity`: são o histórico técnico de entrega. O acesso ao banco deve impedir alterações diretas que contornem essas regras.
 
 ## Central de notificações internas
 
@@ -103,7 +103,7 @@ A revisão estática cobre escopo por relação, troca de contexto, UUID alheio,
 > [!warning] Segredos não entram no histórico
 > Senhas, tokens, URLs assinadas e credenciais SMTP não devem ser persistidos em mensagens, tentativas, notificações ou Activity Log.
 
-O e-mail de conta criada leva à tela de recuperação com o e-mail preenchido. A pessoa então solicita o link para definir a senha. Essa notificação do Fortify é enfileirada com payload cifrado, pois a fila técnica precisa transportar temporariamente o token; ela não cria histórico nas tabelas de e-mail da aplicação.
+O e-mail de conta criada leva à tela de recuperação com o e-mail preenchido. A pessoa então solicita o link para definir a senha. Essa notificação do Fortify (`QueuedPasswordReset`) é enfileirada com payload cifrado (`$tries = 3`, `$timeout = 60`, `$backoff = [5, 30, 120]`), pois a fila técnica precisa transportar temporariamente o token; ela não cria histórico nas tabelas de e-mail da aplicação.
 
 ## Fluxos de autenticação e avisos operacionais
 
@@ -175,7 +175,7 @@ O aviso de envio ao vínculo discente usa `InternshipRequestReceipt` e o templat
 
 ## Aceite da avaliação do supervisor e conclusão da prática
 
-O aceite pelo Setor seleciona a avaliação vigente, calcula a nota do supervisor e conclui o estágio na mesma transação, com carga horária integral confirmada. Para o Discente, `NotifyInternshipEvaluationResults::supervisorApproved` prepara o e-mail específico de aceite e conclusão. O Orientador recebe o e-mail de conclusão. Para o Supervisor, `DeliverSupervisorEvaluationNotice` comunica o aceite e a conclusão em um único e-mail.
+O aceite pelo Setor seleciona a avaliação vigente, calcula a nota do supervisor e conclui o estágio na mesma transação, com carga horária integral confirmada. Para o Discente, `NotifyInternshipLifecycle` gera uma `idempotency_key` determinística (`Uuid::uuid5` por estágio e avaliação vigente) e `NotifyInternshipEvaluationResults::supervisorApproved` prepara o e-mail específico de aceite e conclusão. O Orientador recebe o e-mail de conclusão. Para o Supervisor, `DeliverSupervisorEvaluationNotice` comunica o aceite e a conclusão em um único e-mail. `DeliverInternshipRequestNotice` e `DeliverSupervisorEvaluationNotice` registram `exception_class` e `error` em `failed()`.
 
 O destinatário acadêmico é o vínculo discente ativo do estágio, do mesmo campus e com e-mail válido, selecionado por `InternshipRecipients`. O legado (`SupervisorEvaluationController::associate`, `AvaliacaoEstagioConcluida` e `emails.estagios.avaliacao-concluida`) enviava ao e-mail do discente nome, curso, tipo, nota/peso do supervisor e confirmação de carga horária cumprida e conclusão. O SGE novo preserva esses elementos e acrescenta a identificação do estágio, concedente, campus e período previsto. Não envia as considerações nem os aspectos de rendimento que o template antigo podia incluir: as observações permanecem nas consultas autorizadas. O e-mail não contém nota final, mesmo quando as notas acadêmicas já existem, e não depende delas para ser preparado.
 

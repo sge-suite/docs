@@ -11,8 +11,10 @@ source_refs:
 ---
 ## Inventário
 
-- [`CpfCast`](doc:cast-cpfcast) — valida e persiste CPF somente com dígitos.
+- [`CpfCast`](doc:cast-cpfcast) — valida e persiste CPF somente com dígitos (normalizando valores em branco para `null`).
 - [`PhoneCast`](doc:cast-phonecast) — valida telefone fixo ou celular com DDD e persiste somente os dígitos.
+- `CnpjCast` — valida e normaliza CNPJ (numérico ou alfanumérico) sem máscara antes da persistência.
+- `AffiliationTypeCast` — converte o tipo de vínculo para `AffiliationType`, mapeando o valor legado `campus_administrator` para `internship_office` em leitura e escrita.
 
 ## Checklist comum
 

@@ -60,6 +60,8 @@ Ao disponibilizar os índices em um ambiente, execute pelo Sail `artisan scout:s
 
 O filtro de concedente na busca de estágios usa `granting_party_id` no índice `internships`. Ao publicar esse filtro em um ambiente existente, sincronize as configurações dos índices e reimporte `App\Models\Internship` para atualizar os documentos já indexados.
 
+Para o vínculo ativo de **Setor de Estágios** (`AffiliationType::InternshipOffice`) em desktop (`>= 1024px`), `App\Support\SectorCommandPaletteSearch` atende a busca rápida (`Ctrl+K` / `⌘K`) executando uma única chamada `multiSearch()` no Meilisearch sobre até sete índices do campus (`internships`, `internship_requests`, `users`, `granting_parties`, `courses`, `internship_types` e `document_templates`), sempre respeitando as Policies do usuário e degradando de forma graciosa quando o motor de busca está indisponível.
+
 ## Organização do código
 
 {{diagram:arquitetura-atual-diagrama}}

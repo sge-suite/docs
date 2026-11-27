@@ -30,6 +30,15 @@ Esta nota é o inventário do código transversal do projeto novo. Cada componen
 ## Componentes Blade
 
 - [Upload de arquivos](doc:component-file-upload) — campo reutilizável de arquivos com seleção, arrastar e soltar, estado de envio e remoção de uploads temporários.
+- `resources/views/components/keyboard-shortcuts-modal.blade.php` — modal de referência de atalhos (`?`) com detecção automática de sistema operacional (`macOS` vs `Windows / Linux`).
+- `resources/views/components/sector/⚡command-palette.blade.php` + `app/Support/SectorCommandPaletteSearch.php` — paleta de comandos e busca rápida em desktop (`Ctrl+K` / `⌘K`, oculta abaixo de `1024px`) exclusiva para `AffiliationType::InternshipOffice`.
+
+## Navegação por teclado
+
+- **CSS e foco visual (`resources/css/app.css`):** anel `:focus-visible` global com `--color-brand` para links/botões nativos e destaque completo da linha em tabelas (`tr:has(a:focus-visible)`).
+- **Navegação entre telas (`resources/js/fragment-navigation.js`):** após `wire:navigate`, move o foco para o alvo do `#hash` ou para `#main-content` (`resources/views/layouts/app.blade.php`).
+- **Atalhos globais e modais (`resources/js/keyboard-navigation.js`):** `/` foca a busca da página, `↑`/`↓` navega entre linhas de tabelas, `Ctrl+Enter`/`⌘+↵` envia o formulário atual (preservando o `Enter` padrão), `?` abre a lista de atalhos e modais `<dialog>` recebem foco inteligente ao abrir (primeiro campo editável ou botão seguro de cancelar/fechar) e restauram o foco ao fechar.
+- **Componentes interativos:** `<x-select>` suporta `Home`, `End` e `Space` além das setas/busca; os gráficos de indicadores (`indicator-chart.blade.php`) usam `<button>` reais para todos os agrupamentos clicáveis.
 
 ## Regra de manutenção
 

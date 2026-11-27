@@ -99,7 +99,8 @@ O painel mostra até cinco estágios por fila: documentos efetivamente em `Await
 - aprovar ou recusar pedido de cancelamento, preservando documentos e histórico conforme o fluxo;
 - liberar a avaliação do supervisor, aprovar ou devolver a resposta com motivo e validar a carga horária exigida;
 - consultar supervisor, relatório, apresentação e nota consolidada dos estágios autorizados do próprio campus, no detalhe e nos resumos da listagem e do painel, inclusive responsivos; valores e pesos são os registrados no estágio, sem novo cálculo, com “Pendente” para ausências e zero válido;
-- consultar o histórico operacional autorizado e emitir o resumo interno agrupado de pendências.
+- consultar o histórico operacional autorizado e emitir o resumo interno agrupado de pendências;
+- utilizar a busca rápida em desktop (`Ctrl+K` / `⌘K`) para navegar entre páginas, ações rápidas (como cadastros e importações/exportações CSV) e registros do campus autorizado via Meilisearch.
 
 ### Limites e proibições
 

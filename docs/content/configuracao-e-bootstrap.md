@@ -60,6 +60,8 @@ Registra exatamente:
 
 Os fallbacks de `config/app.php` são `UTC`, `USD`, locale `en`, fallback `en` e Faker `en_US`; o arquivo `.env.example` do projeto define `America/Sao_Paulo`, `BRL`, `pt_BR`, `en` e `pt_BR`, respectivamente. [`AppServiceProvider`](doc:provider-appserviceprovider) aplica os valores resolvidos pela configuração. Ambientes de implantação devem manter essas variáveis alinhadas ao ambiente institucional.
 
+Em produção (`APP_ENV=production`), `config/app.php` força `debug => false` independentemente do valor de `APP_DEBUG`, garantindo que exceções internas e stack traces nunca sejam exibidos. As páginas personalizadas em `resources/views/errors/` cobrem `403`, `404`, `409`, `419`, `429`, `500` e `503` com mensagens genéricas em português via `<x-error-page>`.
+
 > [!warning] Valores de fallback
 > Se essas variáveis não forem configuradas no ambiente, Laravel usará os fallbacks internacionais de `config/app.php`. Preserve os valores brasileiros declarados em `.env.example` nos ambientes institucionais.
 
